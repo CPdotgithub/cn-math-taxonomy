@@ -304,16 +304,17 @@
   function save() {
     if (demo || !session) return;
     lsSet(sessionKey(), {
-      v: 2, mode: session.mode, targets: session.targets, limit: session.limit, label: sessionMeta.label, answers: session.answers,
+      v: 2, mode: session.mode, targets: session.targets, base: session.base || [], limit: session.limit, label: sessionMeta.label, answers: session.answers,
       seed: session.seed, avoid: session.avoid, savedAt: new Date().toISOString()
     });
   }
 
-  function startSession(targets, label, limit, mode) {
+  function startSession(targets, label, limit, mode, base) {
     pathExpanded = false;
     const screen = mode === 'screen';
     session = E.createSession(D.graph, targets, {
-      mode: mode, limit: limit || (screen ? getSettings().screenLimit : getSettings().limit), seed: newSeed(), avoid: seenList()
+      mode: mode, limit: limit || (screen ? getSettings().screenLimit : getSettings().limit),
+      base: screen ? base : null, seed: newSeed(), avoid: seenList()
     });
     sessionMeta = { label: label };
     resetUi();
@@ -323,7 +324,7 @@
 
   function restoreSession(saved) {
     try {
-      session = E.replay(D.graph, saved.targets, saved.answers, { mode: saved.mode, limit: saved.limit, seed: saved.seed, avoid: saved.avoid });
+      session = E.replay(D.graph, saved.targets, saved.answers, { mode: saved.mode, limit: saved.limit, seed: saved.seed, avoid: saved.avoid, base: saved.base });
       sessionMeta = { label: saved.label || saved.targets.map(nameOf).join('、') };
       return true;
     } catch (e) { return false; }
@@ -566,12 +567,28 @@
     return gradeSel + (volSel ? volSel : '年级');
   }
 
+  // 基础池覆盖到哪些年级：连续年级并成「一年级–三年级」，跨学段用「、」分开
+  function baseGradeLabel(grades) {
+    if (!grades || !grades.length) return '';
+    const segs = [];
+    let start = grades[0], prev = grades[0];
+    for (let i = 1; i < grades.length; i++) {
+      if (grades[i] === prev + 1) { prev = grades[i]; continue; }
+      segs.push([start, prev]);
+      start = prev = grades[i];
+    }
+    segs.push([start, prev]);
+    return segs.map(function (s) {
+      return s[0] === s[1] ? gradeWord(s[0]) : gradeWord(s[0]) + '–' + gradeWord(s[1]);
+    }).join('、');
+  }
+
   function gradeCard(sideCol) {
     const box = h('section', { class: 'pt-panel', id: 'grade-card' });
     let sideMount = null;   // 侧栏槽位：用闭包持有，避免在未入文档时查不到
     const fill = function () {
       while (box.firstChild) box.removeChild(box.firstChild);
-      const g = E.gradeTargets(D.graph, gradeScope(), subject);
+      const g = E.gradeTargets(D.graph, gradeScope(), subject, { cumulative: true });
       const tabs = function (label, items, current, set) {
         return h('div', { class: 'stage-tabs', role: 'tablist', 'aria-label': label }, items.map(function (it) {
           return h('button', {
@@ -595,9 +612,10 @@
       box.append(
         h('div', { class: 'pt-panel-head' },
           h('h2', null, '选一个年级'),
-          h('span', { class: 'pt-pill is-blue', id: 'grade-info' }, g ? g.ids.length + ' 个知识点' : '无知识点')),
+          h('span', { class: 'pt-pill is-blue', id: 'grade-info' },
+            g ? g.ids.length + ' 个' + (g.base.length ? ' + ' + g.base.length + ' 基础' : '') : '无知识点')),
         h('div', { class: 'pt-panel-body' },
-          h('p', { class: 'dx-lead' }, '不选具体知识点，在一个年级（或一册）里抽查。答错只在所选范围内回溯先修，最后按章汇总出哪几章薄弱。适合期初摸底、学期末复习。'),
+          h('p', { class: 'dx-lead' }, '不选具体知识点，在一个年级（或一册）里抽查。答错会沿先修一路往回追——高年级的题做不对，就下探到它依赖的低年级基础，最后按章汇总出哪几章薄弱。基础只在被用到时才问，不会把简单的题重复考一遍。'),
           h('div', { class: 'dx-tabblock' },
             h('span', { class: 'dx-tablabel' }, '年级'),
             tabs('年级', subject === 'physics'
@@ -635,23 +653,27 @@
         sideCol.append(sideMount);
       }
       while (sideMount.firstChild) sideMount.removeChild(sideMount.firstChild);
+      const baseGrades = g && g.base.length ? baseGradeLabel(g.baseGrades) : '';
       sideMount.append(h('section', { class: 'pt-panel dx-side-card' },
         h('div', { class: 'pt-panel-head' },
           h('h2', null, '本次范围'),
-          h('span', { class: 'pt-pill is-blue' }, '整年级')),
+          h('span', { class: 'pt-pill is-blue' }, '整年级 + 基础')),
         h('div', { class: 'pt-panel-body' },
           h('p', { class: 'dx-scope' },
             h('strong', null, g ? g.label : '这个范围没有知识点'),
-            h('span', null, g ? g.ids.length + ' 个知识点，最多问 ' + (g.ids.length * 2) + ' 题' : '换一个年级再试')),
+            g
+              ? h('span', null, g.ids.length + ' 个本年级知识点' + (g.base.length ? '，连带 ' + g.base.length + ' 个过往基础点' : ''))
+              : h('span', null, '换一个年级再试'),
+            baseGrades ? h('span', { class: 'dx-scope-sub' }, '基础范围：' + baseGrades + ' · 只在答错时回查，不单独占题量') : null),
           h('label', { class: 'dx-field', for: 'screen-limit-input' },
             h('span', { class: 'dx-field-label' }, '题量上限'),
             h('span', { class: 'dx-field-hint' }, SCREEN_MIN + '–' + SCREEN_MAX + ' 题'),
             limitInput),
           h('button', {
             class: 'primary dx-start-btn', id: 'btn-grade-start', disabled: !g,
-            onclick: function () { if (g) startSession(g.ids, g.label + '（整体筛查）', null, 'screen'); }
+            onclick: function () { if (g) startSession(g.ids, g.label + '（整体筛查）', null, 'screen', g.base); }
           }, '开始整体诊断'),
-          h('p', { class: 'dx-note' }, '知识点多、题量有限，到上限后没测到的标为「未测」；结果页可以再加题。默认 ' + E.SCREEN_LIMIT + ' 题。'))));
+          h('p', { class: 'dx-note' }, '先查本年级；答错或不稳时往上一个环节追，追到低年级基础就顺手查掉。题量到上限后没测到的标为「未测」，结果页可以再加题。默认 ' + E.SCREEN_LIMIT + ' 题。'))));
     };
     fill();
     return box;
@@ -1032,12 +1054,24 @@
     const chapters = screen ? E.chapterSummary(D.graph, session) : null;
     const outOfScope = screen ? sum.roots.filter(function (r) { return r.outOfScopePrereqs.length; }) : [];
     let headline;
+    // 筛查模式下 sum.weak / sum.shaky 会混进「顺着先修回查到的低年级基础点」，
+    // 主 KPI 只报本年级的账，基础的问题留给下面的「连带回查」卡单独说，否则数字对不上。
+    const fWeak = new Set((sum.foundation && sum.foundation.weak) || []);
+    const fShaky = new Set((sum.foundation && sum.foundation.shaky) || []);
+    const gradeWeak = sum.weak.filter(function (id) { return !fWeak.has(id); }).length;
+    const gradeShaky = sum.shaky.filter(function (id) { return !fShaky.has(id); }).length;
+
     if (screen) {
+      const f = sum.foundation || { checked: [], weak: [] };
       if (!sum.weak.length && !sum.shaky.length) headline = sum.untested.length
         ? '已测到的知识点没有发现薄弱点，另有 ' + sum.untested.length + ' 个没测到。'
         : '范围内的知识点都已掌握，没有发现薄弱点。';
-      else headline = '范围内共 ' + session.targets.length + ' 个知识点：薄弱 ' + sum.weak.length + '、不稳 ' + sum.shaky.length + '、未测 ' + sum.untested.length +
-        '。先看下面的「按章汇总」，薄弱的章排在前面。';
+      else headline = '本年级 ' + session.targets.length + ' 个知识点中：薄弱 ' + gradeWeak + '、不稳 ' + gradeShaky + '、未测 ' + sum.untested.length + '。' +
+        (f.checked.length
+          ? '顺着先修又回查了 ' + f.checked.length + ' 个过往基础点，其中 ' + f.weak.length + ' 个薄弱' +
+            (f.weak.length >= f.checked.length / 2 ? '——问题多半压在基础层，建议先从下面的「连带回查」补起。' : '。')
+          : '') +
+        (f.checked.length ? '本年级的按章情况见下方「按章汇总」，本年级的章排在最前。' : '先看下面的「按章汇总」，薄弱的章排在前面。');
     }
     else if (!sum.roots.length && !sum.shaky.length && targetsMastered) headline = '目标知识点已掌握，没有发现需要补的先修。';
     else if (!sum.roots.length && !sum.shaky.length) headline = '没有判出薄弱点，但目标尚未全部测到。';
@@ -1050,11 +1084,14 @@
       h('p', null, headline),
       h('div', { class: 'stats' },
         stat('ask', sum.asked, '已答题数'),
-        stat('bad', sum.weak.length, '薄弱'),
-        stat('shaky', sum.shaky.length, '不稳'),
+        stat('bad', gradeWeak, screen ? '本年级薄弱' : '薄弱'),
+        stat('shaky', gradeShaky, screen ? '本年级不稳' : '不稳'),
         stat('ok', sum.mastered.length, '已掌握'),
         stat('unk', sum.untested.length, '未测')),
       sum.unconfirmed.length ? h('p', { class: 'notice' }, '「' + sum.unconfirmed.map(nameOf).join('」「') + '」只答了第一题（答错）就到了题量上限，没来得及复测，暂按薄弱处理。') : null,
+      screen && !sum.foundation.checked.length && sum.baseTotal
+        ? h('p', { class: 'muted small' }, '本年级的题没有触发先修回查：' + sum.baseTotal + ' 个过往基础点按「上层会做 = 基础具备」推断为掌握，所以没有额外出题。')
+        : null,
       sum.limitReached ? h('p', { class: 'notice' }, '已达到题量上限（' + sum.limit + '），剩余没测到的知识点标为「未测」。薄弱根因的先修里若有未测点，真正的根因可能更靠前。',
         session.limit >= 60 ? null : h('button', { class: 'no-print', style: 'margin-left:8px', onclick: function () { rebuild(session.answers, Math.min(session.limit + more, 60)); } }, '再多答 ' + Math.min(more, 60 - session.limit) + ' 题')) : null,
       h('p', { class: 'muted small' }, '自动判题只是近似的，答题记录里可以更正任何一题。生成时间：' + new Date().toLocaleString('zh-CN')),
@@ -1066,6 +1103,7 @@
         session.answers.length ? h('button', { onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null));
     page.append(summaryCard);
     if (screen) page.append(chaptersCard(chapters, outOfScope));
+    if (sum.foundation && sum.foundation.checked.length) page.append(foundationCard(sum, rootSet, targetSet));
 
     page.append(h('div', { class: 'card', id: 'roots' },
       h('h2', { text: '薄弱的先修知识点（根因）' }),
@@ -1125,31 +1163,46 @@
 
     page.append(standardsCard(sum));
     page.append(logCard());
-    page.append(h('p', { class: 'iq-line', id: 'iq-line' },
-      '做完数学诊断，再测测思维能力？→ ',
-      h('a', {
-        href: 'https://test.pansgo.com/?from=math-result',
-        target: '_blank',
-        rel: 'noopener',
-        text: '儿童智商测试'
-      })));
     show(page);
     mountPathGraph(sum);
   }
 
   function nameList(ids) { return ids.map(nameOf).join('、'); }
 
+  /**
+   * 连带回查的过往基础：筛查时顺着先修链下探到、并且真的出了题的低年级知识点。
+   * 只列真正问过的，没被用到的低年级内容不会出现在这里，也不占题量。
+   */
+  function foundationCard(sum, rootSet, targetSet) {
+    const f = sum.foundation;
+    const rank = { weak: 0, shaky: 1, mastered: 2 };
+    const list = f.checked.slice().sort(function (a, b) {
+      const ra = rank[E.statusOf(session, a)] == null ? 3 : rank[E.statusOf(session, a)];
+      const rb = rank[E.statusOf(session, b)] == null ? 3 : rank[E.statusOf(session, b)];
+      return ra - rb;
+    });
+    return h('div', { class: 'card', id: 'foundation' },
+      h('h2', { text: '连带回查的过往基础（' + f.checked.length + '）' }),
+      h('p', { class: 'muted small' }, '所选范围下面的先修基础：本年级的题答错或不稳时，会顺着先修链往回追，追到的低年级知识点才会出题。没被用到的低年级内容不会重复考。基础没打牢，上面的知识点迟早还会卡住，建议先补这里。'),
+      h('div', { class: 'stats', style: 'grid-template-columns:repeat(3,minmax(0,1fr))' },
+        stat('bad', f.weak.length, '薄弱'),
+        stat('shaky', f.shaky.length, '不稳'),
+        stat('ok', f.mastered.length, '已掌握')),
+      list.map(function (id) { return topicItem(id, statusTags(id, rootSet, targetSet)); }));
+  }
+
   function chaptersCard(chapters, outOfScope) {
     const seg = function (cls, n, total) { return n ? h('i', { class: cls, style: 'width:' + (n / total * 100) + '%' }) : null; };
     return h('div', { class: 'card', id: 'chapters' },
       h('h2', { text: '按章汇总' }),
-      h('p', { class: 'muted small' }, '每章的知识点掌握情况，薄弱多的章排在前面；点开看具体是哪几个知识点。色条从左到右：掌握、不稳、薄弱、未测。'),
+      h('p', { class: 'muted small' }, '每章的知识点掌握情况，本年级的章排在前面、薄弱多的优先；点开看具体是哪几个知识点。色条从左到右：掌握、不稳、薄弱、未测。带「基础」标记的章是顺着先修回查到的低年级内容。'),
       outOfScope.length ? h('p', { class: 'notice', id: 'out-of-scope' }, '部分薄弱点的先修在所选范围之外，未检查（涉及 ' + outOfScope.length + ' 个薄弱点，如「' +
         outOfScope.slice(0, 3).map(function (r) { return nameOf(r.id); }).join('」「') + '」）。可对这些知识点单独做诊断，沿先修继续往前查。') : null,
       chapters.map(function (c) {
         return h('details', { class: 'topic chap-sum', open: c.weak > 0 || c.shaky > 0 },
           h('summary', null,
             h('span', { class: 'chap-name', text: c.label }),
+            c.fromBase ? h('span', { class: 'chap-base', text: '基础' }) : null,
             h('span', { class: 'chap-counts' },
               tag('mastered', '掌握 ' + c.mastered), tag('shaky', '不稳 ' + c.shaky), tag('weak', '薄弱 ' + c.weak), tag('unknown', '未测 ' + c.untested)),
             h('span', { class: 'chap-bar', 'aria-hidden': 'true' },
@@ -1584,9 +1637,9 @@
         if (scope.charAt(0) !== gch) throw new Error('URL 参数 grade 与 volume 不一致：' + grade + ' / ' + volume);
       }
       if (/^[一二三四五六七八九]$/.test(scope)) scope += '年级';
-      const g = E.gradeTargets(D.graph, scope, subject);
+      const g = E.gradeTargets(D.graph, scope, subject, { cumulative: true });
       if (!g) throw new Error('URL 参数 grade / volume 无法识别：' + (volume || grade) + '（写法如 grade=七年级、volume=七上）');
-      return { ids: g.ids, label: g.label + '（整体筛查）', mode: 'screen' };
+      return { ids: g.ids, base: g.base, label: g.label + '（整体筛查）', mode: 'screen' };
     }
     return null;
   }
@@ -1611,7 +1664,7 @@
       demo = { oracle: makeOracle(resolved.ids, resolved.mode) };
       session = E.createSession(D.graph, resolved.ids, {
         mode: resolved.mode, limit: limit || (resolved.mode === 'screen' ? getSettings().screenLimit : getSettings().limit),
-        seed: seedParam == null ? 'demo' : seedParam
+        base: resolved.base, seed: seedParam == null ? 'demo' : seedParam
       });
       sessionMeta = { label: resolved.label };
       const step = parseInt(params.get('step'), 10);
@@ -1624,7 +1677,7 @@
       const same = saved && JSON.stringify(saved.targets) === JSON.stringify(Array.from(new Set(resolved.ids))) &&
         (saved.mode || 'target') === (resolved.mode || 'target') && (seedParam == null || saved.seed === seedParam);
       if (same && restoreSession(saved)) { render(); return; }
-      startSession(resolved.ids, resolved.label, limit, resolved.mode);
+      startSession(resolved.ids, resolved.label, limit, resolved.mode, resolved.base);
       return;
     }
     renderStart();

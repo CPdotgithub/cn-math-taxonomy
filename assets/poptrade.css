@@ -145,16 +145,6 @@ body {
   font-feature-settings: "tnum" 1;
 }
 
-/* 顶部深色条：压暗成 PopTrade 的近黑 */
-.top-banner {
-  background: #0A0C10;
-  color: #F7FAFE;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: .01em;
-}
-.top-banner:hover { background: var(--pt-blue); color: #fff; }
-
 /* 顶栏：白底、细描边、去掉厚重感 */
 .site-header {
   padding: 10px 24px;

@@ -6,9 +6,11 @@
  *         nextItem(graph, session) -> {topicId, question, attempt} | null   （要出的具体题目；attempt 为 1 或 2）
  *         applyAnswer(graph, session, id, 'correct'|'wrong'|'skip', {text}) -> 新 session（不修改入参）
  *         summarize(graph, session) -> 结果（根因、学习路径、掌握/不稳/薄弱/未测）
- *         gradeTargets(graph, '一年级'|'七上'|'高一'|'选必二', subject?) -> {ids, volumes, label} | null
+ *         gradeTargets(graph, '一年级'|'七上'|'高一'|'选必二', subject?, {cumulative}) -> {ids, base, volumes, label} | null
  *           默认 subject 为 math，不把英语卷进数学的整册；'english' 只取英语（含九全），'physics' 只取物理（八上、八下、九全），'all' 不限学科
- *         createSession(graph, ids, {mode:'screen'}) -> 筛查会话：范围 = 目标本身，回溯不出范围，默认题量上限 SCREEN_LIMIT
+ *           cumulative 为 true 时额外算出基础回溯池 base：该范围全部先修里年级更低、可测、同学科的点
+ *         createSession(graph, ids, {mode:'screen', base}) -> 筛查会话：范围 = 目标 + 基础池（回溯可下探），
+ *           但初始出题队列只有目标，基础点要等答错/不稳时才被压到栈顶；默认题量上限 SCREEN_LIMIT
  *         chapterSummary(graph, session) -> 按章汇总（薄弱章节在前）
  *         layout(graph, session, summary) -> 路径图的分层布局
  *         judgeQuestion(question, userText) -> {verdict:'correct'|'wrong'|'manual', reason}
@@ -152,16 +154,23 @@
     ts.forEach(function (id) { if (!graph.byId[id]) throw new Error('未知知识点：' + id); });
     const screen = opts.mode === 'screen';
     const limit = Math.max(1, Math.floor(opts.limit == null ? (screen ? SCREEN_LIMIT : DEFAULT_LIMIT) : opts.limit));
-    // 筛查模式：诊断范围就是目标集合本身（不把先修祖先并进来），回溯只在范围内进行
-    const sub = screen ? { nodes: topoSort(graph, ts) } : subgraph(graph, ts);
+    // 基础回溯池：只在筛查模式下生效，只保留「同学科、可测、不在目标里」的点
+    const base = screen ? Array.from(new Set(opts.base || [])).filter(function (id) {
+      if (ts.indexOf(id) >= 0) return false;
+      const t = graph.byId[id];
+      return !!(t && !t.external && isTestable(graph, id));
+    }) : [];
+    // 筛查模式：诊断范围 = 目标 + 基础池（回溯可以下探到低年级），但初始出题队列只有目标
+    const scopeIds = ts.concat(base);
+    const sub = screen ? { nodes: topoSort(graph, scopeIds) } : subgraph(graph, ts);
     const pos = Object.create(null);
     sub.nodes.forEach(function (id, i) { pos[id] = i; });
-    // 离目标最近（拓扑序最靠后）的目标先问；其余目标作为后备留在栈里
+    // 离目标最近（拓扑序最靠后）的目标先问；基础池留在 scope 里，等答错时才被压到栈顶
     const stack = ts.filter(function (id) { return isTestable(graph, id); })
       .sort(function (a, b) { return pos[b] - pos[a]; });
     return {
-      targets: ts, limit: limit, order: sub.nodes, status: {}, stack: stack, answers: [], attempts: {},
-      mode: screen ? 'screen' : 'target', scope: screen ? ts.slice() : null,
+      targets: ts, base: base, limit: limit, order: sub.nodes, status: {}, stack: stack, answers: [], attempts: {},
+      mode: screen ? 'screen' : 'target', scope: screen ? scopeIds.slice() : null,
       seed: opts.seed == null ? 'default' : String(opts.seed),
       avoid: Array.from(new Set(opts.avoid || []))
     };
@@ -171,7 +180,7 @@
     const attempts = {};
     Object.keys(s.attempts).forEach(function (k) { attempts[k] = s.attempts[k].slice(); });
     return {
-      targets: s.targets.slice(), limit: s.limit, order: s.order, stack: s.stack.slice(),
+      targets: s.targets.slice(), base: (s.base || []).slice(), limit: s.limit, order: s.order, stack: s.stack.slice(),
       status: Object.assign({}, s.status), answers: s.answers.slice(), attempts: attempts,
       seed: s.seed, avoid: s.avoid, mode: s.mode, scope: s.scope ? s.scope.slice() : null
     };
@@ -328,11 +337,26 @@
   function summarize(graph, session) {
     const nodes = session.order;
     const st = function (id) { return statusOf(session, id); };
-    const mastered = nodes.filter(function (id) { return st(id) === 'mastered'; });
+    // 基础池里的点只在真正被测到时才算数：答题正确推断出的「掌握」不并入当级统计，
+    // 否则「掌握」会被几百个低年级基础点撑爆；答错发现的薄弱则保留（那才是根因）。
+    const baseSet = new Set(session.base || []);
+    const isBase = function (id) { return baseSet.has(id); };
+    const mastered = nodes.filter(function (id) { return !isBase(id) && st(id) === 'mastered'; });
     const shaky = nodes.filter(function (id) { return st(id) === 'shaky'; });
     const weak = nodes.filter(function (id) { return st(id) === 'weak'; });
     const unconfirmed = weak.filter(function (id) { return isUnconfirmed(session, id); });
-    const untested = nodes.filter(function (id) { return st(id) === 'unknown'; });
+    const untested = nodes.filter(function (id) { return !isBase(id) && st(id) === 'unknown'; });
+    // 连带回查的过往基础：真正出过题的才算
+    const foundationChecked = (session.base || []).filter(function (id) {
+      const a = session.attempts[id];
+      return !!(a && a.length);
+    });
+    const foundation = {
+      checked: foundationChecked,
+      weak: foundationChecked.filter(function (id) { return st(id) === 'weak'; }),
+      shaky: foundationChecked.filter(function (id) { return st(id) === 'shaky'; }),
+      mastered: foundationChecked.filter(function (id) { return st(id) === 'mastered'; })
+    };
     const scope = session.scope ? new Set(session.scope) : null;
     const inScope = function (id) { return !scope || scope.has(id); };
 
@@ -386,6 +410,7 @@
       finished: next === null,
       limitReached: session.answers.length >= session.limit && pending.length > 0,
       mastered: mastered, shaky: shaky, weak: weak, unconfirmed: unconfirmed, untested: untested,
+      foundation: foundation, baseTotal: (session.base || []).length,
       roots: roots, path: path
     };
   }
@@ -526,7 +551,14 @@
    * 不带 subject 时「必修一」没有数学知识点，返回 null。
    * 返回 {ids, volumes, label}（ids 按 topics 文件顺序，只含正式知识点）；不认识的写法返回 null。
    */
-  function gradeTargets(graph, scope, subject) {
+  /**
+   * 把「四年级」「七上」「必修一」这类范围解析成知识点集合。
+   * opts.cumulative 为 true 时额外算出基础回溯池 base：
+   *   所选范围全部先修的传递闭包里，年级更低的、可测的、同学科的知识点。
+   *   base 不进初始出题队列，只在答错/不稳时按先修逐层下探，
+   *   所以既覆盖「所有过往知识点」，又不会把太基础的题重复问一遍。
+   */
+  function gradeTargets(graph, scope, subject, opts) {
     const subj = subject == null || subject === '' ? 'math' : subject;
     const key = String(scope == null ? '' : scope).trim();
     const books = {
@@ -573,7 +605,31 @@
       if (subj !== 'all' && subjectOf(t) !== subj) return false;
       return volumes.indexOf(parseChapter(t.chapter).volume) >= 0;
     }).map(function (t) { return t.id; });
-    return ids.length ? { ids: ids, volumes: volumes, label: label } : null;
+    if (!ids.length) return null;
+
+    const out = { ids: ids, volumes: volumes, label: label, base: [], baseGrades: [] };
+    if (opts && opts.cumulative) {
+      const idSet = new Set(ids);
+      const grades = ids.map(function (id) { return graph.byId[id].grade; })
+        .filter(function (g) { return typeof g === 'number'; });
+      const lowest = grades.length ? Math.min.apply(null, grades) : null;
+      if (lowest != null && lowest > 1) {
+        const base = [];
+        ancestors(graph, ids).forEach(function (id) {
+          if (idSet.has(id)) return;
+          const t = graph.byId[id];
+          if (!t || t.external) return;
+          if (subj !== 'all' && subjectOf(t) !== subj) return;
+          if (!isTestable(graph, id)) return;
+          if (typeof t.grade !== 'number' || t.grade >= lowest) return;
+          base.push(id);
+        });
+        out.base = base;
+        out.baseGrades = Array.from(new Set(base.map(function (id) { return graph.byId[id].grade; })))
+          .sort(function (a, b) { return a - b; });
+      }
+    }
+    return out;
   }
 
   /**
@@ -582,10 +638,17 @@
    */
   function chapterSummary(graph, session) {
     const inOrder = new Set(session.order);
+    const baseSet = new Set(session.base || []);
     const byKey = Object.create(null);
     const list = [];
     graph.topics.forEach(function (t) {
       if (t.external || !inOrder.has(t.id)) return;
+      // 基础池里的知识点只在真正被回查到（出过题）时才把它的章节带进来，
+      // 否则整张「按章汇总」会被几百个低年级章节灌满
+      if (baseSet.has(t.id)) {
+        const a = session.attempts[t.id];
+        if (!a || !a.length) return;
+      }
       const c = parseChapter(t.chapter);
       const key = c.volume + ' ' + c.chapterNo + ' ' + c.chapterName;
       let ch = byKey[key];
@@ -593,10 +656,13 @@
         ch = byKey[key] = {
           key: key, volume: c.volume, chapterNo: c.chapterNo, chapterName: c.chapterName,
           label: (c.volume ? c.volume + ' ' : '') + c.chapterNo + ' ' + c.chapterName,
-          total: 0, mastered: 0, shaky: 0, weak: 0, untested: 0, weakIds: [], shakyIds: [], untestedIds: [], _i: list.length
+          total: 0, mastered: 0, shaky: 0, weak: 0, untested: 0, weakIds: [], shakyIds: [], untestedIds: [],
+          fromBase: baseSet.has(t.id), _i: list.length
         };
         list.push(ch);
       }
+      // 只要章里有本年级的点，这一章就算「本年级的章」
+      if (!baseSet.has(t.id)) ch.fromBase = false;
       const st = statusOf(session, t.id);
       ch.total++;
       if (st === 'mastered') ch.mastered++;
@@ -604,7 +670,11 @@
       else if (st === 'weak') { ch.weak++; ch.weakIds.push(t.id); }
       else { ch.untested++; ch.untestedIds.push(t.id); }
     });
-    list.sort(function (a, b) { return b.weak - a.weak || b.shaky - a.shaky || a._i - b._i; });
+    // 本年级的章排前面；只有基础点的章（顺着先修回查到的低年级内容）排在后面
+    list.sort(function (a, b) {
+      if (a.fromBase !== b.fromBase) return a.fromBase ? 1 : -1;
+      return b.weak - a.weak || b.shaky - a.shaky || a._i - b._i;
+    });
     list.forEach(function (ch) { delete ch._i; });
     return list;
   }

@@ -327,13 +327,6 @@ body.has-rail.page-explore { padding-left: var(--rail-w); }
   }
   .rail-toggle svg { width: 20px; height: 20px; }
 
-  /* 给内容让出汉堡按钮的位置：横幅改成左对齐，避免按钮压住文字 */
-  body.has-rail .top-banner {
-    justify-content: flex-start;
-    padding-left: 58px;
-    padding-right: 12px;
-  }
-
   .rail-scrim {
     display: block;
     position: fixed;
@@ -475,25 +468,25 @@ body.has-rail.page-explore { padding-left: var(--rail-w); }
   .rail-scrim { display: none !important; }
 }
 
-@media (max-width: 900px) {
-  body.has-rail .top-banner { padding-left: 64px; }
-}
-
-/* 移动端：汉堡按钮嵌进深色横幅里，别做成一块白砖 */
+/* 移动端：顶部不再有横幅，汉堡按钮改为独立浮层按钮，内容顶部让出它的位置 */
 @media (max-width: 900px) {
   .rail-toggle {
-    top: 2px;
-    left: 8px;
-    width: 32px;
-    height: 30px;
-    border: 0;
-    border-radius: 7px;
-    background: transparent;
-    color: #F7FAFE;
-    box-shadow: none;
-    backdrop-filter: none;
+    top: 10px;
+    left: 10px;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--pt-line);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, .96);
+    color: var(--pt-ink);
+    box-shadow: 0 2px 8px rgba(10, 12, 16, .10);
   }
-  .rail-toggle:hover { background: rgba(255, 255, 255, .14); }
-  .rail-toggle svg { width: 18px; height: 18px; }
-  body.has-rail .top-banner { padding-left: 46px; }
+  .rail-toggle:hover { background: #fff; }
+  .rail-toggle svg { width: 20px; height: 20px; }
+  /* 各页 main 的 padding 简写特异性更高，这里跟着写一遍选择器，只改上边距 */
+  body.has-rail main,
+  body.has-rail .home,
+  body.has-rail main.kids,
+  body.has-rail main#root { padding-top: 58px; }
 }
+
