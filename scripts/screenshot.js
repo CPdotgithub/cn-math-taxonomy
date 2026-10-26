@@ -486,7 +486,7 @@ async function main() {
     check(await exists('#roots') && await exists('#path') && await exists('#shaky') && await exists('ol.path'), '结果页含 根因 / 不稳 / 文字版学习路径');
     await checkPathGraph('结果页');
     const asked = await evalJs('document.querySelectorAll("#log tbody tr").length');
-    check(asked > 2 && asked <= 16, '答题数不超过上限 16（实际 ' + asked + '）');
+    check(asked > 2, '答题数大于 2（实际 ' + asked + '，无题量上限）');
     check((await evalJs('document.querySelectorAll("#roots details.topic").length')) >= 1, '至少有一个薄弱根因可展开');
     check((await evalJs('document.querySelectorAll("#standards .std").length')) >= 1, '列出了相关课标条目（含原文）');
     await click('#btn-export');
@@ -712,7 +712,7 @@ async function main() {
     check(await evalJs('!!document.querySelector(".legend .sw-h")'), '诊断图例有高中');
     await shot('23-diagnose-h027.png', null, 1400);
     await shot('24-diagnose-h027-graph.png', '#graph', 720);
-    await goto(BASE + '/diagnose/?grade=' + encodeURIComponent('高一') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?grade=' + encodeURIComponent('高一') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '高一整体诊断', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).includes('高一'), '高一（必修第一册）整体诊断');
     check(await exists('#chapters .chap-sum'), '高一整体诊断有按章汇总');
@@ -742,7 +742,7 @@ async function main() {
     check(derInfo.senior > 0, '「导数的概念」局部图含高中节点');
     check((await evalJs('document.body.innerText')).indexOf('选必二 · 选择性必修第二册') >= 0, '导数页标明选择性必修第二册');
     await shot('28-explore-der.png');
-    await goto(BASE + '/diagnose/?grade=' + encodeURIComponent('选必二') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?grade=' + encodeURIComponent('选必二') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '选必二整体诊断', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('选必二') >= 0, '选必二（选择性必修第二册）整体诊断');
     check(await exists('#chapters .chap-sum'), '选必二整体诊断有按章汇总');
@@ -753,7 +753,7 @@ async function main() {
     check((await evalJs('document.body.innerText')).indexOf('选择性必修第二册') >= 0, '375 导数页仍标明选必二');
     await checkPage('导数概念 375');
     await shot('29-explore-der-375.png', null, 1100);
-    await goto(BASE + '/diagnose/?grade=' + encodeURIComponent('选必二') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?grade=' + encodeURIComponent('选必二') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '选必二整体诊断 375', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('选择性必修第二册') >= 0, '375 选必二整体诊断');
     await checkPage('选必二整体诊断 375');
@@ -785,7 +785,7 @@ async function main() {
     await checkPage('现在进行时 375');
     await shot('33-explore-ing-375.png', null, 1100);
     await setView(1280, 900);
-    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('四上') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('四上') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '四年级上册英语整体诊断', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('四年级上册') >= 0, '四年级上册英语整体诊断标题');
     check((await evalJs(TOP_BANNER_EXPR)) === 'ok', '英语诊断结果页没有智商测试入口');
@@ -795,7 +795,7 @@ async function main() {
     await checkPage('四年级上册英语 1280');
     await shot('34-diagnose-en-g4.png', '#summary', 900);
     await setView(375, 812);
-    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('四上') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('四上') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '四年级上册英语整体诊断 375', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('四年级上册') >= 0, '375 四年级上册英语整体诊断');
     await checkBanner('英语诊断 375');
@@ -821,7 +821,7 @@ async function main() {
     await checkPage('现在完成时 375');
     await shot('44-explore-perfect-375.png', null, 1100);
     await setView(1280, 900);
-    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('八上') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('八上') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '八年级上册英语整体诊断', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('八年级上册') >= 0, '八年级上册英语整体诊断标题');
     check((await evalJs(TOP_BANNER_EXPR)) === 'ok', '初中英语诊断结果页没有智商测试入口');
@@ -832,7 +832,7 @@ async function main() {
     await checkPage('八年级上册英语 1280');
     await shot('45-diagnose-en-g8.png', '#summary', 900);
     await setView(375, 812);
-    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('八上') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('八上') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '八年级上册英语整体诊断 375', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('八年级上册') >= 0, '375 八年级上册英语整体诊断');
     await checkBanner('初中英语诊断 375');
@@ -854,7 +854,7 @@ async function main() {
     await checkPage('虚拟语气 375');
     await shot('52-explore-subjunctive-375.png', null, 1100);
     await setView(1280, 900);
-    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('选必一') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('选必一') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '选择性必修第一册英语整体诊断', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('选必一') >= 0, '选必一英语整体诊断标题');
     check((await evalJs('document.body.innerText')).indexOf('配方法') < 0, '高中英语整册诊断不混入数学知识点');
@@ -863,7 +863,7 @@ async function main() {
     await checkPage('选必一英语 1280');
     await shot('53-diagnose-en-xuanbi1.png', '#summary', 900);
     await setView(375, 812);
-    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('选必一') + '&demo=1&limit=12');
+    await goto(BASE + '/diagnose/?subject=english&grade=' + encodeURIComponent('选必一') + '&demo=1&step=12');
     await waitFor(() => exists('#chapters'), '选择性必修第一册英语整体诊断 375', 20000);
     check((await evalJs('document.querySelector("#summary h2").textContent')).indexOf('选必一') >= 0, '375 选必一英语整体诊断');
     await checkPage('选必一英语 375');

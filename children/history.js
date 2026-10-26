@@ -287,8 +287,11 @@
     sum.appendChild(el('span', 'pf-rec-date', fmtDay(r.savedAt)));
 
     var main = el('span', 'pf-rec-main');
-    main.appendChild(el('b', null, r.label || '诊断'));
-    main.appendChild(el('em', null, (SUBJECT_NAME[r.subject] || '数学') + ' · ' + (r.asked || 0) + ' 题' + (r.mode === 'screen' ? ' · 整体筛查' : '')));
+    var titleRow = el('span', 'pf-rec-title');
+    titleRow.appendChild(el('b', null, r.label || '诊断'));
+    if (r.partial) titleRow.appendChild(tag('shaky', '未测完'));
+    main.appendChild(titleRow);
+    main.appendChild(el('em', null, (SUBJECT_NAME[r.subject] || '数学') + ' · ' + (r.asked || 0) + ' 题' + (r.mode === 'screen' ? ' · 年级诊断' : '')));
     sum.appendChild(main);
 
     var c = r.counts || {};

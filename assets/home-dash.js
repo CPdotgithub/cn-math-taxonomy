@@ -16,6 +16,14 @@
     return n;
   }
 
+  /* 当前学科挂在 body 的 class 上（subject-english / physics / chinese），链接要带上 */
+  function withSubj(href) {
+    var b = document.body.classList;
+    var sub = b.contains('subject-english') ? 'english' : b.contains('subject-physics') ? 'physics' : b.contains('subject-chinese') ? 'chinese' : '';
+    if (!sub) return href;
+    return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + sub;
+  }
+
   function fmtDate(iso) {
     if (!iso) return '';
     var d = new Date(iso);
@@ -118,7 +126,7 @@
 
     var actions = el('div', 'kid-panel-actions');
     var go = el('a', 'btn btn-primary', rate == null ? '做第一次诊断' : '继续诊断');
-    go.href = 'diagnose/';
+    go.href = withSubj('diagnose/?mode=grade');
     actions.appendChild(go);
     var more = el('a', 'btn', rate == null ? '管理档案' : '打开档案');
     more.href = rate == null ? 'children/' : 'children/history.html?child=' + encodeURIComponent(child.id);
@@ -149,7 +157,7 @@
       row.href = 'children/history.html' + (child ? '?child=' + encodeURIComponent(child.id) : '');
 
       var top = el('div', 'recent-top');
-      top.appendChild(el('span', 'recent-label', r.label || '诊断记录'));
+      top.appendChild(el('span', 'recent-label', (r.label || '诊断记录') + (r.partial ? ' · 未测完' : '')));
       top.appendChild(el('span', 'recent-date', fmtDate(r.savedAt || r.updatedAt)));
       row.appendChild(top);
 

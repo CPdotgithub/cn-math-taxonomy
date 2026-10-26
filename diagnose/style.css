@@ -295,6 +295,8 @@ body.has-rail main#root { max-width: 1180px; }
 @media (max-width: 980px) {
   .dx-cols { grid-template-columns: minmax(0, 1fr); }
   .dx-side { order: -1; }
+  /* 按年级模式：先选科目，再看到范围与开始按钮，别把开始按钮顶到前面 */
+  .dx-start.is-grade .dx-side { order: 0; }
 }
 @media (min-width: 981px) {
   .dx-side { position: sticky; top: 18px; }
@@ -609,9 +611,9 @@ body.has-rail main#root { max-width: 1180px; }
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 22px;
 }
 .dx-legend li {
   display: flex;
@@ -644,4 +646,224 @@ main#root > .dx-stage:not(.dx-start) {
   .dx-legend { flex-direction: row; flex-wrap: wrap; gap: 6px 14px; }
   .dx-legend li { font-size: .76rem; }
   .dx-legend .pt-pill { min-width: 0; height: 20px; padding: 0 7px; font-size: .72rem; }
+}
+
+/* ---------------------------------------------------------------------------
+   9. 按年级诊查：范围自动跟随档案年级
+   --------------------------------------------------------------------------- */
+
+/* 当前孩子行：范围从哪来，一眼可见 */
+.dx-childline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--pt-line);
+  border-radius: var(--radius);
+  background: var(--pt-surface-2);
+}
+.dx-childline.is-empty { background: #FFFCF5; border-color: #F3E2BC; }
+.dx-childline-name {
+  font-size: .92rem;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  color: var(--pt-ink);
+}
+.dx-childline-hint { font-size: .78rem; color: var(--pt-ink-2); }
+.dx-childline-link {
+  margin-left: auto;
+  flex: none;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-blue);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.dx-childline-link:hover { text-decoration: underline; }
+
+/* 科目分段：比顶部模式切换轻一档，塞进表单里 */
+.dx-subjects { width: 100%; }
+.dx-subjects button { flex: 1 1 0; min-width: 0; }
+
+/* 自动范围块 */
+.dx-autoscope {
+  margin: 2px 0 4px;
+  padding: 12px 14px;
+  border: 1px solid #D8E4FA;
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, #F7FAFF 0%, #FFFFFF 100%);
+}
+.dx-autoscope-main {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.dx-autoscope-grade {
+  font-size: 1.02rem;
+  font-weight: 650;
+  letter-spacing: -.015em;
+  color: var(--pt-ink);
+}
+.dx-autoscope-n {
+  flex: none;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-blue);
+  font-variant-numeric: tabular-nums;
+}
+.dx-autoscope-sub {
+  margin: 6px 0 0;
+  font-size: .78rem;
+  line-height: 1.5;
+  color: var(--pt-ink-2);
+}
+.dx-autoscope-note {
+  margin: 7px 0 0;
+  padding-top: 7px;
+  border-top: 1px dashed #DDE7F8;
+  font-size: .74rem;
+  line-height: 1.45;
+  color: var(--pt-ink-3);
+}
+
+/* 折叠的手动调整 */
+.dx-advance {
+  margin-top: 14px;
+  border-top: 1px solid var(--pt-line-soft);
+  padding-top: 10px;
+}
+.dx-advance > summary {
+  cursor: pointer;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+}
+.dx-advance > summary::-webkit-details-marker { display: none; }
+.dx-advance > summary::before {
+  content: '';
+  width: 0;
+  height: 0;
+  border-left: 5px solid currentColor;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform .15s ease;
+}
+.dx-advance[open] > summary::before { transform: rotate(90deg); }
+.dx-advance > summary:hover { color: var(--pt-blue); }
+.dx-advance[open] > summary { margin-bottom: 12px; }
+.dx-advance-reset {
+  margin-top: 4px;
+  min-height: 30px;
+  padding: 0 12px;
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--pt-blue);
+  background: var(--pt-blue-50);
+  border: 1px solid #D8E4FA;
+  border-radius: 999px;
+}
+.dx-advance-reset:hover { background: var(--pt-blue-100); }
+
+/* 窄屏：科目四列会挤，改成两行两列 */
+@media (max-width: 520px) {
+  .dx-subjects { flex-wrap: wrap; }
+  .dx-subjects button { flex: 1 1 46%; }
+  .dx-childline-link { margin-left: 0; }
+  .dx-autoscope-main { flex-direction: column; gap: 2px; }
+}
+
+.dx-autoscope-vols {
+  margin: 6px 0 0;
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 孩子行里的下拉：吃掉剩余宽度，右侧保存提示收成小字 */
+.dx-childline-label {
+  flex: none;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+}
+.dx-childline select,
+.dx-childline #child-select {
+  flex: 1 1 150px;
+  min-width: 0;
+  max-width: 220px;
+  min-height: 32px;
+  padding: 0 28px 0 10px;
+  font-size: .86rem;
+  font-weight: 600;
+  color: var(--pt-ink);
+  background-color: #fff;
+  border: 1px solid var(--pt-line);
+  border-radius: 8px;
+}
+.dx-childline-save {
+  margin-left: auto;
+  flex: none;
+  font-size: .74rem;
+  color: var(--pt-ink-3);
+  white-space: nowrap;
+}
+@media (max-width: 520px) {
+  .dx-childline select,
+  .dx-childline #child-select { max-width: none; flex: 1 1 100%; }
+  .dx-childline-save { margin-left: 0; white-space: normal; }
+}
+
+/* 答题页头部：进度 + 随时结束 */
+.q-head { align-items: center; gap: 10px; flex-wrap: wrap; }
+.q-head-label {
+  min-width: 0;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.q-progress-num { flex: none; font-variant-numeric: tabular-nums; }
+.q-end {
+  flex: none;
+  min-height: 30px;
+  padding: 0 13px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+  background: #fff;
+  border: 1px solid var(--pt-line);
+  border-radius: 999px;
+  box-shadow: none;
+}
+.q-end:hover {
+  color: var(--pt-ink);
+  border-color: #C7D0DE;
+  background: var(--pt-surface-2);
+}
+@media (max-width: 560px) {
+  .q-head-label { max-width: 100%; }
+  .q-end { margin-left: auto; }
+}
+
+/* 中断提示里的「继续诊断」：跟文字同一行，不要掉下去 */
+#summary .notice .btn,
+#summary .notice button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  margin-left: 10px !important;
+  padding: 0 13px;
+  font-size: .78rem;
+  font-weight: 600;
+  vertical-align: middle;
 }

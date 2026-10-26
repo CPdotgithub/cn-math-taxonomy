@@ -360,3 +360,12 @@ body[data-page="history"] .kid-tag {
   .pf-rec > summary.pf-rec-sum { grid-template-columns: 46px minmax(0, 1fr); }
   .pf-rec-counts { grid-column: 1 / -1; justify-content: flex-start; }
 }
+
+/* 记录标题行：标题和「未测完」并排，别被 flex column 拉成整行 */
+.pf-rec-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  min-width: 0;
+}

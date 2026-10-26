@@ -153,7 +153,8 @@
     if (!ts.length) throw new Error('至少需要一个目标知识点');
     ts.forEach(function (id) { if (!graph.byId[id]) throw new Error('未知知识点：' + id); });
     const screen = opts.mode === 'screen';
-    const limit = Math.max(1, Math.floor(opts.limit == null ? (screen ? SCREEN_LIMIT : DEFAULT_LIMIT) : opts.limit));
+    const open = opts.open === true;   // 开放式：不设题量上限，用户想停就停
+    const limit = open ? Infinity : Math.max(1, Math.floor(opts.limit == null ? (screen ? SCREEN_LIMIT : DEFAULT_LIMIT) : opts.limit));
     // 基础回溯池：只在筛查模式下生效，只保留「同学科、可测、不在目标里」的点
     const base = screen ? Array.from(new Set(opts.base || [])).filter(function (id) {
       if (ts.indexOf(id) >= 0) return false;
@@ -165,11 +166,12 @@
     const sub = screen ? { nodes: topoSort(graph, scopeIds) } : subgraph(graph, ts);
     const pos = Object.create(null);
     sub.nodes.forEach(function (id, i) { pos[id] = i; });
-    // 离目标最近（拓扑序最靠后）的目标先问；基础池留在 scope 里，等答错时才被压到栈顶
+    // 出题池：可测的目标。顺序只作为随机取的底子，不再决定先问哪一章
     const stack = ts.filter(function (id) { return isTestable(graph, id); })
       .sort(function (a, b) { return pos[b] - pos[a]; });
     return {
-      targets: ts, base: base, limit: limit, order: sub.nodes, status: {}, stack: stack, answers: [], attempts: {},
+      targets: ts, base: base, limit: limit, order: sub.nodes, status: {}, stack: stack, follow: [],
+      answers: [], attempts: {}, open: open,
       mode: screen ? 'screen' : 'target', scope: screen ? scopeIds.slice() : null,
       seed: opts.seed == null ? 'default' : String(opts.seed),
       avoid: Array.from(new Set(opts.avoid || []))
@@ -181,6 +183,7 @@
     Object.keys(s.attempts).forEach(function (k) { attempts[k] = s.attempts[k].slice(); });
     return {
       targets: s.targets.slice(), base: (s.base || []).slice(), limit: s.limit, order: s.order, stack: s.stack.slice(),
+      follow: (s.follow || []).slice(), open: !!s.open,
       status: Object.assign({}, s.status), answers: s.answers.slice(), attempts: attempts,
       seed: s.seed, avoid: s.avoid, mode: s.mode, scope: s.scope ? s.scope.slice() : null
     };
@@ -291,17 +294,40 @@
         .filter(function (p) { return isTestable(graph, p) && !s.status[p] && (!scope || scope.has(p)); });
       const pushed = new Set(push);
       s.stack = push.concat(s.stack.filter(function (x) { return !pushed.has(x); }));
+      // 先修复查另存一条优先队列：下一题先问它，问完就出队
+      s.follow = push.concat((s.follow || []).filter(function (x) { return !pushed.has(x); }));
     }
     return s;
   }
 
   function nextQuestion(graph, session) {
-    if (session.answers.length >= session.limit) return null;
+    if (isFinite(session.limit) && session.answers.length >= session.limit) return null;
+    // 1. 已经答过一题、还没定论的知识点：必须接着出第二题
     for (let i = 0; i < session.stack.length; i++) {
       const id = session.stack[i];
-      if (!session.status[id] && isTestable(graph, id)) return id;
+      if (session.status[id]) continue;
+      const a = session.attempts[id];
+      if (a && a.length) return id;
     }
-    return null;
+    // 2. 上一题答错时压进来的先修：优先回查，这是诊断的核心路径
+    const follow = session.follow || [];
+    for (let i = 0; i < follow.length; i++) {
+      const id = follow[i];
+      if (session.status[id]) continue;
+      const a = session.attempts[id];
+      if (a && a.length) continue;
+      if (isTestable(graph, id)) return id;
+    }
+    // 3. 其余在范围内随机挑，避免每次都从第一册第一章顺下来
+    const pool = session.stack.filter(function (id) {
+      if (session.status[id]) return false;
+      const a = session.attempts[id];
+      if (a && a.length) return false;
+      return isTestable(graph, id);
+    });
+    if (!pool.length) return null;
+    const idx = Math.min(pool.length - 1, Math.floor(rand01(session.seed + '|pick', session.answers.length) * pool.length));
+    return pool[idx];
   }
 
   function nextItem(graph, session) {
@@ -607,7 +633,15 @@
     }).map(function (t) { return t.id; });
     if (!ids.length) return null;
 
-    const out = { ids: ids, volumes: volumes, label: label, base: [], baseGrades: [] };
+    const out = { ids: ids, volumes: volumes, label: label, base: [], baseGrades: [], byVolume: [] };
+    // 按册拆分，给界面显示「四上 21 个 · 四下 20 个」
+    const countByVol = Object.create(null);
+    ids.forEach(function (id) {
+      const v = parseChapter(graph.byId[id].chapter).volume;
+      if (v) countByVol[v] = (countByVol[v] || 0) + 1;
+    });
+    out.byVolume = volumes.filter(function (v) { return countByVol[v]; })
+      .map(function (v) { return { volume: v, n: countByVol[v] }; });
     if (opts && opts.cumulative) {
       const idSet = new Set(ids);
       const grades = ids.map(function (id) { return graph.byId[id].grade; })
