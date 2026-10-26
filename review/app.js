@@ -634,6 +634,22 @@
     if (!ST.grade2) stageEl.appendChild(submitBar());
   }
 
+  /* 这一套题会带上哪些上下文，写在开卷前，出问题好判断是数据不对还是模型不对 */
+  function contextSummary(picks) {
+    var bits = [];
+    if (ST.child && CC) {
+      var recs = CC.recordsOf(ST.child.id).filter(function (r) { return r.subject === ST.subject; });
+      var diag = recs.filter(function (r) { return r.mode !== 'review'; });
+      if (diag.length) bits.push('最近诊断 ' + (fmtMin(diag[0].savedAt) || '—'));
+      if (recs.length) bits.push('档案 ' + recs.length + ' 次记录');
+      var n = candidates().length;
+      if (n) bits.push('待补 ' + n + ' 个点');
+    }
+    var sup = supportOf(picks);
+    if (sup.length) bits.push('先修台阶 ' + sup.length + ' 个');
+    return bits.length ? '这次出题会带上：' + bits.join(' · ') + '。' : '';
+  }
+
   function introPanel() {
     var p = h('div', { class: 'pt-panel rv-intro' });
     var body = h('div', { class: 'pt-panel-body' });
@@ -688,6 +704,22 @@
     body.appendChild(steps);
 
     body.appendChild(h('p', { class: 'rv-intro-text', text: '每档 ' + ST.count + ' 题，共 ' + (ST.count * 3) + ' 题。选题在' + childGrade() + '范围内，模型会围绕这些点综合命题。' }));
+
+    var ctxLine = contextSummary(picks);
+    if (ctxLine) body.appendChild(h('p', { class: 'rv-hint', text: ctxLine }));
+
+    /* 出问题时好判断是数据不对还是模型不对：把要发出去的画像摊开给人看 */
+    var brief = h('details', { class: 'rv-brief' });
+    brief.appendChild(h('summary', null, [document.createTextNode('这次命题的依据')]));
+    var pre = h('pre', { class: 'rv-brief-pre' });
+    var bt = [];
+    var pb = PR.profileBlock(buildProfile(picks));
+    var sb = PR.scopeBlock(buildScope(picks));
+    if (pb) bt.push(pb);
+    if (sb) bt.push(sb);
+    pre.textContent = bt.join('\n\n') || '（没有档案，也没有先修数据，模型只知道年级和知识点）';
+    brief.appendChild(pre);
+    body.appendChild(brief);
 
     body.appendChild(h('button', {
       type: 'button', class: 'rv-btn is-primary',
@@ -894,6 +926,12 @@
       }
     }
 
+    if (g.errorType) {
+      var why = h('p', { class: 'rv-fb-why' });
+      why.appendChild(pill(g.errorType, 'amber'));
+      if (g.point) why.appendChild(h('span', { class: 'rv-fb-why-point', text: '卡在 ' + g.point }));
+      box.appendChild(why);
+    }
     if (g.comment) box.appendChild(h('p', { class: 'rv-fb-comment', text: g.comment }));
     if (q.explain) {
       box.appendChild(h('div', { class: 'rv-fb-explain' }, [
@@ -964,6 +1002,18 @@
     });
     body.appendChild(lv);
 
+    if (g.errs && g.errs.length) {
+      /* 这里只说「错在哪一类」，具体的知识点留给下面的「还没过关」，避免两栏重复 */
+      var ec = h('div', { class: 'rv-errs' });
+      ec.appendChild(h('span', { class: 'rv-label', text: '错在哪' }));
+      var echips = h('div', { class: 'rv-chips' });
+      var tc = g.types || {};
+      Object.keys(tc).sort(function (a, b) { return tc[b] - tc[a]; }).forEach(function (k) {
+        echips.appendChild(h('span', { class: 'pt-pill is-amber', text: k + (tc[k] > 1 ? ' ×' + tc[k] : '') }));
+      });
+      ec.appendChild(echips);
+      body.appendChild(ec);
+    }
     if (g.gaps && g.gaps.length) {
       var gap = h('div', { class: 'rv-gaps' });
       gap.appendChild(h('span', { class: 'rv-label', text: '还没过关' }));
@@ -1083,6 +1133,111 @@
       .slice(0, 3);
   }
 
+  /* ------------------------------------------------------- 学情画像与范围 */
+
+  /* 沿先修链回溯：[目标, 一级先修, 二级先修] 的名字 */
+  function chainOf(id, depth) {
+    var names = [], seen = {}, cur = id, guard = 0;
+    var max = depth || 3;
+    if (!ST.data) return names;
+    while (cur && !seen[cur] && guard < max) {
+      var t = topicOf(cur);
+      if (!t) break;
+      seen[cur] = true;
+      names.push(t.name);
+      var ps = (ST.data.prereq[cur] || []).filter(function (p) { return !!ST.data.byId[p]; });
+      cur = ps.length ? ps[0] : '';
+      guard++;
+    }
+    return names;
+  }
+
+  /* 两层以内的先修：给低档题当台阶用，本身不单独出题 */
+  function supportOf(picks) {
+    var out = [], seen = {}, skip = {};
+    if (!ST.data) return out;
+    picks.forEach(function (t) { skip[t.id] = true; });
+    var level = picks.map(function (t) { return t.id; });
+    for (var d = 0; d < 2 && level.length; d++) {
+      var next = [];
+      level.forEach(function (id) {
+        (ST.data.prereq[id] || []).forEach(function (pid) {
+          var pt = topicOf(pid);
+          if (!pt || pt.external || seen[pid] || skip[pid]) return;
+          if (subjectOf(pt) !== ST.subject) return;
+          seen[pid] = true;
+          out.push(pt.name);
+          next.push(pid);
+        });
+      });
+      level = next;
+    }
+    return out.slice(0, 8);
+  }
+
+  /* 把档案里的诊断记录整理成模型能读的画像：最近一次诊断、累计、问题点、先修链 */
+  function buildProfile(picks) {
+    var p = {
+      grade: childGrade(), textbook: childTextbook(), subject: ST.subject,
+      last: null, total: null, weak: [], chains: []
+    };
+    var recs = (ST.child && CC) ? CC.recordsOf(ST.child.id).filter(function (r) {
+      return r.subject === ST.subject;
+    }) : [];
+    var diag = recs.filter(function (r) { return r.mode !== 'review'; });
+
+    if (diag.length) {
+      var r0 = diag[0], c0 = r0.counts || {};
+      p.last = {
+        when: fmtMin(r0.savedAt) || '—',
+        label: String(r0.label || '诊断').slice(0, 20),
+        asked: Number(r0.asked) || 0,
+        weak: Number(c0.weak) || 0,
+        shaky: Number(c0.shaky) || 0,
+        mastered: Number(c0.mastered) || 0
+      };
+    }
+    if (recs.length) {
+      var tested = {}, nweak = 0, nshaky = 0;
+      recs.forEach(function (r) {
+        (r.weak || []).concat(r.shaky || [], r.mastered || []).forEach(function (id) { tested[id] = true; });
+      });
+      if (ST.child && CC) {
+        var st = CC.latestStatus(ST.child.id, ST.subject) || {};
+        Object.keys(st).forEach(function (id) {
+          if (st[id].status === 'weak') nweak++;
+          else if (st[id].status === 'shaky') nshaky++;
+        });
+      }
+      p.total = { records: recs.length, tested: Object.keys(tested).length, weak: nweak, shaky: nshaky };
+    }
+
+    var cands = candidates();
+    cands.slice(0, 6).forEach(function (c) {
+      p.weak.push({ name: c.topic.name, chapter: shortChapter(c.topic.chapter) || '', status: c.status });
+    });
+
+    /* 先修链：本次目标在前，档案里其余问题点在后，去重，最多 5 条 */
+    var seenChain = {};
+    var addChain = function (id) {
+      if (seenChain[id] || p.chains.length >= 5) return;
+      seenChain[id] = true;
+      var c = chainOf(id, 3);
+      if (c.length > 1) p.chains.push(c);
+    };
+    picks.forEach(function (t) { addChain(t.id); });
+    cands.forEach(function (c) { addChain(c.id); });
+
+    return p;
+  }
+
+  function buildScope(picks) {
+    return {
+      targets: picks.map(function (t) { return t.name; }),
+      support: supportOf(picks)
+    };
+  }
+
   function generate() {
     if (ST.busy) return;
     var picks = pickedTopics();
@@ -1143,7 +1298,9 @@
             state: c ? (c.status === 'weak' ? '薄弱' : '不稳') : ''
           };
         }),
-        count: ST.count
+        count: ST.count,
+        profile: buildProfile(picks),
+        scope: buildScope(picks)
       });
       user += PR.webBlock(webItems);
 
@@ -1288,6 +1445,31 @@
 
   /* ---------------------------------------------------------------- 批改 */
 
+  function cleanList(arr, n) {
+    return (arr || []).map(function (x) { return String(x).replace(/\s+/g, ' ').trim().slice(0, 60); })
+      .filter(Boolean).slice(0, n || 3);
+  }
+
+  /* 客观题写了什么，交给模型做错因归因；不含正确答案以外的提示 */
+  function objectiveEvidence(q) {
+    if (q.type === 'choice') {
+      var v = ST.answers[q.id];
+      if (v === undefined || v === null || v === '') return '未作答';
+      var k = Number(v);
+      var mine = String((q.options || [])[k] || '').slice(0, 40);
+      return '选了 ' + ('ABCD'[k] || '?') + '. ' + mine +
+        '；正确选项是 ' + ('ABCD'[q.answerIndex] || '?') + '. ' + String((q.options || [])[q.answerIndex] || '').slice(0, 40);
+    }
+    if (q.type === 'blank') {
+      var arr = Array.isArray(ST.answers[q.id]) ? ST.answers[q.id] : [];
+      var mine2 = arr.map(function (x, i) {
+        return '第' + (i + 1) + '空写「' + String(x == null || x === '' ? '空' : x).slice(0, 20) + '」';
+      }).join('、');
+      return (mine2 || '未作答') + '；应填 ' + String(q.answerText || '').slice(0, 50);
+    }
+    return '';
+  }
+
   function submit() {
     if (ST.busy) return;
     var qs = ST.set.questions;
@@ -1329,11 +1511,14 @@
 
     (async function () {
       var extra = { summary: '', gaps: [], next: '' };
-      if (subjective.length) {
+      var missCount = qs.filter(function (q) { return items[q.id].verdict !== 'right'; }).length;
+      /* 有解答题要判分，或者客观题有错要归因，都值得让模型看一遍；全对且无解答题就不花这次额度 */
+      if (subjective.length || missCount) {
         var objective = qs.filter(function (q) { return q.type !== 'solution'; }).map(function (q) {
           return {
             id: q.id, level: LEVEL_NAME[q.level] || q.level, type: q.type,
-            got: items[q.id].got, full: items[q.id].full, verdict: items[q.id].verdict
+            got: items[q.id].got, full: items[q.id].full, verdict: items[q.id].verdict,
+            evidence: objectiveEvidence(q)
           };
         });
         var user = PR.gradePrompt({
@@ -1356,15 +1541,21 @@
         (obj.items || []).forEach(function (it) {
           var q = qs.filter(function (x) { return x.id === it.id; })[0];
           if (!q || !items[it.id]) return;
-          var full = items[it.id].full;
-          var score = Number(it.score);
-          if (!isFinite(score)) score = 0;
-          score = Math.max(0, Math.min(full, score));
-          items[it.id].got = round1(score);
-          items[it.id].verdict = score >= full ? 'right' : score > 0 ? 'partial' : 'wrong';
-          items[it.id].hits = (it.hits || []).map(function (x) { return String(x).slice(0, 60); }).slice(0, 4);
-          items[it.id].miss = (it.miss || []).map(function (x) { return String(x).slice(0, 60); }).slice(0, 4);
-          items[it.id].comment = String(it.comment || '').slice(0, 200);
+          var row = items[it.id];
+          /* 客观题的分由前端判，模型只负责归因，不许改分 */
+          if (q.type === 'solution') {
+            var score = Number(it.score);
+            if (!isFinite(score)) score = 0;
+            score = Math.max(0, Math.min(row.full, score));
+            row.got = round1(score);
+            row.verdict = score >= row.full ? 'right' : score > 0 ? 'partial' : 'wrong';
+            row.hits = cleanList(it.hits, 4);
+            row.miss = cleanList(it.miss, 4);
+          }
+          row.comment = String(it.comment || '').slice(0, 200);
+          var et = PR.ERROR_CN[String(it.errorType || '')];
+          row.errorType = (et && et !== '—' && row.verdict !== 'right') ? et : '';
+          row.point = row.verdict === 'right' ? '' : String(it.point || '').replace(/\s+/g, ' ').trim().slice(0, 24);
         });
         extra.summary = String(obj.summary || '').slice(0, 400);
         extra.gaps = (obj.gaps || []).map(function (x) { return String(x).slice(0, 24); }).slice(0, 3);
@@ -1398,6 +1589,18 @@
 
     score = round1(score);
     var finalScore = score, finalFull = full;
+
+    /* 逐题的错因归因收拢：报告里给一栏「错在哪」，档案里也留一份 */
+    var errs = qs.filter(function (q) { return items[q.id] && items[q.id].errorType; })
+      .map(function (q) {
+        return {
+          type: items[q.id].errorType,
+          point: items[q.id].point || String(q.topicName || '').slice(0, 16)
+        };
+      }).slice(0, 6);
+    var typeCount = {};
+    errs.forEach(function (e) { typeCount[e.type] = (typeCount[e.type] || 0) + 1; });
+
     var summary = extra.summary;
     if (!summary) {
       /* 模型没给整体判断时，用三档分数拼一句实话，别留空 */
@@ -1405,7 +1608,21 @@
         var p = l.full ? l.got / l.full : 0;
         return (LEVEL_FULL[l.key] || l.key) + ' ' + l.got + '/' + l.full + '（' + verdictText(p * 100) + '）';
       }).join('；') + '。';
+      var top = Object.keys(typeCount).sort(function (a, b) { return typeCount[b] - typeCount[a]; })[0];
+      if (top) summary += '主要错因是' + top + '。';
     }
+
+    /* 模型没给「还没过关」时，用逐题归因出来的卡点补上，别让这一栏空着 */
+    var gaps = (extra.gaps || []).filter(Boolean).slice(0, 3);
+    if (!gaps.length) {
+      var seenG = {};
+      errs.forEach(function (e) {
+        if (!e.point || seenG[e.point] || gaps.length >= 3) return;
+        seenG[e.point] = true;
+        gaps.push(e.point);
+      });
+    }
+
     ST.grade2 = {
       at: new Date().toISOString(),
       title: ST.set.title,
@@ -1415,8 +1632,10 @@
       pct: finalFull ? finalScore / finalFull * 100 : 0,
       levels: levels,
       summary: summary,
-      gaps: extra.gaps,
+      gaps: gaps,
       next: extra.next,
+      errs: errs,
+      types: typeCount,
       partial: !!ST.gradeErr
     };
     ST.set.savedToChild = false;
@@ -1439,7 +1658,8 @@
       weak: [], shaky: [], mastered: [], roots: [],
       review: {
         score: g.score, full: g.full, pct: Math.round(g.pct),
-        levels: g.levels, gaps: g.gaps
+        levels: g.levels, gaps: g.gaps,
+        errs: (g.errs || []).slice(0, 5), types: g.types || {}
       }
     });
     ST.set.savedToChild = true;

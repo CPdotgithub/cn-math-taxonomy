@@ -465,6 +465,36 @@ body.has-rail main#root.rv {
 .rv-step b { font-size: .85rem; font-weight: 650; color: var(--pt-ink); }
 .rv-step em { font-style: normal; font-size: .76rem; color: var(--pt-ink-3); line-height: 1.5; }
 
+/* 命题依据：默认收起，想核对的人再展开 */
+.rv-brief {
+  margin: 0 0 16px;
+  border: 1px solid var(--pt-line);
+  border-radius: 10px;
+  background: var(--pt-surface-2);
+  overflow: hidden;
+}
+.rv-brief summary {
+  padding: 9px 12px;
+  font-size: .8rem;
+  font-weight: 650;
+  color: var(--pt-ink-2);
+  cursor: pointer;
+  list-style: none;
+}
+.rv-brief summary::-webkit-details-marker { display: none; }
+.rv-brief summary::after { content: " ›"; }
+.rv-brief[open] summary::after { content: " ⌄"; }
+.rv-brief-pre {
+  margin: 0;
+  padding: 0 12px 12px;
+  font-family: inherit;
+  font-size: .78rem;
+  line-height: 1.75;
+  color: var(--pt-ink-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 /* ------------------------------------------------------------------ 主区：生成中 */
 
 .rv-gen .pt-panel-body { display: flex; flex-direction: column; gap: 10px; padding: 20px; }
@@ -667,6 +697,19 @@ body.has-rail main#root.rv {
   line-height: 1.75;
   color: var(--pt-ink);
 }
+/* 错因归因：AI 判的「哪一类错 + 卡在哪个点」 */
+.rv-fb-why {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+.rv-fb-why-point {
+  font-size: .84rem;
+  line-height: 1.6;
+  color: var(--pt-ink-2);
+}
 .rv-fb-explain .rv-label { margin-bottom: 3px; }
 .rv-fb-explain p {
   margin: 0;
@@ -769,7 +812,9 @@ body.has-rail main#root.rv {
 }
 .rv-level-bar { height: 5px; }
 
-.rv-gaps { display: flex; flex-direction: column; gap: 6px; }
+.rv-gaps,
+.rv-errs { display: flex; flex-direction: column; gap: 6px; }
+.rv-errs .rv-label { color: var(--warn); }
 .rv-next {
   padding: 12px 14px;
   border: 1px solid var(--pt-line);

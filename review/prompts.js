@@ -43,7 +43,53 @@
     return out.join('\n');
   }
 
-  /* ctx: { grade, textbook, subject, topics:[{id,name,chapter,description,mastery_criteria,state}], count } */
+  /* 学情画像：把档案里的诊断记录和知识图谱里的先修链一起交给模型，
+     模型才知道这孩子到底卡在哪一层，而不是只看见三个知识点名字。 */
+  function profileBlock(p) {
+    if (!p) return '';
+    var out = ['【学情画像】'];
+    out.push('学生：' + (p.grade || '未知年级') + (p.textbook ? ' · ' + p.textbook : '') + ' · ' + (SUBJECT_NAME[p.subject] || '数学'));
+
+    if (p.last) {
+      out.push('最近一次诊断：' + p.last.when + '「' + p.last.label + '」，测了 ' + p.last.asked + ' 个点，' +
+        '薄弱 ' + p.last.weak + '、不稳 ' + p.last.shaky + '、已掌握 ' + p.last.mastered + '。');
+    }
+    if (p.total && p.total.records) {
+      out.push('档案累计：' + p.total.records + ' 次记录，练过 ' + p.total.tested + ' 个知识点，其中薄弱 ' + p.total.weak + '、不稳 ' + p.total.shaky + '。');
+    }
+    if (p.weak && p.weak.length) {
+      out.push('档案里判为有问题的点（薄弱在前）：');
+      p.weak.forEach(function (w) {
+        /* 章节名以知识点名结尾时，说明是重复，去掉；否则照原样保留（章节可能是「加法模型和乘法模型」这种合并名） */
+        var ch = String(w.chapter || '');
+        if (w.name && ch.slice(-w.name.length) === w.name) {
+          ch = ch.slice(0, ch.length - w.name.length).replace(/[\s·,，、]+$/, '');
+        }
+        out.push('- ' + w.name + (ch ? '（' + ch + '）' : '') + (w.status === 'weak' ? '：薄弱' : '：不稳'));
+      });
+    }
+    if (p.chains && p.chains.length) {
+      out.push('这些点的先修链（左边是目标，右边越来越基础）：');
+      p.chains.forEach(function (c) { out.push('- ' + c.join(' ← ')); });
+    }
+    out.push('怎么用这份画像：低档题可以退到底层的先修当台阶；中、高档必须落在目标点上；');
+    out.push('已经掌握的点不要重复考；学生的卡点如果落在先修，就在题目里把它当成第一小步。');
+    return out.join('\n');
+  }
+
+  /* 出题范围：写清楚「必须考什么」和「可以借什么」，避免模型自由发挥到超纲 */
+  function scopeBlock(s) {
+    if (!s) return '';
+    var out = ['【出题范围】'];
+    out.push('必须覆盖的考点：' + (s.targets || []).join('、'));
+    if (s.support && s.support.length) {
+      out.push('允许顺带引用的基础（只当台阶，不单独出题）：' + s.support.join('、'));
+    }
+    out.push('范围外的知识点、超出本年级教材的方法一律不用；不要出需要课外资料才能作答的题。');
+    return out.join('\n');
+  }
+
+  /* ctx: { grade, textbook, subject, topics:[{id,name,chapter,description,mastery_criteria,state}], count, profile, scope } */
   function setPrompt(ctx) {
     var subj = SUBJECT_NAME[ctx.subject] || '数学';
     var per = Math.max(1, Math.min(2, ctx.count || 1));
@@ -52,10 +98,19 @@
     var lines = [];
     lines.push('请为下面这名学生出一套「薄弱点综合考察」题。');
     lines.push('');
-    lines.push('学生：' + (ctx.grade || '未知年级') + (ctx.textbook ? ' · ' + ctx.textbook : '') + ' · 学科：' + subj);
-    lines.push('薄弱知识点（题目只能围绕这些点，允许跨点综合）：');
+    if (ctx.profile) {
+      lines.push(profileBlock(ctx.profile));
+    } else {
+      lines.push('学生：' + (ctx.grade || '未知年级') + (ctx.textbook ? ' · ' + ctx.textbook : '') + ' · 学科：' + subj);
+    }
+    lines.push('');
+    lines.push('要重点检验的薄弱知识点（题目围绕这些点，允许跨点综合）：');
     (ctx.topics || []).forEach(function (t, i) { lines.push(topicLine(t, i)); });
     lines.push('');
+    if (ctx.scope) {
+      lines.push(scopeBlock(ctx.scope));
+      lines.push('');
+    }
     lines.push('共 ' + n + ' 题：低、中、高三档各 ' + per + ' 题。三档的定义：');
     LEVELS.forEach(function (l) { lines.push('- ' + l.key + '（' + l.name + '）：' + l.hint); });
     lines.push('');
@@ -122,10 +177,14 @@
      objective：[{id, level, type, got, full, verdict}] —— 客观题已由前端判好，这里只用于写整体判断 */
   function gradePrompt(ctx) {
     var lines = [];
-    lines.push('你在批改学生的作答。只批改下面列出的解答题，并给出整体判断。');
+    lines.push('你在批改学生的作答：给解答题判分，给答错的客观题归因，最后给整体判断。');
     lines.push('');
     lines.push('学生：' + (ctx.grade || '未知年级') + ' · 学科 ' + (SUBJECT_NAME[ctx.subject] || '数学'));
     lines.push('');
+    if (!(ctx.subjective || []).length) {
+      lines.push('本次没有需要批改的解答题，只做客观题的错因归因和整体判断。');
+      lines.push('');
+    }
     (ctx.subjective || []).forEach(function (q) {
       lines.push('【' + q.id + '】难度：' + q.level + ' · 满分 ' + q.fullScore + ' 分');
       lines.push('题干：' + q.stem);
@@ -136,10 +195,11 @@
       lines.push('');
     });
     if (ctx.objective && ctx.objective.length) {
-      lines.push('客观题结果（系统已判好，不用你重新判，只用来写 summary）：');
+      lines.push('客观题结果（系统已判好分数，不要重新判分，只用来写 summary 和归因错因）：');
       ctx.objective.forEach(function (o) {
         lines.push('- ' + o.id + '（' + o.level + '·' + (o.type === 'choice' ? '选择' : '填空') + '）得分 ' + o.got + '/' + o.full + '，' +
-          (o.verdict === 'right' ? '全对' : o.verdict === 'partial' ? '部分对' : '错误或空白'));
+          (o.verdict === 'right' ? '全对' : o.verdict === 'partial' ? '部分对' : '错误或空白') +
+          (o.evidence ? '；学生作答：' + o.evidence : ''));
       });
       lines.push('');
     }
@@ -150,23 +210,36 @@
     lines.push('- 空白或完全跑题：0 分，但要指出该先补哪个点。');
     lines.push('- 评语面向学生，指出具体错在哪一步，不要空泛鼓励。');
     lines.push('- 提到某道题时说「基础题 / 变式题 / 综合题」，不要用 q1、q2 这种内部编号。');
+    lines.push('- 每题做一次错因归因 errorType，只能取这几个值：concept（概念没懂）、calc（计算失误）、reading（审题偏差）、unit（单位或量纲错）、method（方法选错）、express（过程或表述不完整）、none（答对了）。');
+    lines.push('- 每题给 point：真正卡住的那个知识点，写知识点名字，不要写题号，不超过 16 字。');
+    lines.push('- 客观题里判为错误或部分对的，也要在 items 里出现，按学生实际作答归因（score 照抄我给的分，不要改），并针对那个错法写一句 comment。');
+    lines.push('- 客观题全对的不用出现在 items 里。');
     lines.push('');
     lines.push('输出 JSON（字段名不要改）：');
     lines.push('{');
-    lines.push('  "items": [{ "id": "q3", "score": 3, "hits": ["做到了什么"], "miss": ["漏了哪一步"], "comment": "30–80 字" }],');
-    lines.push('  "summary": "整体判断，60–140 字，结合上面的客观题结果和你的批改，说清低/中/高三档各自的掌握情况，并指出最该补的一点",');
+    lines.push('  "items": [{ "id": "q3", "score": 3, "hits": ["做到了什么"], "miss": ["漏了哪一步"], "comment": "30–80 字", "errorType": "calc", "point": "两位数乘两位数的进位" }],');
+    lines.push('  "summary": "整体判断，60–140 字。结合客观题对的错的、以及解答题的批改，说清低/中/高三档各自的掌握情况，点出最该补的一个点，并说明错因主要属于哪一类",');
     lines.push('  "gaps": ["还没过关的点，最多 3 条，每条不超过 18 字"],');
     lines.push('  "next": "下一步怎么练，40–80 字，具体到动作"');
     lines.push('}');
     return lines.join('\n');
   }
 
+  /* 错因中文名，前端和档案共用 */
+  var ERROR_CN = {
+    concept: '概念不清', calc: '计算失误', reading: '审题偏差',
+    unit: '单位量纲', method: '方法选错', express: '表述不全', none: '—'
+  };
+
   window.RvPrompts = {
     SYSTEM: SYSTEM,
     LEVELS: LEVELS,
+    ERROR_CN: ERROR_CN,
     SUBJECT_NAME: SUBJECT_NAME,
     setPrompt: setPrompt,
     webBlock: webBlock,
-    gradePrompt: gradePrompt
+    gradePrompt: gradePrompt,
+    profileBlock: profileBlock,
+    scopeBlock: scopeBlock
   };
 })();

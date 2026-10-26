@@ -341,6 +341,19 @@
         body.appendChild(el('h4', null, '三档得分'));
         body.appendChild(ul2);
       }
+      /* AI 逐题归因出来的错因与卡点 */
+      var errs = (r.review && r.review.errs) || [];
+      if (errs.length) {
+        var ul3 = el('ul', 'rec-topics');
+        errs.forEach(function (e) {
+          var li = el('li');
+          li.appendChild(tag('shaky', e.type || '错因'));
+          if (e.point) li.appendChild(el('span', null, ' 卡在 ' + e.point));
+          ul3.appendChild(li);
+        });
+        body.appendChild(el('h4', null, 'AI 判定的错因'));
+        body.appendChild(ul3);
+      }
     } else if (!(r.weak || []).length && !(r.shaky || []).length) {
       body.appendChild(el('p', 'kid-empty', '这次没有发现薄弱或不稳的知识点。'));
     }
