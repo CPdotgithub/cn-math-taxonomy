@@ -489,16 +489,20 @@
       text: '低 / 中 / 高三档各 ' + ST.count + ' 题，共 ' + (ST.count * 3) + ' 题。选择题 + 填空 + 解答各一档。'
     }));
 
-    /* 高级：模型 / 联网 */
+    /* 通道放在明面上：换到网页版是家长会主动找的动作，别藏在折叠里 */
+    var chan = channelField();
+    chan.classList.add('rv-chanfield');
+    body.appendChild(chan);
+
+    /* 高级：模型 / 凭据 / 联网 */
     var det = h('details', { class: 'rv-adv' });
     if (ST.advanced) det.setAttribute('open', '');
     det.addEventListener('toggle', function () { ST.advanced = det.open; savePrefs(); });
     det.appendChild(h('summary', null, [document.createTextNode(
-      LLM.isWeb() ? '模型与联网素材 · 网页版' : '模型与联网素材'
+      LLM.isWeb() ? '网页版设置与联网素材' : '模型与联网素材'
     )]));
 
     var inner = h('div', { class: 'rv-adv-body' });
-    inner.appendChild(channelField());
     if (LLM.isWeb()) {
       inner.appendChild(webCfgField());
       inner.appendChild(webModelField());
@@ -530,8 +534,8 @@
     wrap.appendChild(h('p', {
       class: 'rv-hint',
       text: LLM.isWeb()
-        ? '用你自己的 DeepSeek 网页账号，手写照片也能一起发过去。'
-        : '云端通道免密钥，稳定；只能发文字，不能传照片。'
+        ? '走你自己的 DeepSeek 账号，手写照片也能一起判。'
+        : '免密钥，稳定；只能发文字。'
     }));
     return wrap;
   }
@@ -2078,6 +2082,8 @@
       if (ST.child) { ST.grade = ST.child.grade || ''; ST.textbook = ST.child.textbook || ''; }
     }
     if (!ST.child) ST.showPicker = true; // 没有档案时，直接把「自己选」打开
+    /* 选了网页版却还没凭据（换了设备 / 清了缓存）：把配置面板摊开，别让人找不到 */
+    if (LLM.isWeb() && !LLM.web().token) ST.advanced = true;
     render();
 
     loadData().then(function () {

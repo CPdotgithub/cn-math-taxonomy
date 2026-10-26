@@ -407,6 +407,13 @@ body.has-rail main#root.rv {
 }
 .rv-hint.is-ok { color: #0f7a5a; }
 .rv-chan { align-self: flex-start; }
+.rv-chanfield {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--pt-line-soft);
+  gap: 6px;
+}
+.rv-chanfield .rv-hint { margin-top: 2px; }
 
 .rv-picker { display: flex; flex-direction: column; gap: 6px; }
 .rv-results { display: flex; flex-direction: column; gap: 2px; margin: 2px -6px 0; }
