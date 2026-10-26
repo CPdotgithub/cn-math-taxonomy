@@ -1,0 +1,1530 @@
+/* 复习与考察
+   ----------------------------------------------------------------------------
+   流程：选薄弱知识点 → 让模型出一套低/中/高三档的题 → 学生作答 → 客观题本地判、
+         主观题回模型批 → 汇总报告，可存进孩子档案。
+
+   设计取舍：
+   - 客观题本地判分，快且不花额度；只有解答题交给模型批，并要求给分步评分点。
+   - 模型输出当不可信文本处理：只做 JSON 解析，全部用 textContent 渲染，从不拼 HTML。
+   - 一份卷子的每题都带 topicId，报告能指回知识图谱。
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var CC = window.CnmChildren;
+  var LLM = window.RvLLM;
+  var PR = window.RvPrompts;
+  var WEB = window.RvWeb;
+
+  var LS_PREFS = 'cnmReview.prefs.v1';
+  var LS_SETS = 'cnmReview.sets.v1';
+  var MAX_SETS = 12;
+  var MAX_PICK = 3;
+  var COOLDOWN_MS = 4000;
+
+  var root = document.getElementById('root');
+  var headEl = document.getElementById('rv-head');
+  var sideEl = document.getElementById('rv-side');
+  var stageEl = document.getElementById('rv-stage');
+
+  var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
+
+  var ST = {
+    subject: 'math',
+    data: null,
+    child: null,
+    grade: '',
+    textbook: '',
+    picked: [],
+    count: 1,
+    model: '',
+    models: [],
+    modelsErr: '',
+    busy: '',
+    busyNote: '',
+    chars: 0,
+    err: '',
+    set: null,
+    answers: {},
+    grade2: null,
+    gradeErr: '',
+    showPicker: false,
+    q: '',
+    webOn: false,
+    links: '',
+    cfgOpen: false,
+    lastGenAt: 0,
+    advanced: false
+  };
+
+  var abortCtl = null;
+
+  /* ---------------------------------------------------------------- 小工具 */
+
+  function h(tag, attrs, kids) {
+    var el = document.createElement(tag);
+    var a = attrs || {};
+    Object.keys(a).forEach(function (k) {
+      var v = a[k];
+      if (v == null || v === false) return;
+      if (k === 'class') el.className = v;
+      else if (k === 'text') el.textContent = v;
+      else if (k === 'html') el.innerHTML = v; // 只用于本文件写死的图标 SVG
+      else if (k.slice(0, 2) === 'on' && typeof v === 'function') el.addEventListener(k.slice(2), v);
+      else if (k === 'dataset') Object.keys(v).forEach(function (d) { el.dataset[d] = v[d]; });
+      else el.setAttribute(k, v === true ? '' : v);
+    });
+    (kids || []).forEach(function (c) {
+      if (c == null || c === false) return;
+      el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+    });
+    return el;
+  }
+  function clear(el) { while (el.firstChild) el.removeChild(el.firstChild); }
+  function pill(text, tone) { return h('span', { class: 'pt-pill is-' + (tone || 'gray'), text: text }); }
+
+  function readLS(k, fb) {
+    try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? fb : v; } catch (e) { return fb; }
+  }
+  function writeLS(k, v) {
+    try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch (e) { return false; }
+  }
+  function uid() { return 'rv' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+  function fmtMin(iso) {
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    var p = function (n) { return ('0' + n).slice(-2); };
+    return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+  }
+  function round1(n) { return Math.round(n * 10) / 10; }
+
+  function subjectOf(t) {
+    if (!t) return 'math';
+    if (t.subject === 'english' || t.subject === 'math' || t.subject === 'physics' || t.subject === 'chinese') return t.subject;
+    var id = String(t.id || '');
+    if (id.indexOf('cne_') === 0) return 'english';
+    if (id.indexOf('cnp_') === 0) return 'physics';
+    if (id.indexOf('cnc_') === 0) return 'chinese';
+    return 'math';
+  }
+
+  var LEVEL_NAME = { low: '基础', mid: '变式', high: '综合' };
+  var LEVEL_FULL = { low: '基础巩固', mid: '变式应用', high: '综合迁移' };
+  var TYPE_NAME = { choice: '单项选择', blank: '填空', solution: '解答' };
+
+  /* ---------------------------------------------------------------- 偏好 */
+
+  function loadPrefs() {
+    var p = readLS(LS_PREFS, {}) || {};
+    ST.count = p.count === 2 ? 2 : 1;
+    ST.model = p.model || '';
+    ST.webOn = !!p.webOn;
+    ST.links = p.links || '';
+    ST.advanced = !!p.advanced;
+  }
+  function savePrefs() {
+    writeLS(LS_PREFS, {
+      count: ST.count, model: ST.model, webOn: ST.webOn,
+      links: ST.links, advanced: ST.advanced
+    });
+  }
+
+  function loadSets() {
+    var arr = readLS(LS_SETS, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+  function persistSet() {
+    if (!ST.set) return;
+    var arr = loadSets();
+    var i = arr.map(function (x) { return x.id; }).indexOf(ST.set.id);
+    var row = {
+      id: ST.set.id, at: ST.set.at, childId: ST.child ? ST.child.id : null,
+      subject: ST.subject, title: ST.set.title, topicIds: ST.set.topicIds,
+      model: ST.model, questions: ST.set.questions, answers: ST.answers,
+      grade: ST.grade2, savedToChild: !!ST.set.savedToChild
+    };
+    if (i >= 0) arr[i] = row; else arr.unshift(row);
+    writeLS(LS_SETS, arr.slice(0, MAX_SETS));
+  }
+
+  /* ---------------------------------------------------------------- 数据 */
+
+  function loadData() {
+    var urls = ['../data/topics.json', '../data/dependencies.json'];
+    return Promise.all(urls.map(function (u) { return fetch(u); })).then(function (rs) {
+      rs.forEach(function (r, i) { if (!r.ok) throw new Error(urls[i] + ' HTTP ' + r.status); });
+      return Promise.all(rs.map(function (r) { return r.json(); }));
+    }).then(function (js) {
+      var byId = {};
+      js[0].forEach(function (t) { byId[t.id] = t; });
+      var prereq = {};
+      js[1].forEach(function (d) {
+        if (!d || !d.topicId || !d.prerequisiteId) return;
+        (prereq[d.topicId] = prereq[d.topicId] || []).push(d.prerequisiteId);
+      });
+      ST.data = { topics: js[0], byId: byId, prereq: prereq };
+    });
+  }
+
+  function topicsOfSubject() {
+    if (!ST.data) return [];
+    return ST.data.topics.filter(function (t) { return subjectOf(t) === ST.subject && !t.external; });
+  }
+
+  function childGrade() {
+    if (ST.child && ST.child.grade) return ST.child.grade;
+    return ST.grade || '四年级';
+  }
+  function childTextbook() {
+    return (ST.child && ST.child.textbook) || ST.textbook || '人教版';
+  }
+
+  /* 档案里被判为薄弱/不稳的点，弱在前、新的在前 */
+  function candidates() {
+    if (!ST.child || !CC || !ST.data) return [];
+    var st = CC.latestStatus(ST.child.id, ST.subject);
+    var out = [];
+    Object.keys(st).forEach(function (id) {
+      var v = st[id];
+      if (!v || (v.status !== 'weak' && v.status !== 'shaky')) return;
+      var t = ST.data.byId[id];
+      if (!t || t.external) return;
+      if (subjectOf(t) !== ST.subject) return;
+      out.push({ id: id, status: v.status, at: v.at, topic: t });
+    });
+    out.sort(function (a, b) {
+      var ra = a.status === 'weak' ? 0 : 1;
+      var rb = b.status === 'weak' ? 0 : 1;
+      if (ra !== rb) return ra - rb;
+      return String(b.at || '').localeCompare(String(a.at || ''));
+    });
+    return out;
+  }
+
+  function topicOf(id) { return (ST.data && ST.data.byId[id]) || null; }
+
+  function autoPickIfEmpty() {
+    if (ST.picked.length) return;
+    var c = candidates().slice(0, 3);
+    ST.picked = c.map(function (x) { return x.id; });
+  }
+
+  function togglePick(id) {
+    var i = ST.picked.indexOf(id);
+    if (i >= 0) { ST.picked.splice(i, 1); return ''; }
+    if (ST.picked.length >= MAX_PICK) return '最多同时考察 ' + MAX_PICK + ' 个知识点，先取消一个。';
+    ST.picked.push(id);
+    return '';
+  }
+
+  /* ---------------------------------------------------------------- 顶部 */
+
+  function renderHead() {
+    clear(headEl);
+    var meta = h('div', { class: 'rv-head-meta' });
+    if (ST.child) {
+      meta.appendChild(pill(ST.child.name + ' · ' + (ST.child.grade || '未填年级'), 'blue'));
+      meta.appendChild(pill(PR.SUBJECT_NAME[ST.subject] || '数学', 'gray'));
+    } else {
+      meta.appendChild(pill('未建档', 'amber'));
+      meta.appendChild(pill(PR.SUBJECT_NAME[ST.subject] || '数学', 'gray'));
+    }
+    headEl.appendChild(h('div', { class: 'rv-head' }, [
+      h('div', { class: 'rv-head-copy' }, [
+        h('h1', { text: '复习与考察' }),
+        h('p', { class: 'lede', text: '挑出薄弱知识点，让模型出一套低、中、高三档的题；做完客观题当场判，解答题逐点给分。' })
+      ]),
+      meta
+    ]));
+  }
+
+  /* ---------------------------------------------------------------- 左栏 */
+
+  function renderSide() {
+    clear(sideEl);
+
+    sideEl.appendChild(targetPanel());
+    sideEl.appendChild(topicPanel());
+    sideEl.appendChild(settingPanel());
+    sideEl.appendChild(histPanel());
+  }
+
+  function targetPanel() {
+    var p = h('div', { class: 'pt-panel rv-panel' });
+    p.appendChild(h('div', { class: 'pt-panel-head' }, [h('h2', { text: '考察对象' })]));
+    var body = h('div', { class: 'pt-panel-body' });
+
+    if (ST.child) {
+      body.appendChild(h('div', { class: 'rv-child' }, [
+        h('span', { class: 'rv-avatar', text: Array.from(ST.child.name)[0] || '·' }),
+        h('div', { class: 'rv-child-main' }, [
+          h('b', { text: ST.child.name }),
+          h('em', { text: (ST.child.grade || '未填年级') + ' · ' + (ST.child.textbook || '人教版') })
+        ]),
+        h('a', { class: 'rv-link', href: '../children/', text: '换孩子' })
+      ]));
+    } else {
+      var sel = h('select', { class: 'rv-select', 'aria-label': '年级' });
+      GRADES.forEach(function (g) {
+        sel.appendChild(h('option', { value: g, text: g, selected: g === childGrade() ? true : null }));
+      });
+      sel.addEventListener('change', function () { ST.grade = sel.value; render(); });
+      body.appendChild(h('div', { class: 'rv-anon' }, [
+        h('label', { class: 'rv-field rv-field-col' }, [h('span', { class: 'rv-label', text: '年级' }), sel]),
+        h('p', { class: 'rv-hint' }, [
+          h('a', { class: 'rv-link', href: '../children/', text: '建一份档案' }),
+          document.createTextNode(' 后，薄弱点会自动带出来。')
+        ])
+      ]));
+    }
+    p.appendChild(body);
+    return p;
+  }
+
+  function topicPanel() {
+    var p = h('div', { class: 'pt-panel rv-panel' });
+    var head = h('div', { class: 'pt-panel-head' }, [
+      h('h2', { text: '考察哪几个点' }),
+      h('button', {
+        type: 'button', class: 'rv-mini',
+        text: ST.showPicker ? '收起搜索' : '自己选',
+        onclick: function () { ST.showPicker = !ST.showPicker; renderSide(); }
+      })
+    ]);
+    p.appendChild(head);
+
+    var body = h('div', { class: 'pt-panel-body' });
+
+    if (ST.showPicker) body.appendChild(pickerBox());
+
+    var cands = candidates();
+    if (ST.child && !cands.length) {
+      body.appendChild(h('p', { class: 'rv-hint' }, [
+        document.createTextNode('还没有薄弱点记录。先做一次'),
+        h('a', { class: 'rv-link', href: '../diagnose/?mode=grade', text: '年级诊断' }),
+        document.createTextNode('，或者直接在上面搜索知识点。')
+      ]));
+    }
+    if (!ST.child && !ST.showPicker) {
+      body.appendChild(h('p', { class: 'rv-hint', text: '没有档案也能用：点「自己选」搜知识点，或者先建一份档案让薄弱点自动带出来。' }));
+    }
+
+    if (cands.length && !ST.showPicker) {
+      var list = h('div', { class: 'rv-cands' });
+      cands.slice(0, 10).forEach(function (c) {
+        list.appendChild(topicRow(c.topic, c.status));
+      });
+      body.appendChild(list);
+    }
+
+    if (ST.picked.length) {
+      var chosen = h('div', { class: 'rv-chosen' });
+      chosen.appendChild(h('span', { class: 'rv-label', text: '已选 ' + ST.picked.length + ' / ' + MAX_PICK }));
+      var chips = h('div', { class: 'rv-chips' });
+      ST.picked.forEach(function (id) {
+        var t = topicOf(id);
+        chips.appendChild(h('span', { class: 'rv-chip' }, [
+          h('span', { text: t ? t.name : id }),
+          h('button', {
+            type: 'button', class: 'rv-chip-x', 'aria-label': '移除',
+            text: '×',
+            onclick: function () { togglePick(id); render(); }
+          })
+        ]));
+      });
+      chosen.appendChild(chips);
+      body.appendChild(chosen);
+    }
+
+    p.appendChild(body);
+    return p;
+  }
+
+  function topicRow(t, status, withMeta) {
+    var on = ST.picked.indexOf(t.id) >= 0;
+    var body = h('span', { class: 'rv-topic-body' }, [
+      h('span', { class: 'rv-topic-name', text: t.name }),
+      h('span', { class: 'rv-topic-meta', text: shortChapter(t.chapter) })
+    ]);
+    var row = h('button', {
+      type: 'button',
+      class: 'rv-topic' + (on ? ' is-on' : '') + (withMeta ? ' has-meta' : ''),
+      onclick: function () {
+        var err = togglePick(t.id);
+        if (err) ST.err = err;
+        render();
+      }
+    }, [body]);
+    if (status) {
+      row.appendChild(h('span', {
+        class: 'pt-pill is-' + (status === 'weak' ? 'red' : 'amber') + ' rv-topic-tag',
+        text: status === 'weak' ? '薄弱' : '不稳'
+      }));
+    } else {
+      row.appendChild(h('span', { class: 'pt-pill is-gray rv-topic-tag', text: '自选' }));
+    }
+    return row;
+  }
+
+  function shortChapter(ch) {
+    var s = String(ch || '');
+    var m = s.match(/第\s*\d+\s*单元[^，,]*/);
+    if (m) return m[0];
+    return s.length > 18 ? Array.from(s).slice(0, 17).join('') + '…' : s;
+  }
+
+  function pickerBox() {
+    var box = h('div', { class: 'rv-picker' });
+    var input = h('input', {
+      type: 'search', class: 'rv-input', placeholder: '搜知识点名或章节，如 小数乘法',
+      value: ST.q, 'aria-label': '搜索知识点'
+    });
+    var out = h('div', { class: 'rv-results', id: 'rv-results' });
+    input.addEventListener('input', function () {
+      ST.q = input.value;
+      paintResults(out);
+    });
+    box.appendChild(input);
+    box.appendChild(out);
+    paintResults(out);
+    return box;
+  }
+
+  function paintResults(box) {
+    clear(box);
+    if (!ST.data) return;
+    var q = ST.q.trim().toLowerCase();
+    if (!q) {
+      box.appendChild(h('p', { class: 'rv-hint', text: '输入关键词，从本学科 ' + topicsOfSubject().length + ' 个知识点里找。' }));
+      return;
+    }
+    var hit = [];
+    var all = topicsOfSubject();
+    for (var i = 0; i < all.length && hit.length < 8; i++) {
+      var t = all[i];
+      var hay = (t.name + ' ' + (t.chapter || '')).toLowerCase();
+      if (hay.indexOf(q) >= 0) hit.push(t);
+    }
+    if (!hit.length) {
+      box.appendChild(h('p', { class: 'rv-hint', text: '没找到，换个词试试。' }));
+      return;
+    }
+    box.appendChild(h('span', { class: 'rv-label', text: '找到 ' + hit.length + ' 个，点一下加入' }));
+    hit.forEach(function (t) { box.appendChild(topicRow(t, null, true)); });
+  }
+
+  function settingPanel() {
+    var p = h('div', { class: 'pt-panel rv-panel' });
+    p.appendChild(h('div', { class: 'pt-panel-head' }, [h('h2', { text: '出题设置' })]));
+    var body = h('div', { class: 'pt-panel-body' });
+
+    /* 每档题数 */
+    var seg = h('div', { class: 'pt-seg rv-seg', role: 'group', 'aria-label': '每档题数' });
+    [1, 2].forEach(function (n) {
+      seg.appendChild(h('button', {
+        type: 'button', class: ST.count === n ? 'on' : '',
+        text: n + ' 题',
+        onclick: function () { ST.count = n; savePrefs(); render(); }
+      }));
+    });
+    body.appendChild(h('div', { class: 'rv-field' }, [
+      h('span', { class: 'rv-label', text: '每档题数' }),
+      seg
+    ]));
+    body.appendChild(h('p', {
+      class: 'rv-hint',
+      text: '低 / 中 / 高三档各 ' + ST.count + ' 题，共 ' + (ST.count * 3) + ' 题。选择题 + 填空 + 解答各一档。'
+    }));
+
+    /* 高级：模型 / 联网 */
+    var det = h('details', { class: 'rv-adv' });
+    if (ST.advanced) det.setAttribute('open', '');
+    det.addEventListener('toggle', function () { ST.advanced = det.open; savePrefs(); });
+    det.appendChild(h('summary', null, [document.createTextNode('模型与联网素材')]));
+
+    var inner = h('div', { class: 'rv-adv-body' });
+    inner.appendChild(modelField());
+    inner.appendChild(webField());
+    det.appendChild(inner);
+    body.appendChild(det);
+
+    p.appendChild(body);
+    return p;
+  }
+
+  function modelLabel(m) {
+    var name = m.name || m.id;
+    var cr = m.credits ? String(m.credits).replace(/\s*credits?/i, '') : '';
+    return cr ? name + ' · ' + cr : name;
+  }
+
+  function modelField() {
+    var wrap = h('div', { class: 'rv-field rv-field-col' });
+    wrap.appendChild(h('span', { class: 'rv-label', text: '出题模型' }));
+    if (ST.modelsErr) {
+      wrap.appendChild(h('p', { class: 'rv-hint is-warn', text: ST.modelsErr }));
+      return wrap;
+    }
+    if (!ST.models.length) {
+      wrap.appendChild(h('p', { class: 'rv-hint', text: ST.busy === 'models' ? '读取模型列表…' : '正在读取…' }));
+      return wrap;
+    }
+    var sel = h('select', { class: 'rv-select', 'aria-label': '出题模型' });
+    var ds = ST.models.filter(function (m) { return LLM.isDeepSeek(m); });
+    var rest = ST.models.filter(function (m) { return !LLM.isDeepSeek(m); });
+    var addGroup = function (label, list) {
+      if (!list.length) return;
+      var g = h('optgroup', { label: label });
+      list.forEach(function (m) {
+        g.appendChild(h('option', { value: m.id, text: modelLabel(m), selected: m.id === ST.model ? true : null }));
+      });
+      sel.appendChild(g);
+    };
+    addGroup('DeepSeek', ds);
+    addGroup('其他模型', rest);
+    sel.addEventListener('change', function () { ST.model = sel.value; savePrefs(); renderSide(); });
+    wrap.appendChild(sel);
+    var cur = ST.models.filter(function (m) { return m.id === ST.model; })[0];
+    if (cur && cur.descriptionZh) wrap.appendChild(h('p', { class: 'rv-hint', text: cur.descriptionZh }));
+    return wrap;
+  }
+
+  function webField() {
+    var wrap = h('div', { class: 'rv-field rv-field-col' });
+    var row = h('label', { class: 'rv-switch' }, [
+      h('input', {
+        type: 'checkbox', checked: ST.webOn ? true : null,
+        onchange: function (e) { ST.webOn = e.target.checked; savePrefs(); renderSide(); }
+      }),
+      h('span', { text: '联网找参考素材' })
+    ]);
+    wrap.appendChild(row);
+    wrap.appendChild(h('p', {
+      class: 'rv-hint',
+      text: '只用来把握题型和常见易错，不作答案依据。'
+    }));
+
+    if (ST.webOn) {
+      var ta = h('textarea', {
+        class: 'rv-input rv-textarea', rows: '2',
+        placeholder: '粘贴 1–3 个参考链接（可选），不填就按知识点自动搜',
+        'aria-label': '参考链接'
+      });
+      ta.value = ST.links;
+      ta.addEventListener('input', function () { ST.links = ta.value; savePrefs(); });
+      wrap.appendChild(ta);
+
+      var cfg = WEB.cfg();
+      var note = h('p', { class: 'rv-hint' });
+      if (!cfg.provider || !cfg.key) {
+        note.appendChild(document.createTextNode('没配搜索源，只能抓上面粘贴的链接。'));
+        note.appendChild(h('button', {
+          type: 'button', class: 'rv-mini', text: '配搜索源',
+          onclick: function () { ST.cfgOpen = !ST.cfgOpen; renderSide(); }
+        }));
+      } else {
+        note.appendChild(document.createTextNode('搜索源：' + cfg.provider));
+        note.appendChild(h('button', {
+          type: 'button', class: 'rv-mini', text: '修改',
+          onclick: function () { ST.cfgOpen = !ST.cfgOpen; renderSide(); }
+        }));
+      }
+      wrap.appendChild(note);
+      if (ST.cfgOpen) wrap.appendChild(searchCfgBox());
+    }
+    return wrap;
+  }
+
+  function searchCfgBox() {
+    var cfg = WEB.cfg();
+    var box = h('div', { class: 'rv-webcfg' });
+    var prov = h('select', { class: 'rv-select rv-select-sm', 'aria-label': '搜索源' });
+    [['tavily', 'Tavily'], ['serper', 'Serper']].forEach(function (p) {
+      prov.appendChild(h('option', {
+        value: p[0], text: p[1],
+        selected: (cfg.provider || 'tavily') === p[0] ? true : null
+      }));
+    });
+    var key = h('input', {
+      type: 'password', class: 'rv-input rv-input-sm',
+      placeholder: 'API Key（只存在这台设备上）',
+      value: cfg.key || '', 'aria-label': '搜索 API Key'
+    });
+    box.appendChild(prov);
+    box.appendChild(key);
+    box.appendChild(h('div', { class: 'rv-webcfg-acts' }, [
+      h('button', {
+        type: 'button', class: 'rv-btn is-primary rv-btn-sm', text: '保存',
+        onclick: function () {
+          var v = key.value.trim();
+          if (!v) { WEB.save({ provider: '', key: '' }); ST.cfgOpen = false; renderSide(); return; }
+          WEB.save({ provider: prov.value, key: v });
+          ST.cfgOpen = false;
+          renderSide();
+        }
+      }),
+      h('button', {
+        type: 'button', class: 'rv-btn rv-btn-sm', text: '清除',
+        onclick: function () { WEB.save({ provider: '', key: '' }); renderSide(); }
+      })
+    ]));
+    box.appendChild(h('p', { class: 'rv-hint', text: '搜索源能跨域直连浏览器，key 只保存在本机，不上传。' }));
+    return box;
+  }
+
+  function histPanel() {
+    var arr = loadSets().filter(function (x) { return x.subject === ST.subject; }).slice(0, 4);
+    if (!arr.length) return h('div');
+    var p = h('div', { class: 'pt-panel rv-panel' });
+    p.appendChild(h('div', { class: 'pt-panel-head' }, [h('h2', { text: '最近考察' })]));
+    var body = h('div', { class: 'pt-panel-body rv-hist' });
+    arr.forEach(function (row) {
+      var sum = row.grade;
+      var txt = sum ? (sum.score + ' / ' + sum.full + ' 分') : '未批改';
+      body.appendChild(h('button', {
+        type: 'button', class: 'rv-hist-row',
+        onclick: function () { openSet(row); }
+      }, [
+        h('span', { class: 'rv-hist-main' }, [
+          h('b', { text: row.title || '综合考察' }),
+          h('em', { text: fmtMin(row.at) + ' · ' + (row.questions || []).length + ' 题' })
+        ]),
+        h('span', { class: 'rv-hist-score', text: txt })
+      ]));
+    });
+    p.appendChild(body);
+    return p;
+  }
+
+  function openSet(row) {
+    ST.set = {
+      id: row.id, at: row.at, title: row.title,
+      topicIds: row.topicIds || [],
+      questions: row.questions || [],
+      savedToChild: !!row.savedToChild
+    };
+    ST.answers = row.answers || {};
+    ST.grade2 = row.grade || null;
+    ST.err = ''; ST.gradeErr = '';
+    if (row.model) ST.model = row.model;
+    render();
+  }
+
+  /* ---------------------------------------------------------------- 主区 */
+
+  function renderStage() {
+    clear(stageEl);
+
+    if (!ST.data) {
+      stageEl.appendChild(h('div', { class: 'pt-panel' }, [
+        h('div', { class: 'pt-empty', text: '正在加载知识点…' })
+      ]));
+      return;
+    }
+    if (ST.busy === 'gen') { stageEl.appendChild(genPanel()); return; }
+    if (ST.err) stageEl.appendChild(errorPanel(ST.err));
+
+    if (!ST.set) { stageEl.appendChild(introPanel()); return; }
+
+    if (ST.grade2) stageEl.appendChild(reportPanel());
+    else stageEl.appendChild(quizHead());
+
+    ST.set.questions.forEach(function (q, i) { stageEl.appendChild(questionCard(q, i)); });
+
+    if (!ST.grade2) stageEl.appendChild(submitBar());
+  }
+
+  function introPanel() {
+    var p = h('div', { class: 'pt-panel rv-intro' });
+    var body = h('div', { class: 'pt-panel-body' });
+    body.appendChild(h('div', { class: 'rv-intro-ico', html: ico('spark') }));
+
+    var picks = ST.picked.map(function (id) { return topicOf(id); }).filter(Boolean);
+    body.appendChild(h('h2', { class: 'rv-intro-title', text: picks.length ? '准备好了，出' + (ST.count * 3) + '道题' : '先挑一个知识点' }));
+
+    if (!picks.length) {
+      body.appendChild(h('p', {
+        class: 'rv-intro-text',
+        text: ST.child
+          ? '左边列出了档案里的薄弱点，点一下就能选中；也可以「自己选」搜任意知识点。'
+          : '先从左边搜一个知识点：输入关键词，点一下加入，再回来生成题目。'
+      }));
+      var c = candidates();
+      if (c.length) {
+        body.appendChild(h('button', {
+          type: 'button', class: 'rv-btn is-primary rv-btn-narrow',
+          text: '选最薄弱的 3 个',
+          onclick: function () { ST.picked = c.slice(0, 3).map(function (x) { return x.id; }); render(); }
+        }));
+      } else {
+        body.appendChild(h('button', {
+          type: 'button', class: 'rv-btn is-primary rv-btn-narrow',
+          text: '搜索知识点',
+          onclick: function () { ST.showPicker = true; renderSide(); focusSide(); }
+        }));
+      }
+      p.appendChild(body);
+      return p;
+    }
+
+    var list = h('div', { class: 'rv-intro-topics' });
+    picks.forEach(function (t) {
+      list.appendChild(h('span', { class: 'pt-pill is-blue', text: t.name }));
+    });
+    body.appendChild(list);
+
+    var steps = h('div', { class: 'rv-steps' });
+    [
+      ['低', '基础巩固', '单选，考会不会'],
+      ['中', '变式应用', '填空，考会不会用'],
+      ['高', '综合迁移', '解答，考能不能迁移']
+    ].forEach(function (s) {
+      steps.appendChild(h('div', { class: 'rv-step' }, [
+        h('span', { class: 'rv-step-k', text: s[0] }),
+        h('b', { text: s[1] }),
+        h('em', { text: s[2] })
+      ]));
+    });
+    body.appendChild(steps);
+
+    body.appendChild(h('p', { class: 'rv-intro-text', text: '每档 ' + ST.count + ' 题，共 ' + (ST.count * 3) + ' 题。选题在' + childGrade() + '范围内，模型会围绕这些点综合命题。' }));
+
+    body.appendChild(h('button', {
+      type: 'button', class: 'rv-btn is-primary',
+      text: '生成这套题',
+      onclick: generate
+    }));
+    p.appendChild(body);
+    return p;
+  }
+
+  function genPanel() {
+    var p = h('div', { class: 'pt-panel rv-gen' });
+    var body = h('div', { class: 'pt-panel-body' });
+    body.appendChild(h('div', { class: 'rv-gen-head' }, [
+      h('span', { class: 'rv-spin' }),
+      h('b', { text: ST.busyNote || '模型正在命题' })
+    ]));
+    body.appendChild(h('p', { class: 'rv-hint', text: '已接收 ' + ST.chars + ' 字。通常 20–60 秒，慢一点的模型会更久。' }));
+    var bars = h('div', { class: 'rv-skel' });
+    [92, 76, 88, 64].forEach(function (w) {
+      bars.appendChild(h('span', { style: 'width:' + w + '%' }));
+    });
+    body.appendChild(bars);
+    body.appendChild(h('button', {
+      type: 'button', class: 'rv-btn is-ghost rv-btn-narrow',
+      text: '取消',
+      onclick: function () { if (abortCtl) abortCtl.abort(); }
+    }));
+    p.appendChild(body);
+    return p;
+  }
+
+  function errorPanel(msg) {
+    var p = h('div', { class: 'pt-panel rv-error' });
+    p.appendChild(h('div', { class: 'pt-panel-body' }, [
+      h('b', { text: '没成功' }),
+      h('p', { class: 'rv-hint', text: msg })
+    ]));
+    return p;
+  }
+
+  function quizHead() {
+    var p = h('div', { class: 'pt-panel rv-quizhead' });
+    var answered = countAnswered();
+    var total = ST.set.questions.length;
+    var left = h('div', { class: 'rv-quizhead-main' }, [
+      h('h2', { text: ST.set.title || '综合考察' }),
+      h('p', { class: 'rv-hint', text: ST.set.topicIds.length + ' 个知识点 · ' + total + ' 题 · 已作答 ' + answered + ' / ' + total })
+    ]);
+    var bar = h('div', { class: 'pt-bar rv-progressbar' });
+    bar.appendChild(h('i', { class: 'm', style: 'width:' + Math.round(answered / total * 100) + '%' }));
+    var body = h('div', { class: 'pt-panel-body rv-quizhead-body' });
+    body.appendChild(left);
+    body.appendChild(bar);
+    p.appendChild(body);
+    return p;
+  }
+
+  function countAnswered() {
+    return ST.set.questions.filter(function (q) { return isAnswered(q); }).length;
+  }
+  function isAnswered(q) {
+    var v = ST.answers[q.id];
+    if (q.type === 'choice') return v !== undefined && v !== null && v !== '';
+    if (q.type === 'blank') return Array.isArray(v) && v.some(function (x) { return String(x || '').trim(); });
+    return !!(v && String(v).trim());
+  }
+
+  function questionCard(q, idx) {
+    var graded = ST.grade2 && ST.grade2.items[q.id];
+    var card = h('article', { class: 'rv-q' + (graded ? ' is-graded' : '') });
+    if (graded) {
+      card.classList.add(graded.verdict === 'right' ? 'is-right' : graded.verdict === 'wrong' ? 'is-wrong' : 'is-partial');
+    }
+
+    var head = h('div', { class: 'rv-q-head' }, [
+      h('span', { class: 'rv-q-no', text: ('0' + (idx + 1)).slice(-2) }),
+      h('span', { class: 'pt-pill is-' + (q.level === 'low' ? 'blue' : q.level === 'mid' ? 'amber' : 'red'), text: LEVEL_NAME[q.level] || q.level }),
+      h('span', { class: 'rv-q-topic', text: q.topicName || '' }),
+      h('span', { class: 'rv-q-type', text: TYPE_NAME[q.type] || '' })
+    ]);
+    if (graded) {
+      head.appendChild(h('span', {
+        class: 'rv-q-score' + (graded.verdict === 'wrong' ? ' is-bad' : ''),
+        text: graded.got + ' / ' + graded.full + ' 分'
+      }));
+    } else {
+      head.appendChild(h('span', { class: 'rv-q-score is-muted', text: pointsOf(q) + ' 分' }));
+    }
+    card.appendChild(head);
+
+    card.appendChild(h('p', { class: 'rv-q-stem', text: q.stem }));
+
+    if (q.type === 'choice') card.appendChild(choiceBlock(q, graded));
+    else if (q.type === 'blank') card.appendChild(blankBlock(q, graded));
+    else card.appendChild(solutionBlock(q, graded));
+
+    if (graded) card.appendChild(feedbackBlock(q, graded));
+    return card;
+  }
+
+  function choiceBlock(q, graded) {
+    var wrap = h('div', { class: 'rv-opts' });
+    var chosen = ST.answers[q.id];
+    (q.options || []).forEach(function (opt, i) {
+      var cls = 'rv-opt';
+      if (graded) {
+        if (i === q.answerIndex) cls += ' is-answer';
+        else if (Number(chosen) === i) cls += ' is-picked';
+      } else if (Number(chosen) === i) cls += ' is-picked';
+      var btn = h('button', {
+        type: 'button', class: cls, disabled: graded ? true : null,
+        onclick: function () { ST.answers[q.id] = i; render(); }
+      }, [
+        h('span', { class: 'rv-opt-k', text: 'ABCD'[i] || String(i + 1) }),
+        h('span', { class: 'rv-opt-t', text: String(opt) })
+      ]);
+      wrap.appendChild(btn);
+    });
+    return wrap;
+  }
+
+  function blankBlock(q, graded) {
+    var wrap = h('div', { class: 'rv-blanks' });
+    var n = (q.blanks || []).length || 1;
+    var vals = Array.isArray(ST.answers[q.id]) ? ST.answers[q.id] : [];
+    var detail = graded && graded.detail ? graded.detail : null;
+
+    for (var i = 0; i < n; i++) {
+      (function (idx) {
+        var cls = 'rv-input rv-blank';
+        if (detail && detail[idx] !== undefined) cls += detail[idx] ? ' is-right' : ' is-wrong';
+        var input = h('input', {
+          type: 'text', class: cls,
+          placeholder: n > 1 ? '第 ' + (idx + 1) + ' 空' : '填答案',
+          value: vals[idx] || '',
+          'aria-label': '第 ' + (idx + 1) + ' 空',
+          disabled: graded ? true : null
+        });
+        input.addEventListener('input', function () {
+          var arr = Array.isArray(ST.answers[q.id]) ? ST.answers[q.id].slice() : [];
+          while (arr.length < n) arr.push('');
+          arr[idx] = input.value;
+          ST.answers[q.id] = arr;
+        });
+        wrap.appendChild(input);
+      })(i);
+    }
+    return wrap;
+  }
+
+  function solutionBlock(q, graded) {
+    var wrap = h('div', { class: 'rv-work' });
+    var ta = h('textarea', {
+      class: 'rv-input rv-textarea', rows: '5',
+      placeholder: '写出你的过程和结论',
+      'aria-label': '作答',
+      disabled: graded ? true : null
+    });
+    ta.value = ST.answers[q.id] || '';
+    ta.addEventListener('input', function () { ST.answers[q.id] = ta.value; });
+    wrap.appendChild(ta);
+    return wrap;
+  }
+
+  function feedbackBlock(q, g) {
+    var box = h('div', { class: 'rv-fb' });
+
+    if (q.type === 'choice') {
+      box.appendChild(h('p', { class: 'rv-fb-answer' }, [
+        h('b', { text: '正确答案 ' }),
+        h('span', { text: 'ABCD'[q.answerIndex] + '. ' + String((q.options || [])[q.answerIndex] || '') })
+      ]));
+      var mine = ST.answers[q.id];
+      if (mine === undefined || mine === null || mine === '') {
+        box.appendChild(h('p', { class: 'rv-fb-note', text: '这题空着没做。' }));
+      }
+    } else if (q.type === 'blank') {
+      box.appendChild(h('p', { class: 'rv-fb-answer' }, [
+        h('b', { text: '答案 ' }),
+        h('span', { text: q.answerText || '' })
+      ]));
+    } else {
+      if (g.hits && g.hits.length) {
+        box.appendChild(h('div', { class: 'rv-fb-hits' }, [
+          h('span', { class: 'rv-label', text: '做到了' }),
+          h('ul', null, g.hits.map(function (x) { return h('li', { text: x }); }))
+        ]));
+      }
+      if (g.miss && g.miss.length) {
+        box.appendChild(h('div', { class: 'rv-fb-miss' }, [
+          h('span', { class: 'rv-label', text: '漏了' }),
+          h('ul', null, g.miss.map(function (x) { return h('li', { text: x }); }))
+        ]));
+      }
+      if (!g.hits && !g.miss) {
+        box.appendChild(h('p', { class: 'rv-fb-note', text: '这道题还没批改。' }));
+      }
+      if (q.answerText) {
+        var det = h('details', { class: 'rv-fb-ref' });
+        det.appendChild(h('summary', null, [document.createTextNode('参考答案')]));
+        det.appendChild(h('p', { text: q.answerText }));
+        box.appendChild(det);
+      }
+    }
+
+    if (g.comment) box.appendChild(h('p', { class: 'rv-fb-comment', text: g.comment }));
+    if (q.explain) {
+      box.appendChild(h('div', { class: 'rv-fb-explain' }, [
+        h('span', { class: 'rv-label', text: '讲评' }),
+        h('p', { text: q.explain })
+      ]));
+    }
+    return box;
+  }
+
+  function submitBar() {
+    var total = ST.set.questions.length;
+    var left = total - countAnswered();
+    var bar = h('div', { class: 'rv-submitbar' });
+    var info = h('div', { class: 'rv-submit-info' });
+    if (ST.gradeErr) {
+      info.appendChild(h('p', { class: 'rv-hint is-warn', text: ST.gradeErr }));
+    } else if (left > 0) {
+      info.appendChild(h('p', { class: 'rv-hint', text: '还有 ' + left + ' 题没做，直接提交也可以，空题按 0 分算。' }));
+    } else {
+      info.appendChild(h('p', { class: 'rv-hint', text: '都做完了，提交批改。' }));
+    }
+    bar.appendChild(info);
+    bar.appendChild(h('button', {
+      type: 'button', class: 'rv-btn is-primary',
+      text: ST.busy === 'grade' ? '批改中…' : (ST.gradeErr ? '重新批改' : '提交批改'),
+      disabled: ST.busy === 'grade' ? true : null,
+      onclick: submit
+    }));
+    return bar;
+  }
+
+  function reportPanel() {
+    var g = ST.grade2;
+    var p = h('div', { class: 'pt-panel rv-report' });
+    var body = h('div', { class: 'pt-panel-body' });
+
+    var head = h('div', { class: 'rv-report-head' });
+    var ring = h('div', { class: 'pt-ring is-lg ' + toneClass(g.pct) });
+    ring.style.setProperty('--p', String(Math.max(0, Math.min(100, Math.round(g.pct)))));
+    ring.appendChild(h('span', { class: 'pt-ring-value', text: Math.round(g.pct) + '%' }));
+    head.appendChild(ring);
+
+    var summaryBox = h('div', { class: 'rv-report-summary' }, [
+      h('h2', { text: g.title || '考察报告' }),
+      h('p', { class: 'rv-report-total' }, [
+        h('b', { text: String(g.score) }),
+        document.createTextNode(' / ' + g.full + ' 分 · ' + verdictText(g.pct))
+      ])
+    ]);
+    if (g.summary) summaryBox.appendChild(h('p', { class: 'rv-report-text', text: g.summary }));
+    head.appendChild(summaryBox);
+    body.appendChild(head);
+
+    /* 三档分数 */
+    var lv = h('div', { class: 'rv-levels' });
+    (g.levels || []).forEach(function (l) {
+      var pct = l.full ? l.got / l.full * 100 : 0;
+      var cell = h('div', { class: 'rv-level' });
+      cell.appendChild(h('div', { class: 'rv-level-top' }, [
+        h('b', { text: LEVEL_FULL[l.key] || l.key }),
+        h('span', { class: 'rv-level-num', text: l.got + '/' + l.full })
+      ]));
+      var bar = h('div', { class: 'pt-bar rv-level-bar' });
+      bar.appendChild(h('i', { class: pct >= 85 ? 'm' : pct >= 60 ? 's' : 'w', style: 'width:' + pct + '%' }));
+      cell.appendChild(bar);
+      lv.appendChild(cell);
+    });
+    body.appendChild(lv);
+
+    if (g.gaps && g.gaps.length) {
+      var gap = h('div', { class: 'rv-gaps' });
+      gap.appendChild(h('span', { class: 'rv-label', text: '还没过关' }));
+      var chips = h('div', { class: 'rv-chips' });
+      g.gaps.forEach(function (x) { chips.appendChild(h('span', { class: 'pt-pill is-amber', text: x })); });
+      gap.appendChild(chips);
+      body.appendChild(gap);
+    }
+    if (g.next) {
+      body.appendChild(h('div', { class: 'rv-next' }, [
+        h('span', { class: 'rv-label', text: '下一步' }),
+        h('p', { text: g.next })
+      ]));
+    }
+
+    var acts = h('div', { class: 'rv-report-acts' });
+    acts.appendChild(h('button', { type: 'button', class: 'rv-btn is-primary', text: '同知识点再来一套', onclick: function () { generate(); } }));
+    acts.appendChild(h('button', {
+      type: 'button', class: 'rv-btn', text: '登记到档案',
+      disabled: (ST.child && !ST.set.savedToChild) ? null : true,
+      onclick: saveToChild
+    }));
+    if (!ST.child) acts.appendChild(h('a', { class: 'rv-btn', href: '../children/', text: '先建档案' }));
+    body.appendChild(acts);
+
+    if (ST.child && ST.set.savedToChild) {
+      body.appendChild(h('p', { class: 'rv-hint', text: '已登记到 ' + ST.child.name + ' 的档案。' }));
+    }
+    if (g.partial) {
+      body.appendChild(h('p', { class: 'rv-hint is-warn', text: '这是部分结果：' + (ST.gradeErr || '解答题还没批改') + ' 客观题分数已算好，可以再点「提交批改」重试。' }));
+    }
+    p.appendChild(body);
+    return p;
+  }
+
+  function toneClass(pct) { return pct >= 85 ? 'tone-ok' : pct >= 60 ? 'tone-amber' : 'tone-bad'; }
+  function verdictText(pct) {
+    if (pct >= 85) return '过关';
+    if (pct >= 60) return '需要巩固';
+    return '还没过关';
+  }
+
+  /* ---------------------------------------------------------------- 判分 */
+
+  var UNITS = ['平方米', '平方厘米', '平方分米', '立方米', '立方厘米', '千米', '公里', '厘米', '分米', '毫米',
+    '千克', '公斤', '克', '吨', '毫升', '升', '分钟', '小时', '秒钟', '秒', '米', '元', '角', '分',
+    '个', '人', '本', '支', '只', '块', '片', '天', '度', '°', '倍', '页', '次', '张'];
+
+  function norm(s) {
+    var t = String(s == null ? '' : s);
+    var out = '';
+    for (var i = 0; i < t.length; i++) {
+      var c = t.charCodeAt(i);
+      if (c >= 0xFF01 && c <= 0xFF5E) out += String.fromCharCode(c - 0xFEE0);
+      else out += t[i];
+    }
+    return out.toLowerCase()
+      .replace(/\s+/g, '')
+      .replace(/[，。；：、,.;:!?！？"“”‘’]/g, '')
+      .replace(/[（）()【】\[\]]/g, '')
+      .replace(/[−–—]/g, '-')
+      .replace(/^=/,'');
+  }
+  function stripUnit(s) {
+    var t = norm(s);
+    UNITS.forEach(function (u) { t = t.split(u).join(''); });
+    return t;
+  }
+  function numOf(s) {
+    var t = stripUnit(s).replace(/%$/, '');
+    if (/^-?\d+\/-?\d+$/.test(t)) {
+      var p = t.split('/');
+      return Number(p[0]) / Number(p[1]);
+    }
+    if (/^-?\d+(\.\d+)?$/.test(t)) return Number(t);
+    return null;
+  }
+  function matchOne(accept, given) {
+    var a = norm(accept), b = norm(given);
+    if (!b) return false;
+    if (a === b) return true;
+    var sa = stripUnit(accept), sb = stripUnit(given);
+    if (sa && sa === sb) return true;
+    var na = numOf(accept), nb = numOf(given);
+    if (na != null && nb != null && Math.abs(na - nb) < 1e-6) return true;
+    return false;
+  }
+  function matchBlank(blank, given) {
+    var list = (blank && blank.accept) || [];
+    if (!list.length) return false;
+    return list.some(function (x) { return matchOne(x, given); });
+  }
+
+  function pointsOf(q) {
+    if (q.type === 'choice') return 3;
+    if (q.type === 'blank') return Math.max(2, Math.min(4, ((q.blanks || []).length || 1) * 2));
+    var sum = (q.rubric || []).reduce(function (a, r) { return a + (Number(r.score) || 0); }, 0);
+    return Number(q.fullScore) || sum || 5;
+  }
+
+  /* ---------------------------------------------------------------- 出题 */
+
+  function pickedTopics() {
+    return ST.picked.map(function (id) { return topicOf(id); }).filter(Boolean);
+  }
+
+  function webQuery() {
+    var names = pickedTopics().map(function (t) { return t.name; }).slice(0, 2);
+    return [childGrade(), PR.SUBJECT_NAME[ST.subject] || '数学'].concat(names).join(' ') + ' 易错题 练习';
+  }
+
+  function parseLinks() {
+    return String(ST.links || '')
+      .split(/[\s,，;；\n]+/)
+      .map(function (s) { return s.trim(); })
+      .filter(function (s) { return /^https?:\/\//i.test(s) || /^[\w-]+(\.[\w-]+)+\//.test(s); })
+      .slice(0, 3);
+  }
+
+  function generate() {
+    if (ST.busy) return;
+    var picks = pickedTopics();
+    if (!picks.length) {
+      ST.err = '先选至少一个知识点。';
+      render();
+      return;
+    }
+    if (Date.now() - ST.lastGenAt < COOLDOWN_MS) {
+      ST.err = '刚生成过，等几秒再出下一套。';
+      render();
+      return;
+    }
+    if (!LLM.available()) {
+      ST.err = '云端模型通道没加载成功，检查网络后刷新页面。';
+      render();
+      return;
+    }
+    if (!ST.model) {
+      ST.err = '模型列表还没读到，稍等一下再点。';
+      render();
+      return;
+    }
+
+    abortCtl = new AbortController();
+    ST.busy = 'gen';
+    ST.busyNote = '正在命题';
+    ST.chars = 0;
+    ST.err = '';
+    ST.gradeErr = '';
+    render();
+
+    var wantWeb = ST.webOn;
+    var links = parseLinks();
+
+    (async function () {
+      var webItems = [];
+      if (wantWeb) {
+        ST.busyNote = links.length ? '正在抓取参考链接' : '正在检索参考素材';
+        render();
+        try {
+          webItems = await WEB.collect({ links: links, query: links.length ? '' : webQuery() });
+        } catch (e) { webItems = []; }
+        if (webItems.length) ST.busyNote = '已取到 ' + webItems.length + ' 段素材，正在命题';
+        else ST.busyNote = '没取到素材，直接命题';
+        render();
+      }
+
+      var user = PR.setPrompt({
+        grade: childGrade(),
+        textbook: childTextbook(),
+        subject: ST.subject,
+        topics: picks.map(function (t) {
+          var c = candidates().filter(function (x) { return x.id === t.id; })[0];
+          return {
+            id: t.id, name: t.name, chapter: t.chapter,
+            description: t.description, mastery_criteria: t.mastery_criteria,
+            state: c ? (c.status === 'weak' ? '薄弱' : '不稳') : ''
+          };
+        }),
+        count: ST.count
+      });
+      user += PR.webBlock(webItems);
+
+      var text = await LLM.complete({
+        model: ST.model,
+        system: PR.SYSTEM,
+        user: user,
+        temperature: 0.8,
+        signal: abortCtl.signal,
+        onProgress: function (chars) {
+          ST.chars = chars;
+          var el = stageEl.querySelector('.rv-gen .rv-hint');
+          if (el) el.textContent = '已接收 ' + chars + ' 字。通常 20–60 秒，慢一点的模型会更久。';
+        }
+      });
+
+      var obj = LLM.parseJson(text);
+      var qs = normalizeQuestions(obj);
+      if (qs.length < 2) throw Object.assign(new Error('题目太少'), { error: { code: 'model_bad_json' } });
+
+      ST.set = {
+        id: uid(),
+        at: new Date().toISOString(),
+        title: String(obj.title || '').slice(0, 24) || (childGrade() + PR.SUBJECT_NAME[ST.subject] + '·综合考察'),
+        topicIds: picks.map(function (t) { return t.id; }),
+        questions: qs
+      };
+      ST.answers = {};
+      ST.grade2 = null;
+      ST.lastGenAt = Date.now();
+      persistSet();
+    })().catch(function (e) {
+      ST.err = LLM.describeError(e);
+    }).then(function () {
+      ST.busy = '';
+      abortCtl = null;
+      render();
+      focusStage();
+    });
+  }
+
+  /* 手机上设置在上、题目在下：出完题把视线带到卷子 */
+  function focusStage() {
+    if (window.matchMedia('(max-width: 900px)').matches && stageEl) {
+      try { stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+    }
+  }
+  function focusSide() {
+    if (!sideEl) return;
+    try { sideEl.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+    var input = sideEl.querySelector('.rv-picker input');
+    if (input) input.focus({ preventScroll: true });
+  }
+
+  /* 把 "（1）20（2）50（3）够" 切成 ["20","50","够"]，用于补题干里多出来的空 */
+  function splitAnswerText(t) {
+    var s = String(t || '');
+    return s
+      .split(/(?:（\d+）|\(\d+\)|[①②③④⑤⑥⑦]|；|;|\n)/)
+      .map(function (x) { return x.replace(/^[\s、,，:：]+/, '').replace(/[\s。.]+$/, '').trim(); })
+      .filter(Boolean);
+  }
+
+  /* 模型输出不可信：逐题清洗，缺关键字段的直接丢掉 */
+  function normalizeQuestions(obj) {
+    var raw = (obj && obj.questions) || [];
+    var out = [];
+    var seen = {};
+    raw.forEach(function (q) {
+      if (!q || typeof q !== 'object') return;
+      var stem = String(q.stem || '').trim();
+      if (!stem) return;
+      var level = ['low', 'mid', 'high'].indexOf(q.level) >= 0 ? q.level : 'mid';
+      var type = q.type;
+      if (type === 'choice') {
+        var opts = (q.options || []).map(function (o) { return String(o == null ? '' : (o.text || o)).trim(); }).filter(Boolean);
+        if (opts.length < 2) return;
+        var ai = Number(q.answerIndex);
+        if (!(ai >= 0 && ai < opts.length)) {
+          var letter = String(q.answer || '').trim().toUpperCase().replace(/[^A-D]/g, '');
+          ai = letter ? letter.charCodeAt(0) - 65 : -1;
+          if (!(ai >= 0 && ai < opts.length)) return;
+        }
+        out.push({
+          id: 'q' + (out.length + 1), topicId: String(q.topicId || ''), topicName: String(q.topicName || ''),
+          level: level, type: 'choice', stem: stem, options: opts, answerIndex: ai,
+          explain: String(q.explain || ''), rubric: []
+        });
+      } else if (type === 'blank') {
+        var accepts = (q.blanks || []).map(function (b) {
+          var acc = (b && b.accept) || [];
+          if (!Array.isArray(acc)) acc = [acc];
+          return acc.map(function (x) { return String(x == null ? '' : x).trim(); }).filter(Boolean);
+        }).filter(function (a) { return a.length; });
+
+        /* 题干里的空可能比 blanks 多：按题干补齐，答案从 answerText 里切出来 */
+        var gaps = (stem.match(/_{2,}/g) || []).length;
+        if (!accepts.length && !gaps) return;
+        if (gaps > accepts.length) {
+          var parts = splitAnswerText(q.answerText);
+          for (var gi = accepts.length; gi < gaps && gi < 4; gi++) {
+            accepts.push(parts[gi] ? [parts[gi]] : []);
+          }
+        }
+        if (!accepts.length) accepts.push([]);
+
+        out.push({
+          id: 'q' + (out.length + 1), topicId: String(q.topicId || ''), topicName: String(q.topicName || ''),
+          level: level, type: 'blank', stem: stem,
+          blanks: accepts.slice(0, 4).map(function (a) { return { accept: a }; }),
+          answerText: String(q.answerText || ''), explain: String(q.explain || ''),
+          rubric: (q.rubric || []).map(function (r) { return { point: String(r.point || ''), score: Number(r.score) || 0 }; })
+        });
+      } else if (type === 'solution') {
+        var rb = (q.rubric || []).map(function (r) {
+          return { point: String(r.point || '').slice(0, 40), score: Number(r.score) || 0 };
+        }).filter(function (r) { return r.point && r.score > 0; });
+        var full = Number(q.fullScore) || rb.reduce(function (a, r) { return a + r.score; }, 0) || 5;
+        if (!rb.length) rb = [{ point: '过程与结论', score: full }];
+        out.push({
+          id: 'q' + (out.length + 1), topicId: String(q.topicId || ''), topicName: String(q.topicName || ''),
+          level: level, type: 'solution', stem: stem, answerText: String(q.answerText || ''),
+          fullScore: full, rubric: rb, explain: String(q.explain || '')
+        });
+      }
+    });
+    /* 同一档最多留 count 题，档位顺序 低→中→高 */
+    var order = { low: 0, mid: 1, high: 2 };
+    var rank = function (lv) { return order[lv] === undefined ? 9 : order[lv]; };
+    out.sort(function (a, b) { return rank(a.level) - rank(b.level); });
+    var kept = [];
+    var per = {};
+    out.forEach(function (q) {
+      per[q.level] = per[q.level] || 0;
+      if (per[q.level] >= ST.count) return;
+      per[q.level]++;
+      kept.push(q);
+    });
+    kept.forEach(function (q, i) { q.id = 'q' + (i + 1); });
+    return kept;
+  }
+
+  /* ---------------------------------------------------------------- 批改 */
+
+  function submit() {
+    if (ST.busy) return;
+    var qs = ST.set.questions;
+    var items = {};
+
+    qs.forEach(function (q) {
+      var full = pointsOf(q);
+      if (q.type === 'choice') {
+        var v = ST.answers[q.id];
+        var ok = v !== undefined && v !== null && Number(v) === Number(q.answerIndex);
+        items[q.id] = { got: ok ? full : 0, full: full, verdict: ok ? 'right' : 'wrong' };
+      } else if (q.type === 'blank') {
+        var arr = Array.isArray(ST.answers[q.id]) ? ST.answers[q.id] : [];
+        var n = q.blanks.length || 1;
+        var per = full / n;
+        var got = 0;
+        var detail = q.blanks.map(function (b, i) {
+          var good = matchBlank(b, arr[i]);
+          if (good) got += per;
+          return good;
+        });
+        var all = detail.every(Boolean);
+        items[q.id] = {
+          got: round1(got), full: full,
+          verdict: all ? 'right' : got > 0 ? 'partial' : 'wrong',
+          detail: detail
+        };
+      } else {
+        items[q.id] = { got: 0, full: full, verdict: 'pending' };
+      }
+    });
+
+    var subjective = qs.filter(function (q) { return q.type === 'solution'; });
+    ST.busy = 'grade';
+    ST.gradeErr = '';
+    ST.busyNote = '正在批改';
+    abortCtl = new AbortController();
+    render();
+
+    (async function () {
+      var extra = { summary: '', gaps: [], next: '' };
+      if (subjective.length) {
+        var objective = qs.filter(function (q) { return q.type !== 'solution'; }).map(function (q) {
+          return {
+            id: q.id, level: LEVEL_NAME[q.level] || q.level, type: q.type,
+            got: items[q.id].got, full: items[q.id].full, verdict: items[q.id].verdict
+          };
+        });
+        var user = PR.gradePrompt({
+          grade: childGrade(),
+          subject: ST.subject,
+          objective: objective,
+          subjective: subjective.map(function (q) {
+            return {
+              id: q.id, level: LEVEL_FULL[q.level] || q.level, stem: q.stem,
+              answerText: q.answerText, rubric: q.rubric, fullScore: pointsOf(q),
+              studentAnswer: ST.answers[q.id] || ''
+            };
+          })
+        });
+        var text = await LLM.complete({
+          model: ST.model, system: PR.SYSTEM, user: user,
+          temperature: 0.2, signal: abortCtl.signal
+        });
+        var obj = LLM.parseJson(text);
+        (obj.items || []).forEach(function (it) {
+          var q = qs.filter(function (x) { return x.id === it.id; })[0];
+          if (!q || !items[it.id]) return;
+          var full = items[it.id].full;
+          var score = Number(it.score);
+          if (!isFinite(score)) score = 0;
+          score = Math.max(0, Math.min(full, score));
+          items[it.id].got = round1(score);
+          items[it.id].verdict = score >= full ? 'right' : score > 0 ? 'partial' : 'wrong';
+          items[it.id].hits = (it.hits || []).map(function (x) { return String(x).slice(0, 60); }).slice(0, 4);
+          items[it.id].miss = (it.miss || []).map(function (x) { return String(x).slice(0, 60); }).slice(0, 4);
+          items[it.id].comment = String(it.comment || '').slice(0, 200);
+        });
+        extra.summary = String(obj.summary || '').slice(0, 400);
+        extra.gaps = (obj.gaps || []).map(function (x) { return String(x).slice(0, 24); }).slice(0, 3);
+        extra.next = String(obj.next || '').slice(0, 300);
+      }
+      finishGrade(items, extra);
+    })().catch(function (e) {
+      ST.gradeErr = LLM.describeError(e);
+      finishGrade(items, { summary: '', gaps: [], next: '' });
+    }).then(function () {
+      ST.busy = '';
+      abortCtl = null;
+      render();
+      if (ST.grade2) window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+  function finishGrade(items, extra) {
+    var qs = ST.set.questions;
+    var score = 0, full = 0;
+    var levels = ['low', 'mid', 'high'].map(function (k) {
+      var got = 0, f = 0;
+      qs.forEach(function (q) {
+        if (q.level !== k) return;
+        got += items[q.id].got;
+        f += items[q.id].full;
+      });
+      return { key: k, got: round1(got), full: f };
+    }).filter(function (l) { return l.full > 0; });
+    levels.forEach(function (l) { score += l.got; full += l.full; });
+
+    score = round1(score);
+    var finalScore = score, finalFull = full;
+    var summary = extra.summary;
+    if (!summary) {
+      /* 模型没给整体判断时，用三档分数拼一句实话，别留空 */
+      summary = levels.map(function (l) {
+        var p = l.full ? l.got / l.full : 0;
+        return (LEVEL_FULL[l.key] || l.key) + ' ' + l.got + '/' + l.full + '（' + verdictText(p * 100) + '）';
+      }).join('；') + '。';
+    }
+    ST.grade2 = {
+      at: new Date().toISOString(),
+      title: ST.set.title,
+      items: items,
+      score: finalScore,
+      full: finalFull,
+      pct: finalFull ? finalScore / finalFull * 100 : 0,
+      levels: levels,
+      summary: summary,
+      gaps: extra.gaps,
+      next: extra.next,
+      partial: !!ST.gradeErr
+    };
+    ST.set.savedToChild = false;
+    persistSet();
+  }
+
+  /* 考察结果进档案：只作记录，不改诊断得出的掌握状态 */
+  function saveToChild() {
+    if (!ST.child || !ST.grade2 || !CC) return;
+    var g = ST.grade2;
+    CC.saveRecord(ST.child.id, {
+      key: 'rv:' + ST.set.id,
+      subject: ST.subject,
+      label: ST.set.title || '综合考察',
+      mode: 'review',
+      asked: ST.set.questions.length,
+      partial: !!g.partial,
+      targets: ST.set.topicIds.slice(0, 8),
+      counts: { weak: 0, shaky: 0, mastered: 0, untested: 0 },
+      weak: [], shaky: [], mastered: [], roots: [],
+      review: {
+        score: g.score, full: g.full, pct: Math.round(g.pct),
+        levels: g.levels, gaps: g.gaps
+      }
+    });
+    ST.set.savedToChild = true;
+    persistSet();
+    render();
+  }
+
+  /* ---------------------------------------------------------------- 渲染 */
+
+  function withSubject(href) {
+    if (ST.subject === 'math' || !href) return href;
+    if (href.indexOf('subject=') >= 0 || href.indexOf('http') === 0) return href;
+    return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + ST.subject;
+  }
+
+  /* 导航里的学科高亮与链接带上 subject，切学科后不丢上下文 */
+  function applySubjectChrome() {
+    var subj = ST.subject;
+    document.body.classList.toggle('subject-english', subj === 'english');
+    document.body.classList.toggle('subject-physics', subj === 'physics');
+    document.body.classList.toggle('subject-chinese', subj === 'chinese');
+    document.querySelectorAll('.site-nav a:not(.subject-link), a.brand').forEach(function (link) {
+      var href = link.getAttribute('href');
+      var next = withSubject(href);
+      if (next && next !== href) link.setAttribute('href', next);
+    });
+    document.querySelectorAll('.subject-link').forEach(function (link) {
+      var on = link.getAttribute('data-subject') === subj;
+      link.classList.toggle('on', on);
+      if (on) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function render() {
+    applySubjectChrome();
+    renderHead();
+    renderSide();
+    renderStage();
+  }
+
+  function ico(name) {
+    if (name === 'spark') {
+      return '<svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2l1.9 4.6 4.6 1.9-4.6 1.9L12 16.2l-1.9-4.6L5.5 9.7l4.6-1.9z"/><path d="M18.4 15.6l.9 2.1 2.1.9-2.1.9-.9 2.1-.9-2.1-2.1-.9 2.1-.9z"/></svg>';
+    }
+    return '';
+  }
+
+  /* ---------------------------------------------------------------- 启动 */
+
+  function boot() {
+    loadPrefs();
+    var qs = new URLSearchParams(location.search);
+    var sub = qs.get('subject');
+    if (sub === 'chinese' || sub === 'english' || sub === 'physics') ST.subject = sub;
+    if (CC) {
+      ST.child = CC.current();
+      if (ST.child) { ST.grade = ST.child.grade || ''; ST.textbook = ST.child.textbook || ''; }
+    }
+    if (!ST.child) ST.showPicker = true; // 没有档案时，直接把「自己选」打开
+    render();
+
+    loadData().then(function () {
+      autoPickIfEmpty();
+      render();
+    }).catch(function (e) {
+      ST.err = '知识点数据没加载出来：' + (e && e.message ? e.message : '未知错误');
+      render();
+    });
+
+    ST.busy = 'models';
+    LLM.listModels().then(function (list) {
+      ST.models = list;
+      ST.modelsErr = '';
+      if (!ST.model || !list.some(function (m) { return m.id === ST.model; })) {
+        ST.model = LLM.pickDefault(list);
+      }
+      if (ST.model) savePrefs();
+    }).catch(function (e) {
+      ST.modelsErr = LLM.describeError(e);
+    }).then(function () {
+      ST.busy = '';
+      render();
+    });
+  }
+
+  boot();
+})();

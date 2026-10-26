@@ -131,6 +131,11 @@
     var more = el('a', 'btn', rate == null ? '管理档案' : '打开档案');
     more.href = rate == null ? 'children/' : 'children/history.html?child=' + encodeURIComponent(child.id);
     actions.appendChild(more);
+    if (t.w || t.s) {
+      var rv = el('a', 'btn', '去复习');
+      rv.href = withSubj('review/');
+      actions.appendChild(rv);
+    }
     body.appendChild(actions);
   }
 

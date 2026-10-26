@@ -12,6 +12,7 @@
     home: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.6" y="2.6" width="6.2" height="6.2" rx="1.4"/><rect x="11.2" y="2.6" width="6.2" height="6.2" rx="1.4"/><rect x="2.6" y="11.2" width="6.2" height="6.2" rx="1.4"/><rect x="11.2" y="11.2" width="6.2" height="6.2" rx="1.4"/></svg>',
     graph: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="3.6" r="2.1"/><circle cx="3.9" cy="14.4" r="2.1"/><circle cx="16.1" cy="14.4" r="2.1"/><path d="M8.6 5.5 5.3 12.5M11.4 5.5l3.3 7M6 14.4h8"/></svg>',
     target: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.2"/><circle cx="10" cy="10" r="2.6"/><path d="M10 1.4v3M10 15.6v3M1.4 10h3M15.6 10h3"/></svg>',
+    spark: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.4l1.7 4.1 4.1 1.7-4.1 1.7L10 14l-1.7-4.1L4.2 8.2l4.1-1.7z"/><path d="M15.6 13.4l.7 1.6 1.6.7-1.6.7-.7 1.6-.7-1.6-1.6-.7 1.6-.7z"/></svg>',
     user: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 17.4v-1.6a4.2 4.2 0 0 0-4.2-4.2H8.2A4.2 4.2 0 0 0 4 15.8v1.6"/><circle cx="10" cy="5.8" r="3.4"/></svg>',
     info: '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="10" r="7.4"/><path d="M10 9.2v4.4"/><circle cx="10" cy="6.6" r=".9" fill="currentColor" stroke="none"/></svg>'
   };
@@ -22,7 +23,17 @@
     if (href.indexOf('github.com') >= 0 || href.indexOf('issues') >= 0) return ICONS.info;
     if (href.indexOf('explore/') >= 0) return ICONS.graph;
     if (href.indexOf('diagnose/') >= 0) return ICONS.target;
+    if (href.indexOf('review/') >= 0) return ICONS.spark;
     if (href.indexOf('children/') >= 0) return ICONS.user;
+    // 当前页的入口常常写成 './'，按 body[data-page] 补图标，别一律落到首页图标
+    if (link.getAttribute('aria-current') === 'page' || link.classList.contains('active')) {
+      var page = document.body.getAttribute('data-page') || '';
+      if (page === 'explore') return ICONS.graph;
+      if (page === 'diagnose') return ICONS.target;
+      if (page === 'review') return ICONS.spark;
+      if (page === 'kids' || page === 'history' || page === 'children') return ICONS.user;
+      return ICONS.home;
+    }
     return ICONS.home;
   }
 

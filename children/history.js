@@ -133,7 +133,7 @@
     head.appendChild(row);
 
     var kpis = el('div', 'pt-kpis pf-kpis');
-    kpis.appendChild(kpi('累计诊断', recs.length, '次', lastAt ? '最近 ' + fmtDay(lastAt) : '还没有记录', 'is-blue', ''));
+    kpis.appendChild(kpi('累计记录', recs.length, '次', lastAt ? '最近 ' + fmtDay(lastAt) : '还没有记录', 'is-blue', ''));
     kpis.appendChild(kpi('已测知识点', st.tested, '个', st.tested ? '覆盖 ' + chapterCount(st.by) + ' 个章节' : '等待第一次诊断', 'is-green', ''));
     kpis.appendChild(kpi('已掌握', st.m, '个', st.tested ? '占已测 ' + Math.round(st.m * 100 / st.tested) + '%' : '—', 'is-amber', ''));
     kpis.appendChild(kpi('待补薄弱', st.w, '个', st.s ? '另有 ' + st.s + ' 个不稳' : '没有不稳的知识点', 'is-red', st.w ? 'tone-bad' : ''));
@@ -291,15 +291,20 @@
     titleRow.appendChild(el('b', null, r.label || '诊断'));
     if (r.partial) titleRow.appendChild(tag('shaky', '未测完'));
     main.appendChild(titleRow);
-    main.appendChild(el('em', null, (SUBJECT_NAME[r.subject] || '数学') + ' · ' + (r.asked || 0) + ' 题' + (r.mode === 'screen' ? ' · 年级诊断' : '')));
+    main.appendChild(el('em', null, (SUBJECT_NAME[r.subject] || '数学') + ' · ' + (r.asked || 0) + ' 题' + (r.mode === 'screen' ? ' · 年级诊断' : '') + (r.mode === 'review' ? ' · 综合考察' : '')));
     sum.appendChild(main);
 
     var c = r.counts || {};
     var counts = el('span', 'pf-rec-counts');
-    if (c.weak) counts.appendChild(tag('weak', '薄弱 ' + c.weak));
-    if (c.shaky) counts.appendChild(tag('shaky', '不稳 ' + c.shaky));
-    if (c.mastered) counts.appendChild(tag('ok', '掌握 ' + c.mastered));
-    if (!c.weak && !c.shaky) counts.appendChild(tag('ok', '全部掌握'));
+    if (r.review && typeof r.review.pct === 'number') {
+      counts.appendChild(tag(r.review.pct >= 85 ? 'ok' : r.review.pct >= 60 ? 'shaky' : 'weak',
+        '得分 ' + r.review.score + '/' + r.review.full));
+    } else if (r.mode !== 'review') {
+      if (c.weak) counts.appendChild(tag('weak', '薄弱 ' + c.weak));
+      if (c.shaky) counts.appendChild(tag('shaky', '不稳 ' + c.shaky));
+      if (c.mastered) counts.appendChild(tag('ok', '掌握 ' + c.mastered));
+      if (!c.weak && !c.shaky) counts.appendChild(tag('ok', '全部掌握'));
+    }
     sum.appendChild(counts);
 
     det.appendChild(sum);
@@ -323,7 +328,22 @@
     };
     group('薄弱', r.weak, 'weak');
     group('不稳', r.shaky, 'shaky');
-    if (!(r.weak || []).length && !(r.shaky || []).length) body.appendChild(el('p', 'kid-empty', '这次没有发现薄弱或不稳的知识点。'));
+    if (r.mode === 'review') {
+      var lv = (r.review && r.review.levels) || [];
+      if (lv.length) {
+        var ul2 = el('ul', 'rec-topics');
+        var LEVEL_CN = { low: '基础', mid: '变式', high: '综合' };
+        lv.forEach(function (l) {
+          var li = el('li');
+          li.appendChild(el('span', null, (LEVEL_CN[l.key] || l.key) + ' ' + l.got + '/' + l.full + ' 分'));
+          ul2.appendChild(li);
+        });
+        body.appendChild(el('h4', null, '三档得分'));
+        body.appendChild(ul2);
+      }
+    } else if (!(r.weak || []).length && !(r.shaky || []).length) {
+      body.appendChild(el('p', 'kid-empty', '这次没有发现薄弱或不稳的知识点。'));
+    }
 
     var actions = el('div', 'rec-actions');
     if (r.targets && r.targets.length) {
