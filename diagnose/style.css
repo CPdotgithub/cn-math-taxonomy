@@ -854,11 +854,12 @@ main#root > .dx-stage:not(.dx-start) {
   min-height: 32px;
   min-width: 92px;
   max-width: 190px;
-  padding: 0 8px;
+  padding: 0 26px 0 8px;
   font-size: .84rem;
   font-weight: 600;
   color: var(--pt-ink);
-  background: #fff;
+  /* 只改底色，保住全局的下拉箭头 */
+  background-color: #fff;
   border: 1px solid var(--pt-line);
   border-radius: 8px;
 }

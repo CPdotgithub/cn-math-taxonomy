@@ -275,14 +275,15 @@ body.has-rail main#root.rv {
   padding: 0 10px;
   border: 1px solid var(--pt-line);
   border-radius: var(--radius-sm);
-  background: #fff;
+  /* 只改底色，别把全局下拉箭头（background-image）盖掉 */
+  background-color: #fff;
   color: var(--pt-ink);
   font: inherit;
   font-size: .86rem;
   outline: none;
   transition: border-color .12s ease, box-shadow .12s ease;
 }
-.rv-select { padding-right: 6px; cursor: pointer; }
+.rv-select { padding-right: 30px; cursor: pointer; }
 .rv-input:focus,
 .rv-select:focus {
   border-color: var(--pt-blue);
@@ -1000,14 +1001,23 @@ body.has-rail main#root.rv {
   .rv-blank { flex: 1 1 100%; max-width: none; }
 }
 
-/* 选点：册 + 知识点两个下拉并排 */
+/* 选点：册 + 知识点两个下拉上下排，各自占满一行，标签不会被截断 */
 .rv-bookrow {
   display: grid;
-  grid-template-columns: minmax(0, 96px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 8px;
   margin-bottom: 10px;
 }
-.rv-bookrow .rv-select { height: 36px; }
+.rv-bookrow .rv-select { height: 36px; max-width: 340px; }
+/* 已选满 3 个也照样能点：再挑一个会换掉最早那个，别做成灰框 */
+.rv-bookrow .rv-select.is-full {
+  border-color: rgba(180, 120, 0, .5);
+  background-color: #fffdf6;
+}
+.rv-bookrow .rv-select.is-full:focus {
+  border-color: var(--warn);
+  box-shadow: 0 0 0 3px rgba(180, 120, 0, .14);
+}
 
 /* 网页版「怎么开」 */
 .rv-howto {
@@ -1088,7 +1098,6 @@ body.has-rail main#root.rv {
 body.has-modal { overflow: hidden; }
 
 @media (max-width: 560px) {
-  .rv-bookrow { grid-template-columns: minmax(0, 84px) minmax(0, 1fr); }
   .rv-modal-card { padding: 16px; }
 }
 

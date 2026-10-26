@@ -55,6 +55,7 @@
     grade2: null,
     gradeErr: '',
     showPicker: false,
+    swapNote: '',
     q: '',
     webOn: false,
     links: '',
@@ -329,6 +330,7 @@
   /* 一个点都没选时不拦人：有档案就用档案里的薄弱点，没有就随机抽本册几个点拼综合题。
      force=true 是「换一组」。 */
   function ensureTargets(force) {
+    ST.swapNote = '';
     if (force) { ST.picked = []; ST.pickOrigin = ''; }
     else if (ST.picked.length) return;
 
@@ -351,6 +353,25 @@
     if (ST.picked.length >= MAX_PICK) return '最多同时考察 ' + MAX_PICK + ' 个知识点，先取消一个。';
     ST.picked.push(id);
     return '';
+  }
+
+  /* 加一个点；已经满 MAX_PICK 时换掉最早选的那个。
+     满了也不能把控件变灰——点不动的框会被当成坏了。 */
+  function pickOrSwap(id) {
+    ST.swapNote = '';
+    if (ST.picked.indexOf(id) >= 0) {
+      togglePick(id);
+    } else if (ST.picked.length >= MAX_PICK) {
+      var out = ST.picked.shift();
+      ST.picked.push(id);
+      var ot = topicOf(out), nt = topicOf(id);
+      ST.swapNote = '已满 ' + MAX_PICK + ' 个，把「' + (ot ? ot.name : out) + '」换成了「'
+        + (nt ? nt.name : id) + '」。';
+    } else {
+      ST.picked.push(id);
+    }
+    ST.err = '';
+    ST.pickOrigin = ST.picked.length ? 'user' : '';
   }
 
   /* ---------------------------------------------------------------- 顶部 */
@@ -541,8 +562,16 @@
       render();
     });
 
-    var addSel = h('select', { class: 'rv-select', 'aria-label': '加一个知识点' });
-    addSel.appendChild(h('option', { value: '', text: '加一个知识点（可多次选）' }));
+    var full = ST.picked.length >= MAX_PICK;
+    var addSel = h('select', {
+      class: 'rv-select' + (full ? ' is-full' : ''),
+      'aria-label': full ? '换一个知识点' : '加一个知识点'
+    });
+    /* 满了也不禁用：禁用会变成一个点不动的灰框，家长只会以为是坏了 */
+    addSel.appendChild(h('option', {
+      value: '',
+      text: full ? '已选满 ' + MAX_PICK + ' 个 · 再选会换掉最早那个' : '加一个知识点（可多选）'
+    }));
     var groups = {}, order = [];
     topicsInBook(bookNow).forEach(function (t) {
       var g = shortChapter(t.chapter) || '其他';
@@ -556,17 +585,14 @@
       });
       addSel.appendChild(og);
     });
-    if (ST.picked.length >= MAX_PICK) {
-      addSel.disabled = true;
-      addSel.title = '最多同时考察 ' + MAX_PICK + ' 个知识点，先取消一个';
-    }
+    addSel.title = full
+      ? '最多同时考察 ' + MAX_PICK + ' 个知识点，再选一个会换掉最早那个'
+      : '可以连着选，最多 ' + MAX_PICK + ' 个';
     addSel.addEventListener('change', function () {
       var id = addSel.value;
       addSel.value = '';
       if (!id) return;
-      var err = togglePick(id);
-      if (err) ST.err = err;
-      else { ST.err = ''; ST.pickOrigin = 'user'; }
+      pickOrSwap(id);
       render();
     });
 
@@ -586,6 +612,7 @@
             type: 'button', class: 'rv-chip-x', 'aria-label': '移除', text: '×',
             onclick: function () {
               togglePick(id);
+              ST.swapNote = '';
               ST.pickOrigin = ST.picked.length ? 'user' : '';
               render();
             }
@@ -607,7 +634,7 @@
         onclick: function () { ensureTargets(true); render(); }
       }));
     } else if (ST.picked.length) {
-      note.appendChild(document.createTextNode('自己挑的 ' + ST.picked.length + ' 个点。'));
+      note.appendChild(document.createTextNode(ST.swapNote || ('自己挑的 ' + ST.picked.length + ' 个点。')));
     } else {
       note.appendChild(document.createTextNode('不选也能出题：有档案就用档案里的薄弱点，没有就随机抽几个本册的点。'));
     }
@@ -629,8 +656,7 @@
       type: 'button',
       class: 'rv-topic' + (on ? ' is-on' : '') + (withMeta ? ' has-meta' : ''),
       onclick: function () {
-        var err = togglePick(t.id);
-        if (err) ST.err = err;
+        pickOrSwap(t.id);
         render();
       }
     }, [body]);
