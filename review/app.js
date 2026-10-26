@@ -12,6 +12,7 @@
   'use strict';
 
   var CC = window.CnmChildren;
+  var SC = window.CnmScope;
   var LLM = window.RvLLM;
   var PR = window.RvPrompts;
   var WEB = window.RvWeb;
@@ -34,6 +35,7 @@
     data: null,
     child: null,
     grade: '',
+    term: '',
     textbook: '',
     picked: [],
     count: 1,
@@ -180,11 +182,22 @@
   }
 
   function childGrade() {
-    if (ST.child && ST.child.grade) return ST.child.grade;
+    var sc = currentScope();
+    if (sc && sc.grade) return SC.text(sc);
     return ST.grade || '四年级';
   }
   function childTextbook() {
     return (ST.child && ST.child.textbook) || ST.textbook || '人教版';
+  }
+
+  /* 全站共享的学习范围：手动指定 > 当前孩子的档案 > 本页兜底。
+   * 诊断页改过的年级/册次会存进同一份状态，这里直接接着用，不另记一套。 */
+  function currentScope() {
+    var sc = SC ? SC.get(ST.subject) : null;
+    if (sc && sc.grade) return sc;
+    var g = String(ST.grade || '').trim();
+    if (g) return { grade: SC ? SC.shortGrade(g) : g, term: ST.term || '', manual: false };
+    return null;
   }
 
   /* 档案里被判为薄弱/不稳的点，弱在前、新的在前 */
@@ -231,7 +244,7 @@
     clear(headEl);
     var meta = h('div', { class: 'rv-head-meta' });
     if (ST.child) {
-      meta.appendChild(pill(ST.child.name + ' · ' + (ST.child.grade || '未填年级'), 'blue'));
+      meta.appendChild(pill(ST.child.name + ' · ' + childGrade(), 'blue'));
       meta.appendChild(pill(PR.SUBJECT_NAME[ST.subject] || '数学', 'gray'));
     } else {
       meta.appendChild(pill('未建档', 'amber'));
@@ -258,6 +271,47 @@
     sideEl.appendChild(histPanel());
   }
 
+  /* 没建档案时自己选年级和学期：写进全站共享状态，诊断页也跟着变 */
+  function scopeFields() {
+    var cur = currentScope() || { grade: '四', term: '' };
+    var seniorOf = function (k) { return ['高一', '高二', '高三'].indexOf(SC ? SC.fullGrade(k) : k) >= 0; };
+
+    var gradeS = h('select', { class: 'rv-select', 'aria-label': '年级' });
+    GRADES.forEach(function (g) {
+      var k = SC ? SC.shortGrade(g) : g;
+      gradeS.appendChild(h('option', { value: k, text: g, selected: k === cur.grade ? true : null }));
+    });
+
+    var termS = h('select', { class: 'rv-select', 'aria-label': '学期' });
+    [['', '整个学年'], ['上', '上学期'], ['下', '下学期']].forEach(function (t) {
+      termS.appendChild(h('option', { value: t[0], text: t[1], selected: (cur.term || '') === t[0] ? true : null }));
+    });
+    termS.disabled = seniorOf(cur.grade);
+
+    function push() {
+      if (SC) SC.set(ST.subject, { grade: gradeS.value, term: termS.value });
+      ST.grade = SC ? SC.fullGrade(gradeS.value) : gradeS.value;
+      ST.term = termS.value;
+      render();
+    }
+    gradeS.addEventListener('change', function () {
+      if (seniorOf(gradeS.value)) termS.value = '';
+      push();
+    });
+    termS.addEventListener('change', push);
+
+    return h('div', { class: 'rv-scope' }, [
+      h('div', { class: 'rv-scope-row' }, [
+        h('label', { class: 'rv-field rv-field-col' }, [h('span', { class: 'rv-label', text: '年级' }), gradeS]),
+        h('label', { class: 'rv-field rv-field-col' }, [h('span', { class: 'rv-label', text: '学期' }), termS])
+      ]),
+      h('p', { class: 'rv-hint' }, [
+        h('a', { class: 'rv-link', href: '../children/', text: '建一份档案' }),
+        document.createTextNode(' 后，薄弱点会自动带出来。')
+      ])
+    ]);
+  }
+
   function targetPanel() {
     var p = h('div', { class: 'pt-panel rv-panel' });
     p.appendChild(h('div', { class: 'pt-panel-head' }, [h('h2', { text: '考察对象' })]));
@@ -266,27 +320,28 @@
     body.appendChild(subjectField());
 
     if (ST.child) {
+      var sc0 = currentScope();
+      var manualScope = !!(sc0 && sc0.manual);
       body.appendChild(h('div', { class: 'rv-child' }, [
         h('span', { class: 'rv-avatar', text: Array.from(ST.child.name)[0] || '·' }),
         h('div', { class: 'rv-child-main' }, [
           h('b', { text: ST.child.name }),
-          h('em', { text: (ST.child.grade || '未填年级') + ' · ' + (ST.child.textbook || '人教版') })
+          h('em', { text: childGrade() + ' · ' + (ST.child.textbook || '人教版') })
         ]),
         h('a', { class: 'rv-link', href: '../children/', text: '换孩子' })
       ]));
+      /* 诊断页手动改过范围：这儿跟着用，但要说清不是档案里的年级 */
+      if (manualScope) {
+        body.appendChild(h('p', { class: 'rv-hint is-warn' }, [
+          document.createTextNode('诊断页手动选的，档案里是' + CC.gradeText(ST.child) + '。 '),
+          h('button', {
+            type: 'button', class: 'rv-linkbtn',
+            onclick: function () { if (SC) SC.clear(ST.subject); render(); }
+          }, ['回到档案'])
+        ]));
+      }
     } else {
-      var sel = h('select', { class: 'rv-select', 'aria-label': '年级' });
-      GRADES.forEach(function (g) {
-        sel.appendChild(h('option', { value: g, text: g, selected: g === childGrade() ? true : null }));
-      });
-      sel.addEventListener('change', function () { ST.grade = sel.value; render(); });
-      body.appendChild(h('div', { class: 'rv-anon' }, [
-        h('label', { class: 'rv-field rv-field-col' }, [h('span', { class: 'rv-label', text: '年级' }), sel]),
-        h('p', { class: 'rv-hint' }, [
-          h('a', { class: 'rv-link', href: '../children/', text: '建一份档案' }),
-          document.createTextNode(' 后，薄弱点会自动带出来。')
-        ])
-      ]));
+      body.appendChild(h('div', { class: 'rv-anon' }, [scopeFields()]));
     }
     p.appendChild(body);
     return p;
@@ -322,6 +377,7 @@
     ST.gradeErr = '';
     ST.photoNote = '';
     ST.err = '';
+    if (SC) SC.setSubject(next);
     savePrefs();
     /* 地址栏跟着变，刷新或分享出去还是这个学科 */
     try {
@@ -2077,9 +2133,22 @@
     var qs = new URLSearchParams(location.search);
     var sub = qs.get('subject');
     if (sub === 'chinese' || sub === 'english' || sub === 'physics') ST.subject = sub;
+    else if (SC && SC.subject()) ST.subject = SC.subject();   // 跟上「诊断」里最后用的学科
+    /* 地址栏跟上，分享出去还是这个学科 */
+    if (!sub && ST.subject !== 'math') {
+      try {
+        var u0 = new URL(location.href);
+        u0.searchParams.set('subject', ST.subject);
+        history.replaceState(null, '', u0.pathname + u0.search);
+      } catch (e0) { /* ignore */ }
+    }
     if (CC) {
       ST.child = CC.current();
-      if (ST.child) { ST.grade = ST.child.grade || ''; ST.textbook = ST.child.textbook || ''; }
+      if (ST.child) {
+        ST.grade = ST.child.grade || '';
+        ST.term = ST.child.term || '';
+        ST.textbook = ST.child.textbook || '';
+      }
     }
     if (!ST.child) ST.showPicker = true; // 没有档案时，直接把「自己选」打开
     /* 选了网页版却还没凭据（换了设备 / 清了缓存）：把配置面板摊开，别让人找不到 */

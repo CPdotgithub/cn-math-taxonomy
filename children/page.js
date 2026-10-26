@@ -2,10 +2,13 @@
 (function () {
   'use strict';
   var CC = window.CnmChildren;
+  var SC = window.CnmScope;
   var listBox = document.getElementById('list');
   var form = document.getElementById('form');
   var nameIn = document.getElementById('f-name');
   var gradeSel = document.getElementById('f-grade');
+  var termSel = document.getElementById('f-term');
+  var termNote = document.getElementById('term-note');
   var bookSel = document.getElementById('f-book');
   var errBox = document.getElementById('f-error');
   var submitBtn = document.getElementById('f-submit');
@@ -25,8 +28,42 @@
     if (placeholder) { var o = el('option', null, placeholder); o.value = ''; sel.appendChild(o); }
     items.forEach(function (x) { var o = el('option', null, x); o.value = x; sel.appendChild(o); });
   }
+  function fillPairs(sel, pairs) {
+    sel.textContent = '';
+    pairs.forEach(function (p) { var o = el('option', null, p[1]); o.value = p[0]; sel.appendChild(o); });
+  }
   fillSelect(gradeSel, CC.GRADES, '请选择年级');
+  fillPairs(termSel, CC.TERMS);
   fillSelect(bookSel, CC.TEXTBOOKS);
+
+  /* 学期跟着年级变：没选年级给占位，高中按必修/选必分册直接锁掉 */
+  function syncTerm(want) {
+    var g = gradeSel.value;
+    var senior = CC.GRADES.indexOf(g) >= 9; // 高一 高二 高三
+    var blank = !g;
+    var v = want === undefined ? termSel.value : String(want);
+    if (blank) {
+      fillPairs(termSel, [['', '先选年级']]);
+      termSel.value = '';
+      termSel.disabled = true;
+    } else if (senior) {
+      fillPairs(termSel, [['', '不分上下学期']]);
+      termSel.value = '';
+      termSel.disabled = true;
+    } else {
+      var has = CC.TERMS.some(function (t) { return t[0] === v; });
+      fillPairs(termSel, CC.TERMS);
+      termSel.value = has ? v : '上';
+      termSel.disabled = false;
+    }
+    termNote.textContent = senior
+      ? '高中按必修 / 选必分册，不用选上下学期。'
+      : '诊断、复习默认落在这一册的知识点上。';
+  }
+  gradeSel.addEventListener('change', function () {
+    var g = gradeSel.value;
+    syncTerm(g && CC.GRADES.indexOf(g) < 9 ? '上' : '');
+  });
 
   var params = new URLSearchParams(location.search);
   if (params.get('from') === 'diagnose') {
@@ -45,6 +82,7 @@
     editing = null;
     nameIn.value = '';
     gradeSel.value = '';
+    syncTerm('');
     bookSel.value = CC.TEXTBOOKS[0];
     formTitle.textContent = '添加孩子';
     submitBtn.textContent = '添加孩子';
@@ -56,6 +94,7 @@
     editing = c.id;
     nameIn.value = c.name;
     gradeSel.value = c.grade;
+    syncTerm(c.term || '');
     bookSel.value = c.textbook;
     formTitle.textContent = '修改「' + c.name + '」的信息';
     submitBtn.textContent = '保存修改';
@@ -174,7 +213,7 @@
     box.appendChild(head);
 
     var meta = el('p', 'kid-meta');
-    meta.appendChild(el('span', 'pt-pill is-gray', c.grade));
+    meta.appendChild(el('span', 'pt-pill is-gray', CC.gradeText(c)));
     meta.appendChild(el('span', 'pt-pill is-gray', c.textbook));
     box.appendChild(meta);
 
@@ -200,7 +239,11 @@
     if (!isCurrent) {
       var use = el('button', 'primary', '设为当前');
       use.type = 'button';
-      use.addEventListener('click', function () { CC.setCurrent(c.id); render(); });
+      use.addEventListener('click', function () {
+        CC.setCurrent(c.id);
+        if (SC) SC.clearAll();
+        render();
+      });
       row.appendChild(use);
     }
     var hist = el('a', 'btn', '打开档案');
@@ -215,6 +258,7 @@
     del.addEventListener('click', function () {
       if (!confirm('删除「' + c.name + '」的档案和全部诊断记录？删除后无法恢复。')) return;
       CC.remove(c.id);
+      if (SC) SC.clearAll();
       if (editing === c.id) resetForm();
       render();
     });
@@ -245,9 +289,11 @@
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var f = { name: nameIn.value, grade: gradeSel.value, textbook: bookSel.value };
+    var f = { name: nameIn.value, grade: gradeSel.value, term: termSel.value, textbook: bookSel.value };
     var res = editing ? CC.update(editing, f) : CC.add(f);
     if (!res.ok) { showError(res.error); return; }
+    /* 档案是「当前学习范围」的事实来源：改了年级/学期，手动指定的范围就作废 */
+    if (SC) SC.clearAll();
     if (!editing && window.cnmTrack) window.cnmTrack('child_added');
     resetForm();
     render();

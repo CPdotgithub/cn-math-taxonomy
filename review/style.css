@@ -112,7 +112,23 @@ body.has-rail main#root.rv {
   white-space: nowrap;
 }
 .rv-link:hover { text-decoration: underline; }
+.rv-linkbtn {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 650;
+  color: var(--pt-blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
 .rv-anon { display: flex; flex-direction: column; gap: 8px; }
+/* 年级 + 学期并排：一个「位置」的两种说法，不该分两行 */
+.rv-scope { display: flex; flex-direction: column; gap: 8px; }
+.rv-scope-row { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 8px; }
+.rv-scope .rv-hint { margin-top: 0; }
+.rv-select:disabled { opacity: .55; cursor: default; }
 
 /* 学科：这一页的总开关，放在最上面 */
 .rv-subjfield { margin-bottom: 12px; }

@@ -8,6 +8,10 @@
   var MAX_RECORDS = 40;
   var GRADES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
   var TEXTBOOKS = ['人教版', '北师大版', '苏教版', '沪教版', '外研版', '译林版', '其他'];
+  /* 学期：'' 整学年（不想分上下的）、'上' 上册、'下' 下册。高中按必修/选必分册，固定 '' */
+  var TERMS = [['上', '上学期（上册）'], ['下', '下学期（下册）'], ['', '整学年']];
+  var TERM_SHORT = { '上': '上册', '下': '下册', '': '' };
+  var SENIOR = ['高一', '高二', '高三'];
 
   function read(k, fallback) {
     try { var v = JSON.parse(localStorage.getItem(k)); return v == null ? fallback : v; } catch (e) { return fallback; }
@@ -42,7 +46,16 @@
     var name = String(f && f.name || '').replace(/\s+/g, ' ').trim();
     var grade = GRADES.indexOf(f && f.grade) >= 0 ? f.grade : '';
     var textbook = TEXTBOOKS.indexOf(f && f.textbook) >= 0 ? f.textbook : TEXTBOOKS[0];
-    return { name: name, grade: grade, textbook: textbook };
+    var term = (f && (f.term === '上' || f.term === '下')) ? f.term : '';
+    /* 高中按必修/选必分册，没有上下学期 */
+    if (SENIOR.indexOf(grade) >= 0) term = '';
+    return { name: name, grade: grade, term: term, textbook: textbook };
+  }
+
+  /* 展示用：「五年级」/「五年级上册」 */
+  function gradeText(c) {
+    if (!c || !c.grade) return '';
+    return c.grade + (TERM_SHORT[c.term] || '');
   }
   function check(s, f, selfId) {
     if (!f.name) return '请填写孩子的昵称。';
@@ -59,7 +72,7 @@
     if (s.children.length >= MAX_CHILDREN) return { ok: false, error: '最多可以建 ' + MAX_CHILDREN + ' 个孩子。' };
     var err = check(s, f, null);
     if (err) return { ok: false, error: err };
-    var child = { id: newId(), name: f.name, grade: f.grade, textbook: f.textbook, createdAt: new Date().toISOString() };
+    var child = { id: newId(), name: f.name, grade: f.grade, term: f.term, textbook: f.textbook, createdAt: new Date().toISOString() };
     s.children.push(child);
     if (!s.current) s.current = child.id;
     if (!write(KEY, s)) return { ok: false, error: '浏览器不允许保存数据（可能是隐私模式），档案无法保存。' };
@@ -145,9 +158,9 @@
   }
 
   window.CnmChildren = {
-    GRADES: GRADES, TEXTBOOKS: TEXTBOOKS, MAX_CHILDREN: MAX_CHILDREN,
+    GRADES: GRADES, TEXTBOOKS: TEXTBOOKS, TERMS: TERMS, MAX_CHILDREN: MAX_CHILDREN,
     list: list, get: get, current: current, setCurrent: setCurrent,
-    add: add, update: update, remove: remove,
+    add: add, update: update, remove: remove, gradeText: gradeText,
     recordsOf: recordsOf, saveRecord: saveRecord, hasRecord: hasRecord, moveRecord: moveRecord, removeRecord: removeRecord,
     latestStatus: latestStatus
   };

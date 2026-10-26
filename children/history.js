@@ -97,7 +97,7 @@
     h1.appendChild(document.createTextNode(child.name));
     if (kids.length && CC.current() && CC.current().id === child.id) h1.appendChild(el('span', 'pt-pill is-solid', '当前'));
     title.appendChild(h1);
-    var sub = [child.grade, child.textbook];
+    var sub = [CC.gradeText(child), child.textbook];
     if (child.createdAt) {
       var d = new Date(child.createdAt);
       if (!isNaN(d)) sub.push(d.getFullYear() + ' 年 ' + (d.getMonth() + 1) + ' 月建档');

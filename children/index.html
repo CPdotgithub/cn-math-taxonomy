@@ -70,8 +70,17 @@
         <form id="form" novalidate>
           <label for="f-name">昵称</label>
           <input id="f-name" type="text" maxlength="12" autocomplete="off" placeholder="例如：小满（最多 12 个字）">
-          <label for="f-grade">年级</label>
-          <select id="f-grade"></select>
+          <div class="form-pair">
+            <div>
+              <label for="f-grade">年级</label>
+              <select id="f-grade"></select>
+            </div>
+            <div>
+              <label for="f-term">学期</label>
+              <select id="f-term"></select>
+            </div>
+          </div>
+          <p class="muted small" id="term-note">诊断、复习默认落在这一册的知识点上。</p>
           <label for="f-book">教材版本</label>
           <select id="f-book"></select>
           <p class="muted small" id="book-note">图谱的知识点和章节按人教版编排。选其他版本也能用，章节名称可能和手上的教材略有不同。</p>
@@ -87,6 +96,7 @@
   </div>
 </main>
 <script src="../assets/children.js"></script>
+<script src="../assets/scope.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js" onerror="window.__CNM_SDK_FAILED=1"></script>
 <script defer src="../assets/cloud-config.js"></script>
 <script defer src="../assets/cloud-sync.js"></script>

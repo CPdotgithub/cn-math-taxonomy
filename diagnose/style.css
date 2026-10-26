@@ -1018,6 +1018,18 @@ main#root > .dx-stage:not(.dx-start) {
   color: var(--pt-ink-3);
 }
 .dx-launch-auto.is-manual { color: #A06A12; }
+.dx-launch-reset {
+  margin-left: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: .74rem;
+  color: var(--pt-primary, #003df7);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
 .dx-launch-btn {
   width: 100%;
   margin-top: 14px;

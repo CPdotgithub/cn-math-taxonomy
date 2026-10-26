@@ -228,7 +228,8 @@
 
   /* ------------------------------------------------------------ 孩子档案 */
   const CC = window.CnmChildren;
-  function childLabel(c) { return c.name + (c.grade ? '（' + c.grade + '）' : ''); }
+  const SC = window.CnmScope;
+  function childLabel(c) { return c.name + (c.grade ? '（' + CC.gradeText(c) + '）' : ''); }
   function childrenHref(path) { return '../children/' + (path || ''); }
   function fromQuery() { return '?from=diagnose' + (subject !== 'math' ? '&subject=' + subject : ''); }
   function childSelect(onPick) {
@@ -504,7 +505,7 @@
           h('a', { class: 'dx-kid-link', href: childrenHref(fromQuery()) }, '建一个 →'));
       }
       return h('div', { class: 'dx-kid' },
-        childSelect(function (id) { CC.setCurrent(id); rangeManual = false; renderStart(); }),
+        childSelect(function (id) { CC.setCurrent(id); if (SC) SC.clearAll(); rangeManual = false; renderStart(); }),
         cur
           ? h('a', { class: 'dx-kid-link', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)) },
             n ? '已测 ' + n + ' 次 · 看档案' : '还没测过 · 看档案')
@@ -514,11 +515,14 @@
     const fill = function () {
       while (box.firstChild) box.removeChild(box.firstChild);
       const cur = CC.current();
-      const autoKey = childScopeOf(cur && cur.grade);
-      const auto = !!autoKey && !rangeManual;
+      const sc = SC ? SC.get(subject) : null;
+      const auto = !!sc && !sc.manual;
       const g = E.gradeTargets(D.graph, gradeScope(), subject, { cumulative: true });
       const baseGrades = g && g.base.length ? baseGradeLabel(g.baseGrades) : '';
-      const volText = g ? (g.volumes.length === 1 ? '全一册' : '上下册') : '';
+      const volText = volSel === '上' ? '上册'
+        : volSel === '下' ? '下册'
+          : volSel === '全' ? '全一册'
+            : (g && g.volumes.length === 1 ? '全一册' : '上下册');
 
       const onGrade = function (v) {
         rangeManual = true;
@@ -527,6 +531,7 @@
         else if (subject === 'physics' && v === '九') volSel = '全';
         else if (subject === 'english' && v === '九') volSel = '';
         else if (volSel === '全') volSel = '';
+        persistScope();
         fill();
       };
       /* 一年级~六年级 / 七年级~九年级 / 高中，一行一组 */
@@ -554,7 +559,7 @@
               volItems.length > 1
                 ? h('div', { class: 'dx-vol-row' },
                   h('span', { class: 'dx-vol-label' }, '册次'),
-                  chips('册次', volItems, volSel, function (v) { rangeManual = true; volSel = v; fill(); }, 'is-sub'))
+                  chips('册次', volItems, volSel, function (v) { volSel = v; persistScope(); fill(); }, 'is-sub'))
                 : null)),
           h('div', { class: 'dx-field' },
             h('span', { class: 'dx-field-label' }, '科目'),
@@ -567,9 +572,16 @@
           baseGrades
             ? h('p', { class: 'dx-launch-base' }, '往下兜底 ' + baseGrades + ' 的 ' + g.base.length + ' 个基础点，只在答错时回查')
             : null,
-          h('p', { class: 'dx-launch-auto' + (auto ? '' : ' is-manual') }, auto
-            ? '跟着「' + cur.name + '」的档案年级'
-            : (autoKey ? '手动指定，不跟随档案' : '手动指定')),
+          h('p', { class: 'dx-launch-auto' + (auto ? '' : ' is-manual') },
+            auto
+              ? '跟着「' + cur.name + '」的档案（' + SC.text(sc) + '）'
+              : (cur ? '手动指定，不跟随档案' : '自己选的范围'),
+            sc && sc.manual && cur
+              ? [' · ', h('button', {
+                type: 'button', class: 'dx-launch-reset',
+                onclick: function () { rangeManual = false; if (SC) SC.clear(subject); renderStart(); }
+              }, '回到档案')]
+              : null),
           h('button', {
             class: 'primary dx-launch-btn', id: 'btn-grade-start', disabled: !g,
             onclick: function () { if (g) startSession(g.ids, g.label + '（年级诊断）', 'screen', g.base); }
@@ -656,15 +668,15 @@
     }
     if (errMsg) page.append(h('p', { class: 'err', text: errMsg }));
 
-    const cur = CC.current();
-    /* 范围默认跟着档案里的年级走；没有档案孩子（含演示）时才用手动范围 */
-    if (demo || !childScopeOf(cur && cur.grade)) rangeManual = true;
-    followChildGrade();
+    /* 范围默认跟着共享状态走（有档案跟档案，手动指定过就跟手动） */
+    if (demo) rangeManual = true;
+    followScope();
     /* 换过科目后原年级可能不存在（数学四年级 → 物理没有四年级），退回该科目第一个年级 */
     if (!gradeOptions(subject).some(function (o) { return o[0] === gradeSel; })) {
       gradeSel = gradeOptions(subject)[0][0];
       volSel = '';
       rangeManual = true;
+      if (SC) SC.set(subject, { grade: gradeSel, term: '' });
     }
 
     page.append(h('div', { class: 'shell-head no-print' },
@@ -710,34 +722,43 @@
   const SUBJECT_NAME = { math: '数学', english: '英语', physics: '物理', chinese: '语文' };
 
   /* 档案里的年级 → engine 的 scope 键。映射不上的（高三 / 空）返回 ''，交给手动选择。 */
-  function childScopeOf(g) {
+  function scopeKeyOf(g) {
+    if (SC) return SC.shortGrade(g);
     const s = String(g || '').trim();
     if (/^[一二三四五六七八九]年级$/.test(s)) return s;
     if (s === '高一' || s === '高二') return s;
     return '';
   }
 
-  /* 把 gradeSel / volSel 对齐到当前孩子的年级。返回是否发生了变化。 */
-  function followChildGrade() {
+  /* 学期 → 册次。「全」只出现在九年一贯的物理，英语九年级另有旧版全一册。 */
+  function volFor(g, term) {
+    if (seniorGrade(g)) return '';
+    if (subject === 'physics' && g === '九') return '全';
+    if (subject === 'english' && g === '九') return term === '全' ? '全' : (term === '上' ? '上' : '');
+    return term === '上' || term === '下' ? term : '';
+  }
+
+  /* 把 gradeSel / volSel 对齐到全站共享的学习范围（手动指定 > 孩子档案）。 */
+  function followScope() {
     if (rangeManual) return false;
-    const cur = CC.current();
-    const key = childScopeOf(cur && cur.grade);
-    if (!key) return false;
+    const sc = SC && SC.get(subject);
+    if (!sc || !sc.grade) return false;
     let changed = false;
-    if (seniorGrade(key)) {
-      if (gradeSel !== key) { gradeSel = key; changed = true; }
-      if (volSel !== '') { volSel = ''; changed = true; }
-      return changed;
-    }
-    const g1 = key.charAt(0);
-    if (gradeSel !== g1) { gradeSel = g1; changed = true; }
-    const want = (subject === 'physics' && g1 === '九') ? '全' : '';
+    if (gradeSel !== sc.grade) { gradeSel = sc.grade; changed = true; }
+    const want = volFor(sc.grade, sc.term);
     if (volSel !== want) { volSel = want; changed = true; }
     return changed;
   }
 
+  /* 手动选了年级/册次：写回共享状态，复习页接着用同一份 */
+  function persistScope() {
+    rangeManual = true;
+    if (SC) SC.set(subject, { grade: gradeSel, term: volSel });
+  }
+
   /* 换科目：走 URL 参数，和全站学科切换保持一致 */
   function switchSubject(next) {
+    if (SC) SC.setSubject(next);
     const p = new URLSearchParams(location.search);
     if (next === 'math') p.delete('subject'); else p.set('subject', next);
     p.delete('target');
@@ -813,7 +834,7 @@
       const count = chapters.reduce(function (n, c) { return n + c.rows.length; }, 0);
       shown += count;
       /* 默认展开哪一册：跟着当前选的年级走，别再对四年级的孩子展开「一年级上册」 */
-      const openVol = seniorGrade(gradeSel) ? '' : String(gradeSel).charAt(0) + '上';
+      const openVol = seniorGrade(gradeSel) ? '' : String(gradeSel).charAt(0) + (volSel === '下' ? '下' : '上');
       const seniorOpen = subject === 'english' || subject === 'physics' ? '必修一' : '高一';
       const det = h('details', { class: 'vol', open: !!q || (startStage === 'j' ? vv[0] === '七上' : startStage === 'h' ? vv[0] === seniorOpen : vv[0] === openVol) },
         h('summary', null, vv[1] + '（' + count + ' 个知识点）'));
@@ -1761,6 +1782,16 @@
 
   async function init() {
     subject = detectSubject();
+    /* 没带 subject 参数就从全站状态里接着上次的学科，别让四个页面各记一套 */
+    if (SC && !new URLSearchParams(location.search).get('subject') && !new URLSearchParams(location.search).get('target') && !location.hash) {
+      const last = SC.subject();
+      if (last && last !== 'math') {
+        const p0 = new URLSearchParams(location.search);
+        p0.set('subject', last);
+        history.replaceState(null, '', location.pathname + '?' + p0.toString());
+        subject = last;
+      }
+    }
     applySubjectChrome();
     try { await loadData(); } catch (e) {
       clearRoot();
