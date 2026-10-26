@@ -28,18 +28,25 @@
     if (placeholder) { var o = el('option', null, placeholder); o.value = ''; sel.appendChild(o); }
     items.forEach(function (x) { var o = el('option', null, x); o.value = x; sel.appendChild(o); });
   }
+  /* 这几个常量以 children.js 为准，但页面可能跑在旧缓存的 children.js 上
+     （Service Worker 换版本那一瞬间常见）。旧版没有 TERMS 会让下拉框整个空白，
+     所以这里留一份兜底，至少框里是有字的。 */
+  var GRADES = (CC && CC.GRADES) || ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '高一', '高二', '高三'];
+  var TEXTBOOKS = (CC && CC.TEXTBOOKS) || ['人教版', '北师大版', '苏教版', '沪教版', '外研版', '译林版', '其他'];
+  var TERMS = (CC && CC.TERMS) || [['上', '上学期（上册）'], ['下', '下学期（下册）'], ['', '整学年']];
+
   function fillPairs(sel, pairs) {
     sel.textContent = '';
-    pairs.forEach(function (p) { var o = el('option', null, p[1]); o.value = p[0]; sel.appendChild(o); });
+    (pairs || []).forEach(function (p) { var o = el('option', null, p[1]); o.value = p[0]; sel.appendChild(o); });
   }
-  fillSelect(gradeSel, CC.GRADES, '请选择年级');
-  fillPairs(termSel, CC.TERMS);
-  fillSelect(bookSel, CC.TEXTBOOKS);
+  fillSelect(gradeSel, GRADES, '请选择年级');
+  fillPairs(termSel, TERMS);
+  fillSelect(bookSel, TEXTBOOKS);
 
   /* 学期跟着年级变：没选年级给占位，高中按必修/选必分册直接锁掉 */
   function syncTerm(want) {
     var g = gradeSel.value;
-    var senior = CC.GRADES.indexOf(g) >= 9; // 高一 高二 高三
+    var senior = GRADES.indexOf(g) >= 9; // 高一 高二 高三
     var blank = !g;
     var v = want === undefined ? termSel.value : String(want);
     if (blank) {
@@ -51,8 +58,8 @@
       termSel.value = '';
       termSel.disabled = true;
     } else {
-      var has = CC.TERMS.some(function (t) { return t[0] === v; });
-      fillPairs(termSel, CC.TERMS);
+      var has = TERMS.some(function (t) { return t[0] === v; });
+      fillPairs(termSel, TERMS);
       termSel.value = has ? v : '上';
       termSel.disabled = false;
     }
@@ -62,7 +69,7 @@
   }
   gradeSel.addEventListener('change', function () {
     var g = gradeSel.value;
-    syncTerm(g && CC.GRADES.indexOf(g) < 9 ? '上' : '');
+    syncTerm(g && GRADES.indexOf(g) < 9 ? '上' : '');
   });
 
   var params = new URLSearchParams(location.search);
@@ -83,7 +90,7 @@
     nameIn.value = '';
     gradeSel.value = '';
     syncTerm('');
-    bookSel.value = CC.TEXTBOOKS[0];
+    bookSel.value = TEXTBOOKS[0];
     formTitle.textContent = '添加孩子';
     submitBtn.textContent = '添加孩子';
     cancelBtn.hidden = true;

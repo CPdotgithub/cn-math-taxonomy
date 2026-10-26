@@ -59,7 +59,8 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36 Edg/152.0.0.0")
 
 MODES = {
-    "deepseek": (False, False),
+    # 网页端默认开着联网搜索和深度思考，所以 deepseek 这个名字就是两者全开
+    "deepseek": (True, True),
     "deepseek-think": (True, False),
     "deepseek-r1": (True, False),
     "deepseek-search": (False, True),
@@ -132,10 +133,12 @@ def env_status():
 # --------------------------------------------------------------------- 客户端
 
 class DSClient:
-    def __init__(self, token, cookie="", timeout=180):
+    def __init__(self, token, cookie="", timeout=180, extra=None):
         self.token = (token or "").strip()
         self.cookie = (cookie or "").strip()
         self.timeout = timeout
+        # 浏览器那条 curl 里的 x-device-id / x-hif-* / UA 等，原样重放
+        self.extra = dict(extra or {})
         if not self.token:
             raise DSError("没有登录凭据：先复制一条 chat.deepseek.com 的 curl 贴到网页里",
                           code="token_missing", status=401)
@@ -149,13 +152,18 @@ class DSClient:
             "origin": BASE,
             "referer": BASE + "/",
             "x-client-platform": "web",
-            "x-client-version": "2.5.0",
+            "x-client-version": "2.7.0",
             "x-client-locale": "zh_CN",
             "x-client-bundle-id": "com.deepseek.chat",
             "x-client-timezone-offset": "28800",
         }
         if self.cookie:
             h["Cookie"] = self.cookie
+        for k, v in self.extra.items():
+            if k in ("content-type", "cookie", "authorization", "host",
+                     "content-length", "accept-encoding", "connection"):
+                continue
+            h[k] = v
         h.update(extra or {})
         return h
 
@@ -433,7 +441,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers",
-                         "content-type, authorization, x-ds-cookie, x-ds-ua")
+                         "content-type, authorization, x-ds-cookie, x-ds-ua, x-ds-headers")
         self.send_header("Access-Control-Allow-Private-Network", "true")
         self.send_header("Access-Control-Max-Age", "86400")
 
@@ -463,7 +471,22 @@ class Handler(BaseHTTPRequestHandler):
         tok = auth[7:].strip() if auth.lower().startswith("bearer ") else auth.strip()
         if not tok:
             tok = (os.environ.get("DS_TOKEN") or "").strip()
-        return tok, (self.headers.get("X-DS-Cookie") or os.environ.get("DS_COOKIE") or "").strip()
+        cookie = (self.headers.get("X-DS-Cookie") or os.environ.get("DS_COOKIE") or "").strip()
+        return tok, cookie
+
+    def _extra_headers(self):
+        """网页把 curl 里的整套头 base64 JSON 塞在 X-DS-Headers 里，这里解出来。"""
+        raw = (self.headers.get("X-DS-Headers") or "").strip()
+        if not raw:
+            return {}
+        try:
+            pad = "=" * (-len(raw) % 4)
+            obj = json.loads(base64.b64decode(raw + pad).decode("utf-8", "replace"))
+            if isinstance(obj, dict):
+                return {str(k).lower(): str(v) for k, v in obj.items() if v}
+        except Exception:
+            pass
+        return {}
 
     # ---- 路由
     def do_OPTIONS(self):
@@ -507,7 +530,7 @@ class Handler(BaseHTTPRequestHandler):
             self._send(200, {"ok": False, "env": st, "code": "token_missing",
                              "message": "还没贴凭据"})
             return
-        c = DSClient(token, cookie, timeout=20)
+        c = DSClient(token, cookie, timeout=20, extra=self._extra_headers())
         req = urllib.request.Request(BASE + "/api/v0/users/current",
                                      headers=c.headers(), method="GET")
         try:
@@ -539,7 +562,7 @@ class Handler(BaseHTTPRequestHandler):
             self._err(400, "empty", "消息是空的")
             return
 
-        client = DSClient(token, cookie, timeout=300)
+        client = DSClient(token, cookie, timeout=300, extra=self._extra_headers())
         file_ids = []
         for u in images[:4]:
             raw, mime, name = decode_image(u)

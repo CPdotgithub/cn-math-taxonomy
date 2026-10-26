@@ -38,6 +38,8 @@
     term: '',
     textbook: '',
     picked: [],
+    book: '',
+    pickOrigin: '',
     count: 1,
     model: '',
     models: [],
@@ -181,6 +183,106 @@
     return ST.data.topics.filter(function (t) { return subjectOf(t) === ST.subject && !t.external; });
   }
 
+  /* ------------------------------------------------------------ 册（年级+学期） */
+
+  var CN_NUM = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9 };
+
+  /* 章节名的第一段就是册：「五年级上册 第1单元 …」/「七上 第一章 …」/「选必一 第一章 …」 */
+  function bookOfTopic(t) {
+    return String((t && t.chapter) || '').split(/\s+/)[0] || '';
+  }
+
+  /* 把册名压成 {类型, 序号, 学期, 排序键}，各学科的写法都得认 */
+  function parseBook(label) {
+    var s = String(label || '').trim();
+    var m;
+    if ((m = s.match(/^([一二三四五六七八九])\s*(?:年级)?\s*(上|下|全)/))) {
+      var n = CN_NUM[m[1]];
+      return { kind: 'p', n: n, term: m[2] === '全' ? '' : m[2], rank: n * 10 + (m[2] === '上' ? 0 : m[2] === '下' ? 1 : 2) };
+    }
+    if ((m = s.match(/^高([一二])/))) return { kind: 'h', n: CN_NUM[m[1]], term: '', rank: 200 + CN_NUM[m[1]] };
+    if ((m = s.match(/^必修\s*(?:第)?([一二三四])/))) return { kind: 'r', n: CN_NUM[m[1]], term: '', rank: 300 + CN_NUM[m[1]] };
+    if ((m = s.match(/^选(?:择性)?必(?:修)?\s*(?:第)?([一二三四])/))) return { kind: 'o', n: CN_NUM[m[1]], term: '', rank: 400 + CN_NUM[m[1]] };
+    return { kind: 'x', n: 0, term: '', rank: 900 };
+  }
+
+  /* 共享范围里的年级键（'五' / '高一' / '选必一'）→ 与册名可比的形式 */
+  function scopeKey(g, term) {
+    var s = String(g || '');
+    var m;
+    if ((m = s.match(/^([一二三四五六七八九])(?:年级)?$/))) {
+      return { kind: 'p', n: CN_NUM[m[1]], term: term === '下' ? '下' : (term === '上' ? '上' : '') };
+    }
+    if ((m = s.match(/^高([一二])$/))) return { kind: 'h', n: CN_NUM[m[1]], term: '' };
+    if ((m = s.match(/^必修([一二三四])$/))) return { kind: 'r', n: CN_NUM[m[1]], term: '' };
+    if ((m = s.match(/^选必([一二三四])$/))) return { kind: 'o', n: CN_NUM[m[1]], term: '' };
+    return null;
+  }
+
+  function books() {
+    if (!ST.data) return [];
+    var map = {};
+    topicsOfSubject().forEach(function (t) {
+      var lab = bookOfTopic(t);
+      if (!lab) return;
+      if (!map[lab]) map[lab] = { label: lab, count: 0, meta: parseBook(lab) };
+      map[lab].count++;
+    });
+    return Object.keys(map).map(function (k) { return map[k]; })
+      .sort(function (a, b) { return (a.meta.rank - b.meta.rank) || a.label.localeCompare(b.label); });
+  }
+
+  /* 当前范围落在哪一册：对不上就返回空，交给第一册兜底 */
+  function bookForScope() {
+    var sc = currentScope();
+    /* 没档案也没手动选过：跟页面其他地方的兜底年级保持一致，别落到一年级 */
+    var want = sc && sc.grade ? scopeKey(sc.grade, sc.term) : scopeKey('四', '');
+    if (!want) return '';
+    var list = books();
+    for (var i = 0; i < list.length; i++) {
+      var m = list[i].meta;
+      if (m.kind === want.kind && m.n === want.n && (want.term === '' || m.term === want.term)) return list[i].label;
+    }
+    return '';
+  }
+
+  function currentBook() {
+    var list = books();
+    if (ST.book && list.some(function (b) { return b.label === ST.book; })) return ST.book;
+    var fb = bookForScope();
+    if (fb) return fb;
+    return list.length ? list[0].label : '';
+  }
+
+  function topicsInBook(label) {
+    var list = topicsOfSubject();
+    if (!label) return list;
+    return list.filter(function (t) { return bookOfTopic(t) === label; });
+  }
+
+  /* 抽几个点：尽量来自不同章节，拼出来才像一套综合题 */
+  function sampleSpread(pool, n) {
+    var arr = pool.slice();
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    var out = [];
+    var seen = {};
+    arr.forEach(function (t) {
+      if (out.length >= n) return;
+      if (seen[t.chapter]) return;
+      seen[t.chapter] = true;
+      out.push(t);
+    });
+    arr.forEach(function (t) {
+      if (out.length >= n) return;
+      if (out.indexOf(t) >= 0) return;
+      out.push(t);
+    });
+    return out.slice(0, n);
+  }
+
   function childGrade() {
     var sc = currentScope();
     if (sc && sc.grade) return SC.text(sc);
@@ -224,11 +326,24 @@
 
   function topicOf(id) { return (ST.data && ST.data.byId[id]) || null; }
 
-  function autoPickIfEmpty() {
-    if (ST.picked.length) return;
-    var c = candidates().slice(0, 3);
-    ST.picked = c.map(function (x) { return x.id; });
+  /* 一个点都没选时不拦人：有档案就用档案里的薄弱点，没有就随机抽本册几个点拼综合题。
+     force=true 是「换一组」。 */
+  function ensureTargets(force) {
+    if (force) { ST.picked = []; ST.pickOrigin = ''; }
+    else if (ST.picked.length) return;
+
+    var c = candidates().slice(0, MAX_PICK);
+    if (c.length) {
+      ST.picked = c.map(function (x) { return x.id; });
+      ST.pickOrigin = 'weak';
+      return;
+    }
+    var pool = topicsInBook(currentBook());
+    if (!pool.length) pool = topicsOfSubject();
+    ST.picked = sampleSpread(pool, 3).map(function (t) { return t.id; });
+    ST.pickOrigin = ST.picked.length ? 'auto' : '';
   }
+  function autoPickIfEmpty() { ensureTargets(false); }
 
   function togglePick(id) {
     var i = ST.picked.indexOf(id);
@@ -396,7 +511,7 @@
       h('h2', { text: '考察哪几个点' }),
       h('button', {
         type: 'button', class: 'rv-mini',
-        text: ST.showPicker ? '收起搜索' : '自己选',
+        text: ST.showPicker ? '收起' : '搜全学科',
         onclick: function () { ST.showPicker = !ST.showPicker; renderSide(); }
       })
     ]);
@@ -404,46 +519,101 @@
 
     var body = h('div', { class: 'pt-panel-body' });
 
-    if (ST.showPicker) body.appendChild(pickerBox());
+    /* 两个下拉：先按年级学期选册，再按章节挑知识点；挑几次就是多选 */
+    var list = books();
+    var bookNow = currentBook();
 
-    var cands = candidates();
-    if (ST.child && !cands.length) {
-      body.appendChild(h('p', { class: 'rv-hint' }, [
-        document.createTextNode('还没有薄弱点记录。先做一次'),
-        h('a', { class: 'rv-link', href: '../diagnose/', text: '年级诊断' }),
-        document.createTextNode('，或者直接在上面搜索知识点。')
-      ]));
+    var bookSel = h('select', { class: 'rv-select', 'aria-label': '册次' });
+    if (!list.length) {
+      bookSel.appendChild(h('option', { value: '', text: '知识点还没加载出来' }));
     }
-    if (!ST.child && !ST.showPicker) {
-      body.appendChild(h('p', { class: 'rv-hint', text: '没有档案也能用：点「自己选」搜知识点，或者先建一份档案让薄弱点自动带出来。' }));
-    }
+    list.forEach(function (b) {
+      bookSel.appendChild(h('option', {
+        value: b.label, text: b.label + '（' + b.count + ' 个点）',
+        selected: b.label === bookNow ? true : null
+      }));
+    });
+    bookSel.addEventListener('change', function () {
+      ST.book = bookSel.value;
+      ST.picked = [];
+      ST.pickOrigin = '';
+      ensureTargets(false);
+      render();
+    });
 
-    if (cands.length && !ST.showPicker) {
-      var list = h('div', { class: 'rv-cands' });
-      cands.slice(0, 10).forEach(function (c) {
-        list.appendChild(topicRow(c.topic, c.status));
+    var addSel = h('select', { class: 'rv-select', 'aria-label': '加一个知识点' });
+    addSel.appendChild(h('option', { value: '', text: '加一个知识点（可多次选）' }));
+    var groups = {}, order = [];
+    topicsInBook(bookNow).forEach(function (t) {
+      var g = shortChapter(t.chapter) || '其他';
+      if (!groups[g]) { groups[g] = []; order.push(g); }
+      groups[g].push(t);
+    });
+    order.forEach(function (g) {
+      var og = h('optgroup', { label: g });
+      groups[g].forEach(function (t) {
+        og.appendChild(h('option', { value: t.id, text: t.name + (ST.picked.indexOf(t.id) >= 0 ? '（已选）' : '') }));
       });
-      body.appendChild(list);
+      addSel.appendChild(og);
+    });
+    if (ST.picked.length >= MAX_PICK) {
+      addSel.disabled = true;
+      addSel.title = '最多同时考察 ' + MAX_PICK + ' 个知识点，先取消一个';
     }
+    addSel.addEventListener('change', function () {
+      var id = addSel.value;
+      addSel.value = '';
+      if (!id) return;
+      var err = togglePick(id);
+      if (err) ST.err = err;
+      else { ST.err = ''; ST.pickOrigin = 'user'; }
+      render();
+    });
+
+    body.appendChild(h('div', { class: 'rv-bookrow' }, [bookSel, addSel]));
 
     if (ST.picked.length) {
       var chosen = h('div', { class: 'rv-chosen' });
-      chosen.appendChild(h('span', { class: 'rv-label', text: '已选 ' + ST.picked.length + ' / ' + MAX_PICK }));
+      var label = '已选 ' + ST.picked.length + ' / ' + MAX_PICK;
+      if (ST.picked.length > 1) label += ' · 拼成一套综合题';
+      chosen.appendChild(h('span', { class: 'rv-label', text: label }));
       var chips = h('div', { class: 'rv-chips' });
       ST.picked.forEach(function (id) {
         var t = topicOf(id);
         chips.appendChild(h('span', { class: 'rv-chip' }, [
           h('span', { text: t ? t.name : id }),
           h('button', {
-            type: 'button', class: 'rv-chip-x', 'aria-label': '移除',
-            text: '×',
-            onclick: function () { togglePick(id); render(); }
+            type: 'button', class: 'rv-chip-x', 'aria-label': '移除', text: '×',
+            onclick: function () {
+              togglePick(id);
+              ST.pickOrigin = ST.picked.length ? 'user' : '';
+              render();
+            }
           })
         ]));
       });
       chosen.appendChild(chips);
       body.appendChild(chosen);
     }
+
+    /* 这一次的点是怎么来的，说清楚，别让人以为是自己选的 */
+    var note = h('p', { class: 'rv-hint' });
+    if (ST.pickOrigin === 'weak') {
+      note.appendChild(document.createTextNode('这 ' + ST.picked.length + ' 个点是档案里还没过关的。'));
+    } else if (ST.pickOrigin === 'auto') {
+      note.appendChild(document.createTextNode('档案里还没有薄弱点记录，从「' + (bookNow || '本学科') + '」随机抽了 ' + ST.picked.length + ' 个点，拼成一套综合题。 '));
+      note.appendChild(h('button', {
+        type: 'button', class: 'rv-mini', text: '换一组',
+        onclick: function () { ensureTargets(true); render(); }
+      }));
+    } else if (ST.picked.length) {
+      note.appendChild(document.createTextNode('自己挑的 ' + ST.picked.length + ' 个点。'));
+    } else {
+      note.appendChild(document.createTextNode('不选也能出题：有档案就用档案里的薄弱点，没有就随机抽几个本册的点。'));
+    }
+    body.appendChild(note);
+
+    if (ST.showPicker) body.appendChild(pickerBox());
 
     p.appendChild(body);
     return p;
@@ -555,17 +725,18 @@
     if (ST.advanced) det.setAttribute('open', '');
     det.addEventListener('toggle', function () { ST.advanced = det.open; savePrefs(); });
     det.appendChild(h('summary', null, [document.createTextNode(
-      LLM.isWeb() ? '网页版设置与联网素材' : '模型与联网素材'
+      LLM.isWeb() ? '网页版凭据' : '模型与联网素材'
     )]));
 
     var inner = h('div', { class: 'rv-adv-body' });
     if (LLM.isWeb()) {
       inner.appendChild(webCfgField());
-      inner.appendChild(webModelField());
+      if (LLM.WEB_MODELS.length > 1) inner.appendChild(webModelField());
     } else {
       inner.appendChild(modelField());
+      /* 联网素材靠抓网页/搜索源，网页版自己有搜索，不需要这一套 */
+      inner.appendChild(webField());
     }
-    inner.appendChild(webField());
     det.appendChild(inner);
     body.appendChild(det);
 
@@ -590,8 +761,8 @@
     wrap.appendChild(h('p', {
       class: 'rv-hint',
       text: LLM.isWeb()
-        ? '走你自己的 DeepSeek 账号，手写照片也能一起判。'
-        : '免密钥，稳定；只能发文字。'
+        ? '走你自己的 DeepSeek 网页账号，自带联网搜索与深度思考，手写照片也能一起判。'
+        : '免密钥，稳定；只能发文字，不能传照片。'
     }));
     return wrap;
   }
@@ -649,6 +820,12 @@
     var cfg = LLM.web();
     var box = h('div', { class: 'rv-webcfg' });
 
+    /* 网页版自带搜索和推理，模型只剩一个，说清楚就行，不需要选 */
+    box.appendChild(h('p', {
+      class: 'rv-hint',
+      text: '网页版用的是 chat.deepseek.com 那个对话框：联网搜索和深度思考默认都开着，不用另配。'
+    }));
+
     var relay = h('input', {
       type: 'text', class: 'rv-input rv-input-sm', value: cfg.relay || '',
       placeholder: 'http://127.0.0.1:8790', 'aria-label': '本机中转地址'
@@ -669,11 +846,11 @@
       class: 'rv-input rv-textarea rv-curl', rows: '3',
       placeholder: cfg.token
         ? '已保存凭据。要换就粘贴新的 curl 覆盖'
-        : '在 chat.deepseek.com 的请求上右键 → Copy as cURL，粘到这里',
+        : '在 chat.deepseek.com 的请求上右键 → 复制 → 以 cURL 格式复制，粘到这里',
       'aria-label': '登录凭据'
     });
     box.appendChild(h('label', { class: 'rv-field rv-field-col rv-field-tight' }, [
-      h('span', { class: 'rv-label', text: '登录凭据' }), ta
+      h('span', { class: 'rv-label', text: '登录凭据（整条 curl 贴进来）' }), ta
     ]));
 
     var acts = h('div', { class: 'rv-webcfg-acts' });
@@ -695,33 +872,51 @@
           renderSide();
           return;
         }
-        LLM.setWeb({ token: got.token, cookie: got.cookie, ua: got.ua });
+        LLM.setWeb({ token: got.token, cookie: got.cookie, ua: got.ua, hdr: got.hdr });
         ST.chanNote = '';
         ST.chanTone = '';
         renderSide();
-        testChannel();
+        testChannel(false);
       }
     }));
     acts.appendChild(h('button', {
       type: 'button', class: 'rv-btn rv-btn-sm', text: '测试连接',
-      onclick: testChannel
+      onclick: function () { testChannel(false); }
     }));
     box.appendChild(acts);
 
     var note = h('p', { class: 'rv-hint' + (ST.chanTone ? ' ' + ST.chanTone : '') });
-    note.textContent = ST.chanNote || (cfg.token ? '凭据已存在这台设备上，换设备要重新贴。' : '还没配凭据。');
+    note.textContent = ST.chanNote || (cfg.token
+      ? '凭据存在这台设备的浏览器里' + (cfg.savedAt ? '（更新于 ' + fmtMin(cfg.savedAt) + '）' : '') + '，换设备要重贴。'
+      : '还没配凭据。');
     box.appendChild(note);
 
-    if (!cfg.token) {
-      box.appendChild(h('p', {
-        class: 'rv-hint',
-        text: '先在电脑上双击 tools/start-dsweb.command 启动本机中转，再粘一条 curl。凭据只存在本机，不上传。'
-      }));
-    }
+    /* 第一次用的人卡在「中转是什么」上，直接给三句话说清 */
+    var how = h('details', { class: 'rv-howto' });
+    how.appendChild(h('summary', null, [document.createTextNode('网页版怎么开（三步）')]));
+    var ol = h('ol', { class: 'rv-howto-list' });
+    [
+      ['在电脑上双击项目里的 tools/start-dsweb.command，会弹出一个黑窗口，别关它。',
+        '没有图形界面就运行：python3 tools/dsweb-relay.py'],
+      ['上面那个地址填黑窗口里显示的地址，默认就是 http://127.0.0.1:8790。'],
+      ['浏览器打开 chat.deepseek.com 随便发一句话，在开发者工具的网络面板里找到那条 completion 请求，右键「以 cURL 格式复制」，粘到上面保存。']
+    ].forEach(function (x) {
+      ol.appendChild(h('li', null, [
+        h('span', { text: x[0] }),
+        h('code', { class: 'rv-code', text: x[1] })
+      ]));
+    });
+    how.appendChild(ol);
+    how.appendChild(h('p', {
+      class: 'rv-hint',
+      text: '凭据只能用一段时间，过期了重新复制一条粘进来即可，不用重启中转。'
+    }));
+    box.appendChild(how);
+
     return box;
   }
 
-  function testChannel() {
+  function testChannel(retried) {
     ST.chanNote = '正在测试…';
     ST.chanTone = '';
     renderSide();
@@ -730,10 +925,13 @@
         ST.chanNote = '连接正常' + (j.name ? ' · ' + j.name : '');
         ST.chanTone = 'is-ok';
       } else if (j && (j.code === 'token_invalid' || j.code === 'token_missing')) {
-        ST.chanNote = '凭据无效或已过期，重新在浏览器里复制一条 curl 贴上。';
+        ST.chanNote = j.code === 'token_missing'
+          ? '还没贴凭据：把 chat.deepseek.com 的那条 curl 粘进来。'
+          : '凭据无效或已过期，重新复制一条 curl 贴上。';
         ST.chanTone = 'is-warn';
+        if (j.code === 'token_invalid') showCurlModal('DeepSeek 说这条凭据已经不能用了。');
       } else if (j && j.code === 'network') {
-        ST.chanNote = '本机服务在，但连不上 chat.deepseek.com。' + (j.message ? '（' + j.message + '）' : '');
+        ST.chanNote = '本机服务在，但连不上 chat.deepseek.com。' + (j.message ? '（' + j.message + '）' : '') + ' 检查网络或代理。';
         ST.chanTone = 'is-warn';
       } else if (j && j.env && (!j.env.node || !j.env.solver || !j.env.wasm)) {
         ST.chanNote = '本机缺 Node.js 或求解文件，网页版解不了挑战。';
@@ -743,6 +941,25 @@
         ST.chanTone = 'is-warn';
       }
     }).catch(function (e) {
+      var code = (e && e.error && e.error.code) || '';
+      if (code === 'web_offline' && !retried) {
+        ST.chanNote = '这个地址没响应，正在找本机的中转服务…';
+        ST.chanTone = 'is-warn';
+        renderSide();
+        LLM.detectRelay().then(function (hit) {
+          if (hit) {
+            LLM.setWeb({ relay: hit.base });
+            ST.chanNote = '找到了 ' + hit.base + '，再测一次。';
+            ST.chanTone = '';
+            testChannel(true);
+          } else {
+            ST.chanNote = '没找到在跑的中转。先在电脑上双击 tools/start-dsweb.command，再把窗口里显示的地址填到这里。';
+            ST.chanTone = 'is-warn';
+            renderSide();
+          }
+        });
+        return;
+      }
       ST.chanNote = LLM.describeError(e);
       ST.chanTone = 'is-warn';
     }).then(function () {
@@ -956,7 +1173,12 @@
     body.appendChild(h('div', { class: 'rv-intro-ico', html: ico('spark') }));
 
     var picks = ST.picked.map(function (id) { return topicOf(id); }).filter(Boolean);
-    body.appendChild(h('h2', { class: 'rv-intro-title', text: picks.length ? '准备好了，出' + (ST.count * 3) + '道题' : '先挑一个知识点' }));
+    body.appendChild(h('h2', {
+      class: 'rv-intro-title',
+      text: picks.length
+        ? '准备好了，出' + (ST.count * 3) + ' 道题' + (picks.length > 1 ? '（跨 ' + picks.length + ' 个点）' : '')
+        : '先挑一个知识点'
+    }));
 
     if (!picks.length) {
       body.appendChild(h('p', {
@@ -1630,9 +1852,11 @@
 
   function generate() {
     if (ST.busy) return;
+    /* 一个点都没选也能出：先按「档案薄弱点 → 本册随机」补上，再出题 */
+    if (!ST.picked.length) ensureTargets(false);
     var picks = pickedTopics();
     if (!picks.length) {
-      ST.err = '先选至少一个知识点。';
+      ST.err = '知识点还没加载出来，等一秒再点。';
       render();
       return;
     }
@@ -1662,7 +1886,7 @@
     ST.gradeErr = '';
     render();
 
-    var wantWeb = ST.webOn;
+    var wantWeb = !LLM.isWeb() && ST.webOn;
     var links = parseLinks();
 
     (async function () {
@@ -1691,6 +1915,7 @@
           };
         }),
         count: ST.count,
+        synth: picks.length > 1,
         profile: buildProfile(picks),
         scope: buildScope(picks)
       });
@@ -2128,6 +2353,60 @@
 
   /* ---------------------------------------------------------------- 启动 */
 
+  /* 凭据失效不弹窗的话，用户只会看到「模型返回的格式不对」这种看不懂的错。
+     这里给一个明确的弹窗：说清要干什么，一键跳到粘贴框。 */
+  var modalEl = null;
+  function showCurlModal(reason) {
+    if (modalEl) return;
+    var card = h('div', { class: 'rv-modal-card', role: 'dialog', 'aria-modal': 'true', 'aria-labelledby': 'rv-modal-title' }, [
+      h('h2', { id: 'rv-modal-title', text: 'DeepSeek 凭据过期了' }),
+      h('p', { class: 'rv-modal-text', text: (reason ? reason + ' ' : '') + '网页版的登录凭据只能用一段时间，过期后要重新从浏览器里复制一条。' }),
+      h('ol', { class: 'rv-modal-steps' }, [
+        h('li', { text: '在电脑上打开 chat.deepseek.com，随便发一句话。' }),
+        h('li', { text: '在开发者工具的「网络」里找到 chat/completion 那条请求。' }),
+        h('li', { text: '右键 → 复制 → 以 cURL 格式复制，粘到「网页版凭据」里保存。' })
+      ]),
+      h('div', { class: 'rv-modal-acts' }, [
+        h('button', {
+          type: 'button', class: 'rv-btn is-primary rv-btn-sm', text: '去粘贴新凭据',
+          onclick: function () { closeCurlModal(); openCurlBox(); }
+        }),
+        h('button', {
+          type: 'button', class: 'rv-btn rv-btn-sm', text: '先不用',
+          onclick: closeCurlModal
+        })
+      ])
+    ]);
+    modalEl = h('div', { class: 'rv-modal', onclick: function (e) { if (e.target === modalEl) closeCurlModal(); } }, [card]);
+    document.body.appendChild(modalEl);
+    document.body.classList.add('has-modal');
+    var first = modalEl.querySelector('button');
+    if (first) first.focus();
+    document.addEventListener('keydown', onModalKey);
+  }
+  function onModalKey(e) { if (e.key === 'Escape') closeCurlModal(); }
+  function closeCurlModal() {
+    if (!modalEl) return;
+    document.removeEventListener('keydown', onModalKey);
+    document.body.classList.remove('has-modal');
+    modalEl.parentNode.removeChild(modalEl);
+    modalEl = null;
+  }
+  function openCurlBox() {
+    ST.advanced = true;
+    ST.chanOpen = false;
+    ST.chanNote = '把新复制的 curl 粘到下面，点「换一条凭据」。';
+    ST.chanTone = 'is-warn';
+    render();
+    setTimeout(function () {
+      var ta = sideEl && sideEl.querySelector('.rv-curl');
+      if (ta) {
+        ta.scrollIntoView({ block: 'center' });
+        ta.focus({ preventScroll: true });
+      }
+    }, 60);
+  }
+
   function boot() {
     loadPrefs();
     var qs = new URLSearchParams(location.search);
@@ -2150,9 +2429,10 @@
         ST.textbook = ST.child.textbook || '';
       }
     }
-    if (!ST.child) ST.showPicker = true; // 没有档案时，直接把「自己选」打开
     /* 选了网页版却还没凭据（换了设备 / 清了缓存）：把配置面板摊开，别让人找不到 */
     if (LLM.isWeb() && !LLM.web().token) ST.advanced = true;
+    /* 凭据过期时不让人对着「格式不对」发呆，直接弹窗说清楚 */
+    LLM.onAuthFail(showCurlModal);
     render();
 
     loadData().then(function () {

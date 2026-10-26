@@ -111,6 +111,11 @@
     lines.push('要重点检验的薄弱知识点（题目围绕这些点，允许跨点综合）：');
     (ctx.topics || []).forEach(function (t, i) { lines.push(topicLine(t, i)); });
     lines.push('');
+    if (ctx.synth) {
+      lines.push('这次是跨点综合考察：上面几个点来自不同章节，每道题至少要串起其中两个点，');
+      lines.push('让学生自己判断该用哪个知识解决，不要一道题只考一个点。');
+      lines.push('');
+    }
     if (ctx.scope) {
       lines.push(scopeBlock(ctx.scope));
       lines.push('');

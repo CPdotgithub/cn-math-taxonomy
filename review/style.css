@@ -1000,7 +1000,101 @@ body.has-rail main#root.rv {
   .rv-blank { flex: 1 1 100%; max-width: none; }
 }
 
+/* 选点：册 + 知识点两个下拉并排 */
+.rv-bookrow {
+  display: grid;
+  grid-template-columns: minmax(0, 96px) minmax(0, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.rv-bookrow .rv-select { height: 36px; }
+
+/* 网页版「怎么开」 */
+.rv-howto {
+  margin-top: 10px;
+  border-top: 1px dashed var(--pt-line);
+  padding-top: 8px;
+}
+.rv-howto > summary {
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 650;
+  color: var(--pt-blue);
+  list-style: none;
+}
+.rv-howto > summary::-webkit-details-marker { display: none; }
+.rv-howto > summary::before { content: '▸ '; }
+.rv-howto[open] > summary::before { content: '▾ '; }
+.rv-howto-list {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: .78rem;
+  line-height: 1.65;
+  color: var(--pt-ink-2);
+}
+.rv-code {
+  display: block;
+  margin-top: 3px;
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: var(--pt-surface-2, #f3f5f9);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .74rem;
+  color: var(--pt-ink-2);
+  word-break: break-all;
+}
+
+/* 凭据过期弹窗 */
+.rv-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, .42);
+  backdrop-filter: blur(2px);
+}
+.rv-modal-card {
+  width: min(100%, 420px);
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px 20px 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, .28);
+}
+.rv-modal-card h2 {
+  margin: 0 0 8px;
+  font-size: 1.02rem;
+  color: var(--pt-ink);
+}
+.rv-modal-text {
+  margin: 0 0 10px;
+  font-size: .84rem;
+  line-height: 1.7;
+  color: var(--pt-ink-2);
+}
+.rv-modal-steps {
+  margin: 0 0 14px;
+  padding-left: 18px;
+  font-size: .8rem;
+  line-height: 1.75;
+  color: var(--pt-ink-2);
+}
+.rv-modal-acts { display: flex; gap: 8px; justify-content: flex-end; }
+body.has-modal { overflow: hidden; }
+
+@media (max-width: 560px) {
+  .rv-bookrow { grid-template-columns: minmax(0, 84px) minmax(0, 1fr); }
+  .rv-modal-card { padding: 16px; }
+}
+
 @media print {
   .rv-side, .rv-submitbar, .rv-report-acts { display: none; }
   .rv-grid { grid-template-columns: minmax(0, 1fr); }
+  .rv-modal { display: none; }
 }
+

@@ -27,11 +27,10 @@
   var modelsCache = null;
   var modelsPromise = null;
 
-  /* 网页版没有「模型目录」可查，能选的就是这几种能力组合 */
+  /* 网页版就是 chat.deepseek.com 那个对话框：联网搜索和深度思考是它自己的开关，
+     网页端默认都开着，这边不再让用户配。 */
   var WEB_MODELS = [
-    { id: 'deepseek', name: 'DeepSeek 网页版', descriptionZh: '普通对话，速度最快，出题和判分都够用。' },
-    { id: 'deepseek-think', name: 'DeepSeek 深度思考', descriptionZh: '先推理再答，题目更绕、更慢；遇到难题再用。' },
-    { id: 'deepseek-search', name: 'DeepSeek 联网搜索', descriptionZh: '自己上网找题型，会慢一些，题库更贴近真实考法。' }
+    { id: 'deepseek', name: 'DeepSeek 网页版', descriptionZh: '自带联网搜索与深度思考，不用另外设置。' }
   ];
 
   var WEB_DEFAULT = {
@@ -40,9 +39,22 @@
     token: '',
     cookie: '',
     ua: '',
+    hdr: '',            /* 从 curl 里带出来的整套请求头（base64 JSON），转发给中转 */
     model: 'deepseek',
     savedAt: ''
   };
+
+  /* 凭据失效时通知外面弹窗：只在这一个地方挂一次，避免多处提示打架 */
+  var authSink = null;
+  function onAuthFail(fn) { authSink = fn; }
+  function notifyAuth(msg) {
+    if (!authSink) return;
+    try { authSink(msg); } catch (e) {}
+  }
+
+  function b64json(o) {
+    try { return btoa(unescape(encodeURIComponent(JSON.stringify(o)))); } catch (e) { return ''; }
+  }
 
   function sdkMissing() {
     return !!window.__CNM_SDK_FAILED ||
@@ -91,20 +103,49 @@
   function isWeb() { return web().kind === 'web'; }
 
   /* 从浏览器 DevTools 里「Copy as cURL」粘过来的那串里取凭据。
-     只要 token 也能用：整段就是一个长串，没有冒号的，当作 userToken。 */
+     只要 token 也能用：整段就是一个长串，没有冒号的，当作 userToken。
+     DeepSeek 现在除了 token 还要 x-device-id、x-hif-* 这类头才认，
+     所以把整套请求头一起收下来（存本地，换设备要重贴）。 */
+  var HDR_KEEP = [
+    'user-agent', 'x-client-version', 'x-client-platform', 'x-client-locale',
+    'x-client-bundle-id', 'x-client-timezone-offset', 'x-device-id',
+    'x-hif-dliq', 'x-hif-leim'
+  ];
+
   function parseCurl(text) {
-    var s = String(text || '');
-    var out = { token: '', cookie: '', ua: '' };
-    var m = s.match(/authorization\s*:\s*bearer\s+([A-Za-z0-9_\-\/+=.%]{16,})/i);
-    if (m) out.token = m[1];
-    var c = s.match(/cookie\s*:\s*([^\n'"]+)/i);
-    if (c) out.cookie = c[1].trim().replace(/[\\'"]+$/, '');
-    var u = s.match(/user-agent\s*:\s*([^\n'"]+)/i);
-    if (u) out.ua = u[1].trim();
+    var s = String(text || '').replace(/\\\r?\n/g, ' ').replace(/\r?\n/g, ' ');
+    var out = { token: '', cookie: '', ua: '', hdr: '' };
+    var extra = {};
+
+    var re = /(?:^|\s)(?:-H|--header)\s+(['"])([\s\S]*?)\1/g;
+    var m;
+    while ((m = re.exec(s))) {
+      var line = m[2];
+      var i = line.indexOf(':');
+      if (i <= 0) continue;
+      var k = line.slice(0, i).trim().toLowerCase();
+      var v = line.slice(i + 1).trim();
+      if (!k || !v) continue;
+      if (k === 'authorization') {
+        var mm = v.match(/bearer\s+(\S+)/i);
+        if (mm) out.token = mm[1];
+        continue;
+      }
+      if (k === 'cookie') { out.cookie = v.replace(/[\\'"]+$/, ''); continue; }
+      if (HDR_KEEP.indexOf(k) >= 0) extra[k] = v;
+    }
+
+    if (!out.cookie) {
+      var b = s.match(/(?:^|\s)(?:-b|--cookie)\s+(['"])([\s\S]*?)\1/);
+      if (b) out.cookie = b[2].trim().replace(/[\\'"]+$/, '');
+    }
+    out.ua = extra['user-agent'] || '';
+
     if (!out.token) {
       var t = s.trim().replace(/^['"]|['"]$/g, '');
       if (/^[A-Za-z0-9_\-\/+=.]{16,}$/.test(t)) out.token = t;
     }
+    if (Object.keys(extra).length) out.hdr = b64json(extra);
     return out;
   }
 
@@ -236,6 +277,7 @@
     headers.Authorization = 'Bearer ' + cfg.token;
     if (cfg.cookie) headers['X-DS-Cookie'] = cfg.cookie;
     if (cfg.ua) headers['X-DS-UA'] = cfg.ua;
+    if (cfg.hdr) headers['X-DS-Headers'] = cfg.hdr;
 
     var body = {
       model: o.model || cfg.model || 'deepseek',
@@ -268,6 +310,7 @@
       try { j = JSON.parse(payload); } catch (e) { return; }
       if (j && j.error) {
         var code = j.error.code || 'web_failed';
+        if (code === 'token_invalid' || code === 'token_missing') notifyAuth(j.error.message);
         throw makeErr(code, j.error.message || code);
       }
       feed(j);
@@ -287,7 +330,9 @@
           var j = null;
           try { j = JSON.parse(raw); } catch (e) {}
           var err = (j && j.error) || {};
-          throw makeErr(err.code || ('web_http_' + res.status), err.message || ('HTTP ' + res.status));
+          var code = err.code || ('web_http_' + res.status);
+          if (res.status === 401 || res.status === 403 || code === 'token_invalid') notifyAuth(err.message);
+          throw makeErr(code, err.message || ('HTTP ' + res.status));
         });
       }
       if (!res.body || !res.body.getReader) {
@@ -368,6 +413,7 @@
     var headers = { 'Content-Type': 'application/json' };
     if (cfg.token) headers.Authorization = 'Bearer ' + cfg.token;
     if (cfg.cookie) headers['X-DS-Cookie'] = cfg.cookie;
+    if (cfg.hdr) headers['X-DS-Headers'] = cfg.hdr;
     return fetch(base + '/v1/probe', {
       method: 'POST', headers: headers, body: JSON.stringify(payload || {})
     }).catch(function (e) {
@@ -381,6 +427,37 @@
     return fetch(base + '/health', { method: 'GET' })
       .catch(function () { throw makeErr('web_offline', '连不上 ' + base); })
       .then(function (r) { return r.json(); });
+  }
+
+  /* 地址填错、端口换了、服务没起，都会落到「连不上」这一句上。
+     这里把本机几个常见端口扫一遍，找到了就顺手改掉地址，省得人去猜。 */
+  function healthOf(base) {
+    var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = setTimeout(function () { try { if (ctl) ctl.abort(); } catch (e) {} }, 1200);
+    return fetch(base + '/health', { signal: ctl ? ctl.signal : undefined })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        clearTimeout(timer);
+        return (j && j.service === 'dsweb-relay') ? { base: base, info: j } : null;
+      })
+      .catch(function () { clearTimeout(timer); return null; });
+  }
+
+  function detectRelay() {
+    var cur = relayBase(web());
+    var cands = [];
+    if (cur) cands.push(cur);
+    ['127.0.0.1', 'localhost'].forEach(function (h) {
+      for (var p = 8790; p <= 8795; p++) {
+        var u = 'http://' + h + ':' + p;
+        if (u !== cur) cands.push(u);
+      }
+    });
+    return Promise.all(cands.map(healthOf)).then(function (rs) {
+      var hit = null;
+      rs.forEach(function (x) { if (!hit && x) hit = x; });
+      return hit;
+    });
   }
 
   /* ---------------------------------------------------------------- 解析 */
@@ -455,6 +532,8 @@
     parseCurl: parseCurl,
     probe: probe,
     health: health,
+    detectRelay: detectRelay,
+    onAuthFail: onAuthFail,
     WEB_MODELS: WEB_MODELS
   };
 })();
