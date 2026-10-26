@@ -245,16 +245,23 @@
     if (demo) return null;
     const kids = CC.list();
     const cur = CC.current();
+    /* 答题页顶栏：当前孩子 + 考察范围。范围是全站共享的那一份状态，改了就原地换一轮 */
+    if (mode === 'question') {
+      return h('div', { class: 'child-bar compact dx-topbar no-print', id: 'child-bar' },
+        h('div', { class: 'dx-topbar-cell' },
+          h('span', { class: 'dx-topbar-label' }, '当前孩子'),
+          kids.length
+            ? childSelect(function (id) { CC.setCurrent(id); render(); })
+            : h('a', { class: 'dx-topbar-link', href: childrenHref(fromQuery()) }, '还没建档 · 建一个 →')),
+        h('div', { class: 'dx-topbar-cell is-scope' },
+          h('span', { class: 'dx-topbar-label' }, '考察范围'),
+          scopeCell()));
+    }
     if (!kids.length) {
       return h('div', { class: 'banner child-bar no-print', id: 'child-bar' },
         h('b', { text: '还没有孩子档案。' }),
         '添加后，诊断结果会按孩子保存，之后能回看每次的记录和薄弱知识点。', ' ',
         h('a', { class: 'btn btn-primary', href: childrenHref(fromQuery()), text: '添加孩子' }));
-    }
-    if (mode === 'question') {
-      return h('div', { class: 'child-bar compact row no-print', id: 'child-bar' },
-        h('span', { class: 'muted small' }, '当前孩子'),
-        childSelect(function (id) { CC.setCurrent(id); }));
     }
     if (mode === 'result') {
       const key = recordKey();
@@ -299,19 +306,19 @@
     lsSet(sessionKey(), {
       v: 3, mode: session.mode, targets: session.targets, base: session.base || [], finished: !!finished,
       open: !!session.open, limit: isFinite(session.limit) ? session.limit : 0,
-      label: sessionMeta.label, answers: session.answers,
+      label: sessionMeta.label, scope: sessionMeta.scope || null, answers: session.answers,
       seed: session.seed, avoid: session.avoid, savedAt: new Date().toISOString()
     });
   }
 
-  function startSession(targets, label, mode, base) {
+  function startSession(targets, label, mode, base, scope) {
     pathExpanded = false;
     finished = false;
     session = E.createSession(D.graph, targets, {
       mode: mode, open: true,
       base: mode === 'screen' ? base : null, seed: newSeed(), avoid: seenList()
     });
-    sessionMeta = { label: label };
+    sessionMeta = { label: label, scope: scope || null };
     resetUi();
     save();
     render();
@@ -323,7 +330,7 @@
         mode: saved.mode, seed: saved.seed, avoid: saved.avoid, base: saved.base,
         open: saved.open !== false, limit: saved.limit || null
       });
-      sessionMeta = { label: saved.label || saved.targets.map(nameOf).join('、') };
+      sessionMeta = { label: saved.label || saved.targets.map(nameOf).join('、'), scope: saved.scope || null };
       finished = !!saved.finished;
       return true;
     } catch (e) { return false; }
@@ -539,13 +546,7 @@
         gradeGroups(subject).map(function (row) { return chips('年级', row, gradeSel, onGrade); }));
 
       /* 册次：跟着年级变，只有一种选法时不占地方 */
-      const volItems = seniorGrade(gradeSel)
-        ? [['', seniorRangeLabel(gradeSel)]]
-        : (subject === 'physics' && gradeSel === '九')
-          ? [['全', '全一册']]
-          : (subject === 'english' && gradeSel === '九')
-            ? [['', '整年级'], ['上', '上册'], ['全', '全一册（旧版）']]
-            : [['', '整学年'], ['上', '上册'], ['下', '下册']];
+      const volItems = volItemsFor(gradeSel);
 
       box.append(h('div', { class: 'pt-panel-body dx-launch-body' },
         h('div', { class: 'dx-launch-form' },
@@ -584,7 +585,9 @@
               : null),
           h('button', {
             class: 'primary dx-launch-btn', id: 'btn-grade-start', disabled: !g,
-            onclick: function () { if (g) startSession(g.ids, g.label + '（年级诊断）', 'screen', g.base); }
+            onclick: function () {
+              if (g) startSession(g.ids, g.label + '（年级诊断）', 'screen', g.base, { grade: gradeSel, term: volSel });
+            }
           }, g ? '开始' + shortGrade(g.label) + '诊断' : '开始诊断'),
           h('p', { class: 'dx-launch-save' }, cur
             ? '结果存进「' + cur.name + '」的档案'
@@ -756,6 +759,90 @@
     if (SC) SC.set(subject, { grade: gradeSel, term: volSel });
   }
 
+  /* 册次：跟着年级变。只有一种选法的（高中、物理九年级）返回一条，交给调用方判断要不要显示 */
+  function volItemsFor(g) {
+    if (seniorGrade(g)) return [['', seniorRangeLabel(g)]];
+    if (subject === 'physics' && g === '九') return [['全', '全一册']];
+    if (subject === 'english' && g === '九') return [['', '整年级'], ['上', '上册'], ['全', '全一册（旧版）']];
+    return [['', '整学年'], ['上', '上册'], ['下', '下册']];
+  }
+
+  /* 这一轮在看什么范围：本轮开出来的范围 > 全站共享状态 > 页面上的选择 */
+  function scopeOf() {
+    const meta = sessionMeta && sessionMeta.scope;
+    if (meta && meta.grade) return { grade: meta.grade, term: meta.term || '' };
+    const sc = SC && SC.get(subject);
+    if (sc && sc.grade) return { grade: sc.grade, term: sc.term || '' };
+    return { grade: gradeSel, term: volSel };
+  }
+
+  /* 顶栏的「考察范围」：年级（+ 册次）。没设置过的时候就是当前孩子档案里的年级。 */
+  function scopeCell() {
+    const now = scopeOf();
+    const opts = gradeOptions(subject);
+    if (!opts.some(function (o) { return o[0] === now.grade; })) now.grade = opts[0][0];
+
+    const gsel = h('select', { id: 'scope-grade', 'aria-label': '考察范围：年级' },
+      opts.map(function (o) { return h('option', { value: o[0] }, o[1]); }));
+    gsel.value = now.grade;
+    gsel.addEventListener('change', function () { applyScope(gsel.value, null); });
+
+    const vols = volItemsFor(now.grade);
+    const out = [gsel];
+    if (vols.length > 1) {
+      const tsel = h('select', { id: 'scope-term', 'aria-label': '考察范围：册次' },
+        vols.map(function (o) { return h('option', { value: o[0] }, o[1]); }));
+      tsel.value = vols.some(function (o) { return o[0] === now.term; }) ? now.term : vols[0][0];
+      tsel.addEventListener('change', function () { applyScope(now.grade, tsel.value); });
+      out.push(tsel);
+    }
+
+    /* 手选的范围和档案不一致时，给一条回档案的路（不然「孩子五上、在测六年级」看着莫名其妙） */
+    const from = SC && SC.childScope();
+    if (from && (from.grade !== now.grade || volFor(from.grade, from.term) !== now.term)) {
+      out.push(h('button', {
+        type: 'button', class: 'dx-topbar-back',
+        onclick: function () { applyScope(from.grade, volFor(from.grade, from.term)); }
+      }, '回到档案（' + SC.text(from) + '）'));
+    }
+    return out;
+  }
+
+  /* 换范围：写回全站状态，按新范围原地开一轮。已答过题就先问一句。 */
+  function applyScope(gradeKey, term) {
+    const g = String(gradeKey || '');
+    if (!g) return;
+    const keep = scopeOf();
+    const prev = { grade: gradeSel, vol: volSel, manual: rangeManual };
+    const back = function () {
+      gradeSel = prev.grade; volSel = prev.vol; rangeManual = prev.manual;
+      render();
+    };
+
+    gradeSel = g;
+    volSel = volFor(g, term == null ? keep.term : term);
+    const next = E.gradeTargets(D.graph, gradeScope(), subject, { cumulative: true });
+    if (!next || !next.ids.length) {
+      back();
+      alert('「' + (SC ? SC.fullGrade(g) : g) + '」还没有可诊断的知识点，换个年级再试。');
+      return;
+    }
+    if (session && session.answers.length &&
+      !confirm('换成「' + next.label + '」要重新开一轮：当前这轮已答的 ' + session.answers.length +
+        ' 题都记进档案了，可以接着看结果。现在换吗？')) {
+      back();
+      return;
+    }
+
+    /* 选回孩子档案里的年级就是回到「跟档案」，别把状态钉死成手动 */
+    const from = SC && SC.childScope();
+    const isChilds = !!from && from.grade === g && (volFor(g, from.term) === volSel);
+    if (isChilds) { if (SC) SC.clear(subject); rangeManual = false; }
+    else { if (SC) SC.set(subject, { grade: g, term: volSel }); rangeManual = true; }
+
+    startSession(next.ids, next.label + '（年级诊断）', 'screen', next.base, { grade: g, term: volSel });
+  }
+
   /* 换科目：走 URL 参数，和全站学科切换保持一致 */
   function switchSubject(next) {
     if (SC) SC.setSubject(next);
@@ -916,7 +1003,7 @@
     const card = h('div', { class: 'card' });
     card.append(
       h('div', { class: 'row q-head' },
-        h('span', { class: 'muted q-head-label' }, '范围：' + sessionMeta.label),
+        h('span', { class: 'muted q-head-label' }, '本轮：' + sessionMeta.label),
         h('span', { class: 'grow' }),
         h('span', { class: 'muted q-progress-num', id: 'q-progress' }, '已测 ' + seen + ' / ' + total + ' 个'),
         h('button', { class: 'q-end', id: 'btn-end', title: '保留已答的记录，直接出结果', onclick: endNow }, '结束')),

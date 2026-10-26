@@ -823,6 +823,75 @@ main#root > .dx-stage:not(.dx-start) {
   .dx-childline-save { margin-left: 0; white-space: normal; }
 }
 
+/* 答题页顶栏：当前孩子 + 考察范围。范围放在最上面，一眼看到、随手可换 */
+.dx-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 0 0 10px;
+  padding: 9px 13px;
+  border: 1px solid var(--pt-line);
+  border-radius: 12px;
+  background: var(--pt-surface-2);
+}
+.dx-topbar-cell {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.dx-topbar-cell.is-scope { margin-left: auto; }
+.dx-topbar-label {
+  flex: none;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  letter-spacing: .01em;
+}
+.dx-topbar select {
+  min-height: 32px;
+  min-width: 92px;
+  max-width: 190px;
+  padding: 0 8px;
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--pt-ink);
+  background: #fff;
+  border: 1px solid var(--pt-line);
+  border-radius: 8px;
+}
+.dx-topbar #child-select { min-width: 150px; max-width: 230px; }
+.dx-topbar-link {
+  font-size: .8rem;
+  font-weight: 600;
+  color: var(--pt-blue);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.dx-topbar-link:hover { text-decoration: underline; }
+.dx-topbar-back {
+  flex: none;
+  min-height: 28px;
+  padding: 0 8px;
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--pt-blue);
+  background: transparent;
+  border: 0;
+  border-radius: 7px;
+  box-shadow: none;
+  white-space: nowrap;
+}
+.dx-topbar-back:hover { background: var(--pt-blue-50); }
+@media (max-width: 620px) {
+  .dx-topbar { gap: 6px 10px; padding: 8px 11px; }
+  .dx-topbar-cell { flex: 1 1 100%; }
+  .dx-topbar-cell.is-scope { margin-left: 0; }
+  .dx-topbar select { flex: 1 1 0; min-width: 0; max-width: none; }
+}
+
 /* 答题页头部：进度 + 随时结束 */
 .q-head { align-items: center; gap: 10px; flex-wrap: wrap; }
 .q-head-label {
