@@ -72,8 +72,12 @@
       out.push('这些点的先修链（左边是目标，右边越来越基础）：');
       p.chains.forEach(function (c) { out.push('- ' + c.join(' ← ')); });
     }
-    out.push('怎么用这份画像：低档题可以退到底层的先修当台阶；中、高档必须落在目标点上；');
-    out.push('已经掌握的点不要重复考；学生的卡点如果落在先修，就在题目里把它当成第一小步。');
+    /* 没有档案也没有先修数据时，只留学生这行，别把「怎么用画像」的空话发出去 */
+    var hasData = !!(p.last || p.total || (p.weak && p.weak.length) || (p.chains && p.chains.length));
+    if (hasData) {
+      out.push('怎么用这份画像：低档题可以退到底层的先修当台阶；中、高档必须落在目标点上；');
+      out.push('已经掌握的点不要重复考；学生的卡点如果落在先修，就在题目里把它当成第一小步。');
+    }
     return out.join('\n');
   }
 
