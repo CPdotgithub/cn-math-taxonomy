@@ -1,0 +1,499 @@
+/* ============================================================================
+   App Shell —— 应用外壳
+   ----------------------------------------------------------------------------
+   把原来的「顶部横条 + 居中单栏」改成 PopTrade 式的仪表盘骨架：
+
+     桌面   左侧 240px 固定导航 + 右侧内容区
+     移动   侧栏收进抽屉，内容区占满
+
+   实现方式：只对 header 做定位与排版，不改任何页面的 DOM 层级，
+   因此 explore / diagnose 里那些靠选择器工作的脚本不受影响。
+   ============================================================================ */
+
+:root {
+  --rail-w: 240px;
+  --topbar-h: 56px;
+  --content-max: 1360px;
+}
+
+/* ---------------------------------------------------------------------------
+   1. 桌面：header 变成左侧导航栏
+   --------------------------------------------------------------------------- */
+@media (min-width: 901px) {
+  body.has-rail {
+    padding-left: var(--rail-w);
+    min-height: 100vh;
+  }
+
+  body.has-rail .site-header {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--rail-w);
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 16px 12px 14px;
+    background: #fff;
+    border-right: 1px solid var(--pt-line);
+    border-bottom: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* 品牌区 */
+  body.has-rail .brand {
+    gap: 10px;
+    min-height: 0;
+    padding: 2px 6px 15px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--pt-line-soft);
+  }
+  body.has-rail .logo { width: 28px; height: 28px; }
+  body.has-rail .brand-name {
+    font-size: .93rem;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    white-space: nowrap;
+  }
+  body.has-rail .brand-kicker {
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    color: var(--pt-ink-3);
+    text-transform: uppercase;
+  }
+
+  /* 导航：纵向排列 */
+  body.has-rail .site-nav {
+    flex: 1 1 auto;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 2px;
+    min-width: 0;
+    max-width: none;
+    height: auto;
+  }
+  body.has-rail .page-links {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 2px;
+    order: 1;
+    min-width: 0;
+  }
+  body.has-rail .nav-link {
+    min-height: 36px;
+    padding: 0 10px;
+    border-radius: 8px;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: .89rem;
+    font-weight: 600;
+    color: var(--pt-ink-2);
+    letter-spacing: 0;
+  }
+  body.has-rail .nav-link svg { flex: none; opacity: .78; }
+  body.has-rail .nav-link:hover { background: var(--pt-blue-50); color: var(--pt-blue); }
+  body.has-rail .nav-link:hover svg { opacity: 1; }
+  body.has-rail .nav-link.active,
+  body.has-rail .nav-link[aria-current="page"] {
+    background: var(--pt-blue-100);
+    color: var(--pt-blue);
+    font-weight: 650;
+  }
+  body.has-rail .nav-link.active svg,
+  body.has-rail .nav-link[aria-current="page"] svg { opacity: 1; }
+
+  /* 「资源搜索」这类外链：降成柔和的目标行 */
+  body.has-rail .nav-link.resource-search-btn {
+    margin-left: 0;
+    margin-top: 6px;
+    border: 1px solid var(--pt-line);
+    background: var(--pt-surface-2);
+    color: var(--pt-ink-2);
+    font-size: .85rem;
+    min-height: 34px;
+  }
+  body.has-rail .nav-link.resource-search-btn:hover {
+    background: var(--pt-blue-50);
+    border-color: #CFDCF5;
+    color: var(--pt-blue);
+  }
+  body.has-rail .resource-search-ico { display: block; }
+
+  /* 学科切换：2×2 网格，沉到侧栏底部 */
+  body.has-rail .subject-switch {
+    order: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-top: 14px;
+    padding: 10px 0 0;
+    border-top: 1px solid var(--pt-line-soft);
+    border-radius: 0;
+    background: transparent;
+  }
+  body.has-rail .subject-switch::before {
+    content: "学科";
+    grid-column: 1 / -1;
+    font-size: .66rem;
+    font-weight: 650;
+    letter-spacing: .1em;
+    color: var(--pt-ink-3);
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  body.has-rail .nav-link.subject-link {
+    min-height: 34px;
+    padding: 0 8px;
+    border-radius: 8px;
+    justify-content: center;
+    font-size: .84rem;
+    font-weight: 600;
+    color: var(--pt-ink-2);
+    background: var(--pt-surface-2);
+    border: 1px solid var(--pt-line-soft);
+  }
+  body.has-rail .nav-link.subject-link:hover {
+    background: var(--pt-blue-50);
+    color: var(--pt-blue);
+    border-color: #DCE7FE;
+  }
+  body.has-rail .nav-link.subject-link.on,
+  body.has-rail .nav-link.subject-link.on:hover {
+    background: var(--pt-blue);
+    border-color: var(--pt-blue);
+    color: #fff;
+    font-weight: 650;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   2. 内容区容器
+   --------------------------------------------------------------------------- */
+body.has-rail .home,
+body.has-rail main.kids {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding: 22px 28px 72px;
+}
+/* 诊断页内容密度低，收窄一点，两栏才不显空 */
+body.has-rail main#root {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+  padding: 22px 28px 72px;
+}
+
+@media (max-width: 900px) {
+  body.has-rail .home,
+  body.has-rail main.kids,
+  body.has-rail main#root {
+    padding: 16px 14px 56px;
+  }
+}
+
+/* 图谱页是满屏三栏，自己管高度，这里只负责宽度 */
+body.has-rail.page-explore { padding-left: var(--rail-w); }
+@media (max-width: 900px) {
+  body.has-rail.page-explore { padding-left: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   3. 移动端：侧栏变抽屉
+   --------------------------------------------------------------------------- */
+.rail-toggle,
+.rail-scrim { display: none; }
+
+@media (max-width: 900px) {
+  body.has-rail { padding-left: 0; }
+
+  body.has-rail .site-header {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 268px;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 16px 14px 18px;
+    background: #fff;
+    border-right: 1px solid var(--pt-line);
+    border-bottom: 0;
+    overflow-y: auto;
+    transform: translateX(-101%);
+    transition: transform .22s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0 12px 40px rgba(10, 12, 16, .16);
+  }
+  body.rail-open .site-header { transform: none; }
+
+  body.has-rail .brand {
+    padding: 2px 4px 14px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--pt-line-soft);
+    min-height: 0;
+  }
+  body.has-rail .logo { width: 28px; height: 28px; }
+  body.has-rail .brand-name { font-size: .95rem; }
+
+  body.has-rail .site-nav {
+    flex: 1 1 auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    max-width: none;
+  }
+  body.has-rail .page-links {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+    order: 1;
+  }
+  body.has-rail .nav-link {
+    min-height: 42px;
+    padding: 0 10px;
+    border-radius: 8px;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: .94rem;
+  }
+  body.has-rail .nav-link svg { flex: none; opacity: .78; }
+  body.has-rail .nav-link.active,
+  body.has-rail .nav-link[aria-current="page"] {
+    background: var(--pt-blue-100);
+    color: var(--pt-blue);
+  }
+
+  body.has-rail .subject-switch {
+    order: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin-top: 14px;
+    padding: 12px 0 0;
+    border-top: 1px solid var(--pt-line-soft);
+    background: transparent;
+  }
+  body.has-rail .subject-switch::before {
+    content: "学科";
+    grid-column: 1 / -1;
+    font-size: .68rem;
+    font-weight: 650;
+    letter-spacing: .1em;
+    color: var(--pt-ink-3);
+    margin-bottom: 2px;
+  }
+  body.has-rail .nav-link.subject-link {
+    min-height: 38px;
+    justify-content: center;
+    border-radius: 8px;
+    background: var(--pt-surface-2);
+    border: 1px solid var(--pt-line-soft);
+  }
+  body.has-rail .nav-link.subject-link.on {
+    background: var(--pt-blue);
+    border-color: var(--pt-blue);
+    color: #fff;
+  }
+
+  /* 汉堡按钮 */
+  .rail-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 55;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    min-height: 0;
+    border-radius: 10px;
+    border: 1px solid var(--pt-line);
+    background: rgba(255, 255, 255, .94);
+    backdrop-filter: blur(8px);
+    color: var(--pt-ink);
+    box-shadow: 0 1px 3px rgba(10, 12, 16, .08);
+  }
+  .rail-toggle svg { width: 20px; height: 20px; }
+
+  /* 给内容让出汉堡按钮的位置：横幅改成左对齐，避免按钮压住文字 */
+  body.has-rail .top-banner {
+    justify-content: flex-start;
+    padding-left: 58px;
+    padding-right: 12px;
+  }
+
+  .rail-scrim {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    background: rgba(10, 12, 16, .42);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+  body.rail-open .rail-scrim {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  body.rail-open { overflow: hidden; }
+}
+
+@media (min-width: 901px) {
+  .rail-toggle, .rail-scrim { display: none !important; }
+}
+
+/* ---------------------------------------------------------------------------
+   4. 页面头部（各页共用的标题 + 主操作）
+   --------------------------------------------------------------------------- */
+.shell-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px 20px;
+  margin-bottom: 18px;
+}
+.shell-head > .shell-head-main { flex: 1 1 320px; min-width: 0; }
+.shell-head h1 {
+  margin: 0 0 4px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1.24;
+}
+.shell-head .shell-sub {
+  margin: 0;
+  max-width: 66ch;
+  font-size: .9rem;
+  line-height: 1.62;
+  color: var(--pt-ink-2);
+}
+.shell-head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+
+/* 分区标题：比 h2 小一档，带右侧延伸细线 */
+.shell-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 26px 0 12px;
+  font-size: .78rem;
+  font-weight: 650;
+  letter-spacing: .06em;
+  color: var(--pt-ink-3);
+  text-transform: uppercase;
+}
+.shell-section-title::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--pt-line);
+}
+
+/* ---------------------------------------------------------------------------
+   5. 横向数据行（档案 / 概览用）
+   --------------------------------------------------------------------------- */
+.shell-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+/* 三登分布条：掌握 / 不稳 / 薄弱 / 未测 */
+.dist {
+  display: flex;
+  height: 6px;
+  border-radius: 999px;
+  background: #EDF1F7;
+  overflow: hidden;
+  gap: 1px;
+}
+.dist > i { display: block; height: 100%; }
+.dist > .m { background: var(--pt-up); }
+.dist > .s { background: var(--pt-amber); }
+.dist > .w { background: var(--pt-down); }
+.dist > .u { background: #CBD5E4; }
+.dist-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-top: 6px;
+  font-size: .76rem;
+  color: var(--pt-ink-3);
+}
+.dist-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.dist-legend i {
+  width: 6px; height: 6px; border-radius: 2px; display: block;
+}
+.dist-legend .m i { background: var(--pt-up); }
+.dist-legend .s i { background: var(--pt-amber); }
+.dist-legend .w i { background: var(--pt-down); }
+.dist-legend .u i { background: #CBD5E4; }
+
+/* ---------------------------------------------------------------------------
+   6. 紧凑列表行（替代大卡片堆叠）
+   --------------------------------------------------------------------------- */
+.shell-list { display: flex; flex-direction: column; }
+.shell-item {
+  display: grid;
+  gap: 10px 14px;
+  padding: 14px 2px;
+  border-bottom: 1px solid var(--pt-line-soft);
+  align-items: center;
+}
+.shell-item:last-child { border-bottom: 0; }
+.shell-item:hover { background: var(--pt-blue-50); }
+@media (min-width: 720px) {
+  .shell-item { padding: 14px 10px; margin: 0 -10px; border-radius: 10px; }
+}
+
+/* ---------------------------------------------------------------------------
+   7. 打印
+   --------------------------------------------------------------------------- */
+@media print {
+  body.has-rail { padding-left: 0; }
+  body.has-rail .site-header,
+  .rail-toggle,
+  .rail-scrim { display: none !important; }
+}
+
+@media (max-width: 900px) {
+  body.has-rail .top-banner { padding-left: 64px; }
+}
+
+/* 移动端：汉堡按钮嵌进深色横幅里，别做成一块白砖 */
+@media (max-width: 900px) {
+  .rail-toggle {
+    top: 2px;
+    left: 8px;
+    width: 32px;
+    height: 30px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: #F7FAFE;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .rail-toggle:hover { background: rgba(255, 255, 255, .14); }
+  .rail-toggle svg { width: 18px; height: 18px; }
+  body.has-rail .top-banner { padding-left: 46px; }
+}

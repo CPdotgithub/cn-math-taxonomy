@@ -13,7 +13,10 @@
 
   function withSubject(href) {
     if (subject === 'math' || !href || href.indexOf('subject=') >= 0 || href.indexOf('http') === 0) return href;
-    return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject;
+    var hash = '';
+    var cut = href.indexOf('#');
+    if (cut >= 0) { hash = href.slice(cut); href = href.slice(0, cut); }
+    return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject + hash;
   }
 
   document.body.classList.toggle('subject-english', subject === 'english');
@@ -25,7 +28,7 @@
     if (on) link.setAttribute('aria-current', 'true');
     else link.removeAttribute('aria-current');
   });
-  document.querySelectorAll('.site-nav a:not(.subject-link), a.brand').forEach(function (link) {
+  document.querySelectorAll('.site-nav a:not(.subject-link), a.brand, [data-cta]').forEach(function (link) {
     var href = link.getAttribute('href');
     var next = withSubject(href);
     if (next && next !== href) link.setAttribute('href', next);
@@ -34,11 +37,11 @@
     document.title = '英语 · 中小学·高中知识图谱';
     var eye = document.querySelector('.eyebrow');
     if (eye) eye.textContent = '英语：三年级到高中';
-    var primary = document.querySelector('.hero-actions a.btn-primary');
-    var browse = document.querySelector('.hero-actions a.btn:not(.btn-primary)');
+    var primary = document.querySelector('[data-cta="diagnose"]');
+    var browse = document.querySelector('[data-cta="explore"]');
     if (primary) primary.setAttribute('href', 'diagnose/?subject=english');
     if (browse) browse.setAttribute('href', 'explore/?subject=english');
-    var demo = document.querySelector('.quiet-link a');
+    var demo = document.querySelector('[data-cta="demo"]');
     if (demo) {
       demo.setAttribute('href', 'diagnose/?subject=english&grade=' + encodeURIComponent('四上') + '&demo=1');
       demo.textContent = '先看一遍演示：四年级上册英语';
@@ -47,11 +50,11 @@
     document.title = '物理 · 中小学·高中知识图谱';
     var peye = document.querySelector('.eyebrow');
     if (peye) peye.textContent = '物理：初中八、九年级 · 高中必修与选择性必修';
-    var pprimary = document.querySelector('.hero-actions a.btn-primary');
-    var pbrowse = document.querySelector('.hero-actions a.btn:not(.btn-primary)');
+    var pprimary = document.querySelector('[data-cta="diagnose"]');
+    var pbrowse = document.querySelector('[data-cta="explore"]');
     if (pprimary) pprimary.setAttribute('href', 'diagnose/?subject=physics');
     if (pbrowse) pbrowse.setAttribute('href', 'explore/?subject=physics');
-    var pdemo = document.querySelector('.quiet-link a');
+    var pdemo = document.querySelector('[data-cta="demo"]');
     if (pdemo) {
       pdemo.setAttribute('href', 'diagnose/?subject=physics&grade=' + encodeURIComponent('八上') + '&demo=1');
       pdemo.textContent = '先看一遍演示：八年级上册物理';
@@ -60,11 +63,11 @@
     document.title = '小学语文 · 中小学·高中知识图谱';
     var zeye = document.querySelector('.eyebrow');
     if (zeye) zeye.textContent = '语文：小学一至六年级 · 统编版';
-    var zprimary = document.querySelector('.hero-actions a.btn-primary');
-    var zbrowse = document.querySelector('.hero-actions a.btn:not(.btn-primary)');
+    var zprimary = document.querySelector('[data-cta="diagnose"]');
+    var zbrowse = document.querySelector('[data-cta="explore"]');
     if (zprimary) zprimary.setAttribute('href', 'diagnose/?subject=chinese');
     if (zbrowse) zbrowse.setAttribute('href', 'explore/?subject=chinese');
-    var zdemo = document.querySelector('.quiet-link a');
+    var zdemo = document.querySelector('[data-cta="demo"]');
     if (zdemo) {
       zdemo.setAttribute('href', 'diagnose/?subject=chinese&grade=' + encodeURIComponent('一上') + '&demo=1');
       zdemo.textContent = '先看一遍演示：一年级上册语文';

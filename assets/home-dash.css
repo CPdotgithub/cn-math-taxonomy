@@ -1,0 +1,418 @@
+/* ============================================================================
+   首页 · 学习工作台
+   ----------------------------------------------------------------------------
+   从「落地页」改成「工作台」：KPI 条 → 左主区（入口 + 年级）/ 右侧栏（孩子 + 记录）
+   覆盖 site.css 里旧的 hero / steps / grade-card 外观。
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1. 页面头
+   --------------------------------------------------------------------------- */
+body.page-home .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 3px 9px 3px 8px;
+  border-radius: 999px;
+  background: var(--pt-blue-50);
+  color: var(--pt-blue);
+  font-size: .76rem;
+  font-weight: 650;
+  letter-spacing: .01em;
+}
+body.page-home .eyebrow::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+body.page-home .shell-head h1 {
+  font-size: clamp(1.5rem, 2.6vw, 1.86rem);
+  letter-spacing: -.032em;
+  margin-bottom: 6px;
+}
+body.page-home .shell-sub { font-size: .93rem; }
+
+/* ---------------------------------------------------------------------------
+   2. 两栏骨架
+   --------------------------------------------------------------------------- */
+.home-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  margin-top: 4px;
+}
+.home-main,
+.home-side { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.home-main > .pt-panel + .pt-panel,
+.home-side > .pt-panel + .pt-panel { margin-top: 0; }
+
+@media (max-width: 1020px) {
+  .home-split { grid-template-columns: minmax(0, 1fr); }
+}
+@media (min-width: 1021px) {
+  .home-side { position: sticky; top: 18px; }
+}
+
+/* ---------------------------------------------------------------------------
+   3. 入口列表
+   --------------------------------------------------------------------------- */
+.launch-list { padding: 6px 8px 8px; }
+.launch-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: inherit;
+  transition: background .14s;
+}
+.launch-row + .launch-row { margin-top: 2px; }
+.launch-row:hover { background: var(--pt-blue-50); }
+.launch-row:hover .launch-go { color: var(--pt-blue); transform: translateX(2px); }
+.launch-row:focus-visible { outline: 2px solid var(--pt-blue); outline-offset: -2px; }
+
+.launch-ico {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: var(--pt-surface-2);
+  border: 1px solid var(--pt-line-soft);
+  color: var(--pt-ink-2);
+}
+.launch-ico svg { width: 19px; height: 19px; }
+.launch-ico.is-primary {
+  background: var(--pt-blue);
+  border-color: var(--pt-blue);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 61, 247, .22);
+}
+
+.launch-copy { flex: 1 1 auto; min-width: 0; }
+.launch-copy strong {
+  display: block;
+  font-size: .94rem;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  color: var(--pt-ink);
+}
+.launch-copy small {
+  display: block;
+  margin-top: 1px;
+  font-size: .82rem;
+  line-height: 1.5;
+  color: var(--pt-ink-2);
+}
+.launch-go {
+  flex: none;
+  color: var(--pt-ink-3);
+  font-size: .95rem;
+  transition: transform .14s, color .14s;
+}
+
+/* ---------------------------------------------------------------------------
+   4. 年级网格：从大卡片改成紧凑条目
+   --------------------------------------------------------------------------- */
+body.page-home .grade-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+body.page-home a.grade-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  min-height: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--pt-line);
+  border-top: 1px solid var(--pt-line);
+  border-radius: 10px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .14s, background .14s, box-shadow .14s;
+}
+body.page-home a.grade-card:hover {
+  border-color: #C7D8F8;
+  background: var(--pt-blue-50);
+  box-shadow: 0 1px 2px rgba(10, 12, 16, .05);
+}
+body.page-home a.grade-card strong {
+  font-size: .93rem;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  grid-column: 1;
+  grid-row: 1;
+}
+body.page-home a.grade-card .grade-stage {
+  font-size: .74rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  letter-spacing: .02em;
+}
+/* 第一行：学段（小学/初中） */
+body.page-home a.grade-card .grade-stage:first-child {
+  grid-column: 1;
+  grid-row: 2;
+}
+/* 最后一行：上册/下册拆分说明 */
+body.page-home a.grade-card .grade-stage:last-child {
+  grid-column: 2;
+  grid-row: 2;
+  text-align: right;
+}
+body.page-home a.grade-card .grade-count {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+/* 学段用左侧色条表示，不再是顶部粗边 */
+body.page-home a.grade-card::before {
+  content: none;
+}
+body.page-home a.grade-card.is-junior { border-left: 3px solid var(--pt-blue); padding-left: 10px; }
+body.page-home a.grade-card.is-primary { border-left: 3px solid #86C7FF; padding-left: 10px; }
+
+@media (max-width: 720px) {
+  body.page-home .grade-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 380px) {
+  body.page-home .grade-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------------------------------------------------------------------------
+   5. 三步：收进 details
+   --------------------------------------------------------------------------- */
+.home-steps > summary {
+  cursor: pointer;
+  padding: 13px 16px;
+  font-size: .9rem;
+  font-weight: 650;
+  color: var(--pt-ink-2);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--radius);
+}
+.home-steps > summary::-webkit-details-marker { display: none; }
+.home-steps > summary::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  flex: none;
+  background: currentColor;
+  opacity: .5;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M5 3l5 5-5 5'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M5 3l5 5-5 5'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform .15s;
+}
+.home-steps[open] > summary { border-bottom: 1px solid var(--pt-line-soft); border-radius: var(--radius) var(--radius) 0 0; color: var(--pt-ink); }
+.home-steps[open] > summary::before { transform: rotate(90deg); }
+.home-steps > summary:hover { background: var(--pt-surface-2); }
+.home-steps .steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+}
+.home-steps .steps li {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--pt-line-soft);
+  border-radius: 0;
+  padding: 12px 0;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr);
+  gap: 0 10px;
+}
+.home-steps .steps li:last-child { border-bottom: 0; padding-bottom: 2px; }
+.home-steps .step-no {
+  width: 24px;
+  height: 24px;
+  font-size: .78rem;
+  background: var(--pt-blue-100);
+  color: var(--pt-blue);
+  font-weight: 700;
+  grid-row: 1 / 3;
+}
+.home-steps .steps h3 {
+  margin: 0 0 2px;
+  font-size: .9rem;
+  font-weight: 650;
+  letter-spacing: -.01em;
+}
+.home-steps .steps p {
+  margin: 0;
+  font-size: .84rem;
+  line-height: 1.6;
+  color: var(--pt-ink-2);
+}
+
+/* ---------------------------------------------------------------------------
+   6. 右栏：孩子与最近记录
+   --------------------------------------------------------------------------- */
+.kid-current {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.kid-current .kid-id { flex: 1 1 auto; min-width: 0; }
+.kid-current h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  font-weight: 650;
+  letter-spacing: -.015em;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.kid-current .kid-sub {
+  margin: 3px 0 0;
+  font-size: .8rem;
+  color: var(--pt-ink-3);
+}
+.kid-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 10px 0 0;
+  font-size: .78rem;
+  color: var(--pt-ink-2);
+}
+.kid-stats span { display: inline-flex; align-items: center; gap: 4px; }
+.kid-stats i {
+  width: 6px; height: 6px; border-radius: 2px; display: block;
+}
+.kid-stats .m i { background: var(--pt-up); }
+.kid-stats .s i { background: var(--pt-amber); }
+.kid-stats .w i { background: var(--pt-down); }
+.kid-stats .u i { background: #CBD5E4; }
+.kid-panel-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.kid-panel-actions .btn { flex: 1 1 0; min-height: 36px; font-size: .86rem; }
+
+/* 最近记录行 */
+.recent-row {
+  display: block;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--pt-line-soft);
+  text-decoration: none;
+  color: inherit;
+}
+.recent-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.recent-row:first-child { padding-top: 0; }
+.recent-row:hover .recent-label { color: var(--pt-blue); }
+.recent-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.recent-label {
+  font-size: .88rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  color: var(--pt-ink);
+  overflow-wrap: anywhere;
+  transition: color .14s;
+}
+.recent-date {
+  flex: none;
+  font-size: .74rem;
+  color: var(--pt-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.recent-meta {
+  margin: 3px 0 0;
+  font-size: .76rem;
+  color: var(--pt-ink-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+}
+.recent-meta span + span::before {
+  content: "·";
+  margin: 0 6px;
+  color: #B9C3D4;
+}
+.recent-meta b { font-weight: 650; }
+
+/* 空状态里的操作 */
+.kid-empty-cta { margin-top: 12px; }
+.kid-empty-cta .btn { width: 100%; min-height: 38px; font-size: .88rem; }
+
+/* ---------------------------------------------------------------------------
+   7. 智商测试卡：降级成侧栏里的一条低调入口
+   --------------------------------------------------------------------------- */
+body.page-home a.iq-card {
+  margin-top: 0;
+  display: block;
+  padding: 12px 14px;
+  border-top: 1px dashed var(--pt-line);
+  border-radius: var(--radius);
+  background: var(--pt-surface-2);
+  box-shadow: none;
+}
+body.page-home a.iq-card:hover {
+  border-color: #C7D8F8;
+  border-top-style: dashed;
+  background: var(--pt-blue-50);
+}
+body.page-home a.iq-card strong {
+  display: block;
+  font-size: .86rem;
+  font-weight: 650;
+}
+body.page-home a.iq-card .iq-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+}
+body.page-home a.iq-card .iq-note {
+  display: block;
+  margin-top: 3px;
+  font-size: .74rem;
+  color: var(--pt-ink-3);
+}
+
+/* ---------------------------------------------------------------------------
+   8. 加载错误
+   --------------------------------------------------------------------------- */
+body.page-home .load-error {
+  margin: 0 0 14px;
+  background: var(--bad-bg);
+  border: 1px solid #F7C9C4;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: .86rem;
+  color: var(--pt-ink);
+}
+
+/* 移动端年级卡：册次说明太长会挤竖排，只保留学段 */
+@media (max-width: 720px) {
+  body.page-home a.grade-card .grade-stage:last-child { display: none; }
+  body.page-home a.grade-card strong { font-size: .88rem; }
+  body.page-home a.grade-card .grade-count { font-size: .72rem; }
+  body.page-home a.grade-card { padding: 9px 10px; }
+}

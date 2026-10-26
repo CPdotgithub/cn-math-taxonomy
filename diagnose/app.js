@@ -36,9 +36,10 @@
   let subject = 'math';
   let startQuery = '';
   let startStage = '';
-  let chapterOpen = false;
+  let chapterOpen = true;
   let gradeSel = '七';     // 开始页「按年级整体诊断」：年级
   let volSel = '';         // '' 整年级 / '上' / '下'
+  let startMode = new URLSearchParams(location.search).get('mode') === 'grade' ? 'grade' : 'single'; // 开始页当前模式
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
   let pathCy = null;
   let pathToken = 0;
@@ -174,7 +175,7 @@
     pathTipLock = false;
     if (pathCy) { pathCy.destroy(); pathCy = null; window.__pathCy = null; }
   }
-  function show(node) { teardownPath(); closeShare(); clearRoot(); root.append(node); window.scrollTo(0, 0); }
+  function show(node) { teardownPath(); closeShare(); clearRoot(); node.classList.add('dx-stage'); root.append(node); window.scrollTo(0, 0); }
   function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
   function theme() {
     return {
@@ -281,10 +282,9 @@
     return h('div', { class: 'card child-bar no-print', id: 'child-bar' },
       h('div', { class: 'row' },
         h('label', { for: 'child-select' }, '当前孩子'),
-        childSelect(function (id) { CC.setCurrent(id); renderStart(); }),
-        h('span', { class: 'grow' }),
-        cur ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '历史与薄弱点' }) : null,
-        h('a', { class: 'btn', href: childrenHref(fromQuery()), text: '孩子档案' })),
+        childSelect(function (id) { CC.setCurrent(id); renderStart(); })),
+      cur ? h('div', { class: 'row dx-child-actions' },
+        h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '历史与薄弱点' })) : null,
       h('p', { class: 'muted small', style: 'margin:8px 0 0' },
         cur ? '诊断做完，结果会保存到「' + cur.name + '」的档案里。' : '选了“不保存到档案”时，诊断结果不会存下来。'));
   }
@@ -414,8 +414,20 @@
     }, label);
   }
 
+  /* 开始页的 KPI 小卡 */
+  function dxKpi(label, value, unit, meta, cls) {
+    const box = h('div', { class: 'pt-kpi ' + (cls || '') });
+    const lab = h('div', { class: 'pt-kpi-label' });
+    lab.append(h('i', { class: 'pt-dot' }));
+    lab.append(document.createTextNode(label));
+    box.append(lab);
+    box.append(h('div', { class: 'pt-kpi-value' }, String(value), unit ? h('small', null, unit) : null));
+    box.append(h('div', { class: 'pt-kpi-meta', text: meta || '' }));
+    return box;
+  }
+
   function renderStart(errMsg) {
-    const page = h('div');
+    const page = h('div', { class: 'dx-start' });
     const saved = lsGet(sessionKey());
     if (saved && saved.targets && D.graph.byId[saved.targets[0]]) {
       page.append(h('div', { class: 'banner' },
@@ -425,57 +437,122 @@
         ' ', h('button', { onclick: function () { lsDel(sessionKey()); renderStart(); } }, '放弃存档')));
     }
     if (errMsg) page.append(h('p', { class: 'err', text: errMsg }));
-    page.append(childBar('start'));
+
+    const cur = CC.current();
+    const subjects = { math: '数学', chinese: '语文', english: '英语', physics: '物理' };
+
+    /* ---- 页面头 ---------------------------------------------------------- */
+    page.append(h('div', { class: 'shell-head no-print' },
+      h('div', { class: 'shell-head-main' },
+        h('h1', null, '诊断'),
+        h('p', { class: 'shell-sub' },
+          '先问目标本身。答错再出一道同级或更容易的题，仍然错才沿先修往回追，最后按年级排出补学顺序。')),
+      h('div', { class: 'shell-head-actions' },
+        h('a', { class: 'btn', href: childrenHref(fromQuery()) }, '孩子档案'))));
+
+    /* ---- KPI ------------------------------------------------------------- */
+    const recs = cur ? CC.recordsOf(cur.id) : [];
+    page.append(h('div', { class: 'pt-kpis' },
+      dxKpi('可诊断知识点', D.topics.length, '个', subjects[subject] + ' · 当前学科', 'is-blue'),
+      dxKpi('先修关系', D.deps.length, '条', '用于问答式回溯', 'is-blue'),
+      dxKpi('当前孩子', cur ? cur.name : '未选择', '', cur ? ([cur.grade, cur.textbook].filter(Boolean).join(' · ') || '结果会存进档案') : '结果不会存进档案', cur ? 'is-green' : 'is-amber'),
+      dxKpi('已完成诊断', recs.length, '次', recs.length ? '可在档案里回看' : '还没有记录', 'is-amber')));
+
+    /* ---- 模式切换 -------------------------------------------------------- */
+    page.append(h('div', { class: 'dx-modes-wrap no-print' },
+      h('div', { class: 'pt-seg dx-modes', role: 'tablist', 'aria-label': '诊断方式' },
+        [['single', '单点诊断'], ['grade', '整年级筛查']].map(function (m) {
+          return h('button', {
+            type: 'button', role: 'tab',
+            class: startMode === m[0] ? 'on' : '',
+            'aria-selected': startMode === m[0] ? 'true' : 'false',
+            onclick: function () { if (startMode !== m[0]) { startMode = m[0]; renderStart(); } }
+          }, m[1]);
+        }))));
+
+    const mainCol = h('div', { class: 'dx-main' });
+    const sideCol = h('aside', { class: 'dx-side' });
+    page.append(h('div', { class: 'dx-cols' }, mainCol, sideCol));
+
+    /* 当前孩子：属于全局上下文，统一放在侧栏顶部 */
+    const kidBar = childBar('start');
+    if (kidBar) sideCol.append(kidBar);
 
     const st = getSettings();
-    const limitInput = h('input', { type: 'number', min: LIMIT_MIN, max: LIMIT_MAX, step: 1, value: String(st.limit), id: 'limit-input', 'aria-label': '题量上限' });
-    limitInput.addEventListener('change', function () {
-      let v = parseInt(limitInput.value, 10);
-      if (!(v >= LIMIT_MIN)) v = LIMIT_MIN;
-      if (v > LIMIT_MAX) v = LIMIT_MAX;
-      limitInput.value = String(v);
-      setSetting('limit', v);
-    });
-    const listBox = h('div', { id: 'target-list' });
-    const browser = h('details', { class: 'chapter-browser', id: 'chapter-browser', open: chapterOpen || !!startQuery },
-      h('summary', null, '按册、章浏览'),
-      h('p', { class: 'muted small', text: '列表按年级、册、章折叠。想直接开始，用上面的搜索更快。' }),
-      listBox);
-    browser.addEventListener('toggle', function () { chapterOpen = browser.open; });
-    page.append(h('div', { class: 'card' },
-      h('h1', { text: '选择诊断目标' }),
-      h('p', { class: 'muted' }, subject === 'physics'
-        ? '选一个想学会或想检查的物理知识点。第一题答对就算掌握；答错会再出一道同级或更容易的题——第二题也错才算薄弱，并回溯到物理里的先修；第二题答对则标为「不稳」。'
-        : subject === 'english'
-        ? '选一个想学会或想检查的英语知识点。第一题答对就算掌握；答错会再出一道同级或更容易的题——第二题也错才算薄弱，并回溯到先修；第二题答对则标为「不稳」。'
-        : subject === 'chinese'
-        ? '选一个想学会或想检查的语文知识点。第一题答对就算掌握；答错会再出一道同级或更容易的题——第二题也错才算薄弱，并回溯到先修；第二题答对则标为「不稳」。'
-        : '选一个想学会或想检查的知识点。第一题答对就算掌握；答错会再出一道同级或更容易的题——第二题也错才算薄弱，并回溯到先修；第二题答对则标为「不稳」。'),
-      h('div', { class: 'stage-tabs', role: 'tablist', 'aria-label': '学段' },
-        subject === 'physics' ? [stageButton('', '全部'), stageButton('j', '初中'), stageButton('h', '高中')]
-          : subject === 'chinese' ? [stageButton('', '全部'), stageButton('p', '小学')]
-          : [stageButton('', '全部'), stageButton('p', '小学'), stageButton('j', '初中'), stageButton('h', '高中')]),
-      h('input', {
-        type: 'search', class: 'search-lg', id: 'search',
-        placeholder: subject === 'physics' ? '搜索知识点，例如：欧姆定律、浮力、牛顿第二定律、楞次定律' : subject === 'english' ? '搜索知识点，例如：现在进行时、虚拟语气、there is' : subject === 'chinese' ? '搜索知识点，例如：声母、静夜思、的地得' : '搜索知识点，例如：配方法、20 以内加法、一次函数',
-        value: startQuery, autocomplete: 'off', 'aria-label': '搜索知识点',
-        oninput: function (e) {
-          startQuery = e.target.value;
-          fillList(listBox);
-          if (startQuery.trim()) { browser.open = true; chapterOpen = true; }
-        }
-      }),
-      h('p', { class: 'muted small', id: 'match-count' }),
-      h('div', { class: 'row' },
-        h('label', null, '单点 / 整章题量上限（' + LIMIT_MIN + '–' + LIMIT_MAX + '）', limitInput),
-        h('span', { class: 'muted small' }, '每个知识点最多问 2 题。到上限后，没测到的标为「未测」。'))));
-    page.append(gradeCard());
-    page.append(h('div', { class: 'card' }, browser));
-    page.append(h('p', { class: 'muted small' },
-      '可以诊断的知识点：' + D.topics.length + ' 个。进度和出过的题只保存在这台浏览器里。'));
+
+    if (startMode === 'single') {
+      const listBox = h('div', { id: 'target-list' });
+      const browser = h('details', { class: 'chapter-browser', id: 'chapter-browser', open: chapterOpen },
+        h('summary', null, '按册、章浏览'),
+        h('p', { class: 'muted small', text: '列表按年级、册、章折叠。想直接开始，用上面的搜索更快。' }),
+        listBox);
+      browser.addEventListener('toggle', function () { chapterOpen = browser.open; });
+
+      mainCol.append(h('section', { class: 'pt-panel dx-panel-pick' },
+        h('div', { class: 'pt-panel-head' },
+          h('h2', null, '选一个知识点'),
+          h('span', { class: 'pt-pill is-gray', id: 'match-count' }, '')),
+        h('div', { class: 'pt-panel-body' },
+          h('div', { class: 'stage-tabs', role: 'tablist', 'aria-label': '学段' },
+            subject === 'physics' ? [stageButton('', '全部'), stageButton('j', '初中'), stageButton('h', '高中')]
+              : subject === 'chinese' ? [stageButton('', '全部'), stageButton('p', '小学')]
+              : [stageButton('', '全部'), stageButton('p', '小学'), stageButton('j', '初中'), stageButton('h', '高中')]),
+          h('input', {
+            type: 'search', class: 'search-lg', id: 'search',
+            placeholder: subject === 'physics' ? '搜索知识点，例如：欧姆定律、浮力、牛顿第二定律、楞次定律' : subject === 'english' ? '搜索知识点，例如：现在进行时、虚拟语气、there is' : subject === 'chinese' ? '搜索知识点，例如：声母、静夜思、的地得' : '搜索知识点，例如：配方法、20 以内加法、一次函数',
+            value: startQuery, autocomplete: 'off', 'aria-label': '搜索知识点',
+            oninput: function (e) {
+              startQuery = e.target.value;
+              fillList(listBox);
+              if (startQuery.trim()) { browser.open = true; chapterOpen = true; }
+            }
+          }),
+          browser)));
+
+      /* 侧栏：题量设定 + 提示 */
+      const limitInput = h('input', { type: 'number', min: LIMIT_MIN, max: LIMIT_MAX, step: 1, value: String(st.limit), id: 'limit-input', 'aria-label': '题量上限' });
+      limitInput.addEventListener('change', function () {
+        let v = parseInt(limitInput.value, 10);
+        if (!(v >= LIMIT_MIN)) v = LIMIT_MIN;
+        if (v > LIMIT_MAX) v = LIMIT_MAX;
+        limitInput.value = String(v);
+        setSetting('limit', v);
+      });
+
+      sideCol.append(h('section', { class: 'pt-panel dx-side-card' },
+        h('div', { class: 'pt-panel-head' },
+          h('h2', null, '设定'),
+          h('span', { class: 'pt-pill is-blue' }, '单点')),
+        h('div', { class: 'pt-panel-body' },
+          h('label', { class: 'dx-field', for: 'limit-input' },
+            h('span', { class: 'dx-field-label' }, '题量上限'),
+            h('span', { class: 'dx-field-hint' }, LIMIT_MIN + '–' + LIMIT_MAX + ' 题'),
+            limitInput),
+          h('p', { class: 'dx-note' }, '每个知识点最多问 2 题。到上限后，没测到的标为「未测」。'),
+          h('div', { class: 'dx-start-hint' },
+            h('svg', { viewBox: '0 0 24 24', width: '16', height: '16', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' },
+              h('path', { d: 'M12 3v9' }), h('circle', { cx: '12', cy: '16.4', r: '1.1', fill: 'currentColor', stroke: 'none' }), h('circle', { cx: '12', cy: '12', r: '9' })),
+            h('span', null, '点任意知识点的「选为目标」就直接开始，不用再确认。')))));
+
+    } else {
+      mainCol.append(gradeCard(sideCol));
+    }
+
+    /* 侧栏底部：结果怎么读。两张模式卡下面都放，统一在最后追加 */
+    sideCol.append(h('section', { class: 'pt-panel dx-side-card dx-legend-card' },
+      h('div', { class: 'pt-panel-head' }, h('h2', null, '结果怎么读')),
+      h('div', { class: 'pt-panel-body' },
+        h('ul', { class: 'dx-legend' },
+          h('li', null, h('span', { class: 'pt-pill is-green' }, '掌握'), h('span', null, '第一题就答对')),
+          h('li', null, h('span', { class: 'pt-pill is-amber' }, '不稳'), h('span', null, '第二题才答对')),
+          h('li', null, h('span', { class: 'pt-pill is-red' }, '薄弱'), h('span', null, '两道题都没答对')),
+          h('li', null, h('span', { class: 'pt-pill is-gray' }, '未测'), h('span', null, '到题量上限还没问到'))))));
+
     show(page);
-    fillList(listBox);
-    if (startQuery) { const el = document.getElementById('search'); if (el) el.focus(); }
+    if (startMode === 'single') {
+      fillList(document.getElementById('target-list'));
+      if (startQuery) { const el = document.getElementById('search'); if (el) el.focus(); }
+    }
   }
 
   function seniorGrade(sel) {
@@ -489,8 +566,9 @@
     return gradeSel + (volSel ? volSel : '年级');
   }
 
-  function gradeCard() {
-    const box = h('div', { class: 'card', id: 'grade-card' });
+  function gradeCard(sideCol) {
+    const box = h('section', { class: 'pt-panel', id: 'grade-card' });
+    let sideMount = null;   // 侧栏槽位：用闭包持有，避免在未入文档时查不到
     const fill = function () {
       while (box.firstChild) box.removeChild(box.firstChild);
       const g = E.gradeTargets(D.graph, gradeScope(), subject);
@@ -513,44 +591,67 @@
         limitInput.value = String(v);
         setSetting('screenLimit', v);
       });
+
       box.append(
-        h('h2', { text: '按年级整体诊断' }),
-        h('p', { class: 'muted' }, '不选具体知识点，在一个年级（或一册）里抽查：每个知识点最多问 2 题，答错只在所选范围内回溯先修，最后按章汇总出哪几章薄弱。适合期初摸底、学期末复习。'),
-        tabs('年级', subject === 'physics'
-          ? [['八', '八年级'], ['九', '九年级'], ['必修一', '必修一'], ['必修二', '必修二'], ['必修三', '必修三'],
-            ['选必一', '选必一'], ['选必二', '选必二'], ['选必三', '选必三']]
-          : subject === 'english'
-          ? '三四五六七八九'.split('').map(function (x) { return [x, x + '年级']; }).concat([
-            ['必修一', '必修一'], ['必修二', '必修二'], ['必修三', '必修三'],
-            ['选必一', '选必一'], ['选必二', '选必二'], ['选必三', '选必三'], ['选必四', '选必四']
-          ])
-          : subject === 'chinese'
-          ? '一二三四五六'.split('').map(function (x) { return [x, x + '年级']; })
-          : GRADES.map(function (x) { return [x, x + '年级']; }).concat([
-            ['高一', '高一'], ['高二', '高二'], ['选必一', '选必一'], ['选必二', '选必二'], ['选必三', '选必三']
-          ]), gradeSel, function (v) {
-          gradeSel = v;
-          if (seniorGrade(v)) volSel = '';
-          else if (subject === 'physics' && v === '九') volSel = '全';
-          else if (subject === 'english' && v === '九') volSel = '';
-          else if (volSel === '全') volSel = '';
-        }),
-        h('div', { style: 'margin-top:8px' }),
-        seniorGrade(gradeSel)
-          ? tabs('范围', [['', seniorRangeLabel(gradeSel)]], '', function () { volSel = ''; })
-          : (subject === 'physics' && gradeSel === '九')
-            ? tabs('范围', [['全', '全一册']], '全', function () { volSel = '全'; })
-          : (subject === 'english' && gradeSel === '九')
-            ? tabs('范围', [['', '整年级'], ['上', '上册（新版）'], ['全', '全一册（旧版，九下暂用）']], volSel, function (v) { volSel = v; })
-            : tabs('范围', [['', '整年级'], ['上', '上册'], ['下', '下册']], volSel, function (v) { volSel = v; }),
-        h('p', { class: 'muted', id: 'grade-info' }, g ? g.label + '：' + g.ids.length + ' 个知识点。' : '这个范围没有知识点。'),
-        h('div', { class: 'row' },
-          h('label', null, '题量上限（' + SCREEN_MIN + '–' + SCREEN_MAX + '）', limitInput),
+        h('div', { class: 'pt-panel-head' },
+          h('h2', null, '选一个年级'),
+          h('span', { class: 'pt-pill is-blue', id: 'grade-info' }, g ? g.ids.length + ' 个知识点' : '无知识点')),
+        h('div', { class: 'pt-panel-body' },
+          h('p', { class: 'dx-lead' }, '不选具体知识点，在一个年级（或一册）里抽查。答错只在所选范围内回溯先修，最后按章汇总出哪几章薄弱。适合期初摸底、学期末复习。'),
+          h('div', { class: 'dx-tabblock' },
+            h('span', { class: 'dx-tablabel' }, '年级'),
+            tabs('年级', subject === 'physics'
+              ? [['八', '八年级'], ['九', '九年级'], ['必修一', '必修一'], ['必修二', '必修二'], ['必修三', '必修三'],
+                ['选必一', '选必一'], ['选必二', '选必二'], ['选必三', '选必三']]
+              : subject === 'english'
+              ? '三四五六七八九'.split('').map(function (x) { return [x, x + '年级']; }).concat([
+                ['必修一', '必修一'], ['必修二', '必修二'], ['必修三', '必修三'],
+                ['选必一', '选必一'], ['选必二', '选必二'], ['选必三', '选必三'], ['选必四', '选必四']
+              ])
+              : subject === 'chinese'
+              ? '一二三四五六'.split('').map(function (x) { return [x, x + '年级']; })
+              : GRADES.map(function (x) { return [x, x + '年级']; }).concat([
+                ['高一', '高一'], ['高二', '高二'], ['选必一', '选必一'], ['选必二', '选必二'], ['选必三', '选必三']
+              ]), gradeSel, function (v) {
+              gradeSel = v;
+              if (seniorGrade(v)) volSel = '';
+              else if (subject === 'physics' && v === '九') volSel = '全';
+              else if (subject === 'english' && v === '九') volSel = '';
+              else if (volSel === '全') volSel = '';
+            })),
+          h('div', { class: 'dx-tabblock' },
+            h('span', { class: 'dx-tablabel' }, '范围'),
+            seniorGrade(gradeSel)
+              ? tabs('范围', [['', seniorRangeLabel(gradeSel)]], '', function () { volSel = ''; })
+              : (subject === 'physics' && gradeSel === '九')
+                ? tabs('范围', [['全', '全一册']], '全', function () { volSel = '全'; })
+              : (subject === 'english' && gradeSel === '九')
+                ? tabs('范围', [['', '整年级'], ['上', '上册（新版）'], ['全', '全一册（旧版，九下暂用）']], volSel, function (v) { volSel = v; })
+                : tabs('范围', [['', '整年级'], ['上', '上册'], ['下', '下册']], volSel, function (v) { volSel = v; }))));
+
+      if (!sideCol) return;
+      if (!sideMount) {
+        sideMount = h('div', { id: 'grade-side', class: 'dx-side-slot' });
+        sideCol.append(sideMount);
+      }
+      while (sideMount.firstChild) sideMount.removeChild(sideMount.firstChild);
+      sideMount.append(h('section', { class: 'pt-panel dx-side-card' },
+        h('div', { class: 'pt-panel-head' },
+          h('h2', null, '本次范围'),
+          h('span', { class: 'pt-pill is-blue' }, '整年级')),
+        h('div', { class: 'pt-panel-body' },
+          h('p', { class: 'dx-scope' },
+            h('strong', null, g ? g.label : '这个范围没有知识点'),
+            h('span', null, g ? g.ids.length + ' 个知识点，最多问 ' + (g.ids.length * 2) + ' 题' : '换一个年级再试')),
+          h('label', { class: 'dx-field', for: 'screen-limit-input' },
+            h('span', { class: 'dx-field-label' }, '题量上限'),
+            h('span', { class: 'dx-field-hint' }, SCREEN_MIN + '–' + SCREEN_MAX + ' 题'),
+            limitInput),
           h('button', {
-            class: 'primary', id: 'btn-grade-start', disabled: !g,
+            class: 'primary dx-start-btn', id: 'btn-grade-start', disabled: !g,
             onclick: function () { if (g) startSession(g.ids, g.label + '（整体筛查）', null, 'screen'); }
-          }, '开始整体诊断')),
-        h('p', { class: 'muted small' }, '知识点多、题量有限，到上限后没测到的标为「未测」；结果页可以再加题。默认 ' + E.SCREEN_LIMIT + ' 题。'));
+          }, '开始整体诊断'),
+          h('p', { class: 'dx-note' }, '知识点多、题量有限，到上限后没测到的标为「未测」；结果页可以再加题。默认 ' + E.SCREEN_LIMIT + ' 题。'))));
     };
     fill();
     return box;
@@ -605,7 +706,7 @@
     });
     if (!shown) box.append(h('p', { class: 'muted', text: '没有匹配的知识点。' }));
     const mc = document.getElementById('match-count');
-    if (mc) mc.textContent = (q ? '找到 ' : '册章列表里有 ') + shown + ' 个知识点';
+    if (mc) mc.textContent = (q ? '找到 ' : '共 ') + shown + ' 个';
     const browser = document.getElementById('chapter-browser');
     if (browser && q) browser.open = true;
   }
@@ -740,7 +841,8 @@
       h('button', { class: 'small', onclick: function () { if (confirm('确定放弃当前诊断并回到开始页吗？')) restart(); } }, '重新开始')));
     const page = h('div');
     if (demo) page.append(demoBanner());
-    page.append(childBar('question'));
+    const qBar = childBar('question');
+    if (qBar) page.append(qBar);
     page.append(card);
     show(page);
     const inp = document.getElementById('ans');
@@ -923,7 +1025,8 @@
     const page = h('div');
     if (demo) page.append(demoBanner());
     saveToChild(sum);
-    page.append(childBar('result'));
+    const resultBar = childBar('result');
+    if (resultBar) page.append(resultBar);
 
     const targetsMastered = session.targets.every(function (id) { return E.statusOf(session, id) === 'mastered'; });
     const chapters = screen ? E.chapterSummary(D.graph, session) : null;
@@ -1059,7 +1162,11 @@
       }));
   }
 
-  function stat(cls, n, label) { return h('div', { class: 'stat ' + cls }, h('b', { text: String(n) }), label); }
+  function stat(cls, n, label) {
+    return h('div', { class: 'pt-kpi stat ' + cls },
+      h('div', { class: 'pt-kpi-label' }, h('i', { class: 'pt-dot' }), label),
+      h('div', { class: 'pt-kpi-value' }, String(n)));
+  }
 
   function standardsCard(sum) {
     const ids = new Set(session.mode === 'screen' ? [] : session.targets);

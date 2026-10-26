@@ -28,16 +28,19 @@
 })();
 </script>
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/poptrade.css">
 <link rel="stylesheet" href="assets/cloud-sync.css">
+<link rel="stylesheet" href="assets/pwa.css">
+<link rel="stylesheet" href="assets/home-dash.css">
+<link rel="stylesheet" href="assets/shell.css">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-<meta name="theme-color" content="#0f6e62">
+<meta name="theme-color" content="#003DF7">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="知识图谱">
-<link rel="stylesheet" href="assets/pwa.css">
 </head>
-<body class="page-home">
+<body class="page-home has-rail">
 <a class="top-banner" href="https://test.pansgo.com/?from=math-top" target="_blank" rel="noopener">🧠 儿童智商测试</a>
 <header class="site-header">
   <a class="brand" href="./">
@@ -48,14 +51,8 @@
     </span>
   </a>
   <nav class="site-nav" aria-label="主导航">
-    <div class="subject-switch" role="group" aria-label="学科">
-      <a class="nav-link subject-link on" data-subject="math" href="./">数学</a>
-      <a class="nav-link subject-link" data-subject="chinese" href="./?subject=chinese">语文</a>
-      <a class="nav-link subject-link" data-subject="english" href="./?subject=english">英语</a>
-      <a class="nav-link subject-link" data-subject="physics" href="./?subject=physics">物理</a>
-    </div>
     <div class="page-links">
-      <a class="nav-link active" href="./" aria-current="page">首页</a>
+      <a class="nav-link active" href="./" aria-current="page">概览</a>
       <a class="nav-link" href="explore/">知识图谱</a>
       <a class="nav-link" href="diagnose/">诊断</a>
       <a class="nav-link" href="children/">档案</a>
@@ -64,56 +61,161 @@
         <svg class="resource-search-ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M11.5 10.4a5.5 5.5 0 1 0-1.1 1.1l3 3a.75.75 0 0 0 1.06-1.06zM7 11.5A4.5 4.5 0 1 1 7 2.5a4.5 4.5 0 0 1 0 9z"/></svg>资源搜索
       </a>
     </div>
+    <div class="subject-switch" role="group" aria-label="学科">
+      <a class="nav-link subject-link on" data-subject="math" href="./">数学</a>
+      <a class="nav-link subject-link" data-subject="chinese" href="./?subject=chinese">语文</a>
+      <a class="nav-link subject-link" data-subject="english" href="./?subject=english">英语</a>
+      <a class="nav-link subject-link" data-subject="physics" href="./?subject=physics">物理</a>
+    </div>
   </nav>
 </header>
+
 <main class="home">
-  <section class="hero">
-    <p class="eyebrow">数学：小学到高中 · 语文：小学一至六年级 · 英语：三年级到高中 · 物理：初中到高中</p>
-    <h1>先找到真正没学会的那一步</h1>
-    <p class="lede">沿着先修关系自适应出题。数学从小学追到高中，语文覆盖统编版小学一至六年级，英语覆盖三年级到高中，物理覆盖初中八、九年级和高中必修、选择性必修。从你选的知识点往回追，定位薄弱根因，并给出一条按学习顺序排起的路径。</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary btn-lg" href="diagnose/">开始诊断</a>
-      <a class="btn btn-lg" href="explore/">浏览知识图谱</a>
+  <div class="shell-head">
+    <div class="shell-head-main">
+      <p class="eyebrow">数学 · 小学到高中</p>
+      <h1>先找到真正没学会的那一步</h1>
+      <p class="shell-sub">沿着先修关系出题：答错就往上一个环节追，直到找到那个卡住的地方，再按年级排出补学顺序。</p>
     </div>
-    <p class="quiet-link"><a href="diagnose/?target=cnm_221&amp;demo=1">先看一遍演示：配方法</a></p>
-  </section>
-
-  <h2 class="section-title">三步</h2>
-  <ol class="steps">
-    <li>
-      <span class="step-no">1</span>
-      <h3>选知识点</h3>
-      <p>数学从一年级到高中必修和选择性必修，语文从一年级到六年级，英语从三年级到高中，物理从八年级上册到高中选择性必修第三册。搜索或按册、章找到想检查的内容。</p>
-    </li>
-    <li>
-      <span class="step-no">2</span>
-      <h3>自适应答题</h3>
-      <p>先问目标本身。答错再出一道同级或更容易的题，仍然错才沿着先修往回追。</p>
-    </li>
-    <li>
-      <span class="step-no">3</span>
-      <h3>找到根因和学习路径</h3>
-      <p>标出薄弱根因和不稳的点，并按年级从低到高排出建议补学的顺序。</p>
-    </li>
-  </ol>
-
-  <h2 class="section-title">图谱里有什么</h2>
-  <div class="stat-grid" id="stats">
-    <div class="stat-card"><div class="stat-num" id="n-topics">…</div><div class="stat-label">知识点</div></div>
-    <div class="stat-card"><div class="stat-num" id="n-edges">…</div><div class="stat-label">先修边</div></div>
-    <div class="stat-card"><div class="stat-num" id="n-questions">…</div><div class="stat-label">题目</div></div>
-    <div class="stat-card"><div class="stat-num" id="n-standards">…</div><div class="stat-label">课标条目</div></div>
+    <div class="shell-head-actions">
+      <a class="btn" href="explore/" data-cta="explore">浏览知识图谱</a>
+      <a class="btn btn-primary" href="diagnose/" data-cta="diagnose">开始诊断</a>
+    </div>
   </div>
-  <p class="stat-note">以上数字在打开页面时从当前学科的知识点、先修、题库和课标统计。默认是数学。</p>
+
+  <div class="pt-kpis" id="stats">
+    <div class="pt-kpi is-blue">
+      <div class="pt-kpi-label"><i class="pt-dot"></i>知识点</div>
+      <div class="pt-kpi-value" id="n-topics">…</div>
+      <div class="pt-kpi-meta">当前学科可诊断</div>
+    </div>
+    <div class="pt-kpi is-blue">
+      <div class="pt-kpi-label"><i class="pt-dot"></i>先修关系</div>
+      <div class="pt-kpi-value" id="n-edges">…</div>
+      <div class="pt-kpi-meta">知识点之间的依赖边</div>
+    </div>
+    <div class="pt-kpi is-green">
+      <div class="pt-kpi-label"><i class="pt-dot"></i>题库</div>
+      <div class="pt-kpi-value" id="n-questions">…</div>
+      <div class="pt-kpi-meta">用于自适应出题</div>
+    </div>
+    <div class="pt-kpi is-amber">
+      <div class="pt-kpi-label"><i class="pt-dot"></i>课标条目</div>
+      <div class="pt-kpi-value" id="n-standards">…</div>
+      <div class="pt-kpi-meta">对应课程标准</div>
+    </div>
+  </div>
   <div id="load-error" class="load-error" hidden></div>
 
-  <h2 class="section-title">按年级进入</h2>
-  <div class="grade-grid" id="grades" aria-busy="true"></div>
-  <a class="iq-card" href="https://test.pansgo.com/?from=math-home" target="_blank" rel="noopener">
-    <strong>🧠 儿童智商测试</strong>
-    <span class="iq-sub">找规律 · 补图案 · 空间想象</span>
-    <span class="iq-note">趣味测评，与数学诊断无关</span>
-  </a>
+  <div class="home-split">
+    <div class="home-main">
+
+      <section class="pt-panel" aria-labelledby="launch-title">
+        <div class="pt-panel-head">
+          <h2 id="launch-title">
+            <span class="pt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z"/></svg></span>
+            从哪儿开始
+          </h2>
+        </div>
+        <div class="pt-panel-body launch-list">
+          <a class="launch-row" href="diagnose/" data-cta="diagnose">
+            <span class="launch-ico is-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="3.1"/><path d="M12 1.6v3.8M12 18.6v3.8M1.6 12h3.8M18.6 12h3.8"/></svg></span>
+            <span class="launch-copy">
+              <strong>单点诊断</strong>
+              <small>选一个想检查的知识点，答错就沿先修往回追，定位卡住的那一步。</small>
+            </span>
+            <span class="launch-go" aria-hidden="true">→</span>
+          </a>
+          <a class="launch-row" href="diagnose/?mode=grade" data-cta="grade">
+            <span class="launch-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.4" width="7.4" height="7.4" rx="1.6"/><rect x="13.6" y="3.4" width="7.4" height="7.4" rx="1.6"/><rect x="3" y="13.6" width="7.4" height="7.4" rx="1.6"/><rect x="13.6" y="13.6" width="7.4" height="7.4" rx="1.6"/></svg></span>
+            <span class="launch-copy">
+              <strong>整年级筛查</strong>
+              <small>在一个年级或一册里抽查，最后按章汇总出哪几章薄弱。适合期初摸底。</small>
+            </span>
+            <span class="launch-go" aria-hidden="true">→</span>
+          </a>
+          <a class="launch-row" href="diagnose/?target=cnm_221&amp;demo=1" data-cta="demo">
+            <span class="launch-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10.2 8.6 16 12l-5.8 3.4V8.6Z" fill="currentColor" stroke="none"/></svg></span>
+            <span class="launch-copy">
+              <strong>先看一遍演示</strong>
+              <small>拿「配方法」走完整个流程，看看诊断结果长什么样。</small>
+            </span>
+            <span class="launch-go" aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="pt-panel" aria-labelledby="grade-title">
+        <div class="pt-panel-head">
+          <h2 id="grade-title">
+            <span class="pt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.2h7v14H4zM13 5.2h7v14h-7z"/><path d="M4 9.4h7M13 9.4h7"/></svg></span>
+            按年级进入
+          </h2>
+          <span class="pt-pill is-gray" id="grade-hint">图谱</span>
+        </div>
+        <div class="pt-panel-body">
+          <div class="grade-grid" id="grades" aria-busy="true"></div>
+        </div>
+        <div class="pt-panel-foot">点年级直接打开该年级的知识点目录，再挑一个具体内容开始诊断。</div>
+      </section>
+
+      <details class="pt-panel home-steps">
+        <summary>诊断是怎么走的</summary>
+        <div class="pt-panel-body">
+          <ol class="steps">
+            <li>
+              <span class="step-no">1</span>
+              <h3>选知识点</h3>
+              <p>数学从一年级到高中必修和选择性必修，语文从一年级到六年级，英语从三年级到高中，物理从八年级上册到高中选择性必修第三册。搜索或按册、章找到想检查的内容。</p>
+            </li>
+            <li>
+              <span class="step-no">2</span>
+              <h3>自适应答题</h3>
+              <p>先问目标本身。答错再出一道同级或更容易的题，仍然错才沿着先修往回追。</p>
+            </li>
+            <li>
+              <span class="step-no">3</span>
+              <h3>找到根因和学习路径</h3>
+              <p>标出薄弱根因和不稳的点，并按年级从低到高排出建议补学的顺序。</p>
+            </li>
+          </ol>
+        </div>
+      </details>
+    </div>
+
+    <aside class="home-side">
+      <section class="pt-panel" id="kid-panel" aria-labelledby="kid-title">
+        <div class="pt-panel-head">
+          <h2 id="kid-title">
+            <span class="pt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4.2 4.2 0 0 0-4.2-4.2H8.2A4.2 4.2 0 0 0 4 16.8V21"/><circle cx="10" cy="7.4" r="3.6"/><path d="M18.4 14.6a3.7 3.7 0 0 0 0-6.8"/></svg></span>
+            当前孩子
+          </h2>
+          <a class="pt-pill is-gray" href="children/" style="text-decoration:none">档案</a>
+        </div>
+        <div class="pt-panel-body" id="kid-body">
+          <p class="muted small" style="margin:0">正在读取本机档案…</p>
+        </div>
+      </section>
+
+      <section class="pt-panel" id="recent-panel" aria-labelledby="recent-title">
+        <div class="pt-panel-head">
+          <h2 id="recent-title">
+            <span class="pt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></svg></span>
+            最近诊断
+          </h2>
+        </div>
+        <div class="pt-panel-body" id="recent-body">
+          <p class="muted small" style="margin:0">还没有诊断记录。</p>
+        </div>
+      </section>
+
+      <a class="iq-card" href="https://test.pansgo.com/?from=math-home" target="_blank" rel="noopener">
+        <strong>🧠 儿童智商测试</strong>
+        <span class="iq-sub">找规律 · 补图案 · 空间想象</span>
+        <span class="iq-note">趣味测评，与数学诊断无关</span>
+      </a>
+    </aside>
+  </div>
 </main>
 <footer class="site-footer">
   <p><a href="https://github.com/xiaoyang111222/cn-math-taxonomy/issues/new/choose">提交 Issue</a></p>
@@ -122,9 +224,11 @@
 <script src="assets/stats-config.js"></script>
 <script src="assets/stats.js"></script>
 <script src="assets/children.js"></script>
+<script src="assets/home-dash.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js" onerror="window.__CNM_SDK_FAILED=1"></script>
 <script defer src="assets/cloud-config.js"></script>
 <script defer src="assets/cloud-sync.js"></script>
 <script src="assets/pwa.js"></script>
+<script src="assets/shell.js"></script>
 </body>
 </html>

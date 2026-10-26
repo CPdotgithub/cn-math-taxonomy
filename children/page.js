@@ -68,9 +68,12 @@
   function stats(c) {
     var recs = CC.recordsOf(c.id);
     var by = CC.latestStatus(c.id);
-    var weak = 0;
-    Object.keys(by).forEach(function (id) { if (by[id].status === 'weak') weak++; });
-    return { runs: recs.length, weak: weak };
+    var m = 0, s = 0, w = 0;
+    Object.keys(by).forEach(function (id) {
+      var st = by[id].status;
+      if (st === 'mastered') m++; else if (st === 'shaky') s++; else if (st === 'weak') w++;
+    });
+    return { runs: recs.length, weak: w, m: m, s: s, w: w, tested: m + s + w };
   }
 
   /* 掌握率 = 已掌握 / 已测（掌握 + 不稳 + 薄弱），没有测试数据返回 null */
@@ -172,8 +175,20 @@
     meta.appendChild(el('span', 'pt-pill is-gray', c.textbook));
     box.appendChild(meta);
 
+    /* 掌握分布：掌握 / 不稳 / 薄弱，比一行文字更快看出结构 */
+    if (st.tested) {
+      var dist = el('div', 'dist');
+      [['m', st.m], ['s', st.s], ['w', st.w]].forEach(function (pair) {
+        if (!pair[1]) return;
+        var seg = el('i', pair[0]);
+        seg.style.width = (pair[1] * 100 / st.tested) + '%';
+        dist.appendChild(seg);
+      });
+      box.appendChild(dist);
+    }
+
     box.appendChild(el('p', 'kid-stat', st.runs
-      ? '已诊断 ' + st.runs + ' 次 · ' + st.weak + ' 个薄弱点'
+      ? '已诊断 ' + st.runs + ' 次 · 掌握 ' + st.m + ' · 不稳 ' + st.s + ' · 薄弱 ' + st.w
       : '还没有诊断记录'));
     main.appendChild(box);
     art.appendChild(main);

@@ -69,34 +69,23 @@ button.choice.picked { border-color: var(--brand); background: var(--brand-soft)
   .tag.diff-advanced { background: #581c87; color: #f5d0fe; }
 }
 
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(94px, 1fr)); gap: 8px; margin: 12px 0; }
-.stat {
-  position: relative;
-  min-width: 0;
-  padding: 11px 12px 12px;
-  border-radius: var(--radius);
-  border: 1px solid var(--line);
-  background: var(--bg-elev);
-  text-align: left;
-  overflow: hidden;
-  font-size: 0.79rem;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 0.01em;
+.stats {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
 }
-.stat::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 0;
-  width: 100%; height: 2px;
-  background: var(--brand);
+@media (max-width: 760px) {
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-.stat b { display: block; font-size: 1.5rem; line-height: 1.15; letter-spacing: -0.03em; color: var(--text); font-weight: 650; margin-bottom: 2px; }
-.stat.ok::before { background: var(--ok); }
-.stat.bad::before { background: var(--bad); }
-.stat.shaky::before { background: var(--diagram-shaky); }
-.stat.unk::before { background: #C7D0DF; }
-.stat.ask::before { background: var(--brand); }
+.stat { padding: 12px 14px 13px; }
+.stat .pt-kpi-value { font-size: 1.62rem; }
+.stat .pt-dot { background: var(--pt-blue); }
+.stat.ok .pt-dot { background: var(--ok); }
+.stat.bad .pt-dot { background: var(--bad); }
+.stat.shaky .pt-dot { background: var(--diagram-shaky); }
+.stat.unk .pt-dot { background: #C7D0DF; }
+.stat.ask .pt-dot { background: var(--brand); }
 details.topic { border-bottom: 1px solid var(--line); padding: 4px 0; }
 details.topic > summary { cursor: pointer; padding: 8px 0; min-height: 44px; overflow-wrap: anywhere; }
 details.topic > .body { padding: 4px 0 10px 8px; }
@@ -233,4 +222,407 @@ table.log select { min-height: 44px; }
   #path-cy { height: 520px; border: none; background: #fff; }
   a { color: inherit; text-decoration: none; }
   select { border: none; appearance: none; -webkit-appearance: none; }
+}
+
+/* ============================================================================
+   诊断开始页（PopTrade 工作区版式）
+   ----------------------------------------------------------------------------
+   原来「选择诊断目标」和「按年级整体诊断」是两张并列大卡，用户要先读两段
+   说明才知道区别。现在改为顶部模式切换 + 左选择器 / 右设定侧栏：
+   一次只面对一种诊断方式，主操作固定在侧栏里。
+   ============================================================================ */
+
+body.has-rail main#root { max-width: 1180px; }
+
+/* ---------------------------------------------------------------------------
+   1. 模式切换
+   --------------------------------------------------------------------------- */
+.dx-modes-wrap { margin: 0 0 14px; }
+.dx-modes {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  background: #EEF2F9;
+  border-radius: 10px;
+  border: 1px solid var(--pt-line-soft);
+}
+.dx-modes > button,
+.dx-modes > .stage-tab {
+  border: 0;
+  background: transparent;
+  border-radius: 8px;
+  min-height: 34px;
+  padding: 0 16px;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+  box-shadow: none;
+  white-space: nowrap;
+}
+.dx-modes > button:hover { background: rgba(255, 255, 255, .72); color: var(--pt-ink); }
+.dx-modes > button.on {
+  background: #fff;
+  color: var(--pt-blue);
+  font-weight: 650;
+  box-shadow: 0 1px 3px rgba(10, 12, 16, .1);
+}
+
+/* ---------------------------------------------------------------------------
+   2. 双栏
+   --------------------------------------------------------------------------- */
+.dx-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(272px, .82fr);
+  gap: 16px;
+  align-items: start;
+}
+.dx-main,
+.dx-side { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.dx-main > .pt-panel + .pt-panel,
+.dx-side > .pt-panel + .pt-panel { margin-top: 0; }
+
+@media (max-width: 980px) {
+  .dx-cols { grid-template-columns: minmax(0, 1fr); }
+  .dx-side { order: -1; }
+}
+@media (min-width: 981px) {
+  .dx-side { position: sticky; top: 18px; }
+}
+
+/* ---------------------------------------------------------------------------
+   3. 学段 / 范围标签：统一成 pt-seg 的槽式分段控件
+   --------------------------------------------------------------------------- */
+.dx-start .stage-tabs {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 3px;
+  background: #F2F5FA;
+  border-radius: 9px;
+  margin: 0 0 12px;
+  max-width: 100%;
+}
+.dx-start .stage-tab {
+  border: 0;
+  background: transparent;
+  border-radius: 7px;
+  min-height: 30px;
+  padding: 4px 11px;
+  font-size: .83rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+  box-shadow: none;
+  white-space: nowrap;
+}
+.dx-start .stage-tab:hover { background: rgba(255, 255, 255, .72); color: var(--pt-ink); }
+.dx-start .stage-tab.on {
+  background: #fff;
+  color: var(--pt-ink);
+  font-weight: 650;
+  box-shadow: 0 1px 2px rgba(10, 12, 16, .1);
+}
+
+.dx-tabblock { margin-bottom: 12px; }
+.dx-tabblock:last-child { margin-bottom: 0; }
+.dx-tablabel {
+  display: block;
+  margin-bottom: 6px;
+  font-size: .72rem;
+  font-weight: 650;
+  letter-spacing: .05em;
+  color: var(--pt-ink-3);
+  text-transform: uppercase;
+}
+.dx-lead {
+  margin: 0 0 14px;
+  font-size: .87rem;
+  line-height: 1.62;
+  color: var(--pt-ink-2);
+  max-width: 64ch;
+}
+
+/* ---------------------------------------------------------------------------
+   4. 搜索框与匹配计数
+   --------------------------------------------------------------------------- */
+.dx-start .search-lg {
+  width: 100%;
+  margin: 0 0 10px;
+  font-size: .95rem;
+  min-height: 42px;
+}
+.dx-panel-pick .pt-panel-head { padding-bottom: 10px; }
+#match-count { font-variant-numeric: tabular-nums; }
+#match-count:empty { display: none; }
+
+/* ---------------------------------------------------------------------------
+   5. 侧栏：设定卡
+   --------------------------------------------------------------------------- */
+.dx-side-card .pt-panel-body { padding-top: 12px; }
+.dx-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+.dx-field-label {
+  font-size: .82rem;
+  font-weight: 650;
+  color: var(--pt-ink);
+}
+.dx-field-hint {
+  font-size: .74rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.dx-field input {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.dx-note {
+  margin: 10px 0 0;
+  font-size: .78rem;
+  line-height: 1.62;
+  color: var(--pt-ink-3);
+}
+.dx-scope {
+  margin: 0 0 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dx-scope strong {
+  font-size: 1.06rem;
+  font-weight: 650;
+  letter-spacing: -.015em;
+  color: var(--pt-ink);
+}
+.dx-scope span {
+  font-size: .78rem;
+  color: var(--pt-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.dx-start-btn {
+  width: 100%;
+  margin-top: 12px;
+  min-height: 42px;
+  font-size: .92rem;
+}
+.dx-start-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 9px 11px;
+  border-radius: 9px;
+  background: var(--pt-blue-50);
+  color: var(--pt-blue);
+  font-size: .78rem;
+  line-height: 1.55;
+}
+.dx-start-hint svg { flex: none; margin-top: 1px; }
+
+/* ---------------------------------------------------------------------------
+   6. 孩子栏：从大卡片压成一条信息行
+   --------------------------------------------------------------------------- */
+.dx-start .child-bar.card,
+.dx-start .child-bar {
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--pt-line);
+  background: var(--pt-surface-2);
+  font-size: .84rem;
+}
+.dx-start .child-bar .row { gap: 8px; }
+.dx-start .child-bar label {
+  font-weight: 600;
+  font-size: .78rem;
+  color: var(--pt-ink-2);
+  letter-spacing: .01em;
+}
+.dx-start .child-bar select { min-height: 36px; font-size: .86rem; }
+.dx-start .child-bar .btn { min-height: 36px; padding: 5px 12px; font-size: .84rem; }
+.dx-start .child-bar p { margin: 6px 0 0 !important; font-size: .78rem; }
+.dx-start .child-bar b { font-weight: 650; }
+
+/* ---------------------------------------------------------------------------
+   7. 册章浏览：轻量化
+   --------------------------------------------------------------------------- */
+.dx-panel-pick .chapter-browser { margin-top: 2px; }
+.dx-panel-pick .chapter-browser > summary {
+  min-height: 36px;
+  font-weight: 600;
+  font-size: .84rem;
+  color: var(--pt-ink-2);
+  padding: 0 2px;
+  border-top: 1px solid var(--pt-line-soft);
+  margin-top: 8px;
+}
+.dx-panel-pick .chapter-browser > summary:hover { color: var(--pt-blue); }
+.dx-panel-pick .chapter-browser > p { margin: 6px 0 8px; font-size: .78rem; }
+
+.dx-panel-pick .vol {
+  border: 1px solid var(--pt-line-soft);
+  border-radius: 9px;
+  margin: 6px 0;
+  background: #fff;
+  overflow: hidden;
+}
+.dx-panel-pick .vol > summary {
+  padding: 8px 11px;
+  font-weight: 600;
+  font-size: .84rem;
+  background: var(--pt-surface-2);
+  border-radius: 0;
+  color: var(--pt-ink);
+}
+.dx-panel-pick .vol > summary:hover { color: var(--pt-blue); }
+.dx-panel-pick .chap { margin: 0 10px 6px; }
+.dx-panel-pick .chap-head {
+  gap: 8px;
+  padding: 8px 0 6px;
+  font-weight: 650;
+  font-size: .84rem;
+  border-bottom: 1px solid var(--pt-line-soft);
+}
+.dx-panel-pick .chap-head .btn,
+.dx-panel-pick .chap-head button {
+  min-height: 28px;
+  padding: 3px 9px;
+  font-size: .76rem;
+  font-weight: 600;
+}
+.dx-panel-pick .topic-row {
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--pt-line-soft);
+  font-size: .86rem;
+  border-radius: 6px;
+}
+.dx-panel-pick .topic-row:last-child { border-bottom: 0; }
+.dx-panel-pick .topic-row:hover { background: var(--pt-blue-50); }
+.dx-panel-pick .topic-row .nm { font-weight: 600; }
+.dx-panel-pick .topic-row .sec { font-size: .76rem; color: var(--pt-ink-3); }
+.dx-panel-pick .topic-row > button {
+  min-height: 28px;
+  padding: 3px 10px;
+  font-size: .76rem;
+  font-weight: 600;
+  border-radius: 7px;
+}
+
+@media (min-width: 981px) {
+  .dx-panel-pick #target-list { max-height: 560px; overflow-y: auto; scrollbar-width: thin; }
+}
+@media (max-width: 980px) {
+  .dx-panel-pick #target-list { max-height: 54vh; overflow-y: auto; scrollbar-width: thin; }
+}
+
+/* ---------------------------------------------------------------------------
+   8. 开始页里的存档横幅
+   --------------------------------------------------------------------------- */
+.dx-start .banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #D6E2FB;
+  background: var(--pt-blue-50);
+  font-size: .84rem;
+  line-height: 1.5;
+}
+.dx-start .banner b { font-weight: 650; }
+.dx-start .banner button { min-height: 32px; padding: 4px 12px; font-size: .82rem; }
+
+.dx-child-actions { margin-top: 9px; }
+.dx-child-actions .btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 34px;
+}
+/* 侧栏里的孩子栏纵向排，避免按钮换行 */
+.dx-start .child-bar .row:first-child { flex-wrap: wrap; }
+.dx-start .child-bar select { flex: 1 1 120px; min-width: 0; }
+
+/* 「以整章为目标」出现频率高，降级为次要按钮，避免一片蓝色 */
+.dx-panel-pick .chap-head button.primary {
+  background: #fff;
+  border: 1px solid var(--pt-line);
+  color: var(--pt-ink-2);
+  box-shadow: none;
+  font-weight: 600;
+}
+.dx-panel-pick .chap-head button.primary:hover {
+  background: var(--pt-blue-50);
+  border-color: #CFDCF5;
+  color: var(--pt-blue);
+}
+
+/* 侧栏「历史与薄弱点」：轻量按钮，不要看起来像输入框 */
+.dx-child-actions .btn {
+  width: 100%;
+  justify-content: center;
+  min-height: 34px;
+  background: var(--pt-blue-50);
+  border-color: transparent;
+  color: var(--pt-blue);
+  font-weight: 650;
+  font-size: .82rem;
+  box-shadow: none;
+}
+.dx-child-actions .btn:hover {
+  background: var(--pt-blue-100);
+  border-color: transparent;
+  color: var(--pt-blue-600);
+}
+
+/* 结果图例 */
+.dx-legend-card .pt-panel-body { padding-top: 10px; }
+.dx-legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.dx-legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .8rem;
+  color: var(--pt-ink-2);
+  line-height: 1.4;
+}
+.dx-legend .pt-pill { flex: none; min-width: 40px; justify-content: center; }
+
+/* 册章列表：滚动条常显，提示还能往下翻 */
+.dx-panel-pick #target-list::-webkit-scrollbar { width: 9px; }
+.dx-panel-pick #target-list::-webkit-scrollbar-track { background: transparent; }
+.dx-panel-pick #target-list::-webkit-scrollbar-thumb {
+  background: #D5DEEC;
+  border-radius: 5px;
+  border: 2px solid #fff;
+}
+.dx-panel-pick #target-list::-webkit-scrollbar-thumb:hover { background: #BCCAE0; }
+
+/* 答题页和结果页是单栏长文，控制在易读行宽内；开始页保持双栏宽度 */
+main#root > .dx-stage:not(.dx-start) {
+  max-width: 940px;
+  margin-inline: auto;
+}
+
+/* 移动端图例压成两行 */
+@media (max-width: 980px) {
+  .dx-legend { flex-direction: row; flex-wrap: wrap; gap: 6px 14px; }
+  .dx-legend li { font-size: .76rem; }
+  .dx-legend .pt-pill { min-width: 0; height: 20px; padding: 0 7px; font-size: .72rem; }
 }
