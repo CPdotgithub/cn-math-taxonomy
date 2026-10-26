@@ -46,6 +46,8 @@
     err: '',
     set: null,
     answers: {},
+    photos: {},
+    photoNote: '',
     grade2: null,
     gradeErr: '',
     showPicker: false,
@@ -53,6 +55,9 @@
     webOn: false,
     links: '',
     cfgOpen: false,
+    chanOpen: false,
+    chanNote: '',
+    chanTone: '',
     lastGenAt: 0,
     advanced: false
   };
@@ -118,6 +123,9 @@
     var p = readLS(LS_PREFS, {}) || {};
     ST.count = p.count === 2 ? 2 : 1;
     ST.model = p.model || '';
+    if (p.subject === 'chinese' || p.subject === 'english' || p.subject === 'physics' || p.subject === 'math') {
+      ST.subject = p.subject;
+    }
     ST.webOn = !!p.webOn;
     ST.links = p.links || '';
     ST.advanced = !!p.advanced;
@@ -125,7 +133,7 @@
   function savePrefs() {
     writeLS(LS_PREFS, {
       count: ST.count, model: ST.model, webOn: ST.webOn,
-      links: ST.links, advanced: ST.advanced
+      links: ST.links, advanced: ST.advanced, subject: ST.subject
     });
   }
 
@@ -229,6 +237,7 @@
       meta.appendChild(pill('未建档', 'amber'));
       meta.appendChild(pill(PR.SUBJECT_NAME[ST.subject] || '数学', 'gray'));
     }
+    if (LLM.isWeb()) meta.appendChild(pill('网页版', 'gray'));
     headEl.appendChild(h('div', { class: 'rv-head' }, [
       h('div', { class: 'rv-head-copy' }, [
         h('h1', { text: '复习与考察' }),
@@ -253,6 +262,8 @@
     var p = h('div', { class: 'pt-panel rv-panel' });
     p.appendChild(h('div', { class: 'pt-panel-head' }, [h('h2', { text: '考察对象' })]));
     var body = h('div', { class: 'pt-panel-body' });
+
+    body.appendChild(subjectField());
 
     if (ST.child) {
       body.appendChild(h('div', { class: 'rv-child' }, [
@@ -279,6 +290,48 @@
     }
     p.appendChild(body);
     return p;
+  }
+
+  /* 学科是这一页的总开关：换学科，选中的知识点、卷子、答案都得跟着换 */
+  function subjectField() {
+    var wrap = h('div', { class: 'rv-field rv-field-col rv-subjfield' });
+    wrap.appendChild(h('span', { class: 'rv-label', text: '学科' }));
+    var row = h('div', { class: 'rv-subj', role: 'group', 'aria-label': '学科' });
+    ['math', 'chinese', 'english', 'physics'].forEach(function (k) {
+      row.appendChild(h('button', {
+        type: 'button',
+        class: 'rv-subj-item' + (ST.subject === k ? ' is-on' : ''),
+        'aria-pressed': ST.subject === k ? 'true' : 'false',
+        text: PR.SUBJECT_NAME[k] || k,
+        onclick: function () { switchSubject(k); }
+      }));
+    });
+    wrap.appendChild(row);
+    return wrap;
+  }
+
+  function switchSubject(next) {
+    if (!next || next === ST.subject) return;
+    ST.subject = next;
+    ST.picked = [];
+    ST.q = '';
+    ST.set = null;
+    ST.answers = {};
+    ST.photos = {};
+    ST.grade2 = null;
+    ST.gradeErr = '';
+    ST.photoNote = '';
+    ST.err = '';
+    savePrefs();
+    /* 地址栏跟着变，刷新或分享出去还是这个学科 */
+    try {
+      var u = new URL(location.href);
+      if (next === 'math') u.searchParams.delete('subject');
+      else u.searchParams.set('subject', next);
+      history.replaceState(null, '', u.pathname + u.search);
+    } catch (e) {}
+    autoPickIfEmpty();
+    render();
   }
 
   function topicPanel() {
@@ -440,16 +493,201 @@
     var det = h('details', { class: 'rv-adv' });
     if (ST.advanced) det.setAttribute('open', '');
     det.addEventListener('toggle', function () { ST.advanced = det.open; savePrefs(); });
-    det.appendChild(h('summary', null, [document.createTextNode('模型与联网素材')]));
+    det.appendChild(h('summary', null, [document.createTextNode(
+      LLM.isWeb() ? '模型与联网素材 · 网页版' : '模型与联网素材'
+    )]));
 
     var inner = h('div', { class: 'rv-adv-body' });
-    inner.appendChild(modelField());
+    inner.appendChild(channelField());
+    if (LLM.isWeb()) {
+      inner.appendChild(webCfgField());
+      inner.appendChild(webModelField());
+    } else {
+      inner.appendChild(modelField());
+    }
     inner.appendChild(webField());
     det.appendChild(inner);
     body.appendChild(det);
 
     p.appendChild(body);
     return p;
+  }
+
+  /* 通道：云端（免密钥，只能发文字）/ 网页版（自己的账号，能传照片） */
+  function channelField() {
+    var wrap = h('div', { class: 'rv-field rv-field-col' });
+    wrap.appendChild(h('span', { class: 'rv-label', text: '出题通道' }));
+    var seg = h('div', { class: 'pt-seg rv-seg rv-chan', role: 'group', 'aria-label': '出题通道' });
+    [['cloud', '云端'], ['web', '网页版']].forEach(function (k) {
+      var on = LLM.isWeb() === (k[0] === 'web');
+      seg.appendChild(h('button', {
+        type: 'button', class: on ? 'on' : '', text: k[1],
+        'aria-pressed': on ? 'true' : 'false',
+        onclick: function () { switchChannel(k[0]); }
+      }));
+    });
+    wrap.appendChild(seg);
+    wrap.appendChild(h('p', {
+      class: 'rv-hint',
+      text: LLM.isWeb()
+        ? '用你自己的 DeepSeek 网页账号，手写照片也能一起发过去。'
+        : '云端通道免密钥，稳定；只能发文字，不能传照片。'
+    }));
+    return wrap;
+  }
+
+  function switchChannel(kind) {
+    if (LLM.isWeb() === (kind === 'web')) return;
+    LLM.setWeb({ kind: kind });
+    ST.chanNote = '';
+    ST.chanTone = '';
+    if (kind === 'web') ST.advanced = true;
+    savePrefs();
+    ST.busy = 'models';
+    ST.models = [];
+    render();
+    LLM.listModels().then(function (list) {
+      ST.models = list;
+      ST.modelsErr = '';
+      if (!list.some(function (m) { return m.id === ST.model; })) {
+        ST.model = LLM.pickDefault(list);
+      }
+      if (LLM.isWeb() && ST.model) LLM.setWeb({ model: ST.model });
+      savePrefs();
+    }).catch(function (e) {
+      ST.modelsErr = LLM.describeError(e);
+    }).then(function () {
+      ST.busy = '';
+      render();
+    });
+  }
+
+  function webModelField() {
+    var wrap = h('div', { class: 'rv-field rv-field-col' });
+    wrap.appendChild(h('span', { class: 'rv-label', text: '出题模型' }));
+    var sel = h('select', { class: 'rv-select', 'aria-label': '出题模型' });
+    LLM.WEB_MODELS.forEach(function (m) {
+      sel.appendChild(h('option', {
+        value: m.id, text: m.name,
+        selected: m.id === ST.model ? true : null
+      }));
+    });
+    sel.addEventListener('change', function () {
+      ST.model = sel.value;
+      LLM.setWeb({ model: ST.model });
+      savePrefs();
+      renderSide();
+    });
+    wrap.appendChild(sel);
+    var cur = LLM.WEB_MODELS.filter(function (m) { return m.id === ST.model; })[0];
+    if (cur && cur.descriptionZh) wrap.appendChild(h('p', { class: 'rv-hint', text: cur.descriptionZh }));
+    return wrap;
+  }
+
+  /* 网页版要连本机中转；凭据是家长自己复制的一条 curl，过期了重新贴 */
+  function webCfgField() {
+    var cfg = LLM.web();
+    var box = h('div', { class: 'rv-webcfg' });
+
+    var relay = h('input', {
+      type: 'text', class: 'rv-input rv-input-sm', value: cfg.relay || '',
+      placeholder: 'http://127.0.0.1:8790', 'aria-label': '本机中转地址'
+    });
+    /* 边输入边存，但不重绘：否则点「测试连接」时输入框失焦重绘，按钮就点不到了 */
+    relay.addEventListener('input', function () {
+      LLM.setWeb({ relay: relay.value.trim() });
+    });
+    relay.addEventListener('change', function () {
+      ST.chanNote = '';
+      ST.chanTone = '';
+    });
+    box.appendChild(h('label', { class: 'rv-field rv-field-col rv-field-tight' }, [
+      h('span', { class: 'rv-label', text: '本机中转地址' }), relay
+    ]));
+
+    var ta = h('textarea', {
+      class: 'rv-input rv-textarea rv-curl', rows: '3',
+      placeholder: cfg.token
+        ? '已保存凭据。要换就粘贴新的 curl 覆盖'
+        : '在 chat.deepseek.com 的请求上右键 → Copy as cURL，粘到这里',
+      'aria-label': '登录凭据'
+    });
+    box.appendChild(h('label', { class: 'rv-field rv-field-col rv-field-tight' }, [
+      h('span', { class: 'rv-label', text: '登录凭据' }), ta
+    ]));
+
+    var acts = h('div', { class: 'rv-webcfg-acts' });
+    acts.appendChild(h('button', {
+      type: 'button', class: 'rv-btn is-primary rv-btn-sm',
+      text: cfg.token ? '换一条凭据' : '保存凭据',
+      onclick: function () {
+        var raw = String(ta.value || '').trim();
+        if (!raw) {
+          ST.chanNote = '先把 curl 粘进来。';
+          ST.chanTone = 'is-warn';
+          renderSide();
+          return;
+        }
+        var got = LLM.parseCurl(raw);
+        if (!got.token) {
+          ST.chanNote = '没从这段里认出 userToken，重新复制一次完整的 curl。';
+          ST.chanTone = 'is-warn';
+          renderSide();
+          return;
+        }
+        LLM.setWeb({ token: got.token, cookie: got.cookie, ua: got.ua });
+        ST.chanNote = '';
+        ST.chanTone = '';
+        renderSide();
+        testChannel();
+      }
+    }));
+    acts.appendChild(h('button', {
+      type: 'button', class: 'rv-btn rv-btn-sm', text: '测试连接',
+      onclick: testChannel
+    }));
+    box.appendChild(acts);
+
+    var note = h('p', { class: 'rv-hint' + (ST.chanTone ? ' ' + ST.chanTone : '') });
+    note.textContent = ST.chanNote || (cfg.token ? '凭据已存在这台设备上，换设备要重新贴。' : '还没配凭据。');
+    box.appendChild(note);
+
+    if (!cfg.token) {
+      box.appendChild(h('p', {
+        class: 'rv-hint',
+        text: '先在电脑上双击 tools/start-dsweb.command 启动本机中转，再粘一条 curl。凭据只存在本机，不上传。'
+      }));
+    }
+    return box;
+  }
+
+  function testChannel() {
+    ST.chanNote = '正在测试…';
+    ST.chanTone = '';
+    renderSide();
+    LLM.probe().then(function (j) {
+      if (j && j.ok) {
+        ST.chanNote = '连接正常' + (j.name ? ' · ' + j.name : '');
+        ST.chanTone = 'is-ok';
+      } else if (j && (j.code === 'token_invalid' || j.code === 'token_missing')) {
+        ST.chanNote = '凭据无效或已过期，重新在浏览器里复制一条 curl 贴上。';
+        ST.chanTone = 'is-warn';
+      } else if (j && j.code === 'network') {
+        ST.chanNote = '本机服务在，但连不上 chat.deepseek.com。' + (j.message ? '（' + j.message + '）' : '');
+        ST.chanTone = 'is-warn';
+      } else if (j && j.env && (!j.env.node || !j.env.solver || !j.env.wasm)) {
+        ST.chanNote = '本机缺 Node.js 或求解文件，网页版解不了挑战。';
+        ST.chanTone = 'is-warn';
+      } else {
+        ST.chanNote = (j && j.message) || '自检没通过。';
+        ST.chanTone = 'is-warn';
+      }
+    }).catch(function (e) {
+      ST.chanNote = LLM.describeError(e);
+      ST.chanTone = 'is-warn';
+    }).then(function () {
+      renderSide();
+    });
   }
 
   function modelLabel(m) {
@@ -604,6 +842,8 @@
       savedToChild: !!row.savedToChild
     };
     ST.answers = row.answers || {};
+    ST.photos = {};
+    ST.photoNote = '';
     ST.grade2 = row.grade || null;
     ST.err = ''; ST.gradeErr = '';
     if (row.model) ST.model = row.model;
@@ -785,6 +1025,7 @@
     var v = ST.answers[q.id];
     if (q.type === 'choice') return v !== undefined && v !== null && v !== '';
     if (q.type === 'blank') return Array.isArray(v) && v.some(function (x) { return String(x || '').trim(); });
+    if (ST.photos[q.id]) return true;
     return !!(v && String(v).trim());
   }
 
@@ -875,14 +1116,100 @@
     var wrap = h('div', { class: 'rv-work' });
     var ta = h('textarea', {
       class: 'rv-input rv-textarea', rows: '5',
-      placeholder: '写出你的过程和结论',
+      placeholder: '写出你的过程和结论，也可以直接拍一张写在纸上的照片',
       'aria-label': '作答',
       disabled: graded ? true : null
     });
     ta.value = ST.answers[q.id] || '';
     ta.addEventListener('input', function () { ST.answers[q.id] = ta.value; });
     wrap.appendChild(ta);
+    wrap.appendChild(photoRow(q, graded));
     return wrap;
+  }
+
+  /* 手写作业拍照：竖式、画图、几何证明在手机上打字太费劲 */
+  function photoRow(q, graded) {
+    var box = h('div', { class: 'rv-photo' });
+    var pic = ST.photos[q.id];
+
+    if (pic) {
+      var capRow = h('figcaption', { class: 'rv-photo-cap' });
+      capRow.appendChild(h('span', { text: graded ? '判分时看的这张照片' : '这张照片会和文字一起交给模型' }));
+      if (!graded) {
+        capRow.appendChild(h('button', {
+          type: 'button', class: 'rv-photo-x', text: '重拍',
+          'aria-label': '删除这张照片',
+          onclick: function () { delete ST.photos[q.id]; render(); }
+        }));
+      }
+      var fig = h('figure', { class: 'rv-photo-fig' }, [
+        h('img', { src: pic.url, alt: '作答照片' }),
+        capRow
+      ]);
+      box.appendChild(fig);
+      return box;
+    }
+    if (graded) return h('div');
+
+    var input = h('input', {
+      type: 'file', accept: 'image/*', class: 'rv-photo-input', 'aria-label': '上传作答照片'
+    });
+    input.addEventListener('change', function () {
+      var f = input.files && input.files[0];
+      readPhoto(f, function (pic2) {
+        ST.photos[q.id] = pic2;
+        ST.err = '';
+        render();
+      }, function (msg) {
+        ST.err = msg;
+        render();
+      });
+    });
+    box.appendChild(h('label', { class: 'rv-photo-add' }, [
+      h('span', { class: 'rv-photo-ico', html: cameraIco() }),
+      h('span', { text: '拍照当答案' }),
+      input
+    ]));
+    box.appendChild(h('p', { class: 'rv-hint', text: '手机上会直接开相机；写完拍一张，比打字快。' }));
+    return box;
+  }
+
+  /* 照片压到长边 1400，JPEG 0.82：一张作业照约 200–400KB，传得动也看得清 */
+  function readPhoto(file, ok, fail) {
+    if (!file) return;
+    if (!/^image\//.test(String(file.type || ''))) { fail('只支持图片文件。'); return; }
+    if (file.size > 12 * 1024 * 1024) { fail('照片太大了（超过 12MB），重拍一张或先压缩。'); return; }
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function () {
+      try {
+        var max = 1400;
+        var w = img.naturalWidth || img.width;
+        var hh = img.naturalHeight || img.height;
+        var k = Math.min(1, max / Math.max(w, hh));
+        var cw = Math.max(1, Math.round(w * k));
+        var ch = Math.max(1, Math.round(hh * k));
+        var cv = document.createElement('canvas');
+        cv.width = cw;
+        cv.height = ch;
+        var ctx = cv.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.drawImage(img, 0, 0, cw, ch);
+        var data = cv.toDataURL('image/jpeg', 0.82);
+        URL.revokeObjectURL(url);
+        if (!data || data.length < 64) { fail('这张照片读不出来，换一张试试。'); return; }
+        ok({ url: data, name: file.name || 'photo.jpg', w: cw, h: ch });
+      } catch (e) {
+        URL.revokeObjectURL(url);
+        fail('照片处理失败，换一张试试。');
+      }
+    };
+    img.onerror = function () {
+      URL.revokeObjectURL(url);
+      fail('这张照片读不出来，换一张试试。');
+    };
+    img.src = url;
   }
 
   function feedbackBlock(q, g) {
@@ -1044,6 +1371,9 @@
     }
     if (g.partial) {
       body.appendChild(h('p', { class: 'rv-hint is-warn', text: '这是部分结果：' + (ST.gradeErr || '解答题还没批改') + ' 客观题分数已算好，可以再点「提交批改」重试。' }));
+    }
+    if (ST.photoNote) {
+      body.appendChild(h('p', { class: 'rv-hint is-warn', text: ST.photoNote }));
     }
     p.appendChild(body);
     return p;
@@ -1252,7 +1582,9 @@
       return;
     }
     if (!LLM.available()) {
-      ST.err = '云端模型通道没加载成功，检查网络后刷新页面。';
+      ST.err = LLM.isWeb()
+        ? '网页版通道还没配好：填好本机中转地址，再贴一条 chat.deepseek.com 的 curl。'
+        : '云端模型通道没加载成功（网络或授权问题）。也可以展开「模型与联网素材」，把通道切到「网页版」用自己的账号。';
       render();
       return;
     }
@@ -1329,6 +1661,8 @@
         questions: qs
       };
       ST.answers = {};
+      ST.photos = {};
+      ST.photoNote = '';
       ST.grade2 = null;
       ST.lastGenAt = Date.now();
       persistSet();
@@ -1505,6 +1839,7 @@
     var subjective = qs.filter(function (q) { return q.type === 'solution'; });
     ST.busy = 'grade';
     ST.gradeErr = '';
+    ST.photoNote = '';
     ST.busyNote = '正在批改';
     abortCtl = new AbortController();
     render();
@@ -1514,6 +1849,12 @@
       var missCount = qs.filter(function (q) { return items[q.id].verdict !== 'right'; }).length;
       /* 有解答题要判分，或者客观题有错要归因，都值得让模型看一遍；全对且无解答题就不花这次额度 */
       if (subjective.length || missCount) {
+        /* 拍照作答的题：图片按题目顺序排，提示词里写清第几张图对应哪题 */
+        var photoQs = subjective.filter(function (q) { return !!ST.photos[q.id]; });
+        var images = photoQs.map(function (q) { return ST.photos[q.id].url; });
+        var photoNo = {};
+        photoQs.forEach(function (q, i) { photoNo[q.id] = i + 1; });
+
         var objective = qs.filter(function (q) { return q.type !== 'solution'; }).map(function (q) {
           return {
             id: q.id, level: LEVEL_NAME[q.level] || q.level, type: q.type,
@@ -1525,18 +1866,31 @@
           grade: childGrade(),
           subject: ST.subject,
           objective: objective,
+          photoCount: images.length,
           subjective: subjective.map(function (q) {
             return {
               id: q.id, level: LEVEL_FULL[q.level] || q.level, stem: q.stem,
               answerText: q.answerText, rubric: q.rubric, fullScore: pointsOf(q),
-              studentAnswer: ST.answers[q.id] || ''
+              studentAnswer: ST.answers[q.id] || '',
+              photo: photoNo[q.id] || 0
             };
           })
         });
-        var text = await LLM.complete({
-          model: ST.model, system: PR.SYSTEM, user: user,
-          temperature: 0.2, signal: abortCtl.signal
-        });
+        var text;
+        try {
+          text = await LLM.complete({
+            model: ST.model, system: PR.SYSTEM, user: user,
+            images: images, temperature: 0.2, signal: abortCtl.signal
+          });
+        } catch (e) {
+          /* 云端不认图片时，退回文字结果，别让整张卷子判不了 */
+          if (e && e.droppedImages && e.text) {
+            text = e.text;
+            ST.photoNote = '照片没被云端接收，这次只按文字批改。想拍照批改，把通道换成「网页版」。';
+          } else {
+            throw e;
+          }
+        }
         var obj = LLM.parseJson(text);
         (obj.items || []).forEach(function (it) {
           var q = qs.filter(function (x) { return x.id === it.id; })[0];
@@ -1708,6 +2062,10 @@
     return '';
   }
 
+  function cameraIco() {
+    return '<svg viewBox="0 0 20 20" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.3 4.4 8.4 3h3.2l1.1 1.4h2.2A1.9 1.9 0 0 1 16.8 6.3v7.2a1.9 1.9 0 0 1-1.9 1.9H5.1a1.9 1.9 0 0 1-1.9-1.9V6.3a1.9 1.9 0 0 1 1.9-1.9z"/><circle cx="10" cy="9.9" r="2.7"/></svg>';
+  }
+
   /* ---------------------------------------------------------------- 启动 */
 
   function boot() {
@@ -1737,6 +2095,7 @@
       if (!ST.model || !list.some(function (m) { return m.id === ST.model; })) {
         ST.model = LLM.pickDefault(list);
       }
+      if (LLM.isWeb() && ST.model) LLM.setWeb({ model: ST.model });
       if (ST.model) savePrefs();
     }).catch(function (e) {
       ST.modelsErr = LLM.describeError(e);

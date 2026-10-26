@@ -114,6 +114,36 @@ body.has-rail main#root.rv {
 .rv-link:hover { text-decoration: underline; }
 .rv-anon { display: flex; flex-direction: column; gap: 8px; }
 
+/* 学科：这一页的总开关，放在最上面 */
+.rv-subjfield { margin-bottom: 12px; }
+.rv-subj {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--pt-surface-2);
+}
+.rv-subj-item {
+  height: 30px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--pt-ink-2);
+  font: inherit;
+  font-size: .84rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background .12s ease, color .12s ease, box-shadow .12s ease;
+}
+.rv-subj-item:hover { background: rgba(255, 255, 255, .75); }
+.rv-subj-item.is-on {
+  background: #fff;
+  border-color: var(--pt-line);
+  color: var(--pt-blue-700);
+  box-shadow: 0 1px 2px rgba(15, 32, 74, .08);
+}
+
 /* ------------------------------------------------------------------ 知识点行 */
 
 .rv-cands {
@@ -368,6 +398,15 @@ body.has-rail main#root.rv {
 }
 .rv-webcfg-acts { display: flex; gap: 6px; }
 .rv-webcfg .rv-hint { margin-top: 0; }
+.rv-field-tight { gap: 4px; }
+.rv-curl {
+  min-height: 58px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: .74rem;
+  line-height: 1.5;
+}
+.rv-hint.is-ok { color: #0f7a5a; }
+.rv-chan { align-self: flex-start; }
 
 .rv-picker { display: flex; flex-direction: column; gap: 6px; }
 .rv-results { display: flex; flex-direction: column; gap: 2px; margin: 2px -6px 0; }
@@ -660,6 +699,80 @@ body.has-rail main#root.rv {
   color: var(--pt-ink-2);
   cursor: default;
 }
+
+/* 拍照作答 */
+.rv-photo { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+.rv-photo-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.rv-photo-add {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  height: 32px;
+  padding: 0 12px 0 10px;
+  border: 1px dashed var(--pt-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--pt-ink-2);
+  font-size: .82rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: border-color .12s ease, color .12s ease, background .12s ease;
+}
+.rv-photo-add:hover {
+  border-color: var(--pt-blue);
+  color: var(--pt-blue-700);
+  background: var(--pt-blue-50);
+}
+.rv-photo-add:focus-within {
+  border-color: var(--pt-blue);
+  box-shadow: 0 0 0 3px rgba(0, 61, 247, .12);
+}
+.rv-photo-ico { display: inline-flex; color: currentColor; }
+.rv-photo-fig {
+  position: relative;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
+}
+.rv-photo-fig img {
+  display: block;
+  max-width: min(100%, 320px);
+  max-height: 220px;
+  border: 1px solid var(--pt-line);
+  border-radius: 10px;
+  background: #fff;
+}
+.rv-photo-fig.is-small img { max-width: min(100%, 240px); max-height: 160px; }
+.rv-photo-cap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .74rem;
+  color: var(--pt-ink-3);
+}
+.rv-photo-x {
+  height: 24px;
+  padding: 0 9px;
+  border: 1px solid var(--pt-line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--pt-ink-2);
+  font: inherit;
+  font-size: .74rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+.rv-photo-x:hover { border-color: var(--pt-blue); color: var(--pt-blue-700); }
 
 /* 反馈 */
 .rv-fb {

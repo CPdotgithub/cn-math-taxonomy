@@ -189,13 +189,21 @@
       lines.push('本次没有需要批改的解答题，只做客观题的错因归因和整体判断。');
       lines.push('');
     }
+    if (ctx.photoCount) {
+      lines.push('本次消息末尾附了 ' + ctx.photoCount + ' 张学生手写照片，按题目顺序对应（第 1 张对第一道拍照的题，以此类推）。');
+      lines.push('读图规则：只把照片里真实写出来的内容当作学生作答，不要替学生补步骤；照片模糊看不清就直说看不清，不要猜；照片里跟本题无关的草稿忽略。');
+      lines.push('');
+    }
     (ctx.subjective || []).forEach(function (q) {
       lines.push('【' + q.id + '】难度：' + q.level + ' · 满分 ' + q.fullScore + ' 分');
       lines.push('题干：' + q.stem);
       lines.push('参考答案：' + (q.answerText || '（无）'));
       lines.push('评分点：' + (q.rubric || []).map(function (r) { return r.point + '（' + r.score + '分）'; }).join('；'));
       lines.push('学生作答：');
-      lines.push(String(q.studentAnswer || '（空白）').slice(0, 1200));
+      if (q.photo) lines.push('（写在纸上，见随消息附上的第 ' + q.photo + ' 张照片）');
+      var said = String(q.studentAnswer || '').trim();
+      if (said) lines.push(said.slice(0, 1200));
+      else if (!q.photo) lines.push('（空白）');
       lines.push('');
     });
     if (ctx.objective && ctx.objective.length) {
