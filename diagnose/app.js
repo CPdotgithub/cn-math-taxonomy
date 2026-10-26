@@ -318,7 +318,8 @@
       mode: mode, open: true,
       base: mode === 'screen' ? base : null, seed: newSeed(), avoid: seenList()
     });
-    sessionMeta = { label: label, scope: scope || null };
+    // 没显式给范围就按本轮题目反推，保证顶栏和「本轮」说的是同一件事
+    sessionMeta = { label: label, scope: scope || scopeFromTargets(targets) || null };
     resetUi();
     save();
     render();
@@ -330,7 +331,11 @@
         mode: saved.mode, seed: saved.seed, avoid: saved.avoid, base: saved.base,
         open: saved.open !== false, limit: saved.limit || null
       });
-      sessionMeta = { label: saved.label || saved.targets.map(nameOf).join('、'), scope: saved.scope || null };
+      // 老存档（旧版本没写 scope）同样反推，别让顶栏退回孩子档案的年级
+      sessionMeta = {
+        label: saved.label || saved.targets.map(nameOf).join('、'),
+        scope: saved.scope || scopeFromTargets(saved.targets) || null
+      };
       finished = !!saved.finished;
       return true;
     } catch (e) { return false; }
@@ -767,10 +772,37 @@
     return [['', '整学年'], ['上', '上册'], ['下', '下册']];
   }
 
-  /* 这一轮在看什么范围：本轮开出来的范围 > 全站共享状态 > 页面上的选择 */
+  /* 把「六年级 / 六上 / 九全 / 必修一」拆成 { grade, term }（engine 的短键）。
+     顶栏的考察范围、存档里的 scope 都用这一套写法。 */
+  function scopeKey(str) {
+    const s = String(str == null ? '' : str).trim();
+    const m = /^([一二三四五六七八九])(上|下|全)?$/.exec(s.replace(/年级$/, ''));
+    if (m) return { grade: m[1], term: m[2] || '' };
+    return s ? { grade: s, term: '' } : null;
+  }
+
+  /* 从这一轮的目标知识点反推考察范围：册次 → 年级 + 学期。
+     老存档没有 scope、或者从 URL 直接开的一轮，都靠它把顶栏对齐到实际在考的题，
+     不能拿孩子档案的年级去冒充——那样顶栏写五年级、题却是六年级。 */
+  function scopeFromTargets(ids) {
+    if (!ids || !ids.length || !D || !D.graph || !E || !E.parseChapter) return null;
+    for (let i = 0; i < ids.length; i++) {
+      const t = D.graph.byId[ids[i]];
+      if (!t) continue;
+      const vol = String(E.parseChapter(t.chapter || '').volume || '');
+      if (!vol) continue;
+      const k = scopeKey(vol);
+      if (k) return k;
+    }
+    return null;
+  }
+
+  /* 这一轮在看什么范围：本轮开出来的范围 > 从本轮题目反推 > 全站共享状态 > 页面上的选择 */
   function scopeOf() {
     const meta = sessionMeta && sessionMeta.scope;
     if (meta && meta.grade) return { grade: meta.grade, term: meta.term || '' };
+    const derived = session ? scopeFromTargets(session.targets) : null;
+    if (derived) return derived;
     const sc = SC && SC.get(subject);
     if (sc && sc.grade) return { grade: sc.grade, term: sc.term || '' };
     return { grade: gradeSel, term: volSel };
@@ -1862,7 +1894,7 @@
       if (/^[一二三四五六七八九]$/.test(scope)) scope += '年级';
       const g = E.gradeTargets(D.graph, scope, subject, { cumulative: true });
       if (!g) throw new Error('URL 参数 grade / volume 无法识别：' + (volume || grade) + '（写法如 grade=七年级、volume=七上）');
-      return { ids: g.ids, base: g.base, label: g.label + '（年级诊断）', mode: 'screen' };
+      return { ids: g.ids, base: g.base, label: g.label + '（年级诊断）', mode: 'screen', scope: scopeKey(scope) };
     }
     return null;
   }
@@ -1896,7 +1928,7 @@
       session = E.createSession(D.graph, resolved.ids, {
         mode: resolved.mode, open: true, base: resolved.base, seed: seedParam == null ? 'demo' : seedParam
       });
-      sessionMeta = { label: resolved.label };
+      sessionMeta = { label: resolved.label, scope: resolved.scope || scopeFromTargets(resolved.ids) || null };
       const step = parseInt(params.get('step'), 10);
       runDemo(step >= 0 ? step : Infinity);
       render();
@@ -1907,18 +1939,33 @@
       const same = saved && JSON.stringify(saved.targets) === JSON.stringify(Array.from(new Set(resolved.ids))) &&
         (saved.mode || 'target') === (resolved.mode || 'target') && (seedParam == null || saved.seed === seedParam);
       if (same && restoreSession(saved)) { render(); return; }
-      startSession(resolved.ids, resolved.label, resolved.mode, resolved.base);
+      startSession(resolved.ids, resolved.label, resolved.mode, resolved.base, resolved.scope);
       return;
     }
     // 年级模式：刷新后直接接着上次，不用先回开始页
     if (startMode === 'grade') {
       const saved = lsGet(sessionKey());
-      if (saved && saved.mode === 'screen' && Array.isArray(saved.targets) && saved.targets.length && restoreSession(saved)) {
+      if (saved && saved.mode === 'screen' && Array.isArray(saved.targets) && saved.targets.length &&
+        !isStaleSession(saved) && restoreSession(saved)) {
         render();
         return;
       }
     }
     renderStart();
+  }
+
+  /* 存档这一轮的范围，跟「现在该考的范围」对不上、而且一题都没答 —— 是旧版本留下的，丢掉。
+     有答案的不动（那是历史，接着答），改档案/换孩子手动选过的范围也不动。 */
+  function isStaleSession(saved) {
+    if (!saved || !Array.isArray(saved.targets) || !saved.targets.length) return true;
+    if ((saved.answers || []).length) return false;
+    const mine = saved.scope || scopeFromTargets(saved.targets);
+    if (!mine || !mine.grade) return false;
+    const sc = SC && SC.get(subject);
+    if (sc && sc.manual) return false;
+    const from = SC && SC.childScope ? SC.childScope() : null;
+    if (!from || !from.grade) return false;
+    return from.grade !== mine.grade || volFor(from.grade, from.term) !== (mine.term || '');
   }
 
   document.addEventListener('click', function (event) {
