@@ -33,6 +33,7 @@
   var bar = null;
   var sheet = null;
   var footerLink = null;
+  var railEntry = null;
   var shownTracked = false;
 
   function dismissed() { return !!lsGet(DISMISS_KEY); }
@@ -73,7 +74,7 @@
       track(choice && choice.outcome === 'accepted' ? 'install_prompt_accepted' : 'install_prompt_dismissed', { platform: 'chrome' });
     } catch (e) { /* 系统弹框被拦截 */ }
     lsSet(DISMISS_KEY, String(Date.now()));
-    refreshFooter();
+    refreshInstallEntry();
   }
 
   /* 引导图：纯 SVG，颜色走站点变量，深浅色都能看清 */
@@ -179,7 +180,7 @@
     go.addEventListener('click', function () { if (deferred) promptInstall(); else openGuide(); });
     var no = el('button', null, '暂不');
     no.type = 'button';
-    no.addEventListener('click', function () { closeBar(true); refreshFooter(); });
+    no.addEventListener('click', function () { closeBar(true); refreshInstallEntry(); });
     actions.appendChild(go);
     actions.appendChild(no);
     bar.appendChild(icon);
@@ -189,27 +190,48 @@
     if (!shownTracked) { shownTracked = true; track('install_hint_shown', { platform: isIOSSafari && !deferred ? 'ios' : 'chrome' }); }
   }
 
-  /* 页脚里的入口：提示被关掉之后，想装的人仍然能找到 */
-  function refreshFooter() {
+  /* 安装入口：提示条被关掉之后，想装的人仍然能找到。
+     原本挂在页脚「提交 Issue」后面，页脚已经去掉，改为挂在侧栏导航末尾；
+     只在「能装但还没装」时才出现，装完就撤掉，不占常驻位置。 */
+  function refreshInstallEntry() {
+    var want = canInstall();
+
     var p = document.querySelector('.site-footer p');
-    if (!p) return;
-    if (!footerLink) {
-      footerLink = el('button', 'pwa-footer-link', '添加到桌面');
-      footerLink.type = 'button';
-      footerLink.addEventListener('click', function () { if (deferred) promptInstall(); else openGuide(); });
-      p.appendChild(document.createTextNode(' · '));
-      p.appendChild(footerLink);
+    if (p) {
+      if (!footerLink) {
+        footerLink = el('button', 'pwa-footer-link', '添加到桌面');
+        footerLink.type = 'button';
+        footerLink.addEventListener('click', function () { if (deferred) promptInstall(); else openGuide(); });
+        p.appendChild(document.createTextNode(' · '));
+        p.appendChild(footerLink);
+      }
+      footerLink.hidden = !want;
+      if (footerLink.previousSibling && footerLink.previousSibling.nodeType === 3) {
+        footerLink.previousSibling.textContent = want ? ' · ' : '';
+      }
+      return;
     }
-    footerLink.hidden = !canInstall();
-    if (footerLink.previousSibling && footerLink.previousSibling.nodeType === 3) {
-      footerLink.previousSibling.textContent = footerLink.hidden ? '' : ' · ';
+
+    var nav = document.querySelector('.page-links');
+    if (!nav) return;
+    if (!want) {
+      if (railEntry && railEntry.parentNode) railEntry.parentNode.removeChild(railEntry);
+      return;
     }
+    if (!railEntry) {
+      railEntry = el('button', 'nav-link pwa-rail-link');
+      railEntry.type = 'button';
+      /* 和「资源搜索」对齐：侧栏每一行都是图标 + 文字，这里不能只给一行裸字 */
+      railEntry.innerHTML = '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2.8v8.4"/><path d="M6.6 8 10 11.4 13.4 8"/><path d="M4 14.4v2.4h12v-2.4"/></svg><span>添加到桌面</span>';
+      railEntry.addEventListener('click', function () { if (deferred) promptInstall(); else openGuide(); });
+    }
+    if (!railEntry.parentNode) nav.appendChild(railEntry);
   }
 
   window.addEventListener('beforeinstallprompt', function (e) {
     e.preventDefault();
     deferred = e;
-    refreshFooter();
+    refreshInstallEntry();
     setTimeout(showBar, 1200);
   });
 
@@ -218,11 +240,11 @@
     lsSet(INSTALLED_KEY, '1');
     closeBar(false);
     closeSheet(false);
-    refreshFooter();
+    refreshInstallEntry();
   });
 
   function init() {
-    refreshFooter();
+    refreshInstallEntry();
     if (isIOSSafari) setTimeout(showBar, 1200);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();

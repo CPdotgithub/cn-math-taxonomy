@@ -92,4 +92,29 @@
 .pic-icon { fill: var(--brand); }
 .pic-icon-line { stroke: var(--logo-sheet); }
 
-@media print { .pwa-bar, .pwa-sheet-wrap, .pwa-footer-link { display: none !important; } }
+/* 侧栏里的「添加到桌面」：页脚去掉后它搬到这里。
+   是个动作不是页面，所以比导航项再淡一档，虚线框区分开。 */
+.pwa-rail-link {
+  width: 100%;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+body.has-rail .nav-link.pwa-rail-link {
+  margin-top: 6px;
+  min-height: 34px;
+  border: 1px solid var(--pt-line, #E3E8F0);
+  background: var(--pt-surface-2, #F7F9FC);
+  color: var(--pt-ink-3, #8B94A6);
+  font-size: .85rem;
+  font-weight: 600;
+}
+body.has-rail .nav-link.pwa-rail-link:hover {
+  border-color: #CFDCF5;
+  background: var(--pt-blue-50, #EEF3FE);
+  color: var(--pt-blue, #1D4FD8);
+}
+
+@media print { .pwa-bar, .pwa-sheet-wrap, .pwa-footer-link, .pwa-rail-link { display: none !important; } }
