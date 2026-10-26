@@ -867,3 +867,271 @@ main#root > .dx-stage:not(.dx-start) {
   font-weight: 600;
   vertical-align: middle;
 }
+
+/* ============================================================================
+   开始页改版：孩子 → 年级 → 科目 → 开始
+   原来顶上是「单点诊断 / 按年级诊断」两个模式 tab，加四张 KPI 卡，
+   把「这次给谁测、测哪个年级」这些真正要决策的东西挤到了下面。
+   现在主卡就是这三行选择 + 一个大按钮；模式分类下沉成折叠入口，
+   KPI 收成一行小字。
+   ============================================================================ */
+
+.dx-launch {
+  margin: 0 0 0;
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(10, 12, 16, .04), 0 18px 40px -32px rgba(10, 12, 16, .35);
+}
+.dx-launch-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 296px;
+  gap: 0 24px;
+  align-items: start;
+  padding: 4px 22px 18px !important;
+}
+
+/* ---- 左侧三行选择 ---- */
+.dx-launch-form { min-width: 0; }
+.dx-field {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 14px 0;
+  border-bottom: 1px dashed var(--pt-line-soft);
+}
+.dx-field:last-child { border-bottom: 0; }
+.dx-field-label {
+  padding-top: 7px;
+  font-size: .76rem;
+  font-weight: 650;
+  letter-spacing: .06em;
+  color: var(--pt-ink-3);
+}
+.dx-field-main { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+
+/* 孩子 */
+.dx-kid { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-width: 0; }
+.dx-kid #child-select {
+  min-height: 38px;
+  font-size: .92rem;
+  font-weight: 600;
+  min-width: 190px;
+  max-width: 100%;
+}
+.dx-kid-name { font-size: .92rem; font-weight: 650; color: var(--pt-ink); }
+.dx-kid-name.is-empty { color: var(--pt-ink-2); }
+.dx-kid-note { font-size: .78rem; color: var(--pt-ink-3); }
+.dx-kid-link {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-blue);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.dx-kid-link:hover { text-decoration: underline; }
+
+/* 年级 / 册次 chips：比科目分段轻一档，语义是「已选定」 */
+.dx-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.dx-chip {
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: #F4F6FA;
+  color: var(--pt-ink-2);
+  font-size: .82rem;
+  font-weight: 600;
+  box-shadow: none;
+  white-space: nowrap;
+}
+.dx-chip:hover { background: #E9EEF7; color: var(--pt-ink); }
+.dx-chip.on {
+  background: var(--pt-blue-50);
+  border-color: #C9D9F8;
+  color: var(--pt-blue);
+  font-weight: 650;
+}
+.dx-grade-rows { display: flex; flex-direction: column; gap: 6px; }
+
+/* 册次比年级再轻一档：前面带一个小标签，避免和年级混成一片 */
+.dx-vol-row { display: flex; align-items: center; gap: 9px; margin-top: 3px; }
+.dx-vol-label {
+  flex: none;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+}
+.dx-vol-row .dx-chips { gap: 4px; }
+.dx-chip.is-sub {
+  min-height: 26px;
+  padding: 0 10px;
+  font-size: .76rem;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--pt-line-soft);
+  color: var(--pt-ink-3);
+}
+.dx-chip.is-sub.on {
+  background: #fff;
+  border-color: #C9D9F8;
+  color: var(--pt-blue);
+}
+
+/* ---- 右侧：本次范围 + 开始 ---- */
+.dx-launch-go {
+  padding: 18px 0 6px 24px;
+  border-left: 1px dashed var(--pt-line-soft);
+  min-width: 0;
+}
+.dx-launch-kicker {
+  margin: 0 0 6px;
+  font-size: .72rem;
+  font-weight: 650;
+  letter-spacing: .06em;
+  color: var(--pt-ink-3);
+}
+.dx-launch-grade {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  color: var(--pt-ink);
+  line-height: 1.25;
+}
+.dx-launch-count {
+  margin: 3px 0 0;
+  font-size: .82rem;
+  color: var(--pt-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.dx-launch-base {
+  margin: 10px 0 0;
+  padding-top: 9px;
+  border-top: 1px dashed var(--pt-line-soft);
+  font-size: .75rem;
+  line-height: 1.5;
+  color: var(--pt-ink-3);
+}
+.dx-launch-auto {
+  margin: 8px 0 0;
+  font-size: .74rem;
+  color: var(--pt-ink-3);
+}
+.dx-launch-auto.is-manual { color: #A06A12; }
+.dx-launch-btn {
+  width: 100%;
+  margin-top: 14px;
+  min-height: 46px;
+  font-size: .98rem;
+  font-weight: 650;
+  border-radius: 11px;
+}
+.dx-launch-save {
+  margin: 8px 0 0;
+  font-size: .74rem;
+  color: var(--pt-ink-3);
+  text-align: center;
+}
+
+/* ---- 事实行：数据规模低调待着 ---- */
+.dx-facts {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin: 12px 4px 20px;
+  font-size: .78rem;
+  color: var(--pt-ink-3);
+}
+.dx-facts b { font-weight: 650; color: var(--pt-ink-2); font-variant-numeric: tabular-nums; }
+.dx-facts-sep { color: #CBD3DF; }
+
+/* ---- 下半部分：单点诊断（折叠） + 结果怎么读 ---- */
+.dx-start-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1.62fr) minmax(272px, .82fr);
+  gap: 16px;
+  align-items: start;
+}
+.dx-single > summary {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 15px 20px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.dx-single > summary::-webkit-details-marker { display: none; }
+.dx-single > summary::before {
+  content: '';
+  flex: none;
+  width: 0;
+  height: 0;
+  border-left: 5px solid var(--pt-ink-3);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transition: transform .15s ease;
+}
+.dx-single[open] > summary::before { transform: rotate(90deg); }
+.dx-single > summary:hover .dx-single-t { color: var(--pt-blue); }
+.dx-single-t { font-size: .88rem; font-weight: 650; color: var(--pt-ink); }
+.dx-single-hint { font-size: .78rem; color: var(--pt-ink-3); }
+.dx-single > .pt-panel-body { padding-top: 0 !important; }
+
+.dx-legend-foot {
+  padding: 0 20px 14px;
+}
+.dx-legend-foot .dx-note { margin: 0; }
+
+/* ---- 窄屏 ---- */
+@media (max-width: 980px) {
+  .dx-launch-body { grid-template-columns: minmax(0, 1fr); padding: 2px 16px 16px !important; }
+  .dx-launch-go {
+    padding: 16px 0 0;
+    margin-top: 4px;
+    border-left: 0;
+    border-top: 1px dashed var(--pt-line-soft);
+  }
+  .dx-start-foot { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .dx-field { grid-template-columns: minmax(0, 1fr); gap: 7px; padding: 12px 0; }
+  .dx-field-label { padding-top: 0; }
+  .dx-chip { min-height: 32px; padding: 0 11px; font-size: .8rem; }
+  .dx-kid #child-select { min-width: 0; width: 100%; }
+  .dx-launch-grade { font-size: 1.15rem; }
+  .dx-single > summary { padding: 13px 16px; flex-wrap: wrap; gap: 4px 9px; }
+  .dx-legend-foot { padding: 0 16px 12px; }
+
+  /* 年级：一行横滑，别把「开始诊断」推到两屏之外 */
+  .dx-grade-rows {
+    flex-direction: row;
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    /* 右边缘留一点空：最后一项贴边被裁掉半格，本身就是「还能滑」的提示 */
+    padding-right: 14px;
+  }
+  .dx-grade-rows::-webkit-scrollbar { display: none; }
+  .dx-grade-rows .dx-chips { flex: none; flex-wrap: nowrap; }
+
+  /* 科目：4 个一行，省一行的高度 */
+  .dx-subjects {
+    flex-wrap: nowrap !important;
+    gap: 2px;
+  }
+  .dx-subjects button {
+    flex: 1 1 0 !important;
+    min-width: 0;
+    padding: 0 6px;
+    font-size: .8rem;
+  }
+}
+
+/* 单点诊断里的搜索命中数：在搜索框下面一行小字 */
+.dx-match { margin: -2px 0 10px; font-size: .76rem; color: var(--pt-ink-3); }
+.dx-match #match-count { font-variant-numeric: tabular-nums; }

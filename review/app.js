@@ -301,7 +301,7 @@
     if (ST.child && !cands.length) {
       body.appendChild(h('p', { class: 'rv-hint' }, [
         document.createTextNode('还没有薄弱点记录。先做一次'),
-        h('a', { class: 'rv-link', href: '../diagnose/?mode=grade', text: '年级诊断' }),
+        h('a', { class: 'rv-link', href: '../diagnose/', text: '年级诊断' }),
         document.createTextNode('，或者直接在上面搜索知识点。')
       ]));
     }

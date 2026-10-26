@@ -33,11 +33,12 @@
   let subject = 'math';
   let startQuery = '';
   let startStage = '';
-  let chapterOpen = true;
-  let gradeSel = '七';     // 开始页「按年级诊断」：年级
+  let chapterOpen = false;   // 册章浏览默认收起：先用搜索，找不到再翻目录
+  let gradeSel = '七';     // 开始页：年级
   let volSel = '';         // '' 整年级 / '上' / '下'
   let rangeManual = false; // 用户手动改过年级/册次：此后不再跟随档案年级
-  let startMode = new URLSearchParams(location.search).get('mode') === 'grade' ? 'grade' : 'single'; // 开始页当前模式
+  /* 开始页默认就是「按年级测」，单点诊断退成次级入口，用 URL mode=single 直接打开 */
+  let startMode = new URLSearchParams(location.search).get('mode') === 'single' ? 'single' : 'grade';
   let seedParam = null;    // URL 参数 seed：固定选题的随机种子
   let pathCy = null;
   let pathToken = 0;
@@ -420,25 +421,231 @@
       type: 'button',
       class: 'stage-tab' + (startStage === value ? ' on' : ''),
       role: 'tab',
+      'data-value': value,
       'aria-selected': startStage === value ? 'true' : 'false',
-      onclick: function () { startStage = value; renderStart(); }
+      onclick: function (ev) {
+        startStage = value;
+        const wrap = ev.currentTarget.parentNode;
+        Array.prototype.forEach.call(wrap.children, function (b) {
+          const on = b.getAttribute('data-value') === value;
+          b.classList.toggle('on', on);
+          b.setAttribute('aria-selected', on ? 'true' : 'false');
+        });
+        const box = document.getElementById('target-list');
+        if (box) fillList(box);
+      }
     }, label);
   }
 
-  /* 开始页的 KPI 小卡 */
-  function dxKpi(label, value, unit, meta, cls) {
-    const box = h('div', { class: 'pt-kpi ' + (cls || '') });
-    const lab = h('div', { class: 'pt-kpi-label' });
-    lab.append(h('i', { class: 'pt-dot' }));
-    lab.append(document.createTextNode(label));
-    box.append(lab);
-    box.append(h('div', { class: 'pt-kpi-value' }, String(value), unit ? h('small', null, unit) : null));
-    box.append(h('div', { class: 'pt-kpi-meta', text: meta || '' }));
+  /* 学段分组：年级 chips 一行一组，别让「一年级…九年级 高一 选必三」混着换行 */
+  function gradeGroups(subj) {
+    const all = gradeOptions(subj);
+    const low = ['一', '二', '三', '四', '五', '六'];
+    const mid = ['七', '八', '九'];
+    const take = function (keys) { return all.filter(function (o) { return keys.indexOf(o[0]) >= 0; }); };
+    const out = [];
+    const a = take(low), b = take(mid);
+    const c = all.filter(function (o) { return low.indexOf(o[0]) < 0 && mid.indexOf(o[0]) < 0; });
+    if (a.length) out.push(a);
+    if (b.length) out.push(b);
+    if (c.length) out.push(c);
+    return out;
+  }
+
+  /* 一行事实，不抢视线：数据规模让它低调待着 */
+  function factsLine() {
+    return h('p', { class: 'dx-facts no-print' },
+      h('span', null, h('b', null, String(D.topics.length)), ' 个可诊断知识点'),
+      h('span', { class: 'dx-facts-sep' }, '·'),
+      h('span', null, h('b', null, String(D.deps.length)), ' 条先修关系'));
+  }
+  /* ------------------------------------------------------------ 开始页主卡 */
+
+  /* 孩子 → 年级 → 科目 → 开始。这三样就是家长脑子里的顺序，其它都退到下面 */
+  function launchCard() {
+    const box = h('section', { class: 'pt-panel dx-launch', id: 'dx-launch' });
+
+    const chips = function (label, items, current, set, btnCls) {
+      return h('div', { class: 'dx-chips', role: 'tablist', 'aria-label': label }, items.map(function (it) {
+        return h('button', {
+          type: 'button', role: 'tab',
+          class: 'dx-chip' + (btnCls ? ' ' + btnCls : '') + (current === it[0] ? ' on' : ''),
+          'aria-selected': current === it[0] ? 'true' : 'false',
+          onclick: function (ev) {
+            if (current === it[0]) return;
+            ev.currentTarget.blur();
+            set(it[0]);
+          }
+        }, it[1]);
+      }));
+    };
+
+    /* 科目分段：切 URL，和全站学科切换保持一致 */
+    const subjectSeg = function () {
+      return h('div', { class: 'pt-seg dx-subjects', role: 'tablist', 'aria-label': '科目' },
+        ['math', 'english', 'physics', 'chinese'].map(function (k) {
+          return h('button', {
+            type: 'button', role: 'tab', class: subject === k ? 'on' : '',
+            'aria-selected': subject === k ? 'true' : 'false',
+            onclick: function () { if (subject !== k) switchSubject(k); }
+          }, SUBJECT_NAME[k]);
+        }));
+    };
+
+    /* 当前孩子：有档案就给下拉 + 已测次数；没档案就直接给建档入口，不摆空下拉 */
+    const kidRow = function () {
+      const kids = CC.list();
+      const cur = CC.current();
+      const n = cur ? CC.recordsOf(cur.id).length : 0;
+      if (!kids.length) {
+        return h('div', { class: 'dx-kid' },
+          h('span', { class: 'dx-kid-name is-empty' }, '还没建档案'),
+          h('span', { class: 'dx-kid-note' }, '不建档也能测，结果不会存下来'),
+          h('a', { class: 'dx-kid-link', href: childrenHref(fromQuery()) }, '建一个 →'));
+      }
+      return h('div', { class: 'dx-kid' },
+        childSelect(function (id) { CC.setCurrent(id); rangeManual = false; renderStart(); }),
+        cur
+          ? h('a', { class: 'dx-kid-link', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)) },
+            n ? '已测 ' + n + ' 次 · 看档案' : '还没测过 · 看档案')
+          : null);
+    };
+
+    const fill = function () {
+      while (box.firstChild) box.removeChild(box.firstChild);
+      const cur = CC.current();
+      const autoKey = childScopeOf(cur && cur.grade);
+      const auto = !!autoKey && !rangeManual;
+      const g = E.gradeTargets(D.graph, gradeScope(), subject, { cumulative: true });
+      const baseGrades = g && g.base.length ? baseGradeLabel(g.baseGrades) : '';
+      const volText = g ? (g.volumes.length === 1 ? '全一册' : '上下册') : '';
+
+      const onGrade = function (v) {
+        rangeManual = true;
+        gradeSel = v;
+        if (seniorGrade(v)) volSel = '';
+        else if (subject === 'physics' && v === '九') volSel = '全';
+        else if (subject === 'english' && v === '九') volSel = '';
+        else if (volSel === '全') volSel = '';
+        fill();
+      };
+      /* 一年级~六年级 / 七年级~九年级 / 高中，一行一组 */
+      const gradeRows = h('div', { class: 'dx-grade-rows' },
+        gradeGroups(subject).map(function (row) { return chips('年级', row, gradeSel, onGrade); }));
+
+      /* 册次：跟着年级变，只有一种选法时不占地方 */
+      const volItems = seniorGrade(gradeSel)
+        ? [['', seniorRangeLabel(gradeSel)]]
+        : (subject === 'physics' && gradeSel === '九')
+          ? [['全', '全一册']]
+          : (subject === 'english' && gradeSel === '九')
+            ? [['', '整年级'], ['上', '上册'], ['全', '全一册（旧版）']]
+            : [['', '整学年'], ['上', '上册'], ['下', '下册']];
+
+      box.append(h('div', { class: 'pt-panel-body dx-launch-body' },
+        h('div', { class: 'dx-launch-form' },
+          h('div', { class: 'dx-field' },
+            h('span', { class: 'dx-field-label' }, '孩子'),
+            kidRow()),
+          h('div', { class: 'dx-field' },
+            h('span', { class: 'dx-field-label' }, '年级'),
+            h('div', { class: 'dx-field-main' },
+              gradeRows,
+              volItems.length > 1
+                ? h('div', { class: 'dx-vol-row' },
+                  h('span', { class: 'dx-vol-label' }, '册次'),
+                  chips('册次', volItems, volSel, function (v) { rangeManual = true; volSel = v; fill(); }, 'is-sub'))
+                : null)),
+          h('div', { class: 'dx-field' },
+            h('span', { class: 'dx-field-label' }, '科目'),
+            h('div', { class: 'dx-field-main' }, subjectSeg()))),
+
+        h('div', { class: 'dx-launch-go' },
+          h('p', { class: 'dx-launch-kicker' }, '本次范围'),
+          h('p', { class: 'dx-launch-grade' }, g ? g.label : '这个范围没有知识点'),
+          h('p', { class: 'dx-launch-count' }, g ? (volText ? volText + ' · ' : '') + g.ids.length + ' 个知识点' : '换一个科目或年级再试'),
+          baseGrades
+            ? h('p', { class: 'dx-launch-base' }, '往下兜底 ' + baseGrades + ' 的 ' + g.base.length + ' 个基础点，只在答错时回查')
+            : null,
+          h('p', { class: 'dx-launch-auto' + (auto ? '' : ' is-manual') }, auto
+            ? '跟着「' + cur.name + '」的档案年级'
+            : (autoKey ? '手动指定，不跟随档案' : '手动指定')),
+          h('button', {
+            class: 'primary dx-launch-btn', id: 'btn-grade-start', disabled: !g,
+            onclick: function () { if (g) startSession(g.ids, g.label + '（年级诊断）', 'screen', g.base); }
+          }, g ? '开始' + shortGrade(g.label) + '诊断' : '开始诊断'),
+          h('p', { class: 'dx-launch-save' }, cur
+            ? '结果存进「' + cur.name + '」的档案'
+            : '结果不存档案，建了档案才能回看'))));
+
+      /* 窄屏年级是一行横滑：选中的那个不在视野里就滚过去 */
+      const rows = box.querySelector('.dx-grade-rows');
+      const on = rows && rows.querySelector('.dx-chip.on');
+      if (rows && on && rows.scrollWidth > rows.clientWidth + 2) {
+        const rr = rows.getBoundingClientRect();
+        const cr = on.getBoundingClientRect();
+        if (cr.left < rr.left - 1 || cr.right > rr.right + 1) {
+          rows.scrollLeft += (cr.left - rr.left) - (rr.width - cr.width) / 2;
+        }
+      }
+    };
+    fill();
     return box;
   }
 
+  /* 单点诊断：退成次级入口，需要的人自己展开 */
+  function singlePanel() {
+    const listBox = h('div', { id: 'target-list' });
+    const browser = h('details', { class: 'chapter-browser', id: 'chapter-browser', open: chapterOpen },
+      h('summary', null, '按册、章浏览'),
+      h('p', { class: 'muted small', text: '列表按年级、册、章折叠。想直接开始，用上面的搜索更快。' }),
+      listBox);
+    browser.addEventListener('toggle', function () { chapterOpen = browser.open; });
+
+    const panel = h('details', { class: 'pt-panel dx-single', open: startMode === 'single' },
+      h('summary', { class: 'dx-single-sum' },
+        h('span', { class: 'dx-single-t' }, '只想查某一个知识点？'),
+        h('span', { class: 'dx-single-hint' }, '搜一个点出来，选为目标就直接开始')),
+      h('div', { class: 'pt-panel-body dx-panel-pick' },
+        h('div', { class: 'stage-tabs', role: 'tablist', 'aria-label': '学段' },
+          subject === 'physics' ? [stageButton('', '全部'), stageButton('j', '初中'), stageButton('h', '高中')]
+            : subject === 'chinese' ? [stageButton('', '全部'), stageButton('p', '小学')]
+            : [stageButton('', '全部'), stageButton('p', '小学'), stageButton('j', '初中'), stageButton('h', '高中')]),
+        h('input', {
+          type: 'search', class: 'search-lg', id: 'search',
+          placeholder: subject === 'physics' ? '搜索知识点，例如：欧姆定律、浮力、牛顿第二定律、楞次定律' : subject === 'english' ? '搜索知识点，例如：现在进行时、虚拟语气、there is' : subject === 'chinese' ? '搜索知识点，例如：声母、静夜思、的地得' : '搜索知识点，例如：配方法、20 以内加法、一次函数',
+          value: startQuery, autocomplete: 'off', 'aria-label': '搜索知识点',
+          oninput: function (e) {
+            startQuery = e.target.value;
+            fillList(listBox);
+            if (startQuery.trim()) { browser.open = true; chapterOpen = true; }
+          }
+        }),
+        h('p', { class: 'dx-match' }, h('span', { id: 'match-count' }, '')),
+        browser));
+
+    /* 展开面板就直接看到册列表，不用再点一次「按册、章浏览」 */
+    panel.addEventListener('toggle', function () {
+      if (panel.open && !startQuery.trim()) { browser.open = true; chapterOpen = true; }
+    });
+    return panel;
+  }
+
+  function legendCard() {
+    return h('section', { class: 'pt-panel dx-side-card dx-legend-card' },
+      h('div', { class: 'pt-panel-head' }, h('h2', null, '结果怎么读')),
+      h('div', { class: 'pt-panel-body' },
+        h('ul', { class: 'dx-legend' },
+          h('li', null, h('span', { class: 'pt-pill is-green' }, '掌握'), h('span', null, '第一题就答对')),
+          h('li', null, h('span', { class: 'pt-pill is-amber' }, '不稳'), h('span', null, '第二题才答对')),
+          h('li', null, h('span', { class: 'pt-pill is-red' }, '薄弱'), h('span', null, '两道题都没答对')),
+          h('li', null, h('span', { class: 'pt-pill is-gray' }, '未测'), h('span', null, '还没问到的')))),
+      h('div', { class: 'dx-legend-foot' },
+        h('p', { class: 'dx-note' }, '不设题量，一直往下问，想停就点右上角「结束」。')));
+  }
+
   function renderStart(errMsg) {
-    const page = h('div', { class: 'dx-start ' + (startMode === 'grade' ? 'is-grade' : 'is-single') });
+    const page = h('div', { class: 'dx-start ' + (startMode === 'single' ? 'is-single' : 'is-grade') });
     const saved = lsGet(sessionKey());
     if (saved && saved.targets && D.graph.byId[saved.targets[0]]) {
       page.append(h('div', { class: 'banner' },
@@ -450,113 +657,37 @@
     if (errMsg) page.append(h('p', { class: 'err', text: errMsg }));
 
     const cur = CC.current();
-    const subjects = { math: '数学', chinese: '语文', english: '英语', physics: '物理' };
-
-    /* 年级模式：范围默认跟着档案里的年级走；没有档案孩子（含演示）时才用手动范围 */
-    if (startMode === 'grade') {
-      if (demo || !childScopeOf(cur && cur.grade)) rangeManual = true;
-      followChildGrade();
+    /* 范围默认跟着档案里的年级走；没有档案孩子（含演示）时才用手动范围 */
+    if (demo || !childScopeOf(cur && cur.grade)) rangeManual = true;
+    followChildGrade();
+    /* 换过科目后原年级可能不存在（数学四年级 → 物理没有四年级），退回该科目第一个年级 */
+    if (!gradeOptions(subject).some(function (o) { return o[0] === gradeSel; })) {
+      gradeSel = gradeOptions(subject)[0][0];
+      volSel = '';
+      rangeManual = true;
     }
 
-    /* ---- 页面头 ---------------------------------------------------------- */
     page.append(h('div', { class: 'shell-head no-print' },
       h('div', { class: 'shell-head-main' },
         h('h1', null, '诊断'),
-        h('p', { class: 'shell-sub' }, startMode === 'grade'
-          ? '范围跟着档案里的年级走，上下册一起看，只差一样要你选：科目。答错往回追一层，低年级基础只在用到时才问。'
-          : '先问目标本身。答错再出一道同级或更容易的题，仍然错才沿先修往回追，最后按年级排出补学顺序。')),
+        h('p', { class: 'shell-sub' }, '选好孩子、年级和科目，直接开始。答错或不稳会沿先修往回追一层，低年级基础只在用到时才问。')),
       h('div', { class: 'shell-head-actions' },
         h('a', { class: 'btn', href: childrenHref(fromQuery()) }, '孩子档案'))));
 
-    /* ---- KPI ------------------------------------------------------------- */
-    const recs = cur ? CC.recordsOf(cur.id) : [];
-    page.append(h('div', { class: 'pt-kpis' },
-      dxKpi('可诊断知识点', D.topics.length, '个', subjects[subject] + ' · 当前学科', 'is-blue'),
-      dxKpi('先修关系', D.deps.length, '条', '用于问答式回溯', 'is-blue'),
-      dxKpi('当前孩子', cur ? cur.name : '未选择', '', cur ? ([cur.grade, cur.textbook].filter(Boolean).join(' · ') || '结果会存进档案') : '结果不会存进档案', cur ? 'is-green' : 'is-amber'),
-      dxKpi('已完成诊断', recs.length, '次', recs.length ? '可在档案里回看' : '还没有记录', 'is-amber')));
+    page.append(launchCard());
+    page.append(factsLine());
 
-    /* ---- 模式切换 -------------------------------------------------------- */
-    page.append(h('div', { class: 'dx-modes-wrap no-print' },
-      h('div', { class: 'pt-seg dx-modes', role: 'tablist', 'aria-label': '诊断方式' },
-        [['single', '单点诊断'], ['grade', '按年级诊断']].map(function (m) {
-          return h('button', {
-            type: 'button', role: 'tab',
-            class: startMode === m[0] ? 'on' : '',
-            'aria-selected': startMode === m[0] ? 'true' : 'false',
-            onclick: function () { if (startMode !== m[0]) { startMode = m[0]; renderStart(); } }
-          }, m[1]);
-        }))));
-
-    const mainCol = h('div', { class: 'dx-main' });
-    const sideCol = h('aside', { class: 'dx-side' });
-    page.append(h('div', { class: 'dx-cols' }, mainCol, sideCol));
-
-    /* 当前孩子：属于全局上下文，统一放在侧栏顶部（按年级模式已在主卡上给选择器，不重复） */
-    const kidBar = childBar('start');
-    if (kidBar && startMode !== 'grade') sideCol.append(kidBar);
-
-
-    if (startMode === 'single') {
-      const listBox = h('div', { id: 'target-list' });
-      const browser = h('details', { class: 'chapter-browser', id: 'chapter-browser', open: chapterOpen },
-        h('summary', null, '按册、章浏览'),
-        h('p', { class: 'muted small', text: '列表按年级、册、章折叠。想直接开始，用上面的搜索更快。' }),
-        listBox);
-      browser.addEventListener('toggle', function () { chapterOpen = browser.open; });
-
-      mainCol.append(h('section', { class: 'pt-panel dx-panel-pick' },
-        h('div', { class: 'pt-panel-head' },
-          h('h2', null, '选一个知识点'),
-          h('span', { class: 'pt-pill is-gray', id: 'match-count' }, '')),
-        h('div', { class: 'pt-panel-body' },
-          h('div', { class: 'stage-tabs', role: 'tablist', 'aria-label': '学段' },
-            subject === 'physics' ? [stageButton('', '全部'), stageButton('j', '初中'), stageButton('h', '高中')]
-              : subject === 'chinese' ? [stageButton('', '全部'), stageButton('p', '小学')]
-              : [stageButton('', '全部'), stageButton('p', '小学'), stageButton('j', '初中'), stageButton('h', '高中')]),
-          h('input', {
-            type: 'search', class: 'search-lg', id: 'search',
-            placeholder: subject === 'physics' ? '搜索知识点，例如：欧姆定律、浮力、牛顿第二定律、楞次定律' : subject === 'english' ? '搜索知识点，例如：现在进行时、虚拟语气、there is' : subject === 'chinese' ? '搜索知识点，例如：声母、静夜思、的地得' : '搜索知识点，例如：配方法、20 以内加法、一次函数',
-            value: startQuery, autocomplete: 'off', 'aria-label': '搜索知识点',
-            oninput: function (e) {
-              startQuery = e.target.value;
-              fillList(listBox);
-              if (startQuery.trim()) { browser.open = true; chapterOpen = true; }
-            }
-          }),
-          browser)));
-
-      /* 侧栏：怎么开始 + 提示 */
-      sideCol.append(h('section', { class: 'pt-panel dx-side-card' },
-        h('div', { class: 'pt-panel-head' },
-          h('h2', null, '怎么开始'),
-          h('span', { class: 'pt-pill is-blue' }, '单点')),
-        h('div', { class: 'pt-panel-body' },
-          h('p', { class: 'dx-note' }, '点任意知识点的「选为目标」就直接开始，不用再确认。每个知识点最多问 2 题，答完自动出结果。'),
-          h('p', { class: 'dx-note' }, '中途想停就点右上角「结束」，已经答的题会照常记进档案。'),
-          h('div', { class: 'dx-start-hint' },
-            h('svg', { viewBox: '0 0 24 24', width: '16', height: '16', fill: 'none', stroke: 'currentColor', 'stroke-width': '1.8', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'aria-hidden': 'true' },
-              h('path', { d: 'M12 3v9' }), h('circle', { cx: '12', cy: '16.4', r: '1.1', fill: 'currentColor', stroke: 'none' }), h('circle', { cx: '12', cy: '12', r: '9' })),
-            h('span', null, '不设题量，随时可以停。')))));
-
-    } else {
-      mainCol.append(gradeCard(sideCol));
-    }
-
-    /* 左栏底部：结果怎么读。主区比侧栏宽，横排一行看得完 */
-    mainCol.append(h('section', { class: 'pt-panel dx-side-card dx-legend-card' },
-      h('div', { class: 'pt-panel-head' }, h('h2', null, '结果怎么读')),
-      h('div', { class: 'pt-panel-body' },
-        h('ul', { class: 'dx-legend' },
-          h('li', null, h('span', { class: 'pt-pill is-green' }, '掌握'), h('span', null, '第一题就答对')),
-          h('li', null, h('span', { class: 'pt-pill is-amber' }, '不稳'), h('span', null, '第二题才答对')),
-          h('li', null, h('span', { class: 'pt-pill is-red' }, '薄弱'), h('span', null, '两道题都没答对')),
-          h('li', null, h('span', { class: 'pt-pill is-gray' }, '未测'), h('span', null, '还没问到的'))))));
+    page.append(h('div', { class: 'dx-start-foot' }, singlePanel(), legendCard()));
 
     show(page);
+    fillList(document.getElementById('target-list'));
     if (startMode === 'single') {
-      fillList(document.getElementById('target-list'));
-      if (startQuery) { const el = document.getElementById('search'); if (el) el.focus(); }
+      const d = page.querySelector('.dx-single');
+      if (d) d.open = true;
+      const br = document.getElementById('chapter-browser');
+      if (br) { br.open = true; chapterOpen = true; }
+      const el = document.getElementById('search');
+      if (el) el.focus();
     }
   }
 
@@ -564,6 +695,11 @@
     return sel === '高一' || sel === '高二' || String(sel).indexOf('选必') === 0 || String(sel).indexOf('必修') === 0;
   }
   function seniorRangeLabel(sel) { return String(sel).indexOf('选必') === 0 ? '整册' : '必修整册'; }
+  /* 按钮上用短名：「选必三（选择性必修第三册）」→「选必三」 */
+  function shortGrade(s) {
+    const i = String(s || '').indexOf('（');
+    return i > 0 ? String(s).slice(0, i) : String(s || '');
+  }
   function gradeScope() {
     if (seniorGrade(gradeSel)) return gradeSel;
     if (subject === 'physics' && gradeSel === '九') return '九全';
@@ -606,8 +742,8 @@
     if (next === 'math') p.delete('subject'); else p.set('subject', next);
     p.delete('target');
     p.delete('demo');
-    p.set('mode', 'grade');
-    location.href = location.pathname + '?' + p.toString();
+    p.delete('mode');
+    location.href = location.pathname + (p.toString() ? '?' + p.toString() : '');
   }
 
   /* 册次键 → 中文名（四上 → 四年级上册） */
@@ -651,137 +787,6 @@
     }).join('、');
   }
 
-  function gradeCard(sideCol) {
-    const box = h('section', { class: 'pt-panel', id: 'grade-card' });
-    let sideMount = null;   // 侧栏槽位：用闭包持有，避免在未入文档时查不到
-
-    /* 科目分段：切 URL，和全站学科切换保持一致 */
-    const subjectSeg = function () {
-      return h('div', { class: 'pt-seg dx-subjects', role: 'tablist', 'aria-label': '科目' },
-        ['math', 'english', 'physics', 'chinese'].map(function (k) {
-          return h('button', {
-            type: 'button', role: 'tab', class: subject === k ? 'on' : '',
-            'aria-selected': subject === k ? 'true' : 'false',
-            onclick: function () { if (subject !== k) switchSubject(k); }
-          }, SUBJECT_NAME[k]);
-        }));
-    };
-
-    const tabs = function (label, items, current, set) {
-      return h('div', { class: 'stage-tabs', role: 'tablist', 'aria-label': label }, items.map(function (it) {
-        return h('button', {
-          type: 'button', class: 'stage-tab' + (current === it[0] ? ' on' : ''), role: 'tab',
-          'aria-selected': current === it[0] ? 'true' : 'false', 'data-value': it[0],
-          onclick: function () { set(it[0]); fill(); }
-        }, it[1]);
-      }));
-    };
-
-    const fill = function () {
-      while (box.firstChild) box.removeChild(box.firstChild);
-      const cur = CC.current();
-      const kidGrade = cur && cur.grade ? cur.grade : '';
-      const autoKey = childScopeOf(kidGrade);
-      const auto = !!autoKey && !rangeManual;
-      const g = E.gradeTargets(D.graph, gradeScope(), subject, { cumulative: true });
-      const baseGrades = g && g.base.length ? baseGradeLabel(g.baseGrades) : '';
-      const volText = g ? (g.volumes.length === 1 ? '全一册' : '上下册') : '';
-
-      box.append(
-        h('div', { class: 'pt-panel-head' },
-          h('h2', null, '按年级诊查'),
-          h('span', { class: 'pt-pill ' + (auto ? 'is-green' : 'is-gray'), id: 'grade-info' },
-            auto ? '跟随档案年级' : '手动指定')),
-        h('div', { class: 'pt-panel-body' },
-          /* 当前孩子 · 范围来源 */
-          h('div', { class: 'dx-childline' + (cur ? '' : ' is-empty') },
-            h('span', { class: 'dx-childline-label' }, '当前孩子'),
-            CC.list().length
-              ? childSelect(function (id) { CC.setCurrent(id); rangeManual = false; renderStart(); })
-              : h('a', { class: 'dx-childline-link', href: childrenHref(fromQuery()), text: '去建档' }),
-            cur
-              ? h('span', { class: 'dx-childline-save', text: '结果存进「' + cur.name + '」的档案' })
-              : h('span', { class: 'dx-childline-hint', text: '没有档案孩子时，范围只能手动指定' })),
-
-          /* 科目 */
-          h('div', { class: 'dx-tabblock' },
-            h('span', { class: 'dx-tablabel' }, '科目'),
-            subjectSeg()),
-
-          /* 自动范围 */
-          h('div', { class: 'dx-autoscope' },
-            h('div', { class: 'dx-autoscope-main' },
-              h('span', { class: 'dx-autoscope-grade' },
-                g ? g.label + (volText ? '（' + volText + '）' : '') : '这个范围没有知识点'),
-              g ? h('span', { class: 'dx-autoscope-n', text: g.ids.length + ' 个知识点' }) : null),
-            g && g.byVolume && g.byVolume.length > 1
-              ? h('p', { class: 'dx-autoscope-vols' },
-                g.byVolume.map(function (v) { return volLabel(v.volume) + ' ' + v.n + ' 个'; }).join(' · '))
-              : null,
-            g && g.base.length
-              ? h('p', { class: 'dx-autoscope-sub' },
-                '往下兜底：' + baseGrades + ' 的 ' + g.base.length + ' 个基础点，只在答错时回查，不重复考简单题')
-              : null,
-            h('p', { class: 'dx-autoscope-note' }, auto
-              ? '跟着「' + cur.name + '」的档案年级走，档案里改了年级，这里立刻跟着变。'
-              : '当前是手动指定的范围，不会跟随档案年级。')),
-
-          /* 手动调整 */
-          h('details', { class: 'dx-advance', open: !auto },
-            h('summary', null, '调整范围'),
-            h('div', { class: 'dx-tabblock' },
-              h('span', { class: 'dx-tablabel' }, '年级'),
-              tabs('年级', gradeOptions(subject), gradeSel, function (v) {
-                rangeManual = true;
-                gradeSel = v;
-                if (seniorGrade(v)) volSel = '';
-                else if (subject === 'physics' && v === '九') volSel = '全';
-                else if (subject === 'english' && v === '九') volSel = '';
-                else if (volSel === '全') volSel = '';
-              })),
-            h('div', { class: 'dx-tabblock' },
-              h('span', { class: 'dx-tablabel' }, '册次'),
-              seniorGrade(gradeSel)
-                ? tabs('册次', [['', seniorRangeLabel(gradeSel)]], '', function () { rangeManual = true; volSel = ''; })
-                : (subject === 'physics' && gradeSel === '九')
-                  ? tabs('册次', [['全', '全一册']], '全', function () { rangeManual = true; volSel = '全'; })
-                  : (subject === 'english' && gradeSel === '九')
-                    ? tabs('册次', [['', '整年级'], ['上', '上册（新版）'], ['全', '全一册（旧版，九下暂用）']], volSel, function (v) { rangeManual = true; volSel = v; })
-                    : tabs('册次', [['', '整学年（上下册）'], ['上', '只上册'], ['下', '只下册']], volSel, function (v) { rangeManual = true; volSel = v; })),
-            autoKey
-              ? h('button', {
-                type: 'button', class: 'dx-advance-reset',
-                onclick: function () { rangeManual = false; followChildGrade(); fill(); }
-              }, '恢复跟随档案年级')
-              : null)));
-
-      if (!sideCol) return;
-      if (!sideMount) {
-        sideMount = h('div', { id: 'grade-side', class: 'dx-side-slot' });
-        sideCol.append(sideMount);
-      }
-      while (sideMount.firstChild) sideMount.removeChild(sideMount.firstChild);
-      sideMount.append(h('section', { class: 'pt-panel dx-side-card' },
-        h('div', { class: 'pt-panel-head' },
-          h('h2', null, '本次范围'),
-          h('span', { class: 'pt-pill is-blue' }, auto ? '跟随档案' : '手动指定')),
-        h('div', { class: 'pt-panel-body' },
-          h('p', { class: 'dx-scope' },
-            h('strong', null, g ? g.label + (volText ? '（' + volText + '）' : '') : '这个范围没有知识点'),
-            g
-              ? h('span', null, g.ids.length + ' 个本年级知识点' + (g.base.length ? '，连带 ' + g.base.length + ' 个过往基础点' : ''))
-              : h('span', null, '换一个科目或年级再试'),
-            baseGrades ? h('span', { class: 'dx-scope-sub' }, '基础范围：' + baseGrades + ' · 只在答错时回查，不单独占题量') : null),
-          h('button', {
-            class: 'primary dx-start-btn', id: 'btn-grade-start', disabled: !g,
-            onclick: function () { if (g) startSession(g.ids, g.label + '（年级诊断）', 'screen', g.base); }
-          }, g ? '开始「' + g.label + '」诊断' : '开始诊断'),
-          h('p', { class: 'dx-note' }, '不设题量，一直往下问，想停就点右上角「结束」。答错或不稳时会往回追一层，追到低年级基础就顺手查掉；结果随时记进档案。'))));
-    };
-    fill();
-    return box;
-  }
-
   function fillList(box) {
     while (box.firstChild) box.removeChild(box.firstChild);
     const q = startQuery.trim().toLowerCase();
@@ -807,7 +812,8 @@
       if (!chapters.length) return;
       const count = chapters.reduce(function (n, c) { return n + c.rows.length; }, 0);
       shown += count;
-      const openVol = subject === 'physics' ? '八上' : subject === 'english' ? '三上' : '一上';
+      /* 默认展开哪一册：跟着当前选的年级走，别再对四年级的孩子展开「一年级上册」 */
+      const openVol = seniorGrade(gradeSel) ? '' : String(gradeSel).charAt(0) + '上';
       const seniorOpen = subject === 'english' || subject === 'physics' ? '必修一' : '高一';
       const det = h('details', { class: 'vol', open: !!q || (startStage === 'j' ? vv[0] === '七上' : startStage === 'h' ? vv[0] === seniorOpen : vv[0] === openVol) },
         h('summary', null, vv[1] + '（' + count + ' 个知识点）'));

@@ -126,7 +126,7 @@
 
     var actions = el('div', 'kid-panel-actions');
     var go = el('a', 'btn btn-primary', rate == null ? '做第一次诊断' : '继续诊断');
-    go.href = withSubj('diagnose/?mode=grade');
+    go.href = withSubj('diagnose/');
     actions.appendChild(go);
     var more = el('a', 'btn', rate == null ? '管理档案' : '打开档案');
     more.href = rate == null ? 'children/' : 'children/history.html?child=' + encodeURIComponent(child.id);
