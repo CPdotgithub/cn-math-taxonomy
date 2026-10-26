@@ -14,6 +14,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="知识图谱">
 <link rel="stylesheet" href="../assets/site.css">
+<link rel="stylesheet" href="../assets/poptrade.css">
 <link rel="stylesheet" href="../assets/pwa.css">
 <link rel="stylesheet" href="children.css">
 <link rel="stylesheet" href="../assets/cloud-sync.css">
@@ -38,29 +39,52 @@
     </div>
   </nav>
 </header>
-<main class="kids" id="root">
-  <h1>孩子档案</h1>
-  <p class="lede">给每个孩子建一份档案。诊断页选好当前孩子，结果就按孩子分开保存，之后可以回看每次的记录和还没补上的知识点。</p>
+<main class="kids pt-page" id="root">
+  <div class="pt-page-head">
+    <div>
+      <h1>孩子档案</h1>
+      <p class="lede">给每个孩子建一份档案。诊断页选好当前孩子，结果就按孩子分开保存，之后可以回看每次的记录和还没补上的知识点。</p>
+    </div>
+    <div class="pt-page-actions">
+      <a class="btn" href="../diagnose/">去做诊断</a>
+    </div>
+  </div>
   <p id="back" class="quiet-link" hidden></p>
-  <div id="list" aria-live="polite"></div>
-  <section class="kid-form" id="form-card" aria-labelledby="form-title">
-    <h2 id="form-title">添加孩子</h2>
-    <form id="form" novalidate>
-      <label for="f-name">昵称</label>
-      <input id="f-name" type="text" maxlength="12" autocomplete="off" placeholder="例如：小满（最多 12 个字）">
-      <label for="f-grade">年级</label>
-      <select id="f-grade"></select>
-      <label for="f-book">教材版本</label>
-      <select id="f-book"></select>
-      <p class="muted small" id="book-note">图谱的知识点和章节按人教版编排。选其他版本也能用，章节名称可能和手上的教材略有不同。</p>
-      <p class="err" id="f-error" role="alert" hidden></p>
-      <div class="form-actions">
-        <button type="submit" class="primary" id="f-submit">添加孩子</button>
-        <button type="button" id="f-cancel" hidden>取消编辑</button>
+  <div id="overview" class="pt-kpis" aria-label="档案总览"></div>
+  <div class="pt-split">
+    <section class="pt-panel" aria-labelledby="kids-title">
+      <div class="pt-panel-head">
+        <h2 id="kids-title">
+          <span class="pt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 20v-1.6a4 4 0 0 0-4-4h-5a4 4 0 0 0-4 4V20"/><circle cx="8.5" cy="7" r="3.4"/><path d="M17.2 12.6a3.3 3.3 0 0 0 0-6.2"/><path d="M21.5 20v-1.5a3.7 3.7 0 0 0-2.6-3.5"/></svg></span>
+          我的孩子
+        </h2>
+        <span class="pt-pill is-gray" id="kid-count">0 个</span>
       </div>
-    </form>
-  </section>
-  <p class="muted small kid-note">档案和诊断记录默认保存在这台设备的浏览器里；登录云同步后会自动保存到云端，换设备、清缓存都不丢，多台设备自动合并。未登录时数据不上传。</p>
+      <div class="pt-panel-body">
+        <div id="list" aria-live="polite"></div>
+      </div>
+    </section>
+    <aside class="pt-side">
+      <section class="kid-form" id="form-card" aria-labelledby="form-title">
+        <h2 id="form-title">添加孩子</h2>
+        <form id="form" novalidate>
+          <label for="f-name">昵称</label>
+          <input id="f-name" type="text" maxlength="12" autocomplete="off" placeholder="例如：小满（最多 12 个字）">
+          <label for="f-grade">年级</label>
+          <select id="f-grade"></select>
+          <label for="f-book">教材版本</label>
+          <select id="f-book"></select>
+          <p class="muted small" id="book-note">图谱的知识点和章节按人教版编排。选其他版本也能用，章节名称可能和手上的教材略有不同。</p>
+          <p class="err" id="f-error" role="alert" hidden></p>
+          <div class="form-actions">
+            <button type="submit" class="primary" id="f-submit">添加孩子</button>
+            <button type="button" id="f-cancel" hidden>取消编辑</button>
+          </div>
+        </form>
+      </section>
+      <p class="muted small kid-note">档案和诊断记录默认保存在这台设备的浏览器里；登录云同步后会自动保存到云端，换设备、清缓存都不丢，多台设备自动合并。未登录时数据不上传。</p>
+    </aside>
+  </div>
 </main>
 <footer class="site-footer">
   <p><a href="https://github.com/xiaoyang111222/cn-math-taxonomy/issues/new/choose">提交 Issue</a></p>

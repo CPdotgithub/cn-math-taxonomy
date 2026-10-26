@@ -95,7 +95,7 @@ html.cnm-gate-locked body {
 .cnm-gate-input:focus {
   border-color: var(--brand, #0f6e62);
   background: var(--bg-elev, #ffffff);
-  box-shadow: 0 0 0 3px rgba(15, 110, 98, .14);
+  box-shadow: 0 0 0 3px rgba(0, 61, 247, .14);
 }
 
 .cnm-gate-btn {

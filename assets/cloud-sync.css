@@ -78,7 +78,9 @@
 }
 .cnm-toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+.sync-actions .btn { white-space: nowrap; }
+
 @media (max-width: 560px) {
-  .sync-actions { flex-basis: 100%; }
-  .sync-actions .btn { flex: 1 1 0; }
+  .sync-actions { flex-basis: 100%; flex-direction: column; align-items: stretch; gap: 6px; }
+  .sync-actions .btn { flex: 0 0 auto; width: 100%; }
 }

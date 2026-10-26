@@ -1,6 +1,7 @@
 /* 孩子档案、历史与薄弱点页。配色、字号来自 assets/site.css。 */
 
 main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
+body[data-page="children"] main.kids { width: min(1080px, 100%); padding: 22px 20px 64px; }
 .kids h1 { margin: 0 0 8px; font-size: 1.5rem; letter-spacing: -0.02em; }
 .kids h2 { margin: 0 0 8px; font-size: 1.15rem; letter-spacing: -0.02em; }
 .kids .lede { margin: 0 0 16px; font-size: 1rem; }
@@ -17,22 +18,44 @@ main.kids { width: min(760px, 100%); margin: 0 auto; padding: 20px 16px 56px; }
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }
-.kid-card { padding: 14px 16px; margin-bottom: 12px; border-top: 3px solid var(--line); }
-.kid-card.is-current { border-top-color: var(--brand); }
-.kid-head { display: flex; align-items: center; gap: 8px; }
-.kid-head h3 { margin: 0; font-size: 1.15rem; overflow-wrap: anywhere; }
-.kid-badge { background: var(--brand); color: var(--on-brand); font-size: 0.78rem; font-weight: 800; padding: 1px 9px; border-radius: 999px; }
-.kid-meta { margin: 2px 0 0; color: var(--muted); font-weight: 650; overflow-wrap: anywhere; }
-.kid-stat { margin: 4px 0 10px; }
-.kid-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-.kid-empty { margin: 8px 0 14px; padding: 14px 16px; background: var(--bg-muted); border-radius: var(--radius-sm); color: var(--muted); }
+.kid-card {
+  padding: 13px 14px;
+  margin-bottom: 8px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 16px;
+  align-items: center;
+  transition: border-color .15s, box-shadow .15s;
+}
+.kid-card:last-child { margin-bottom: 0; }
+.kid-card:hover { border-color: #CFDCF5; box-shadow: 0 1px 2px rgba(10, 12, 16, .04); }
+.kid-card.is-current { border-color: #B9CBFF; background: linear-gradient(180deg, #FAFCFF, #fff); }
+.kid-main { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.kid-id { min-width: 0; }
+.kid-head { display: flex; align-items: center; gap: 7px; }
+.kid-head h3 { margin: 0; font-size: 1.02rem; font-weight: 650; letter-spacing: -.01em; overflow-wrap: anywhere; }
+.kid-meta { margin: 3px 0 0; display: flex; flex-wrap: wrap; gap: 5px; }
+.kid-stat { margin: 5px 0 0; font-size: 0.84rem; color: var(--muted); overflow-wrap: anywhere; }
+.kid-actions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+.kid-actions button, .kid-actions .btn { min-height: 34px; padding: 5px 11px; font-size: 0.85rem; }
+.kid-empty { margin: 8px 0 0; padding: 14px 16px; background: var(--bg-muted); border-radius: var(--radius-sm); color: var(--muted); }
+@media (max-width: 700px) {
+  .kid-card { grid-template-columns: minmax(0, 1fr); }
+  .kid-actions { justify-content: flex-start; }
+}
 
-.kid-form { padding: 16px; margin-top: 16px; }
-.kid-form label { display: block; margin: 12px 0 4px; font-weight: 700; }
+/* 侧栏表单 */
+.kid-form { padding: 14px 16px 16px; }
+.kid-form label { display: block; margin: 12px 0 5px; font-size: 0.8rem; font-weight: 600; color: var(--muted); letter-spacing: 0.01em; }
 .kid-form input, .kid-form select { width: 100%; }
 .kid-form .form-actions { display: flex; gap: 8px; margin-top: 14px; }
 .kid-form .form-actions button { flex: 1 1 0; }
 .kid-form .small { margin: 8px 0 0; }
+.kid-note { margin: 12px 2px 0; line-height: 1.65; }
+.pt-side { min-width: 0; }
+@media (min-width: 861px) {
+  .pt-side { position: sticky; top: 74px; }
+}
 
 .kid-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
 .kid-picker label { font-weight: 700; }

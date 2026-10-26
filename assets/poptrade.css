@@ -1,0 +1,570 @@
+/* ============================================================================
+   PopTrade 设计层
+   ----------------------------------------------------------------------------
+   来源：PopTrade - Trading Dashboard UI KIT（Lumina UI/UX，90+ screens，Figma）
+   从原始文件中提取到的取值：
+     主蓝    #003DF7      图表蓝  #86C7FF
+     上涨绿  #0DD084
+     画布    #F1F6FC      卡片    #FFFFFF      描边  #E5EAF3
+     正文    #0A0C10      二级    #5A6478      三级  #8B94A6
+     字体    Inter（数字用 tabular-nums）+ 系统中文字体
+     圆角    卡片 14px、控件 10px、胶囊 999px
+   本文件做两件事：
+     1. 覆盖 site.css 的设计变量 —— 全站自动跟随 PopTrade 的视觉语言
+     2. 提供 dashboard 组件 —— KPI 卡、面板、胶囊、分段控件、环形进度、紧凑表格
+   只影响视觉，不改任何业务逻辑。
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1. 设计变量
+   --------------------------------------------------------------------------- */
+:root {
+  /* PopTrade 原始色板 */
+  --pt-blue:        #003DF7;
+  --pt-blue-600:    #0029C4;
+  --pt-blue-700:    #001E96;
+  --pt-blue-100:    #E9EFFF;
+  --pt-blue-50:     #F4F7FF;
+  --pt-chart:       #86C7FF;
+  --pt-chart-soft:  #E4F1FF;
+  --pt-up:          #0DD084;
+  --pt-down:        #F04438;
+  --pt-amber:       #F79009;
+  --pt-violet:      #7A5AF8;
+
+  --pt-ink:         #0A0C10;
+  --pt-ink-2:       #5A6478;
+  --pt-ink-3:       #8B94A6;
+
+  --pt-canvas:      #F1F6FC;
+  --pt-surface:     #FFFFFF;
+  --pt-surface-2:   #F7FAFE;
+  --pt-line:        #E5EAF3;
+  --pt-line-soft:   #EFF2F8;
+
+  /* 覆盖站点 token：这一层是「换皮」的主体 */
+  --bg:             var(--pt-canvas);
+  --bg-elev:        var(--pt-surface);
+  --bg-muted:       #F4F7FC;
+  --text:           var(--pt-ink);
+  --muted:          var(--pt-ink-2);
+  --line:           var(--pt-line);
+  --brand:          var(--pt-blue);
+  --brand-strong:   var(--pt-blue-600);
+  --brand-soft:     var(--pt-blue-100);
+  --on-brand:       #FFFFFF;
+  --accent:         var(--pt-blue);
+  --focus:          var(--pt-blue);
+  --panel:          var(--pt-surface);
+  --header-bg:      #FFFFFF;
+  --logo-sheet:     #DEE8FF;
+  --logo-fold:      #FFFFFF;
+  --shadow:         0 1px 2px rgba(10, 12, 16, .04), 0 10px 24px rgba(10, 12, 16, .045);
+  --radius:         14px;
+  --radius-sm:      10px;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+          "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+
+  /* 状态色：教育语义（掌握 / 不稳 / 薄弱 / 未测），取自 PopTrade 的涨跌配色 */
+  --ok:             #0A8F5B;
+  --ok-bg:          #E4F7EE;
+  --on-ok:          #FFFFFF;
+  --bad:            #D92D20;
+  --bad-bg:         #FEECEA;
+  --on-bad:         #FFFFFF;
+  --warn:           #B54708;
+  --warn-bg:        #FEF3E7;
+  --unk:            #5A6478;
+  --unk-bg:         #EEF2F8;
+  --junior:         var(--pt-blue);
+  --junior-soft:    var(--pt-blue-100);
+
+  /* 图谱节点色：整组调到 PopTrade 蓝紫系，保持层级可辨 */
+  --node-primary:       #0B7C63;
+  --node-primary-bg:    #DDF4EE;
+  --node-junior:        #1D4ED8;
+  --node-junior-bg:     #E1EAFF;
+  --node-senior:        #7A5AF8;
+  --node-senior-bg:     #EFEAFF;
+  --node-current-bg:    #FFF3E0;
+  --node-current-border: #F79009;
+  --node-text:          #162033;
+  --edge:               #94A3B8;
+  --edge-soft:          #C3CEE0;
+  --diagram-ok-bg:      #E4F7EE;
+  --diagram-ok:         #0A8F5B;
+  --diagram-bad-bg:     #FEECEA;
+  --diagram-bad:        #D92D20;
+  --diagram-unk-bg:     #EEF2F8;
+  --diagram-unk:        #5A6478;
+  --diagram-shaky-bg:   #FEF3E7;
+  --diagram-shaky:      #B54708;
+  --diagram-text:       #162033;
+  --diagram-edge:       #94A3B8;
+}
+
+/* 系统处于暗色时也走浅色：PopTrade 的浅色版是这套设计的主形态 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+    --bg: #F1F6FC;
+    --bg-elev: #FFFFFF;
+    --bg-muted: #F4F7FC;
+    --text: #0A0C10;
+    --muted: #5A6478;
+    --line: #E5EAF3;
+    --panel: #FFFFFF;
+    --header-bg: #FFFFFF;
+    --shadow: 0 1px 2px rgba(10, 12, 16, .04), 0 10px 24px rgba(10, 12, 16, .045);
+  }
+  /* 学科主题在暗色下也保持浅色版取值，避免浅底配浅色文字 */
+  body.subject-physics { --brand: #B45309; --brand-strong: #92400E; --brand-soft: #FFF7ED; --on-brand: #FFFFFF; --focus: #B45309; --accent: #B45309; --logo-sheet: #FDE9D4; --logo-fold: #FFFFFF; }
+  body.subject-english { --brand: #4338CA; --brand-strong: #3730A3; --brand-soft: #EEF2FF; --on-brand: #FFFFFF; --focus: #4338CA; --accent: #4338CA; --logo-sheet: #E6E8FB; --logo-fold: #FFFFFF; }
+  body.subject-chinese { --brand: #9F1239; --brand-strong: #881337; --brand-soft: #FFF1F2; --on-brand: #FFFFFF; --focus: #9F1239; --accent: #9F1239; --logo-sheet: #FBE3E8; --logo-fold: #FFFFFF; }
+}
+
+/* ---------------------------------------------------------------------------
+   2. 基础层：字体、控件几何
+   --------------------------------------------------------------------------- */
+body {
+  background: var(--pt-canvas);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 所有数字统一等宽，表格和 KPI 才不会跳动 */
+.pt-num,
+.pt-kpi-value,
+.pt-ring-value,
+.pt-table td,
+.pt-table th,
+.stat b,
+.kid-stat,
+.chap-counts {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* 顶部深色条：压暗成 PopTrade 的近黑 */
+.top-banner {
+  background: #0A0C10;
+  color: #F7FAFE;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.top-banner:hover { background: var(--pt-blue); color: #fff; }
+
+/* 顶栏：白底、细描边、去掉厚重感 */
+.site-header {
+  padding: 10px 24px;
+  background: #fff;
+  border-bottom: 1px solid var(--pt-line);
+}
+.logo { width: 34px; height: 34px; }
+.brand-name { font-weight: 700; letter-spacing: -.01em; }
+.brand-kicker { font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--pt-ink-3); }
+
+.nav-link {
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: .92rem;
+  color: var(--pt-ink-2);
+  padding: 6px 10px;
+  transition: background .15s, color .15s;
+}
+.nav-link:hover { background: var(--pt-blue-50); color: var(--pt-blue); }
+.nav-link.active,
+.nav-link[aria-current="page"] { background: var(--pt-blue-100); color: var(--pt-blue); font-weight: 700; }
+.nav-link.subject-link.on { background: var(--pt-blue); color: #fff; border-radius: 8px; }
+
+/* 按钮：PopTrade 是 10px 圆角，不是全胶囊 */
+button, .btn {
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: .94rem;
+  min-height: 40px;
+  padding: 8px 15px;
+  border: 1px solid var(--pt-line);
+  background: #fff;
+  color: var(--pt-ink);
+  transition: background .15s, border-color .15s, box-shadow .15s, color .15s;
+}
+button:hover, .btn:hover { background: var(--pt-blue-50); border-color: #CFDCF5; }
+button.primary, .btn-primary {
+  background: var(--pt-blue);
+  border-color: var(--pt-blue);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 61, 247, .18);
+}
+button.primary:hover, .btn-primary:hover {
+  background: var(--pt-blue-600);
+  border-color: var(--pt-blue-600);
+  filter: none;
+}
+button.danger, .btn-danger {
+  color: var(--pt-down);
+  border-color: #F5C7C3;
+  background: #fff;
+}
+button.danger:hover { background: var(--bad-bg); border-color: #EFA9A3; }
+a.btn { border-radius: 10px; }
+
+/* 输入控件：10px 圆角 + 聚焦蓝色描边环 */
+input[type="search"], input[type="text"], input[type="number"], select, textarea {
+  border-radius: 10px;
+  border: 1px solid var(--pt-line);
+  background: #fff;
+  min-height: 42px;
+  font-size: .95rem;
+  transition: border-color .15s, box-shadow .15s;
+}
+input[type="search"]:focus, input[type="text"]:focus,
+input[type="number"]:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--pt-blue);
+  box-shadow: 0 0 0 3px rgba(0, 61, 247, .12);
+}
+select { appearance: none; -webkit-appearance: none; padding-right: 32px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='none' stroke='%235A6478' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round' d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; }
+
+/* 页面标题层级：PopTrade 是紧字距、克制的字号 */
+main h1, .kids h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -.025em;
+  line-height: 1.25;
+  margin: 0 0 6px;
+}
+main h2, .kids h2 { font-size: 1.08rem; font-weight: 650; letter-spacing: -.015em; }
+.lede { color: var(--pt-ink-2); font-size: .96rem; line-height: 1.65; }
+.small, .muted.small { font-size: .86rem; }
+
+/* ---------------------------------------------------------------------------
+   3. 布局容器
+   --------------------------------------------------------------------------- */
+.pt-page {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  padding: 22px 20px 64px;
+}
+.pt-page-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-bottom: 18px;
+}
+.pt-page-head > :first-child { flex: 1 1 340px; min-width: 0; }
+.pt-page-head h1 { margin: 0 0 4px; }
+.pt-page-head .lede { margin: 0; max-width: 62ch; }
+.pt-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 0 0 auto;
+  margin-left: auto;
+}
+@media (max-width: 620px) {
+  .pt-page-actions { margin-left: 0; }
+}
+
+/* 两栏：主列表 + 侧栏（桌面），移动端堆叠 */
+.pt-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .pt-split { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------------------------------------------------------------------------
+   4. 面板（PopTrade 的 Card）
+   --------------------------------------------------------------------------- */
+.pt-panel {
+  background: #fff;
+  border: 1px solid var(--pt-line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.pt-panel + .pt-panel { margin-top: 14px; }
+.pt-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px 0;
+}
+.pt-panel-head h2,
+.pt-panel-head h3 {
+  margin: 0;
+  font-size: .98rem;
+  font-weight: 650;
+  letter-spacing: -.01em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pt-panel-head .pt-ico {
+  width: 24px; height: 24px;
+  border-radius: 7px;
+  background: var(--pt-blue-100);
+  color: var(--pt-blue);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.pt-panel-head .pt-ico svg { width: 14px; height: 14px; display: block; }
+.pt-panel-body { padding: 14px 16px 16px; }
+.pt-panel-foot {
+  padding: 11px 16px;
+  border-top: 1px solid var(--pt-line-soft);
+  background: var(--pt-surface-2);
+  font-size: .84rem;
+  color: var(--pt-ink-2);
+}
+
+/* ---------------------------------------------------------------------------
+   5. KPI 卡（PopTrade 的核心组件）
+   --------------------------------------------------------------------------- */
+.pt-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+@media (max-width: 860px) { .pt-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .pt-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } }
+
+.pt-kpi {
+  background: #fff;
+  border: 1px solid var(--pt-line);
+  border-radius: var(--radius);
+  padding: 13px 14px 14px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pt-kpi-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+  letter-spacing: .01em;
+}
+.pt-kpi-label .pt-dot {
+  width: 6px; height: 6px; border-radius: 3px; background: var(--pt-blue); flex: none;
+}
+.pt-kpi-value {
+  font-size: 1.72rem;
+  font-weight: 650;
+  letter-spacing: -.035em;
+  line-height: 1.15;
+  color: var(--pt-ink);
+  overflow-wrap: anywhere;
+}
+.pt-kpi-value small {
+  font-size: .86rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  letter-spacing: 0;
+  margin-left: 3px;
+}
+.pt-kpi-meta {
+  font-size: .78rem;
+  color: var(--pt-ink-3);
+  overflow-wrap: anywhere;
+}
+.pt-kpi.is-blue .pt-dot   { background: var(--pt-blue); }
+.pt-kpi.is-green .pt-dot  { background: var(--pt-up); }
+.pt-kpi.is-amber .pt-dot  { background: var(--pt-amber); }
+.pt-kpi.is-red .pt-dot    { background: var(--pt-down); }
+.pt-kpi .pt-kpi-value.tone-ok   { color: var(--ok); }
+.pt-kpi .pt-kpi-value.tone-bad  { color: var(--pt-down); }
+.pt-kpi .pt-kpi-value.tone-amber { color: var(--warn); }
+
+/* ---------------------------------------------------------------------------
+   6. 胶囊 / 徽标
+   --------------------------------------------------------------------------- */
+.pt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
+  font-size: .76rem;
+  font-weight: 650;
+  letter-spacing: .01em;
+  white-space: nowrap;
+  background: var(--pt-blue-50);
+  color: var(--pt-blue);
+  border: 1px solid transparent;
+}
+.pt-pill.is-gray  { background: #F2F5FA; color: var(--pt-ink-2); }
+.pt-pill.is-blue  { background: var(--pt-blue-100); color: var(--pt-blue); }
+.pt-pill.is-green { background: var(--ok-bg); color: var(--ok); }
+.pt-pill.is-amber { background: var(--warn-bg); color: var(--warn); }
+.pt-pill.is-red   { background: var(--bad-bg); color: var(--pt-down); }
+.pt-pill.is-solid { background: var(--pt-blue); color: #fff; }
+.pt-pill .pt-dot { width: 5px; height: 5px; border-radius: 3px; background: currentColor; flex: none; }
+
+/* ---------------------------------------------------------------------------
+   7. 分段控件（PopTrade 顶部 tab 的形态）
+   --------------------------------------------------------------------------- */
+.pt-seg {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  background: #F2F5FA;
+  border-radius: 9px;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.pt-seg::-webkit-scrollbar { display: none; }
+.pt-seg > * {
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--pt-ink-2);
+  padding: 6px 12px;
+  min-height: 32px;
+  white-space: nowrap;
+  box-shadow: none;
+}
+.pt-seg > *:hover { background: rgba(255, 255, 255, .7); color: var(--pt-ink); }
+.pt-seg > .on, .pt-seg > [aria-selected="true"] {
+  background: #fff;
+  color: var(--pt-ink);
+  box-shadow: 0 1px 2px rgba(10, 12, 16, .1);
+  font-weight: 650;
+}
+
+/* ---------------------------------------------------------------------------
+   8. 环形进度（掌握度）
+   --------------------------------------------------------------------------- */
+.pt-ring {
+  --p: 0;
+  --size: 56px;
+  --thick: 6px;
+  --ring-color: var(--pt-blue);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background:
+    conic-gradient(var(--ring-color) calc(var(--p) * 1%), #E9EEF6 0);
+  position: relative;
+}
+.pt-ring::after {
+  content: "";
+  position: absolute;
+  inset: var(--thick);
+  border-radius: 50%;
+  background: #fff;
+}
+.pt-ring-value {
+  position: relative;
+  z-index: 1;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--pt-ink);
+  letter-spacing: -.02em;
+}
+.pt-ring.is-lg { --size: 88px; --thick: 9px; }
+.pt-ring.is-lg .pt-ring-value { font-size: 1.08rem; }
+.pt-ring.tone-ok    { --ring-color: var(--pt-up); }
+.pt-ring.tone-bad   { --ring-color: var(--pt-down); }
+.pt-ring.tone-amber { --ring-color: var(--pt-amber); }
+
+/* ---------------------------------------------------------------------------
+   9. 细进度条 / 分布条
+   --------------------------------------------------------------------------- */
+.pt-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: #EDF1F7;
+  overflow: hidden;
+  display: flex;
+}
+.pt-bar > i { display: block; height: 100%; }
+.pt-bar > .m { background: var(--ok); }
+.pt-bar > .s { background: var(--warn); }
+.pt-bar > .w { background: var(--pt-down); }
+.pt-bar > .u { background: #C7D0DF; }
+
+/* ---------------------------------------------------------------------------
+   10. 紧凑表格（PopTrade 的 Recent Transaction 形态）
+   --------------------------------------------------------------------------- */
+.pt-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.pt-table th {
+  text-align: left;
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  letter-spacing: .02em;
+  padding: 0 10px 8px;
+  border-bottom: 1px solid var(--pt-line-soft);
+  white-space: nowrap;
+}
+.pt-table td {
+  padding: 10px;
+  border-bottom: 1px solid var(--pt-line-soft);
+  color: var(--pt-ink);
+  vertical-align: middle;
+}
+.pt-table tr:last-child td { border-bottom: none; }
+.pt-table tbody tr:hover td { background: var(--pt-blue-50); }
+.pt-table .num { text-align: right; }
+
+/* ---------------------------------------------------------------------------
+   11. 空状态
+   --------------------------------------------------------------------------- */
+.pt-empty {
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--pt-ink-2);
+  font-size: .92rem;
+  line-height: 1.7;
+}
+.pt-empty .pt-empty-ico {
+  width: 44px; height: 44px;
+  margin: 0 auto 10px;
+  border-radius: 12px;
+  background: var(--pt-blue-50);
+  color: var(--pt-blue);
+  display: grid;
+  place-items: center;
+}
+.pt-empty .pt-empty-ico svg { width: 22px; height: 22px; }
+
+/* ---------------------------------------------------------------------------
+   12. 页脚
+   --------------------------------------------------------------------------- */
+.site-footer {
+  border-top: 1px solid var(--pt-line);
+  background: #fff;
+  font-size: .82rem;
+  color: var(--pt-ink-3);
+}
+.site-footer a { color: var(--pt-ink-2); font-weight: 600; text-decoration: none; }
+.site-footer a:hover { color: var(--pt-blue); }
+
+/* ---------------------------------------------------------------------------
+   13. 打印
+   --------------------------------------------------------------------------- */
+@media print {
+  body { background: #fff; }
+  .pt-panel, .pt-kpi { break-inside: avoid; box-shadow: none; }
+}

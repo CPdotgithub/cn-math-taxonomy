@@ -73,17 +73,111 @@
     return { runs: recs.length, weak: weak };
   }
 
+  /* 掌握率 = 已掌握 / 已测（掌握 + 不稳 + 薄弱），没有测试数据返回 null */
+  function rateOf(c) {
+    var by = CC.latestStatus(c.id);
+    var m = 0, s = 0, w = 0;
+    Object.keys(by).forEach(function (id) {
+      var st = by[id].status;
+      if (st === 'mastered') m++; else if (st === 'shaky') s++; else if (st === 'weak') w++;
+    });
+    var total = m + s + w;
+    return total ? Math.round(m * 100 / total) : null;
+  }
+
+  function toneOf(rate) {
+    if (rate == null) return '';
+    if (rate >= 80) return 'tone-ok';
+    if (rate >= 50) return '';
+    return 'tone-bad';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return (d.getMonth() + 1) + ' 月 ' + d.getDate() + ' 日';
+  }
+
+  /* 总览 KPI 卡 */
+  function kpi(label, value, unit, meta, cls, tone) {
+    var box = el('div', 'pt-kpi ' + cls);
+    var lab = el('span', 'pt-kpi-label');
+    lab.appendChild(el('i', 'pt-dot'));
+    lab.appendChild(document.createTextNode(label));
+    box.appendChild(lab);
+    var val = el('strong', 'pt-kpi-value' + (tone ? ' ' + tone : ''));
+    val.appendChild(document.createTextNode(String(value)));
+    if (unit) val.appendChild(el('small', null, unit));
+    box.appendChild(val);
+    box.appendChild(el('span', 'pt-kpi-meta', meta));
+    return box;
+  }
+
+  function renderOverview(kids) {
+    var box = document.getElementById('overview');
+    if (!box) return;
+    var runs = 0, m = 0, s = 0, w = 0, lastAt = '';
+    kids.forEach(function (c) {
+      var recs = CC.recordsOf(c.id);
+      runs += recs.length;
+      recs.forEach(function (r) { if (r.savedAt && r.savedAt > lastAt) lastAt = r.savedAt; });
+      var by = CC.latestStatus(c.id);
+      Object.keys(by).forEach(function (id) {
+        var st = by[id].status;
+        if (st === 'mastered') m++; else if (st === 'shaky') s++; else if (st === 'weak') w++;
+      });
+    });
+    var tested = m + s + w;
+    var rate = tested ? Math.round(m * 100 / tested) : null;
+    var maxKids = CC.MAX_CHILDREN || 6;
+
+    box.textContent = '';
+    box.appendChild(kpi('在册孩子', kids.length, '个', '最多可建 ' + maxKids + ' 个', 'is-blue', ''));
+    box.appendChild(kpi('累计诊断', runs, '次', lastAt ? '最近 ' + fmtDate(lastAt) : '还没有记录', 'is-green', ''));
+    box.appendChild(kpi('待补薄弱点', w, '个', tested ? '已测 ' + tested + ' 个知识点' : '还没有测试数据', 'is-red', w ? 'tone-bad' : ''));
+    box.appendChild(kpi('平均掌握', rate == null ? '—' : rate, rate == null ? '' : '%',
+      tested ? '掌握 ' + m + ' · 不稳 ' + s : '等待第一次诊断', 'is-amber',
+      rate == null ? '' : (rate >= 80 ? 'tone-ok' : (rate >= 50 ? '' : 'tone-bad'))));
+  }
+
+  function emptyState() {
+    var box = el('div', 'pt-empty');
+    var ico = el('div', 'pt-empty-ico');
+    ico.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.5 20v-1.6a4 4 0 0 0-4-4h-5a4 4 0 0 0-4 4V20"/><circle cx="8.5" cy="7" r="3.4"/><path d="M17.2 12.6a3.3 3.3 0 0 0 0-6.2"/><path d="M21.5 20v-1.5a3.7 3.7 0 0 0-2.6-3.5"/></svg>';
+    box.appendChild(ico);
+    box.appendChild(el('p', null, '还没有孩子。在右边填昵称和年级，添加第一个。'));
+    return box;
+  }
+
   function card(c, isCurrent) {
     var st = stats(c);
+    var rate = rateOf(c);
     var art = el('article', 'kid-card' + (isCurrent ? ' is-current' : ''));
+
+    var main = el('div', 'kid-main');
+    var ring = el('div', 'pt-ring ' + toneOf(rate));
+    ring.style.setProperty('--p', String(rate || 0));
+    ring.appendChild(el('span', 'pt-ring-value', rate == null ? '—' : rate + '%'));
+    main.appendChild(ring);
+
+    var box = el('div', 'kid-id');
     var head = el('div', 'kid-head');
     head.appendChild(el('h3', null, c.name));
-    if (isCurrent) head.appendChild(el('span', 'kid-badge', '当前'));
-    art.appendChild(head);
-    art.appendChild(el('p', 'kid-meta', c.grade + ' · ' + c.textbook));
-    art.appendChild(el('p', 'kid-stat', st.runs
-      ? '已诊断 ' + st.runs + ' 次，目前有 ' + st.weak + ' 个薄弱知识点'
+    if (isCurrent) head.appendChild(el('span', 'pt-pill is-solid', '当前'));
+    box.appendChild(head);
+
+    var meta = el('p', 'kid-meta');
+    meta.appendChild(el('span', 'pt-pill is-gray', c.grade));
+    meta.appendChild(el('span', 'pt-pill is-gray', c.textbook));
+    box.appendChild(meta);
+
+    box.appendChild(el('p', 'kid-stat', st.runs
+      ? '已诊断 ' + st.runs + ' 次 · ' + st.weak + ' 个薄弱点'
       : '还没有诊断记录'));
+    main.appendChild(box);
+    art.appendChild(main);
+
     var row = el('div', 'kid-actions');
     if (!isCurrent) {
       var use = el('button', 'primary', '设为当前');
@@ -115,8 +209,11 @@
     var kids = CC.list();
     var cur = CC.current();
     listBox.textContent = '';
+    renderOverview(kids);
+    var countEl = document.getElementById('kid-count');
+    if (countEl) countEl.textContent = kids.length + ' 个';
     if (!kids.length) {
-      listBox.appendChild(el('p', 'kid-empty', '还没有孩子。在下面填昵称和年级，添加第一个。'));
+      listBox.appendChild(emptyState());
     } else {
       kids.forEach(function (c) { listBox.appendChild(card(c, !!cur && cur.id === c.id)); });
     }
