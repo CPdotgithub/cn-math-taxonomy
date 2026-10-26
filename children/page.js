@@ -158,11 +158,14 @@
     var rate = rateOf(c);
     var art = el('article', 'kid-card' + (isCurrent ? ' is-current' : ''));
 
-    var main = el('div', 'kid-main');
+    /* 整块可点：一份档案 = 一个孩子，点进去看累积状态和时间线 */
+    var open = el('a', 'kid-main');
+    open.href = 'history.html?child=' + encodeURIComponent(c.id);
+    open.setAttribute('aria-label', '打开「' + c.name + '」的档案');
     var ring = el('div', 'pt-ring ' + toneOf(rate));
     ring.style.setProperty('--p', String(rate || 0));
     ring.appendChild(el('span', 'pt-ring-value', rate == null ? '—' : rate + '%'));
-    main.appendChild(ring);
+    open.appendChild(ring);
 
     var box = el('div', 'kid-id');
     var head = el('div', 'kid-head');
@@ -188,10 +191,10 @@
     }
 
     box.appendChild(el('p', 'kid-stat', st.runs
-      ? '已诊断 ' + st.runs + ' 次 · 掌握 ' + st.m + ' · 不稳 ' + st.s + ' · 薄弱 ' + st.w
-      : '还没有诊断记录'));
-    main.appendChild(box);
-    art.appendChild(main);
+      ? '档案里有 ' + st.tested + ' 个知识点 · ' + st.runs + ' 次诊断汇总'
+      : '档案是空的，还没有诊断'));
+    open.appendChild(box);
+    art.appendChild(open);
 
     var row = el('div', 'kid-actions');
     if (!isCurrent) {
@@ -200,7 +203,7 @@
       use.addEventListener('click', function () { CC.setCurrent(c.id); render(); });
       row.appendChild(use);
     }
-    var hist = el('a', 'btn', '历史与薄弱点');
+    var hist = el('a', 'btn', '打开档案');
     hist.href = 'history.html?child=' + encodeURIComponent(c.id);
     row.appendChild(hist);
     var edit = el('button', null, '编辑');

@@ -30,7 +30,9 @@ body[data-page="children"] main.kids { width: min(1080px, 100%); padding: 22px 2
 .kid-card:last-child { margin-bottom: 0; }
 .kid-card:hover { border-color: #CFDCF5; box-shadow: 0 1px 2px rgba(10, 12, 16, .04); }
 .kid-card.is-current { border-color: #B9CBFF; background: linear-gradient(180deg, #FAFCFF, #fff); }
-.kid-main { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.kid-main { display: flex; align-items: center; gap: 12px; min-width: 0; text-decoration: none; color: inherit; }
+a.kid-main:hover .kid-head h3 { color: var(--pt-blue); }
+a.kid-main:focus-visible { outline: 2px solid var(--pt-blue); outline-offset: 3px; border-radius: 8px; }
 .kid-id { min-width: 0; }
 .kid-head { display: flex; align-items: center; gap: 7px; }
 .kid-head h3 { margin: 0; font-size: 1.02rem; font-weight: 650; letter-spacing: -.01em; overflow-wrap: anywhere; }
@@ -118,153 +120,227 @@ body[data-page="children"] .pt-kpis { margin-bottom: 14px; }
 body[data-page="children"] .pt-panel { margin-bottom: 0; }
 
 /* ============================================================================
-   历史与薄弱点页
+   孩子档案详情页（一份档案 = 一个孩子）
    ----------------------------------------------------------------------------
+   上半：按章节分组的累积知识状态；下半：检测时间线。
    和档案页共用同一套 PopTrade 语言：槽式分段控件、紧凑列表行、面板化记录。
    ============================================================================ */
 body[data-page="history"] main.kids {
   width: 100%;
-  max-width: 1080px;
-  padding: 22px 28px 72px;
+  max-width: 1000px;
+  padding: 20px 28px 72px;
 }
-body[data-page="history"] main.kids h1 { margin-bottom: 14px; font-size: 1.5rem; }
 
-/* 顶部：孩子选择 + 管理档案 */
-body[data-page="history"] .kid-picker {
+/* 档案头 */
+.pf-back { margin: 0 0 10px; }
+.pf-back a {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  text-decoration: none;
+}
+.pf-back a:hover { color: var(--pt-blue); }
+
+.pf-title-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.pf-ring { width: 62px; height: 62px; flex: none; }
+.pf-ring .pt-ring-value { font-size: .94rem; }
+.pf-title h1 {
+  margin: 0;
+  font-size: 1.42rem;
+  font-weight: 680;
+  letter-spacing: -.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+.pf-sub { margin: 3px 0 0; font-size: .84rem; color: var(--pt-ink-2); }
+.pf-acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; justify-content: flex-end; }
+.pf-acts select { min-height: 36px; min-width: 104px; font-size: .86rem; }
+.pf-acts .btn, .pf-acts select { border-radius: 9px; }
+.pf-acts .btn { min-height: 36px; padding: 5px 14px; font-size: .85rem; }
+
+.pf-kpis { margin: 0 0 22px; }
+
+/* 分节 */
+.pf-section {
+  background: #fff;
+  border: 1px solid var(--pt-line);
+  border-radius: 14px;
+  padding: 16px 18px 6px;
+  margin-bottom: 16px;
+}
+.pf-sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 2px;
+}
+.pf-section h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 660;
+  letter-spacing: -.02em;
+}
+.pf-sec-note { font-size: .78rem; color: var(--pt-ink-3); }
+
+/* 筛选：槽式分段 */
+.pf-filters {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 8px;
-  margin: 0 0 4px;
+  gap: 10px;
+  margin: 12px 0 4px;
 }
-body[data-page="history"] .kid-picker label {
-  font-size: .78rem;
-  font-weight: 650;
-  color: var(--pt-ink-2);
-  letter-spacing: .02em;
-}
-body[data-page="history"] .kid-picker select {
-  flex: 0 1 260px;
-  min-height: 36px;
-  font-size: .88rem;
-}
-body[data-page="history"] .kid-picker .btn {
-  min-height: 36px;
-  padding: 5px 13px;
-  font-size: .85rem;
-}
-
-/* 学科切换：槽式 */
-body[data-page="history"] .kid-tabs {
+.pf-seg {
   display: inline-flex;
   gap: 2px;
   padding: 3px;
   background: #F2F5FA;
   border-radius: 9px;
-  margin: 10px 0 20px;
 }
-body[data-page="history"] .kid-tabs .stage-tab {
-  min-height: 30px;
-  padding: 3px 13px;
+.pf-seg-btn {
+  min-height: 28px;
+  padding: 3px 11px;
   border: 0;
   border-radius: 7px;
   background: transparent;
   box-shadow: none;
-  font-size: .84rem;
+  font-size: .8rem;
   font-weight: 600;
   color: var(--pt-ink-2);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  cursor: pointer;
 }
-body[data-page="history"] .kid-tabs .stage-tab:hover { background: rgba(255, 255, 255, .7); color: var(--pt-ink); }
-body[data-page="history"] .kid-tabs .stage-tab.on {
+.pf-seg-btn:hover { background: rgba(255, 255, 255, .7); color: var(--pt-ink); }
+.pf-seg-btn.on {
   background: #fff;
   color: var(--pt-ink);
   font-weight: 650;
   box-shadow: 0 1px 2px rgba(10, 12, 16, .1);
 }
 
-body[data-page="history"] .kid-section { margin-bottom: 30px; }
-body[data-page="history"] .kid-section h2 {
-  font-size: 1rem;
-  font-weight: 650;
-  letter-spacing: -.015em;
-  margin: 0 0 4px;
+/* 章节分组 */
+.pf-group { border-top: 1px solid var(--pt-line-soft); }
+.pf-group:first-of-type { border-top: 0; }
+.pf-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 13px 0 7px;
 }
-body[data-page="history"] .kid-section > .muted.small {
-  margin: 0 0 10px;
-  font-size: .82rem;
-  line-height: 1.6;
+.pf-group-name {
+  font-size: .84rem;
+  font-weight: 650;
+  color: var(--pt-ink-2);
+  letter-spacing: -.01em;
+  overflow-wrap: anywhere;
+}
+.pf-group-pills { display: flex; align-items: center; gap: 6px; flex: none; margin-left: auto; }
+.pf-group-n {
+  font-size: .76rem;
+  color: var(--pt-ink-3);
+  font-variant-numeric: tabular-nums;
+  flex: none;
 }
 
-/* 薄弱点：两列行式布局，操作靠右 */
-body[data-page="history"] .wk-list {
-  margin: 0;
-  border-top: 1px solid var(--pt-line-soft);
-}
-body[data-page="history"] .wk-item {
+/* 知识点行 */
+.pf-topics { list-style: none; margin: 0 0 6px; padding: 0; }
+.pf-topic {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: 8px minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: 2px 16px;
-  padding: 12px 2px;
-  border-bottom: 1px solid var(--pt-line-soft);
+  gap: 2px 10px;
+  padding: 7px 8px 7px 6px;
+  margin: 0 -8px;
+  border-radius: 8px;
 }
-body[data-page="history"] .wk-item:hover { background: var(--pt-blue-50); }
-body[data-page="history"] .wk-top {
-  grid-column: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
+.pf-topic:hover { background: var(--pt-blue-50); }
+.pf-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pt-ink-3);
+  justify-self: center;
 }
-body[data-page="history"] .wk-name {
-  font-size: .94rem;
-  font-weight: 650;
+.pf-topic.is-weak .pf-dot { background: var(--bad); }
+.pf-topic.is-shaky .pf-dot { background: var(--pt-amber); }
+.pf-topic.is-mastered .pf-dot { background: var(--ok); }
+.pf-topic-main { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.pf-topic-name {
+  font-size: .9rem;
+  font-weight: 600;
   letter-spacing: -.01em;
-  color: var(--pt-blue);
+  color: var(--pt-ink);
   text-decoration: none;
+  overflow-wrap: anywhere;
 }
-body[data-page="history"] .wk-name:hover { text-decoration: underline; text-underline-offset: 2px; }
-body[data-page="history"] .wk-meta {
-  grid-column: 1;
-  margin: 0;
-  font-size: .78rem;
+.pf-topic-name:hover { color: var(--pt-blue); text-decoration: underline; text-underline-offset: 2px; }
+.pf-topic-meta {
+  font-size: .74rem;
   color: var(--pt-ink-3);
   font-variant-numeric: tabular-nums;
 }
-body[data-page="history"] .wk-retest {
-  grid-column: 2;
-  grid-row: 1 / 3;
-  margin: 0;
-  font-size: .82rem;
-  font-weight: 650;
-  color: var(--pt-ink-2);
+.pf-retest {
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
   text-decoration: none;
-  padding: 5px 12px;
-  border: 1px solid var(--pt-line);
-  border-radius: 8px;
-  background: #fff;
+  padding: 3px 9px;
+  border: 1px solid transparent;
+  border-radius: 7px;
   white-space: nowrap;
 }
-body[data-page="history"] .wk-retest:hover {
-  background: var(--pt-blue-50);
-  border-color: #CFDCF5;
-  color: var(--pt-blue);
-}
+.pf-topic:hover .pf-retest { border-color: var(--pt-line); background: #fff; color: var(--pt-ink-2); }
+.pf-retest:hover { border-color: #CFDCF5; color: var(--pt-blue); }
 
-/* 诊断记录：面板化 */
-body[data-page="history"] .rec {
-  border: 1px solid var(--pt-line);
-  border-radius: 12px;
-  background: #fff;
-  margin-bottom: 8px;
-  overflow: hidden;
+/* 检测时间线 */
+.pf-timeline { margin: 12px 0 10px; border-top: 1px solid var(--pt-line-soft); }
+.pf-rec { border: 0; border-bottom: 1px solid var(--pt-line-soft); border-radius: 0; background: transparent; margin: 0; }
+.pf-rec > summary.pf-rec-sum {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 11px 8px;
+  margin: 0 -8px;
+  border-radius: 8px;
+  list-style: none;
+  cursor: pointer;
 }
-body[data-page="history"] .rec > summary { padding: 12px 14px; }
-body[data-page="history"] .rec > summary:hover { background: var(--pt-surface-2); }
-body[data-page="history"] .rec-label { font-size: .92rem; font-weight: 650; letter-spacing: -.01em; }
-body[data-page="history"] .rec-date { font-size: .76rem; }
-body[data-page="history"] .rec-counts { gap: 5px; margin-top: 5px; }
-body[data-page="history"] .rec-body { padding: 0 14px 14px; border-top: 1px solid var(--pt-line-soft); }
+.pf-rec > summary.pf-rec-sum::-webkit-details-marker { display: none; }
+.pf-rec > summary.pf-rec-sum:hover { background: var(--pt-blue-50); }
+.pf-rec[open] > summary.pf-rec-sum { background: var(--pt-blue-50); }
+.pf-rec-date {
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--pt-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.pf-rec-main { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.pf-rec-main b {
+  font-size: .9rem;
+  font-weight: 620;
+  letter-spacing: -.01em;
+  overflow-wrap: anywhere;
+}
+.pf-rec-main em {
+  font-style: normal;
+  font-size: .74rem;
+  color: var(--pt-ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.pf-rec-counts { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; justify-content: flex-end; }
+.pf-rec .rec-body { padding: 4px 0 14px; border-top: 0; }
+.pf-rec .rec-body h4 { margin: 12px 0 4px; font-size: .88rem; }
 
 body[data-page="history"] .kid-tag {
   font-size: .72rem;
@@ -272,16 +348,15 @@ body[data-page="history"] .kid-tag {
   padding: 1px 7px;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 760px) {
   body[data-page="history"] main.kids { padding: 16px 14px 56px; }
-  body[data-page="history"] .wk-item {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 6px;
-  }
-  body[data-page="history"] .wk-retest {
-    grid-column: 1;
-    grid-row: auto;
-    justify-self: start;
-    margin-top: 2px;
-  }
+  .pf-title-row { grid-template-columns: auto minmax(0, 1fr); row-gap: 12px; }
+  .pf-acts { grid-column: 1 / -1; justify-content: flex-start; }
+  .pf-section { padding: 14px 13px 4px; }
+  .pf-topic { grid-template-columns: 8px minmax(0, 1fr) auto; row-gap: 3px; }
+  .pf-topic-main { grid-column: 2; grid-row: 1; }
+  .pf-topic > .kid-tag { grid-column: 2; grid-row: 2; justify-self: start; }
+  .pf-retest { grid-column: 3; grid-row: 1 / 3; align-self: center; }
+  .pf-rec > summary.pf-rec-sum { grid-template-columns: 46px minmax(0, 1fr); }
+  .pf-rec-counts { grid-column: 1 / -1; justify-content: flex-start; }
 }

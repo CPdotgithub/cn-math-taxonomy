@@ -277,14 +277,14 @@
             CC.setCurrent(id);
             renderResult();
           }),
-          cur ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '历史与薄弱点' }) : null));
+          cur ? h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '打开档案' }) : null));
     }
     return h('div', { class: 'card child-bar no-print', id: 'child-bar' },
       h('div', { class: 'row' },
         h('label', { for: 'child-select' }, '当前孩子'),
         childSelect(function (id) { CC.setCurrent(id); renderStart(); })),
       cur ? h('div', { class: 'row dx-child-actions' },
-        h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '历史与薄弱点' })) : null,
+        h('a', { class: 'btn', href: childrenHref('history.html?child=' + encodeURIComponent(cur.id)), text: '打开档案' })) : null,
       h('p', { class: 'muted small', style: 'margin:8px 0 0' },
         cur ? '诊断做完，结果会保存到「' + cur.name + '」的档案里。' : '选了“不保存到档案”时，诊断结果不会存下来。'));
   }

@@ -120,8 +120,8 @@
     var go = el('a', 'btn btn-primary', rate == null ? '做第一次诊断' : '继续诊断');
     go.href = 'diagnose/';
     actions.appendChild(go);
-    var more = el('a', 'btn', kids.length > 1 ? '切换孩子' : '编辑档案');
-    more.href = 'children/';
+    var more = el('a', 'btn', rate == null ? '管理档案' : '打开档案');
+    more.href = rate == null ? 'children/' : 'children/history.html?child=' + encodeURIComponent(child.id);
     actions.appendChild(more);
     body.appendChild(actions);
   }
@@ -146,7 +146,7 @@
 
     recs.forEach(function (r) {
       var row = el('a', 'recent-row');
-      row.href = 'children/history' + (child ? '?child=' + encodeURIComponent(child.id) : '');
+      row.href = 'children/history.html' + (child ? '?child=' + encodeURIComponent(child.id) : '');
 
       var top = el('div', 'recent-top');
       top.appendChild(el('span', 'recent-label', r.label || '诊断记录'));
