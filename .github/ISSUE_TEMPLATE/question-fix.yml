@@ -1,0 +1,36 @@
+name: 题目纠错
+description: 题干、答案、选项或难度有误时用此模板
+title: "[题目] "
+labels: ["题目纠错"]
+body:
+  - type: input
+    id: question_id
+    attributes:
+      label: 题目 ID
+      description: 如 q_cnm_221_3，或诊断题对应的知识点 id（如 cnm_221）
+      placeholder: q_cnm_xxx_n
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题描述
+      description: 哪里错了（题干表述、答案、选项、难度等）
+      placeholder: 例如：参考答案写成了 2，正确应为 -2；或选项 C 与 A 重复。
+    validations:
+      required: true
+  - type: textarea
+    id: suggested_fix
+    attributes:
+      label: 建议修正
+      description: 你认为正确的写法（可选）
+      placeholder: 建议答案改为 …；或建议题干改为 …
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: 补充信息
+      description: 截图说明、相关知识点、出现页面等（可选）
+    validations:
+      required: false

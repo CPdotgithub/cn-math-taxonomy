@@ -1,0 +1,38 @@
+name: 功能建议
+description: 诊断工具、浏览页、数据或文档的改进想法
+title: "[建议] "
+labels: ["功能建议"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: 想解决什么问题
+      description: 用一两句话说清楚场景和痛点
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: 建议方案
+      description: 你希望怎么改（界面、流程、数据字段等）
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: 相关模块
+      options:
+        - 诊断工具
+        - 知识图谱浏览
+        - 题库 / 数据
+        - 文档 / README
+        - 其他
+    validations:
+      required: true
+  - type: textarea
+    id: extras
+    attributes:
+      label: 其他补充
+      description: 参考链接、竞品截图等（可选）
+    validations:
+      required: false

@@ -1,0 +1,152 @@
+/* 访问密码门样式：全屏遮罩 + 居中卡片。与 site.css 的设计变量保持一致，并带兜底值。 */
+
+/* 未通过时：正文可见但模糊到不可读，且不可交互；遮罩卡片保持清晰 */
+html.cnm-gate-locked body > *:not(.cnm-gate-mask) {
+  filter: blur(12px) brightness(.62);
+  transform: scale(1.04);
+  transform-origin: center center;
+  pointer-events: none;
+  user-select: none;
+}
+html.cnm-gate-locked {
+  background: var(--bg, #f4f5f7);
+}
+html.cnm-gate-locked body {
+  overflow: hidden;
+}
+
+.cnm-gate-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(11, 15, 19, 0.66);
+  font-family: var(--font, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif);
+  animation: cnm-gate-fade .28s ease both;
+}
+
+.cnm-gate-card {
+  width: 100%;
+  max-width: 372px;
+  box-sizing: border-box;
+  padding: 32px 28px 26px;
+  border-radius: 18px;
+  background: var(--bg-elev, #ffffff);
+  border: 1px solid var(--line, #e3e6ed);
+  box-shadow: 0 1px 2px rgba(23, 25, 31, .08), 0 16px 40px rgba(10, 14, 18, .28);
+  text-align: center;
+  animation: cnm-gate-rise .34s cubic-bezier(.2, .9, .3, 1) both;
+}
+
+.cnm-gate-badge {
+  display: inline-block;
+  margin-bottom: 18px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--brand-soft, #e6f4f1);
+  color: var(--brand, #0f6e62);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.cnm-gate-title {
+  margin: 0 0 8px;
+  font-size: 21px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: var(--text, #17191f);
+}
+
+.cnm-gate-desc {
+  margin: 0 0 22px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--muted, #5c6370);
+}
+
+.cnm-gate-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  height: 50px;
+  padding: 0 16px;
+  margin-bottom: 12px;
+  border: 1.5px solid var(--line, #e3e6ed);
+  border-radius: 11px;
+  background: var(--bg, #f4f5f7);
+  color: var(--text, #17191f);
+  font-size: 17px;
+  font-family: inherit;
+  letter-spacing: .16em;
+  text-align: center;
+  outline: none;
+  transition: border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+.cnm-gate-input::placeholder {
+  color: var(--muted, #5c6370);
+  opacity: .62;
+  letter-spacing: normal;
+  font-size: 15px;
+}
+.cnm-gate-input:focus {
+  border-color: var(--brand, #0f6e62);
+  background: var(--bg-elev, #ffffff);
+  box-shadow: 0 0 0 3px rgba(15, 110, 98, .14);
+}
+
+.cnm-gate-btn {
+  display: block;
+  width: 100%;
+  height: 48px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--brand, #0f6e62);
+  color: var(--on-brand, #ffffff);
+  font-size: 15.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .16s ease, transform .08s ease;
+}
+.cnm-gate-btn:hover { background: var(--brand-strong, #0c574e); }
+.cnm-gate-btn:active { transform: translateY(1px); }
+.cnm-gate-btn:disabled { opacity: .64; cursor: default; }
+
+.cnm-gate-err {
+  min-height: 20px;
+  margin: 12px 0 0;
+  font-size: 13px;
+  line-height: 20px;
+  color: var(--bad, #b91c1c);
+}
+
+.cnm-gate-mask.cnm-gate-shake .cnm-gate-card {
+  animation: cnm-gate-shake .4s cubic-bezier(.36, .07, .19, .97) both;
+}
+
+.cnm-gate-mask.cnm-gate-out {
+  animation: cnm-gate-fade-out .3s ease both;
+  pointer-events: none;
+}
+
+@keyframes cnm-gate-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cnm-gate-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes cnm-gate-rise {
+  from { opacity: 0; transform: translateY(14px) scale(.985); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes cnm-gate-shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+
+@media (max-width: 420px) {
+  .cnm-gate-card { padding: 28px 22px 22px; }
+  .cnm-gate-title { font-size: 19px; }
+}
