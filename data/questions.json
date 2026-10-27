@@ -159102,7 +159102,7 @@
     "topicId": "cnc_p012",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "为什么近处听不见水声、人来了鸟也不惊？",
+    "prompt": "《画》里，为什么近处听不见水声、人来了鸟也不惊？",
     "choices": [
       {
         "key": "A",
@@ -159123,14 +159123,15 @@
     ],
     "answer": "D",
     "explanation": "画上的水不会响，画上的鸟也不会被人吓飞。",
-    "verify": "\"因为写的是一幅画，不是真的山水\""
+    "verify": "\"因为写的是一幅画，不是真的山水\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p012_q4",
     "topicId": "cnc_p012",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗写的是什么？",
+    "prompt": "《画》里，这首诗写的是什么？",
     "choices": [
       {
         "key": "A",
@@ -159151,7 +159152,8 @@
     ],
     "answer": "A",
     "explanation": "山有色、水无声、花还在、鸟不惊，都是因为看的是画。",
-    "verify": "\"一幅画\""
+    "verify": "\"一幅画\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p013_q1",
@@ -160418,7 +160420,7 @@
     "topicId": "cnc_p024",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "大雁往哪个方向飞？",
+    "prompt": "《秋天》里，大雁往哪个方向飞？",
     "choices": [
       {
         "key": "A",
@@ -160439,7 +160441,8 @@
     ],
     "answer": "C",
     "explanation": "天气凉了，一群大雁往南飞。",
-    "verify": "\"往南飞\""
+    "verify": "\"往南飞\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p024_q3",
@@ -160614,7 +160617,7 @@
     "topicId": "cnc_p026",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小鸡画的是什么？",
+    "prompt": "《雪地里的小画家》里，小鸡画的是什么？",
     "choices": [
       {
         "key": "A",
@@ -160635,14 +160638,15 @@
     ],
     "answer": "D",
     "explanation": "小鸡的脚印像竹叶。梅花是小狗画的。",
-    "verify": "\"竹叶\""
+    "verify": "\"竹叶\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p026_q2",
     "topicId": "cnc_p026",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "谁画的是梅花？",
+    "prompt": "《雪地里的小画家》里，谁画的是梅花？",
     "choices": [
       {
         "key": "A",
@@ -160663,7 +160667,8 @@
     ],
     "answer": "A",
     "explanation": "小狗的脚印像梅花。小鸡画竹叶，小鸭画枫叶，小马画月牙。",
-    "verify": "\"小狗\""
+    "verify": "\"小狗\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p026_q3",
@@ -160698,7 +160703,7 @@
     "topicId": "cnc_p026",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "青蛙为什么没有参加？",
+    "prompt": "《雪地里的小画家》里，青蛙为什么没有参加？",
     "choices": [
       {
         "key": "A",
@@ -160719,7 +160724,8 @@
     ],
     "answer": "C",
     "explanation": "课文问青蛙为什么没参加，回答是：他在洞里睡着啦。",
-    "verify": "\"他在洞里睡着了\""
+    "verify": "\"他在洞里睡着了\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p027_q1",
@@ -160754,7 +160760,7 @@
     "topicId": "cnc_p027",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "谁说「我是夏天」？",
+    "prompt": "《四季》里，谁说「我是夏天」？",
     "choices": [
       {
         "key": "A",
@@ -160775,7 +160781,8 @@
     ],
     "answer": "B",
     "explanation": "荷叶圆圆，他对青蛙说：我是夏天。",
-    "verify": "\"荷叶\""
+    "verify": "\"荷叶\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p027_q3",
@@ -160810,7 +160817,7 @@
     "topicId": "cnc_p027",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "雪人怎样介绍自己？",
+    "prompt": "《四季》里，雪人怎样介绍自己？",
     "choices": [
       {
         "key": "A",
@@ -160831,7 +160838,8 @@
     ],
     "answer": "D",
     "explanation": "雪人大肚子一挺，顽皮地说：我就是冬天。鞠躬的是谷穗。",
-    "verify": "\"大肚子一挺，说「我就是冬天」\""
+    "verify": "\"大肚子一挺，说「我就是冬天」\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p028_q1",
@@ -161314,7 +161322,7 @@
     "topicId": "cnc_p032",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "国旗是怎样升起来的？",
+    "prompt": "《升国旗》里，国旗是怎样升起来的？",
     "choices": [
       {
         "key": "A",
@@ -161335,7 +161343,8 @@
     ],
     "answer": "C",
     "explanation": "课文写国歌声中，国旗徐徐升起。徐徐是慢慢地。",
-    "verify": "\"随着国歌徐徐升起\""
+    "verify": "\"随着国歌徐徐升起\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p032_q3",
@@ -161622,7 +161631,7 @@
     "topicId": "cnc_p035",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "课文把影子比作什么？",
+    "prompt": "《影子》里，课文把影子比作什么？",
     "choices": [
       {
         "key": "A",
@@ -161643,7 +161652,8 @@
     ],
     "answer": "A",
     "explanation": "影子常常跟着我，就像一条小黑狗。",
-    "verify": "\"一条小黑狗\""
+    "verify": "\"一条小黑狗\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p035_q2",
@@ -161734,7 +161744,7 @@
     "topicId": "cnc_p036",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "人的两件宝是什么？",
+    "prompt": "《两件宝》里，人的两件宝是什么？",
     "choices": [
       {
         "key": "A",
@@ -161755,7 +161765,8 @@
     ],
     "answer": "B",
     "explanation": "课文说人有两件宝，双手和大脑。书包、太阳和影子都不是这两件宝。",
-    "verify": "\"双手和大脑\""
+    "verify": "\"双手和大脑\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p036_q2",
@@ -161818,7 +161829,7 @@
     "topicId": "cnc_p036",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "怎样才能有创造？",
+    "prompt": "《两件宝》里，怎样才能有创造？",
     "choices": [
       {
         "key": "A",
@@ -161839,7 +161850,8 @@
     ],
     "answer": "A",
     "explanation": "课文最后说：用手又用脑，才能有创造。只用一样，办不好。",
-    "verify": "\"用手又用脑\""
+    "verify": "\"用手又用脑\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p037_q1",
@@ -161958,7 +161970,7 @@
     "topicId": "cnc_p038",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "谁的尾巴长？",
+    "prompt": "《比尾巴》里，谁的尾巴长？",
     "choices": [
       {
         "key": "A",
@@ -161979,14 +161991,15 @@
     ],
     "answer": "D",
     "explanation": "猴子的尾巴长。兔子的尾巴短，松鼠的尾巴好像一把伞。",
-    "verify": "\"猴子\""
+    "verify": "\"猴子\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p038_q2",
     "topicId": "cnc_p038",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "谁的尾巴好像一把伞？",
+    "prompt": "《比尾巴》里，谁的尾巴好像一把伞？",
     "choices": [
       {
         "key": "A",
@@ -162007,7 +162020,8 @@
     ],
     "answer": "A",
     "explanation": "松鼠的尾巴又大又蓬松，课文说好像一把伞。孔雀的尾巴是最好看。",
-    "verify": "\"松鼠\""
+    "verify": "\"松鼠\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p038_q3",
@@ -162042,7 +162056,7 @@
     "topicId": "cnc_p038",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "谁的尾巴最好看？",
+    "prompt": "《比尾巴》里，谁的尾巴最好看？",
     "choices": [
       {
         "key": "A",
@@ -162063,7 +162077,8 @@
     ],
     "answer": "C",
     "explanation": "课文最后说孔雀的尾巴最好看。公鸡的尾巴只是弯。",
-    "verify": "\"孔雀\""
+    "verify": "\"孔雀\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p039_q1",
@@ -162098,7 +162113,7 @@
     "topicId": "cnc_p039",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "乌鸦想出了什么办法？",
+    "prompt": "《乌鸦喝水》里，乌鸦想出了什么办法？",
     "choices": [
       {
         "key": "A",
@@ -162119,7 +162134,8 @@
     ],
     "answer": "B",
     "explanation": "它看见旁边有许多小石子，就一颗一颗放进瓶子。",
-    "verify": "\"把小石子一颗一颗放进瓶子\""
+    "verify": "\"把小石子一颗一颗放进瓶子\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p039_q3",
@@ -162154,7 +162170,7 @@
     "topicId": "cnc_p039",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要说什么？",
+    "prompt": "《乌鸦喝水》里，这个故事主要说什么？",
     "choices": [
       {
         "key": "A",
@@ -162175,14 +162191,15 @@
     ],
     "answer": "D",
     "explanation": "乌鸦没有放弃，想出放石子的办法，才喝到了水。",
-    "verify": "\"遇到困难可以想办法\""
+    "verify": "\"遇到困难可以想办法\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p040_q1",
     "topicId": "cnc_p040",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小雨点儿要到哪里去？",
+    "prompt": "《雨点儿》里，小雨点儿要到哪里去？",
     "choices": [
       {
         "key": "A",
@@ -162203,14 +162220,15 @@
     ],
     "answer": "B",
     "explanation": "小雨点儿说：我要去有花有草的地方。没有花草的地方是大雨点儿去的。",
-    "verify": "\"有花有草的地方\""
+    "verify": "\"有花有草的地方\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p040_q2",
     "topicId": "cnc_p040",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "大雨点儿要到哪里去？",
+    "prompt": "《雨点儿》里，大雨点儿要到哪里去？",
     "choices": [
       {
         "key": "A",
@@ -162231,7 +162249,8 @@
     ],
     "answer": "C",
     "explanation": "大雨点儿说：我要去没有花没有草的地方。",
-    "verify": "\"没有花没有草的地方\""
+    "verify": "\"没有花没有草的地方\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p040_q3",
@@ -163162,7 +163181,7 @@
     "topicId": "cnc_p048",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "下面哪一种理解不对？",
+    "prompt": "《热爱中国共产党》里，下面哪一种理解不对？",
     "choices": [
       {
         "key": "A",
@@ -163183,14 +163202,15 @@
     ],
     "answer": "A",
     "explanation": "课文的意思是热爱，不是讨厌。另外三种说法都和课文一致。",
-    "verify": "\"课文是让读者讨厌中国共产党\""
+    "verify": "\"课文是让读者讨厌中国共产党\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p049_q1",
     "topicId": "cnc_p049",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这口井在什么地方？",
+    "prompt": "《吃水不忘挖井人》里，这口井在什么地方？",
     "choices": [
       {
         "key": "A",
@@ -163211,7 +163231,8 @@
     ],
     "answer": "C",
     "explanation": "课文写瑞金城外有个村子叫沙洲坝，井就挖在那里。",
-    "verify": "\"瑞金城外的沙洲坝\""
+    "verify": "\"瑞金城外的沙洲坝\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p049_q2",
@@ -163666,7 +163687,7 @@
     "topicId": "cnc_p053",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "那时候树和喜鹊觉得怎样？",
+    "prompt": "《树和喜鹊》里，那时候树和喜鹊觉得怎样？",
     "choices": [
       {
         "key": "A",
@@ -163687,14 +163708,15 @@
     ],
     "answer": "D",
     "explanation": "只有一个，树很孤单，喜鹊也很孤单。",
-    "verify": "\"很孤单\""
+    "verify": "\"很孤单\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p053_q3",
     "topicId": "cnc_p053",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来这里多了什么，大家就快乐了？",
+    "prompt": "《树和喜鹊》里，后来这里多了什么，大家就快乐了？",
     "choices": [
       {
         "key": "A",
@@ -163715,14 +163737,15 @@
     ],
     "answer": "A",
     "explanation": "邻居多了，大家一起玩，树和喜鹊都很快活。",
-    "verify": "\"很多树、很多鸟窝、很多喜鹊\""
+    "verify": "\"很多树、很多鸟窝、很多喜鹊\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p053_q4",
     "topicId": "cnc_p053",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要想说什么？",
+    "prompt": "《树和喜鹊》里，这个故事主要想说什么？",
     "choices": [
       {
         "key": "A",
@@ -163743,7 +163766,8 @@
     ],
     "answer": "B",
     "explanation": "从前孤单，后来有了朋友就快乐。朋友和邻居很重要。",
-    "verify": "\"有邻居、有朋友，就不会那么孤单\""
+    "verify": "\"有邻居、有朋友，就不会那么孤单\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p054_q1",
@@ -164142,7 +164166,7 @@
     "topicId": "cnc_p057",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来他再看窗外，发现了什么？",
+    "prompt": "《夜色》里，后来他再看窗外，发现了什么？",
     "choices": [
       {
         "key": "A",
@@ -164163,14 +164187,15 @@
     ],
     "answer": "A",
     "explanation": "他晚上再看窗外，原来自己也能看见夜里的景色，心不再乱跳。",
-    "verify": "\"夜晚并没有那么可怕\""
+    "verify": "\"夜晚并没有那么可怕\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p057_q4",
     "topicId": "cnc_p057",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要讲什么？",
+    "prompt": "《夜色》里，这个故事主要讲什么？",
     "choices": [
       {
         "key": "A",
@@ -164191,7 +164216,8 @@
     ],
     "answer": "B",
     "explanation": "他从不敢看窗外，到再黑的夜晚也不那么怕，是变得勇敢了。",
-    "verify": "\"了解了夜晚，人就会变得勇敢\""
+    "verify": "\"了解了夜晚，人就会变得勇敢\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p058_q1",
@@ -165178,7 +165204,7 @@
     "topicId": "cnc_p066",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "蜻蜓站在什么上面？",
+    "prompt": "《小池》里，蜻蜓站在什么上面？",
     "choices": [
       {
         "key": "A",
@@ -165199,7 +165225,8 @@
     ],
     "answer": "C",
     "explanation": "小荷才露尖尖角，早有蜻蜓立上头。",
-    "verify": "\"才露出尖角的小荷上\""
+    "verify": "\"才露出尖角的小荷上\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p067_q1",
@@ -165290,7 +165317,7 @@
     "topicId": "cnc_p067",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "浪花挠过以后怎样了？",
+    "prompt": "《浪花》里，浪花挠过以后怎样了？",
     "choices": [
       {
         "key": "A",
@@ -165311,7 +165338,8 @@
     ],
     "answer": "D",
     "explanation": "浪花会再跑开，不是一直站在脚上，也不是怪物。",
-    "verify": "\"又笑着跑开了\""
+    "verify": "\"又笑着跑开了\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p068_q1",
@@ -165346,7 +165374,7 @@
     "topicId": "cnc_p068",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "谁把荷叶当成停机坪？",
+    "prompt": "《荷叶圆圆》里，谁把荷叶当成停机坪？",
     "choices": [
       {
         "key": "A",
@@ -165367,7 +165395,8 @@
     ],
     "answer": "C",
     "explanation": "小蜻蜓立在荷叶上，说荷叶是我的停机坪。",
-    "verify": "\"小蜻蜓\""
+    "verify": "\"小蜻蜓\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p068_q3",
@@ -165430,7 +165459,7 @@
     "topicId": "cnc_p069",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "燕子为什么飞得很低？",
+    "prompt": "《要下雨了》里，燕子为什么飞得很低？",
     "choices": [
       {
         "key": "A",
@@ -165451,7 +165480,8 @@
     ],
     "answer": "C",
     "explanation": "空气潮湿，虫子翅膀沾了小水珠，飞不高。燕子正忙着低飞捉虫。",
-    "verify": "\"要下雨了，虫子飞不高，燕子低飞捉虫\""
+    "verify": "\"要下雨了，虫子飞不高，燕子低飞捉虫\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p069_q2",
@@ -165486,7 +165516,7 @@
     "topicId": "cnc_p069",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "蚂蚁在忙什么？",
+    "prompt": "《要下雨了》里，蚂蚁在忙什么？",
     "choices": [
       {
         "key": "A",
@@ -165507,7 +165537,8 @@
     ],
     "answer": "A",
     "explanation": "蚂蚁知道要下雨，正把东西往高处搬，免得被雨淋湿。",
-    "verify": "\"把东西往高处搬\""
+    "verify": "\"把东西往高处搬\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p069_q4",
@@ -165710,7 +165741,7 @@
     "topicId": "cnc_p071",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来贝贝怎样做，文具就不再丢了？",
+    "prompt": "《文具的家》里，后来贝贝怎样做，文具就不再丢了？",
     "choices": [
       {
         "key": "A",
@@ -165731,14 +165762,15 @@
     ],
     "answer": "C",
     "explanation": "贝贝养成了送文具回家的习惯，文具就不再丢。",
-    "verify": "\"每天把文具送回铅笔盒\""
+    "verify": "\"每天把文具送回铅笔盒\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p071_q4",
     "topicId": "cnc_p071",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要想告诉大家什么？",
+    "prompt": "《文具的家》里，这个故事主要想告诉大家什么？",
     "choices": [
       {
         "key": "A",
@@ -165759,14 +165791,15 @@
     ],
     "answer": "D",
     "explanation": "给文具一个家，用完就送回去，东西才不会丢。",
-    "verify": "\"用过的东西要放回原处\""
+    "verify": "\"用过的东西要放回原处\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p072_q1",
     "topicId": "cnc_p072",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "元元早上多睡了多久？",
+    "prompt": "《一分钟》里，元元早上多睡了多久？",
     "choices": [
       {
         "key": "A",
@@ -165787,14 +165820,15 @@
     ],
     "answer": "B",
     "explanation": "他打着哈欠说再睡一分钟。迟到二十分钟是后来的结果。",
-    "verify": "\"一分钟\""
+    "verify": "\"一分钟\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p072_q2",
     "topicId": "cnc_p072",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他到学校时，迟到了多久？",
+    "prompt": "《一分钟》里，他到学校时，迟到了多久？",
     "choices": [
       {
         "key": "A",
@@ -165815,14 +165849,15 @@
     ],
     "answer": "C",
     "explanation": "只多睡了一分钟，路上又遇到红灯、错过车，结果晚了二十分钟。",
-    "verify": "\"二十分钟\""
+    "verify": "\"二十分钟\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p072_q3",
     "topicId": "cnc_p072",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "为什么多睡一分钟会迟到这么久？",
+    "prompt": "《一分钟》里，为什么多睡一分钟会迟到这么久？",
     "choices": [
       {
         "key": "A",
@@ -165843,14 +165878,15 @@
     ],
     "answer": "D",
     "explanation": "耽误了一分钟，后面的红灯和车辆都接不上，时间就越误越多。",
-    "verify": "\"绿灯变红灯，公共汽车也开走了\""
+    "verify": "\"绿灯变红灯，公共汽车也开走了\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p072_q4",
     "topicId": "cnc_p072",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事想说什么？",
+    "prompt": "《一分钟》里，这个故事想说什么？",
     "choices": [
       {
         "key": "A",
@@ -165871,7 +165907,8 @@
     ],
     "answer": "A",
     "explanation": "元元的经历说明小小的一分钟也很重要。",
-    "verify": "\"要珍惜时间，一分钟也不能随便浪费\""
+    "verify": "\"要珍惜时间，一分钟也不能随便浪费\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p073_q1",
@@ -166074,7 +166111,7 @@
     "topicId": "cnc_p074",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "故事的结果是什么？",
+    "prompt": "《小猴子下山》里，故事的结果是什么？",
     "choices": [
       {
         "key": "A",
@@ -166095,7 +166132,8 @@
     ],
     "answer": "C",
     "explanation": "一样也不肯放下，结果一样也没带回家。",
-    "verify": "\"兔子跑了，小猴子空着手回家\""
+    "verify": "\"兔子跑了，小猴子空着手回家\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p075_q1",
@@ -166298,7 +166336,7 @@
     "topicId": "cnc_p076",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "最后是谁把蚜虫吃掉的？",
+    "prompt": "《棉花姑娘》里，最后是谁把蚜虫吃掉的？",
     "choices": [
       {
         "key": "A",
@@ -166319,7 +166357,8 @@
     ],
     "answer": "A",
     "explanation": "七星瓢虫把蚜虫吃光了，棉花姑娘才咧开嘴笑了。",
-    "verify": "\"一群七星瓢虫\""
+    "verify": "\"一群七星瓢虫\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p077_q1",
@@ -166494,7 +166533,7 @@
     "topicId": "cnc_p078",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "燕子要用尾巴做什么？",
+    "prompt": "《小壁虎借尾巴》里，燕子要用尾巴做什么？",
     "choices": [
       {
         "key": "A",
@@ -166515,14 +166554,15 @@
     ],
     "answer": "B",
     "explanation": "燕子说，我要用尾巴掌握方向呢。拨水的是鱼，赶蝇子的是牛。",
-    "verify": "\"掌握方向\""
+    "verify": "\"掌握方向\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p078_q4",
     "topicId": "cnc_p078",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "故事的结果是什么？",
+    "prompt": "《小壁虎借尾巴》里，故事的结果是什么？",
     "choices": [
       {
         "key": "A",
@@ -166543,7 +166583,8 @@
     ],
     "answer": "C",
     "explanation": "妈妈让它转过身子看看，新尾巴已经长出来了。",
-    "verify": "\"小壁虎长出了新尾巴\""
+    "verify": "\"小壁虎长出了新尾巴\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p079_q1",
@@ -166914,7 +166955,7 @@
     "topicId": "cnc_p082",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "苍耳怎样离开妈妈？",
+    "prompt": "《植物妈妈有办法》里，苍耳怎样离开妈妈？",
     "choices": [
       {
         "key": "A",
@@ -166935,14 +166976,15 @@
     ],
     "answer": "A",
     "explanation": "苍耳全身带刺，动物碰一碰，它就挂在皮毛上走了。",
-    "verify": "\"带刺的铠甲挂在动物皮毛上\""
+    "verify": "\"带刺的铠甲挂在动物皮毛上\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p082_q3",
     "topicId": "cnc_p082",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "豌豆的种子怎样出发？",
+    "prompt": "《植物妈妈有办法》里，豌豆的种子怎样出发？",
     "choices": [
       {
         "key": "A",
@@ -166963,7 +167005,8 @@
     ],
     "answer": "B",
     "explanation": "豌豆披着豆荚，太阳晒过以后，豆荚啪的一声炸开。",
-    "verify": "\"太阳一晒，豆荚炸开，孩子们蹦着跳着离开\""
+    "verify": "\"太阳一晒，豆荚炸开，孩子们蹦着跳着离开\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p082_q4",
@@ -167334,7 +167377,7 @@
     "topicId": "cnc_p086",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "梧桐的叶子像什么？",
+    "prompt": "《树之歌》里，梧桐的叶子像什么？",
     "choices": [
       {
         "key": "A",
@@ -167355,7 +167398,8 @@
     ],
     "answer": "D",
     "explanation": "课文说梧桐树叶像手掌。",
-    "verify": "\"手掌\""
+    "verify": "\"手掌\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p086_q2",
@@ -167502,7 +167546,7 @@
     "topicId": "cnc_p087",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "熊猫在课文里做什么？",
+    "prompt": "《拍手歌》里，熊猫在课文里做什么？",
     "choices": [
       {
         "key": "A",
@@ -167523,7 +167567,8 @@
     ],
     "answer": "C",
     "explanation": "你拍七，我拍七，竹林熊猫在嬉戏。飞翔的是雄鹰。",
-    "verify": "\"在竹林里嬉戏\""
+    "verify": "\"在竹林里嬉戏\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p087_q4",
@@ -167922,7 +167967,7 @@
     "topicId": "cnc_p091",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "「我」想怎样帮爸爸？",
+    "prompt": "《彩虹》里，「我」想怎样帮爸爸？",
     "choices": [
       {
         "key": "A",
@@ -167943,7 +167988,8 @@
     ],
     "answer": "B",
     "explanation": "如果提着浇花的水壶把水洒下来，那就是「我」在下雨。",
-    "verify": "\"提着水壶到桥上洒水，像在下雨，爸爸就不用挑水浇田\""
+    "verify": "\"提着水壶到桥上洒水，像在下雨，爸爸就不用挑水浇田\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p091_q3",
@@ -168118,7 +168164,7 @@
     "topicId": "cnc_p093",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "数星星的孩子是谁？",
+    "prompt": "《数星星的孩子》里，数星星的孩子是谁？",
     "choices": [
       {
         "key": "A",
@@ -168139,7 +168185,8 @@
     ],
     "answer": "C",
     "explanation": "课文末尾说：这个数星星的孩子名叫张衡，是汉朝人。他后来成了天文学家。",
-    "verify": "\"张衡，汉朝人\""
+    "verify": "\"张衡，汉朝人\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p093_q2",
@@ -168566,7 +168613,7 @@
     "topicId": "cnc_p097",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "仙桃石像什么？",
+    "prompt": "《黄山奇石》里，仙桃石像什么？",
     "choices": [
       {
         "key": "A",
@@ -168587,7 +168634,8 @@
     ],
     "answer": "C",
     "explanation": "飞来石上好像有一只巨大的桃子，那就是仙桃石。",
-    "verify": "\"一个巨大的桃子\""
+    "verify": "\"一个巨大的桃子\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p097_q2",
@@ -168678,7 +168726,7 @@
     "topicId": "cnc_p098",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "日月潭在哪里？",
+    "prompt": "《日月潭》里，日月潭在哪里？",
     "choices": [
       {
         "key": "A",
@@ -168699,7 +168747,8 @@
     ],
     "answer": "D",
     "explanation": "课文写日月潭是台湾省最大的一个湖，在台中附近的高山上。",
-    "verify": "\"我国台湾省的高山上\""
+    "verify": "\"我国台湾省的高山上\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p098_q2",
@@ -168790,7 +168839,7 @@
     "topicId": "cnc_p099",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "葡萄沟在哪里？",
+    "prompt": "《葡萄沟》里，葡萄沟在哪里？",
     "choices": [
       {
         "key": "A",
@@ -168811,7 +168860,8 @@
     ],
     "answer": "A",
     "explanation": "新疆吐鲁番有个地方叫葡萄沟。不要把它写成台湾或黄山。",
-    "verify": "\"新疆吐鲁番\""
+    "verify": "\"新疆吐鲁番\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p099_q2",
@@ -169014,7 +169064,7 @@
     "topicId": "cnc_p101",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "青蛙说天有多大？",
+    "prompt": "《坐井观天》里，青蛙说天有多大？",
     "choices": [
       {
         "key": "A",
@@ -169035,14 +169085,15 @@
     ],
     "answer": "C",
     "explanation": "青蛙天天坐在井里，说天不过井口那么大。",
-    "verify": "\"只有井口那么大\""
+    "verify": "\"只有井口那么大\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p101_q2",
     "topicId": "cnc_p101",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小鸟说天是什么样的？",
+    "prompt": "《坐井观天》里，小鸟说天是什么样的？",
     "choices": [
       {
         "key": "A",
@@ -169063,14 +169114,15 @@
     ],
     "answer": "D",
     "explanation": "小鸟飞过一百多里，说天无边无际，大得很哪。",
-    "verify": "\"无边无际，大得很\""
+    "verify": "\"无边无际，大得很\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p101_q3",
     "topicId": "cnc_p101",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "青蛙为什么会说错？",
+    "prompt": "《坐井观天》里，青蛙为什么会说错？",
     "choices": [
       {
         "key": "A",
@@ -169091,7 +169143,8 @@
     ],
     "answer": "A",
     "explanation": "青蛙不相信小鸟，还叫小鸟飞下来。它自己没有出去看过。",
-    "verify": "\"它一直待在井里，看到的天很有限\""
+    "verify": "\"它一直待在井里，看到的天很有限\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p101_q4",
@@ -169126,7 +169179,7 @@
     "topicId": "cnc_p102",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "喜鹊劝寒号鸟做什么？",
+    "prompt": "《寒号鸟》里，喜鹊劝寒号鸟做什么？",
     "choices": [
       {
         "key": "A",
@@ -169147,14 +169200,15 @@
     ],
     "answer": "D",
     "explanation": "冬天快到了，喜鹊劝寒号鸟别再睡，赶快垒窝。",
-    "verify": "\"趁天好快些垒窝\""
+    "verify": "\"趁天好快些垒窝\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p102_q2",
     "topicId": "cnc_p102",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "寒号鸟怎样回答？",
+    "prompt": "《寒号鸟》里，寒号鸟怎样回答？",
     "choices": [
       {
         "key": "A",
@@ -169175,14 +169229,15 @@
     ],
     "answer": "A",
     "explanation": "它说「明天就垒窝」，白天又忘记了，只想玩。",
-    "verify": "\"得过且过，明天再垒\""
+    "verify": "\"得过且过，明天再垒\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p102_q3",
     "topicId": "cnc_p102",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "寒号鸟最后怎样了？",
+    "prompt": "《寒号鸟》里，寒号鸟最后怎样了？",
     "choices": [
       {
         "key": "A",
@@ -169203,14 +169258,15 @@
     ],
     "answer": "B",
     "explanation": "它一直说明天再做，寒冬夜里终于冻死在崖缝里。",
-    "verify": "\"冬天的夜里冻死了\""
+    "verify": "\"冬天的夜里冻死了\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p102_q4",
     "topicId": "cnc_p102",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事是在劝人什么？",
+    "prompt": "《寒号鸟》里，这个故事是在劝人什么？",
     "choices": [
       {
         "key": "A",
@@ -169231,7 +169287,8 @@
     ],
     "answer": "C",
     "explanation": "得过且过让寒号鸟吃了大亏。好习惯是今天就把事情做完。",
-    "verify": "\"不要拖到明天，该做的事要及时做\""
+    "verify": "\"不要拖到明天，该做的事要及时做\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p103_q1",
@@ -169294,7 +169351,7 @@
     "topicId": "cnc_p103",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来葫芦怎样了？",
+    "prompt": "《我要的是葫芦》里，后来葫芦怎样了？",
     "choices": [
       {
         "key": "A",
@@ -169315,14 +169372,15 @@
     ],
     "answer": "C",
     "explanation": "叶子上的虫越来越多，小葫芦慢慢变黄，一个一个都落了。",
-    "verify": "\"一个一个都落了\""
+    "verify": "\"一个一个都落了\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p103_q4",
     "topicId": "cnc_p103",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事说明什么？",
+    "prompt": "《我要的是葫芦》里，这个故事说明什么？",
     "choices": [
       {
         "key": "A",
@@ -169343,7 +169401,8 @@
     ],
     "answer": "D",
     "explanation": "不管叶子，葫芦也长不好。看事情不能只看自己想要的那一部分。",
-    "verify": "\"叶子和葫芦是连着的，不能只看果实\""
+    "verify": "\"叶子和葫芦是连着的，不能只看果实\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p104_q1",
@@ -169462,7 +169521,7 @@
     "topicId": "cnc_p105",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "八角楼在哪里？",
+    "prompt": "《八角楼上》里，八角楼在哪里？",
     "choices": [
       {
         "key": "A",
@@ -169483,14 +169542,15 @@
     ],
     "answer": "C",
     "explanation": "在井冈山艰苦斗争的年代，毛主席住在茅坪村的八角楼。屋顶是八角形的。",
-    "verify": "\"井冈山茅坪村\""
+    "verify": "\"井冈山茅坪村\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p105_q2",
     "topicId": "cnc_p105",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "那个寒冬腊月的深夜，毛主席怎样工作？",
+    "prompt": "《八角楼上》里，那个寒冬腊月的深夜，毛主席怎样工作？",
     "choices": [
       {
         "key": "A",
@@ -169511,7 +169571,8 @@
     ],
     "answer": "D",
     "explanation": "天气很冷，他还在灯下写。单军衣和薄毯子写出条件艰苦。",
-    "verify": "\"穿着单军衣，披着薄毯子，坐在竹椅上写文章\""
+    "verify": "\"穿着单军衣，披着薄毯子，坐在竹椅上写文章\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p105_q3",
@@ -169658,7 +169719,7 @@
     "topicId": "cnc_p106",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事表现了朱德什么特点？",
+    "prompt": "《朱德的扁担》里，这个故事表现了朱德什么特点？",
     "choices": [
       {
         "key": "A",
@@ -169679,7 +169740,8 @@
     ],
     "answer": "C",
     "explanation": "军长也拿起扁担挑粮，大家很感动。",
-    "verify": "\"和战士们同甘共苦\""
+    "verify": "\"和战士们同甘共苦\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p107_q1",
@@ -169714,7 +169776,7 @@
     "topicId": "cnc_p107",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "人们用泼水表达什么？",
+    "prompt": "《难忘的泼水节》里，人们用泼水表达什么？",
     "choices": [
       {
         "key": "A",
@@ -169735,14 +169797,15 @@
     ],
     "answer": "B",
     "explanation": "清水象征幸福，泼水是在祝福对方。",
-    "verify": "\"祝福\""
+    "verify": "\"祝福\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p107_q3",
     "topicId": "cnc_p107",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "那天的凤凰花怎样？",
+    "prompt": "《难忘的泼水节》里，那天的凤凰花怎样？",
     "choices": [
       {
         "key": "A",
@@ -169763,14 +169826,15 @@
     ],
     "answer": "C",
     "explanation": "课文用火红的凤凰花衬托大家欢迎周总理的喜悦。",
-    "verify": "\"开得特别红，像在欢迎客人\""
+    "verify": "\"开得特别红，像在欢迎客人\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p107_q4",
     "topicId": "cnc_p107",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "为什么说这个泼水节难忘？",
+    "prompt": "《难忘的泼水节》里，为什么说这个泼水节难忘？",
     "choices": [
       {
         "key": "A",
@@ -169791,7 +169855,8 @@
     ],
     "answer": "D",
     "explanation": "周总理身穿傣族服装，和人们互相泼水。这个喜悦的日子让人难忘。",
-    "verify": "\"周总理和大家一起泼水、一起跳舞\""
+    "verify": "\"周总理和大家一起泼水、一起跳舞\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p108_q1",
@@ -169854,7 +169919,7 @@
     "topicId": "cnc_p108",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "她在铡刀前说的哪一句最能表现她的决心？",
+    "prompt": "《刘胡兰》里，她在铡刀前说的哪一句最能表现她的决心？",
     "choices": [
       {
         "key": "A",
@@ -169875,7 +169940,8 @@
     ],
     "answer": "D",
     "explanation": "敌人指着铡刀威胁她。她挺起胸膛这样说，然后走到铡刀前。当时她还不到十五岁。",
-    "verify": "\"要杀要砍由你们，怕死不当共产党\""
+    "verify": "\"要杀要砍由你们，怕死不当共产党\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p108_q4",
@@ -170106,7 +170172,7 @@
     "topicId": "cnc_p110",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗写的是怎样的景象？",
+    "prompt": "《江雪》里，这首诗写的是怎样的景象？",
     "choices": [
       {
         "key": "A",
@@ -170127,7 +170193,8 @@
     ],
     "answer": "C",
     "explanation": "千山鸟飞绝，万径人踪灭。不要和敕勒川、夜宿山寺装成一首。",
-    "verify": "\"大雪盖住山路，鸟和行人都不见了，只剩渔翁独钓\""
+    "verify": "\"大雪盖住山路，鸟和行人都不见了，只剩渔翁独钓\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p111_q1",
@@ -170330,7 +170397,7 @@
     "topicId": "cnc_p112",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "太阳出来以后怎样了？",
+    "prompt": "《雾在哪里》里，太阳出来以后怎样了？",
     "choices": [
       {
         "key": "A",
@@ -170351,14 +170418,15 @@
     ],
     "answer": "A",
     "explanation": "雾一散，船只、房屋、行人和小黑猫都又看见了。",
-    "verify": "\"雾消失了，大海、海岸和城市又露出来\""
+    "verify": "\"雾消失了，大海、海岸和城市又露出来\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p113_q1",
     "topicId": "cnc_p113",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "雪孩子是谁堆出来的？",
+    "prompt": "《雪孩子》里，雪孩子是谁堆出来的？",
     "choices": [
       {
         "key": "A",
@@ -170379,7 +170447,8 @@
     ],
     "answer": "C",
     "explanation": "兔妈妈在门外空地上堆了雪孩子，给小白兔做伴。",
-    "verify": "\"兔妈妈\""
+    "verify": "\"兔妈妈\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p113_q2",
@@ -170442,7 +170511,7 @@
     "topicId": "cnc_p113",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "雪孩子后来怎样了？",
+    "prompt": "《雪孩子》里，雪孩子后来怎样了？",
     "choices": [
       {
         "key": "A",
@@ -170463,7 +170532,8 @@
     ],
     "answer": "B",
     "explanation": "救出小白兔后，雪孩子全身水淋淋的。小白兔后来看见的白云，就是他。",
-    "verify": "\"化成水，变成天上的一朵白云\""
+    "verify": "\"化成水，变成天上的一朵白云\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p114_q1",
@@ -170610,7 +170680,7 @@
     "topicId": "cnc_p115",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小刺猬怎样称赞小獾？",
+    "prompt": "《称赞》里，小刺猬怎样称赞小獾？",
     "choices": [
       {
         "key": "A",
@@ -170631,7 +170701,8 @@
     ],
     "answer": "B",
     "explanation": "称赞说得很具体：一个比一个好，小獾看见了自己的进步。",
-    "verify": "\"你真能干，小板凳做得一个比一个好\""
+    "verify": "\"你真能干，小板凳做得一个比一个好\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p115_q3",
@@ -170750,7 +170821,7 @@
     "topicId": "cnc_p116",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他们吵架以后，谁先提出和好？怎样说？",
+    "prompt": "《纸船和风筝》里，他们吵架以后，谁先提出和好？怎样说？",
     "choices": [
       {
         "key": "A",
@@ -170771,7 +170842,8 @@
     ],
     "answer": "D",
     "explanation": "山顶上看不到风筝，小溪里看不到纸船。松鼠受不了，先写出这句话。",
-    "verify": "\"松鼠在纸船上写：如果你愿意和好，就放一只风筝吧\""
+    "verify": "\"松鼠在纸船上写：如果你愿意和好，就放一只风筝吧\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p116_q4",
@@ -170806,7 +170878,7 @@
     "topicId": "cnc_p117",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小河一开始为什么哭？",
+    "prompt": "《快乐的小河》里，小河一开始为什么哭？",
     "choices": [
       {
         "key": "A",
@@ -170827,7 +170899,8 @@
     ],
     "answer": "C",
     "explanation": "他唱着歌向前流，太着急，撞在大山上。沙地和草地都跟他好，只有这次撞疼了。",
-    "verify": "\"太着急，迎面撞上大山，觉得疼，就抱怨\""
+    "verify": "\"太着急，迎面撞上大山，觉得疼，就抱怨\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p117_q2",
@@ -170890,7 +170963,7 @@
     "topicId": "cnc_p117",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要想说什么？",
+    "prompt": "《快乐的小河》里，这个故事主要想说什么？",
     "choices": [
       {
         "key": "A",
@@ -170911,7 +170984,8 @@
     ],
     "answer": "B",
     "explanation": "开始是轻松的快乐，后来是和朋友一起克服困难的快乐。",
-    "verify": "\"碰到困难不要只抱怨，勇敢向前才会重新快乐\""
+    "verify": "\"碰到困难不要只抱怨，勇敢向前才会重新快乐\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p118_q1",
@@ -171422,7 +171496,7 @@
     "topicId": "cnc_p122",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "第二年春天，通往松鼠太太家的路为什么开满鲜花？",
+    "prompt": "《开满鲜花的小路》里，第二年春天，通往松鼠太太家的路为什么开满鲜花？",
     "choices": [
       {
         "key": "A",
@@ -171443,7 +171517,8 @@
     ],
     "answer": "B",
     "explanation": "松鼠太太说：去年长颈鹿大叔寄来的是花籽。",
-    "verify": "\"漏掉的是花籽，春天发芽开花了\""
+    "verify": "\"漏掉的是花籽，春天发芽开花了\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p122_q4",
@@ -171534,7 +171609,7 @@
     "topicId": "cnc_p123",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他精心地挑选并栽下的是什么？",
+    "prompt": "《邓小平爷爷植树》里，他精心地挑选并栽下的是什么？",
     "choices": [
       {
         "key": "A",
@@ -171555,7 +171630,8 @@
     ],
     "answer": "C",
     "explanation": "他挑选柏树苗，移入树坑，再挥锹填土。",
-    "verify": "\"一棵茁壮的柏树苗\""
+    "verify": "\"一棵茁壮的柏树苗\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p123_q4",
@@ -171702,7 +171778,7 @@
     "topicId": "cnc_p125",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小朋友们在寻找谁？",
+    "prompt": "《雷锋叔叔，你在哪里》里，小朋友们在寻找谁？",
     "choices": [
       {
         "key": "A",
@@ -171723,7 +171799,8 @@
     ],
     "answer": "C",
     "explanation": "题目就是「雷锋叔叔，你在哪里」。他们沿着小溪和小路去找。",
-    "verify": "\"雷锋叔叔\""
+    "verify": "\"雷锋叔叔\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p125_q2",
@@ -171870,7 +171947,7 @@
     "topicId": "cnc_p126",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "为什么叫「千人糕」？",
+    "prompt": "《千人糕》里，为什么叫「千人糕」？",
     "choices": [
       {
         "key": "A",
@@ -171891,14 +171968,15 @@
     ],
     "answer": "B",
     "explanation": "种稻、磨粉、做糖、印包装、运到店里，少了谁都不行。",
-    "verify": "\"因为有很多人的劳动才做成\""
+    "verify": "\"因为有很多人的劳动才做成\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p126_q4",
     "topicId": "cnc_p126",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要想说什么？",
+    "prompt": "《千人糕》里，这个故事主要想说什么？",
     "choices": [
       {
         "key": "A",
@@ -171919,7 +171997,8 @@
     ],
     "answer": "C",
     "explanation": "看起来普通的一块糕，背后有许许多多人的辛苦。",
-    "verify": "\"平常的东西也包含着许多人的劳动\""
+    "verify": "\"平常的东西也包含着许多人的劳动\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p127_q1",
@@ -172234,7 +172313,7 @@
     "topicId": "cnc_p129",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "课文怎样写各民族？",
+    "prompt": "《神州谣》里，课文怎样写各民族？",
     "choices": [
       {
         "key": "A",
@@ -172255,14 +172334,15 @@
     ],
     "answer": "B",
     "explanation": "各民族情谊浓，齐奋发，共荣光。",
-    "verify": "\"情谊浓，齐奋发\""
+    "verify": "\"情谊浓，齐奋发\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p130_q1",
     "topicId": "cnc_p130",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "端午节有哪些习俗？",
+    "prompt": "《传统节日》里，端午节有哪些习俗？",
     "choices": [
       {
         "key": "A",
@@ -172283,7 +172363,8 @@
     ],
     "answer": "D",
     "explanation": "过端午，赛龙舟，粽子飘香。赏月吃月饼是中秋。",
-    "verify": "\"吃粽子、赛龙舟\""
+    "verify": "\"吃粽子、赛龙舟\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p130_q2",
@@ -172318,7 +172399,7 @@
     "topicId": "cnc_p130",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "清明节常常做什么？",
+    "prompt": "《传统节日》里，清明节常常做什么？",
     "choices": [
       {
         "key": "A",
@@ -172339,7 +172420,8 @@
     ],
     "answer": "B",
     "explanation": "清明节雨纷纷，人们到先人墓前祭扫，也出门踏青。乞巧是七夕。",
-    "verify": "\"扫墓、踏青\""
+    "verify": "\"扫墓、踏青\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p130_q4",
@@ -172794,7 +172876,7 @@
     "topicId": "cnc_p134",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首儿童诗主要写什么？",
+    "prompt": "《彩色的梦》里，这首儿童诗主要写什么？",
     "choices": [
       {
         "key": "A",
@@ -172815,14 +172897,15 @@
     ],
     "answer": "C",
     "explanation": "题目就是彩色的梦。颜色和想象是这首诗的重点。",
-    "verify": "\"彩色铅笔带来的美丽想象\""
+    "verify": "\"彩色铅笔带来的美丽想象\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p135_q1",
     "topicId": "cnc_p135",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "散步时，妹妹怎样了？",
+    "prompt": "《一匹出色的马》里，散步时，妹妹怎样了？",
     "choices": [
       {
         "key": "A",
@@ -172843,7 +172926,8 @@
     ],
     "answer": "A",
     "explanation": "妹妹走累了，不愿意再往前走。",
-    "verify": "\"走不动，想让人抱\""
+    "verify": "\"走不动，想让人抱\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p135_q2",
@@ -172878,7 +172962,7 @@
     "topicId": "cnc_p135",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这根柳条在游戏里被当成什么？",
+    "prompt": "《一匹出色的马》里，这根柳条在游戏里被当成什么？",
     "choices": [
       {
         "key": "A",
@@ -172899,14 +172983,15 @@
     ],
     "answer": "C",
     "explanation": "妹妹把柳条夹在腿间，把它当成自己的马。",
-    "verify": "\"一匹马\""
+    "verify": "\"一匹马\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p135_q4",
     "topicId": "cnc_p135",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "妹妹后来怎样回到家？",
+    "prompt": "《一匹出色的马》里，妹妹后来怎样回到家？",
     "choices": [
       {
         "key": "A",
@@ -172927,7 +173012,8 @@
     ],
     "answer": "D",
     "explanation": "有了这匹出色的马，走不动的妹妹反而跑起来了。",
-    "verify": "\"骑着这匹「马」自己跑回去\""
+    "verify": "\"骑着这匹「马」自己跑回去\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p136_q1",
@@ -173186,7 +173272,7 @@
     "topicId": "cnc_p138",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "邻居劝他做什么？",
+    "prompt": "《亡羊补牢》里，邻居劝他做什么？",
     "choices": [
       {
         "key": "A",
@@ -173207,14 +173293,15 @@
     ],
     "answer": "A",
     "explanation": "街坊劝他：还是把羊圈修一修吧。",
-    "verify": "\"赶快把羊圈修一修\""
+    "verify": "\"赶快把羊圈修一修\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p138_q3",
     "topicId": "cnc_p138",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他一开始怎样想？",
+    "prompt": "《亡羊补牢》里，他一开始怎样想？",
     "choices": [
       {
         "key": "A",
@@ -173235,14 +173322,15 @@
     ],
     "answer": "B",
     "explanation": "他觉得羊已经丢了，修不修都一样，所以没有修。",
-    "verify": "\"羊已经丢了，修圈也没用\""
+    "verify": "\"羊已经丢了，修圈也没用\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p138_q4",
     "topicId": "cnc_p138",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "第二天又丢了羊，他才明白什么？",
+    "prompt": "《亡羊补牢》里，第二天又丢了羊，他才明白什么？",
     "choices": [
       {
         "key": "A",
@@ -173263,14 +173351,15 @@
     ],
     "answer": "C",
     "explanation": "他又丢了一只羊，这才动手把窟窿堵上。从此羊不再丢。",
-    "verify": "\"现在修还不晚，要赶快补上窟窿\""
+    "verify": "\"现在修还不晚，要赶快补上窟窿\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p139_q1",
     "topicId": "cnc_p139",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "那个人为什么去拔苗？",
+    "prompt": "《揠苗助长》里，那个人为什么去拔苗？",
     "choices": [
       {
         "key": "A",
@@ -173291,14 +173380,15 @@
     ],
     "answer": "A",
     "explanation": "他巴望自己的禾苗长得快些，天天去看，还是觉得慢。",
-    "verify": "\"他觉得苗长得太慢，想帮它们快些长高\""
+    "verify": "\"他觉得苗长得太慢，想帮它们快些长高\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p139_q2",
     "topicId": "cnc_p139",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他用了什么办法？",
+    "prompt": "《揠苗助长》里，他用了什么办法？",
     "choices": [
       {
         "key": "A",
@@ -173319,14 +173409,15 @@
     ],
     "answer": "B",
     "explanation": "他跑到田里，把苗拔高了一大截，累得筋疲力尽。",
-    "verify": "\"把禾苗一棵一棵往上拔\""
+    "verify": "\"把禾苗一棵一棵往上拔\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p139_q3",
     "topicId": "cnc_p139",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "回到家他怎样说？",
+    "prompt": "《揠苗助长》里，回到家他怎样说？",
     "choices": [
       {
         "key": "A",
@@ -173347,14 +173438,15 @@
     ],
     "answer": "C",
     "explanation": "他并不知道这样做有害，还高兴地告诉家里人。",
-    "verify": "\"今天我帮禾苗长高了\""
+    "verify": "\"今天我帮禾苗长高了\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p139_q4",
     "topicId": "cnc_p139",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "结果怎样？",
+    "prompt": "《揠苗助长》里，结果怎样？",
     "choices": [
       {
         "key": "A",
@@ -173375,7 +173467,8 @@
     ],
     "answer": "D",
     "explanation": "儿子跑去一看，苗都枯死了。违反生长规律，反而帮了倒忙。",
-    "verify": "\"禾苗都枯死了\""
+    "verify": "\"禾苗都枯死了\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p140_q1",
@@ -173410,7 +173503,7 @@
     "topicId": "cnc_p140",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "为什么「我」画出来的和同学不一样？",
+    "prompt": "《画杨桃》里，为什么「我」画出来的和同学不一样？",
     "choices": [
       {
         "key": "A",
@@ -173431,14 +173524,15 @@
     ],
     "answer": "C",
     "explanation": "同一个杨桃，正面看和侧面看，形状不一样。",
-    "verify": "\"看的角度不同，样子就不同\""
+    "verify": "\"看的角度不同，样子就不同\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p140_q3",
     "topicId": "cnc_p140",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "老师让大家怎样检查？",
+    "prompt": "《画杨桃》里，老师让大家怎样检查？",
     "choices": [
       {
         "key": "A",
@@ -173459,7 +173553,8 @@
     ],
     "answer": "D",
     "explanation": "坐到那个位置，他们也看见杨桃像五角星。",
-    "verify": "\"轮流坐到「我」的座位上看\""
+    "verify": "\"轮流坐到「我」的座位上看\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p140_q4",
@@ -173494,7 +173589,7 @@
     "topicId": "cnc_p141",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小马为什么要过河？",
+    "prompt": "《小马过河》里，小马为什么要过河？",
     "choices": [
       {
         "key": "A",
@@ -173515,7 +173610,8 @@
     ],
     "answer": "C",
     "explanation": "磨坊师傅让小马把麦子驮回家，一条河挡住了路。",
-    "verify": "\"要把半口袋麦子驮回家\""
+    "verify": "\"要把半口袋麦子驮回家\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p141_q2",
@@ -173550,7 +173646,7 @@
     "topicId": "cnc_p141",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "妈妈让小马怎样做？",
+    "prompt": "《小马过河》里，妈妈让小马怎样做？",
     "choices": [
       {
         "key": "A",
@@ -173571,7 +173667,8 @@
     ],
     "answer": "A",
     "explanation": "妈妈说：河水是深是浅，你去试一试就知道了。",
-    "verify": "\"自己动脑筋，去试一试\""
+    "verify": "\"自己动脑筋，去试一试\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p141_q4",
@@ -173886,7 +173983,7 @@
     "topicId": "cnc_p144",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗的作者是谁？",
+    "prompt": "《晓出净慈寺送林子方》里，这首诗的作者是谁？",
     "choices": [
       {
         "key": "A",
@@ -173907,7 +174004,8 @@
     ],
     "answer": "D",
     "explanation": "《晓出净慈寺送林子方》是杨万里的诗。苏轼写的是《饮湖上初晴后雨》。",
-    "verify": "\"杨万里\""
+    "verify": "\"杨万里\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p144_q4",
@@ -173970,7 +174068,7 @@
     "topicId": "cnc_p145",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "雨是怎样下的？",
+    "prompt": "《雷雨》里，雨是怎样下的？",
     "choices": [
       {
         "key": "A",
@@ -173991,7 +174089,8 @@
     ],
     "answer": "D",
     "explanation": "雨越下越大，往窗外望去，树哇，房子啊，都看不清了。",
-    "verify": "\"越下越大，后来像从天上倒下来\""
+    "verify": "\"越下越大，后来像从天上倒下来\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p145_q3",
@@ -174250,7 +174349,7 @@
     "topicId": "cnc_p147",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这些趣事主要是因为什么？",
+    "prompt": "《太空生活趣事多》里，这些趣事主要是因为什么？",
     "choices": [
       {
         "key": "A",
@@ -174271,7 +174370,8 @@
     ],
     "answer": "D",
     "explanation": "睡觉、喝水、走路、洗澡都和失重有关，所以特别有趣。",
-    "verify": "\"人在太空中会飘起来\""
+    "verify": "\"人在太空中会飘起来\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p148_q1",
@@ -174474,7 +174574,7 @@
     "topicId": "cnc_p149",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来大象明白了什么？",
+    "prompt": "《大象的耳朵》里，后来大象明白了什么？",
     "choices": [
       {
         "key": "A",
@@ -174495,14 +174595,15 @@
     ],
     "answer": "B",
     "explanation": "它又把耳朵放下来，觉得这样最舒服。别人的样子不一定适合自己。",
-    "verify": "\"人家是人家，自己是自己，耷拉着才舒服\""
+    "verify": "\"人家是人家，自己是自己，耷拉着才舒服\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p150_q1",
     "topicId": "cnc_p150",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "蜘蛛为什么想开店？",
+    "prompt": "《蜘蛛开店》里，蜘蛛为什么想开店？",
     "choices": [
       {
         "key": "A",
@@ -174523,7 +174624,8 @@
     ],
     "answer": "D",
     "explanation": "它每天等小飞虫，好寂寞，好无聊，于是决定开一家商店。",
-    "verify": "\"蹲在网上等飞虫，觉得寂寞、无聊\""
+    "verify": "\"蹲在网上等飞虫，觉得寂寞、无聊\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p150_q2",
@@ -174586,7 +174688,7 @@
     "topicId": "cnc_p150",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "第三次来的顾客是谁？蜘蛛怎样了？",
+    "prompt": "《蜘蛛开店》里，第三次来的顾客是谁？蜘蛛怎样了？",
     "choices": [
       {
         "key": "A",
@@ -174607,7 +174709,8 @@
     ],
     "answer": "C",
     "explanation": "袜子看起来小，可蜈蚣脚太多。蜘蛛匆忙跑回网上。",
-    "verify": "\"四十二只脚的蜈蚣，蜘蛛吓得跑回网上\""
+    "verify": "\"四十二只脚的蜈蚣，蜘蛛吓得跑回网上\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p151_q1",
@@ -174698,7 +174801,7 @@
     "topicId": "cnc_p151",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要想说什么？",
+    "prompt": "《青蛙卖泥塘》里，这个故事主要想说什么？",
     "choices": [
       {
         "key": "A",
@@ -174719,7 +174822,8 @@
     ],
     "answer": "D",
     "explanation": "青蛙一次次修改，泥塘才从卖不掉变成舍不得卖。",
-    "verify": "\"肯动手改进，不好的地方也能变好\""
+    "verify": "\"肯动手改进，不好的地方也能变好\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p152_q1",
@@ -174754,7 +174858,7 @@
     "topicId": "cnc_p152",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小毛虫自己怎样做？",
+    "prompt": "《小毛虫》里，小毛虫自己怎样做？",
     "choices": [
       {
         "key": "A",
@@ -174775,7 +174879,8 @@
     ],
     "answer": "C",
     "explanation": "它知道每一步都在为后面做准备，所以不慌。",
-    "verify": "\"不着急，一天天认真做事\""
+    "verify": "\"不着急，一天天认真做事\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p152_q3",
@@ -174810,7 +174915,7 @@
     "topicId": "cnc_p152",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事想告诉读者什么？",
+    "prompt": "《小毛虫》里，这个故事想告诉读者什么？",
     "choices": [
       {
         "key": "A",
@@ -174831,7 +174936,8 @@
     ],
     "answer": "A",
     "explanation": "着急没有用。把它该做的事做完，变化自然会来。",
-    "verify": "\"不要因为暂时慢就放弃，长大需要一步步来\""
+    "verify": "\"不要因为暂时慢就放弃，长大需要一步步来\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p153_q1",
@@ -174978,7 +175084,7 @@
     "topicId": "cnc_p154",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "羿射下了几个太阳？",
+    "prompt": "《羿射九日》里，羿射下了几个太阳？",
     "choices": [
       {
         "key": "A",
@@ -174999,14 +175105,15 @@
     ],
     "answer": "A",
     "explanation": "他留下人们还需要的那一个，射下了另外九个。",
-    "verify": "\"九个\""
+    "verify": "\"九个\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p154_q3",
     "topicId": "cnc_p154",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "为什么不能把太阳全部射下来？",
+    "prompt": "《羿射九日》里，为什么不能把太阳全部射下来？",
     "choices": [
       {
         "key": "A",
@@ -175027,7 +175134,8 @@
     ],
     "answer": "B",
     "explanation": "没有太阳，世界会又黑又冷。所以要留下一个。",
-    "verify": "\"人们还要靠剩下的太阳得到光明和温暖\""
+    "verify": "\"人们还要靠剩下的太阳得到光明和温暖\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p154_q4",
@@ -175090,7 +175198,7 @@
     "topicId": "cnc_p155",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他看见什么，想到要造车？",
+    "prompt": "《黄帝的传说》里，他看见什么，想到要造车？",
     "choices": [
       {
         "key": "A",
@@ -175111,14 +175219,15 @@
     ],
     "answer": "B",
     "explanation": "草帽骨碌碌地滚，让他想到轮子和车。",
-    "verify": "\"风吹着草帽在地上滚\""
+    "verify": "\"风吹着草帽在地上滚\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p155_q3",
     "topicId": "cnc_p155",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他看见什么，想到要造船？",
+    "prompt": "《黄帝的传说》里，他看见什么，想到要造船？",
     "choices": [
       {
         "key": "A",
@@ -175139,14 +175248,15 @@
     ],
     "answer": "C",
     "explanation": "树叶能浮在水面，人也可以坐在船上过河。",
-    "verify": "\"枯叶漂在水上，蚂蚁趴在叶子上\""
+    "verify": "\"枯叶漂在水上，蚂蚁趴在叶子上\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p155_q4",
     "topicId": "cnc_p155",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "车和船改善了什么？",
+    "prompt": "《黄帝的传说》里，车和船改善了什么？",
     "choices": [
       {
         "key": "A",
@@ -175167,7 +175277,8 @@
     ],
     "answer": "D",
     "explanation": "有了车和船，走远路、过河都方便了。",
-    "verify": "\"路上和水上的来往\""
+    "verify": "\"路上和水上的来往\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p156_q1",
@@ -175258,7 +175369,7 @@
     "topicId": "cnc_p156",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "人们后来怎样称呼他？",
+    "prompt": "《大禹治水》里，人们后来怎样称呼他？",
     "choices": [
       {
         "key": "A",
@@ -175279,7 +175390,8 @@
     ],
     "answer": "A",
     "explanation": "洪水退去，百姓安居，人们尊敬地称他大禹。",
-    "verify": "\"大禹\""
+    "verify": "\"大禹\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p157_q1",
@@ -175482,7 +175594,7 @@
     "topicId": "cnc_p158",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这所小学最让人记住的是什么？",
+    "prompt": "《大青树下的小学》里，这所小学最让人记住的是什么？",
     "choices": [
       {
         "key": "A",
@@ -175503,7 +175615,8 @@
     ],
     "answer": "C",
     "explanation": "他们穿着鲜艳的衣服来上学，在同一间教室里读书。",
-    "verify": "\"不同民族的孩子在一起学习、一起玩\""
+    "verify": "\"不同民族的孩子在一起学习、一起玩\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p159_q1",
@@ -175650,7 +175763,7 @@
     "topicId": "cnc_p160",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "先生让学生怎样读书？",
+    "prompt": "《不懂就要问》里，先生让学生怎样读书？",
     "choices": [
       {
         "key": "A",
@@ -175671,7 +175784,8 @@
     ],
     "answer": "C",
     "explanation": "那时候学生并不懂得句子的意思，只是跟着先生齐读。",
-    "verify": "\"摇头晃脑地跟着念\""
+    "verify": "\"摇头晃脑地跟着念\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p160_q3",
@@ -175706,7 +175820,7 @@
     "topicId": "cnc_p160",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "先生怎样评价这件事？",
+    "prompt": "《不懂就要问》里，先生怎样评价这件事？",
     "choices": [
       {
         "key": "A",
@@ -175727,7 +175841,8 @@
     ],
     "answer": "A",
     "explanation": "先生说：学问学问，不懂就要问。为了弄清道理，问一问是好的。",
-    "verify": "\"这样很好，不懂就要问\""
+    "verify": "\"这样很好，不懂就要问\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p161_q1",
@@ -176378,7 +176493,7 @@
     "topicId": "cnc_p166",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他拾起的第一片落叶怎样处理？",
+    "prompt": "《铺满金色巴掌的水泥道》里，他拾起的第一片落叶怎样处理？",
     "choices": [
       {
         "key": "A",
@@ -176399,7 +176514,8 @@
     ],
     "answer": "C",
     "explanation": "他觉得这片叶子好看，就放进书包，好好留着。",
-    "verify": "\"珍藏进书包里\""
+    "verify": "\"珍藏进书包里\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p167_q1",
@@ -177050,7 +177166,7 @@
     "topicId": "cnc_p172",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "她最后赶上的是哪一次庆典？",
+    "prompt": "《犟龟》里，她最后赶上的是哪一次庆典？",
     "choices": [
       {
         "key": "A",
@@ -177071,14 +177187,15 @@
     ],
     "answer": "A",
     "explanation": "二十八世的婚礼早已过去。她坚持走到了地方，赶上的是二十九世的婚礼。",
-    "verify": "\"狮王二十九世的婚礼\""
+    "verify": "\"狮王二十九世的婚礼\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p173_q1",
     "topicId": "cnc_p173",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这只小狗为什么要学叫？",
+    "prompt": "《小狗学叫》里，这只小狗为什么要学叫？",
     "choices": [
       {
         "key": "A",
@@ -177099,14 +177216,15 @@
     ],
     "answer": "C",
     "explanation": "它不会像狗、猫、牛、马那样叫。别人批评它，它却不知道正确的叫声是什么样。",
-    "verify": "\"它来到没有狗的地方，从没听过狗怎么叫，还被人笑话\""
+    "verify": "\"它来到没有狗的地方，从没听过狗怎么叫，还被人笑话\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p173_q2",
     "topicId": "cnc_p173",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "它向小公鸡学叫，后来遇到了谁？",
+    "prompt": "《小狗学叫》里，它向小公鸡学叫，后来遇到了谁？",
     "choices": [
       {
         "key": "A",
@@ -177127,14 +177245,15 @@
     ],
     "answer": "D",
     "explanation": "喔喔叫学得很像以后，狐狸带着刀叉跑来，以为午餐是公鸡，结果大失所望，嘲笑了它。",
-    "verify": "\"一只狐狸。狐狸以为是公鸡，看见是狗就哈哈大笑\""
+    "verify": "\"一只狐狸。狐狸以为是公鸡，看见是狗就哈哈大笑\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p173_q3",
     "topicId": "cnc_p173",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "它向杜鹃学「咕咕」叫，险些遇到什么？",
+    "prompt": "《小狗学叫》里，它向杜鹃学「咕咕」叫，险些遇到什么？",
     "choices": [
       {
         "key": "A",
@@ -177155,7 +177274,8 @@
     ],
     "answer": "A",
     "explanation": "杜鹃的叫声引来了猎人。枪响以后，小狗吓得逃走了。",
-    "verify": "\"被猎人当成鸟，差点被枪打中\""
+    "verify": "\"被猎人当成鸟，差点被枪打中\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p173_q4",
@@ -177302,7 +177422,7 @@
     "topicId": "cnc_p175",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这篇节选的作者是谁？主人公叫什么？",
+    "prompt": "《宝葫芦的秘密》里，这篇节选的作者是谁？主人公叫什么？",
     "choices": [
       {
         "key": "A",
@@ -177323,7 +177443,8 @@
     ],
     "answer": "A",
     "explanation": "《宝葫芦的秘密》是张天翼的童话。节选里想得到宝葫芦的孩子叫王葆。",
-    "verify": "\"张天翼。主人公是王葆\""
+    "verify": "\"张天翼。主人公是王葆\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p175_q2",
@@ -177554,7 +177675,7 @@
     "topicId": "cnc_p177",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他立下的命令是什么？",
+    "prompt": "《一块奶酪》里，他立下的命令是什么？",
     "choices": [
       {
         "key": "A",
@@ -177575,7 +177696,8 @@
     ],
     "answer": "D",
     "explanation": "规矩对所有蚂蚁一样，包括队长自己。",
-    "verify": "\"谁也不许偷嘴，他自己也不例外\""
+    "verify": "\"谁也不许偷嘴，他自己也不例外\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p177_q3",
@@ -177862,7 +177984,7 @@
     "topicId": "cnc_p180",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "搭船的鸟是什么鸟？",
+    "prompt": "《搭船的鸟》里，搭船的鸟是什么鸟？",
     "choices": [
       {
         "key": "A",
@@ -177883,7 +178005,8 @@
     ],
     "answer": "B",
     "explanation": "母亲告诉「我」，那只彩色的鸟是翠鸟。",
-    "verify": "\"翠鸟\""
+    "verify": "\"翠鸟\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p180_q2",
@@ -177918,7 +178041,7 @@
     "topicId": "cnc_p180",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "翠鸟怎样捕鱼？",
+    "prompt": "《搭船的鸟》里，翠鸟怎样捕鱼？",
     "choices": [
       {
         "key": "A",
@@ -177939,14 +178062,15 @@
     ],
     "answer": "D",
     "explanation": "它盯着水面，忽然冲进水里，衔着一条小鱼飞上来。",
-    "verify": "\"一下子冲进水里，又飞回船边\""
+    "verify": "\"一下子冲进水里，又飞回船边\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p180_q4",
     "topicId": "cnc_p180",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这篇课文最值得学的观察方法是什么？",
+    "prompt": "《搭船的鸟》里，这篇课文最值得学的观察方法是什么？",
     "choices": [
       {
         "key": "A",
@@ -177967,7 +178091,8 @@
     ],
     "answer": "A",
     "explanation": "作者先写样子，再写捕鱼的动作，都是自己亲眼看到的。",
-    "verify": "\"按看到的颜色、动作一层层写下来\""
+    "verify": "\"按看到的颜色、动作一层层写下来\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p181_q1",
@@ -178338,7 +178463,7 @@
     "topicId": "cnc_p184",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "海底有哪些物产？",
+    "prompt": "《富饶的西沙群岛》里，海底有哪些物产？",
     "choices": [
       {
         "key": "A",
@@ -178359,14 +178484,15 @@
     ],
     "answer": "C",
     "explanation": "课文写海底一半是水，一半是鱼。珊瑚、海参、大龙虾都在那里。",
-    "verify": "\"珊瑚、海参、大龙虾和成群的鱼\""
+    "verify": "\"珊瑚、海参、大龙虾和成群的鱼\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p184_q3",
     "topicId": "cnc_p184",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "海滩上可以看见什么？",
+    "prompt": "《富饶的西沙群岛》里，海滩上可以看见什么？",
     "choices": [
       {
         "key": "A",
@@ -178387,7 +178513,8 @@
     ],
     "answer": "D",
     "explanation": "海滩上贝壳各种各样，海龟也在那里产卵。",
-    "verify": "\"拣不完的贝壳，还有海龟产的蛋\""
+    "verify": "\"拣不完的贝壳，还有海龟产的蛋\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p184_q4",
@@ -178562,7 +178689,7 @@
     "topicId": "cnc_p186",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "夏季的森林是什么样？",
+    "prompt": "《美丽的小兴安岭》里，夏季的森林是什么样？",
     "choices": [
       {
         "key": "A",
@@ -178583,7 +178710,8 @@
     ],
     "answer": "A",
     "explanation": "抽出新枝、小鹿散步是春天。夏天的叶子把森林封得严严实实。",
-    "verify": "\"枝叶密密层层，早晨有雾，阳光像利剑穿过树梢\""
+    "verify": "\"枝叶密密层层，早晨有雾，阳光像利剑穿过树梢\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p186_q3",
@@ -178646,7 +178774,7 @@
     "topicId": "cnc_p187",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "课文把香港比作什么？",
+    "prompt": "《香港，璀璨的明珠》里，课文把香港比作什么？",
     "choices": [
       {
         "key": "A",
@@ -178667,7 +178795,8 @@
     ],
     "answer": "A",
     "explanation": "明珠写的是它又亮又重要。青螺是《望洞庭》里的君山。",
-    "verify": "\"祖国南海之滨一颗璀璨的明珠\""
+    "verify": "\"祖国南海之滨一颗璀璨的明珠\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p187_q2",
@@ -178730,7 +178859,7 @@
     "topicId": "cnc_p187",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这样介绍，是为了说明什么？",
+    "prompt": "《香港，璀璨的明珠》里，这样介绍，是为了说明什么？",
     "choices": [
       {
         "key": "A",
@@ -178751,7 +178880,8 @@
     ],
     "answer": "D",
     "explanation": "市场、美食、夜景都在说明这座城市明亮、热闹。",
-    "verify": "\"香港繁华、美丽，像一颗让人喜爱的明珠\""
+    "verify": "\"香港繁华、美丽，像一颗让人喜爱的明珠\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p188_q1",
@@ -179150,7 +179280,7 @@
     "topicId": "cnc_p191",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗的作者是谁？",
+    "prompt": "《饮湖上初晴后雨》里，这首诗的作者是谁？",
     "choices": [
       {
         "key": "A",
@@ -179171,14 +179301,15 @@
     ],
     "answer": "C",
     "explanation": "《饮湖上初晴后雨》是苏轼的诗。杨万里写的是《晓出净慈寺送林子方》。",
-    "verify": "\"苏轼\""
+    "verify": "\"苏轼\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p191_q4",
     "topicId": "cnc_p191",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "「西子」指的是谁？",
+    "prompt": "《饮湖上初晴后雨》里，「西子」指的是谁？",
     "choices": [
       {
         "key": "A",
@@ -179199,7 +179330,8 @@
     ],
     "answer": "D",
     "explanation": "西子就是古代的西施。诗人用她来比喻西湖。",
-    "verify": "\"西施\""
+    "verify": "\"西施\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p192_q1",
@@ -179234,7 +179366,7 @@
     "topicId": "cnc_p192",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "水的声音有什么变化？",
+    "prompt": "《大自然的声音》里，水的声音有什么变化？",
     "choices": [
       {
         "key": "A",
@@ -179255,7 +179387,8 @@
     ],
     "answer": "C",
     "explanation": "小溪淙淙，河流哗哗，大海波澜壮阔，水也能演奏不同的曲子。",
-    "verify": "\"有时轻轻，有时雄壮\""
+    "verify": "\"有时轻轻，有时雄壮\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p192_q3",
@@ -179570,7 +179703,7 @@
     "topicId": "cnc_p195",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "其他孩子怎样做？",
+    "prompt": "《司马光》里，其他孩子怎样做？",
     "choices": [
       {
         "key": "A",
@@ -179591,7 +179724,8 @@
     ],
     "answer": "B",
     "explanation": "众皆弃去。弃去就是离开、跑掉。",
-    "verify": "\"都吓跑了\""
+    "verify": "\"都吓跑了\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p195_q3",
@@ -179654,7 +179788,7 @@
     "topicId": "cnc_p196",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "课文写的是谁的故事？",
+    "prompt": "《一定要争气》里，课文写的是谁的故事？",
     "choices": [
       {
         "key": "A",
@@ -179675,14 +179809,15 @@
     ],
     "answer": "B",
     "explanation": "两件争气的事都发生在童第周身上。白求恩在手术台旁，赵一曼和一只粗瓷大碗有关。",
-    "verify": "\"生物学家童第周\""
+    "verify": "\"生物学家童第周\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p196_q2",
     "topicId": "cnc_p196",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他中学第一学期跟不上，后来怎样？",
+    "prompt": "《一定要争气》里，他中学第一学期跟不上，后来怎样？",
     "choices": [
       {
         "key": "A",
@@ -179703,14 +179838,15 @@
     ],
     "answer": "C",
     "explanation": "校长原本要他退学或降级。他起早在路灯下读，半年以后成绩上来了。",
-    "verify": "\"发愤学习，各科赶了上来，几何还考了满分\""
+    "verify": "\"发愤学习，各科赶了上来，几何还考了满分\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p196_q3",
     "topicId": "cnc_p196",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "第二次「一定要争气」，他做成了什么？",
+    "prompt": "《一定要争气》里，第二次「一定要争气」，他做成了什么？",
     "choices": [
       {
         "key": "A",
@@ -179731,7 +179867,8 @@
     ],
     "answer": "D",
     "explanation": "卵只有小米粒那么大，外面有薄膜。他反复实践，终于成功。",
-    "verify": "\"在国外把青蛙卵的外膜剥掉，这是教授几年没做成的实验\""
+    "verify": "\"在国外把青蛙卵的外膜剥掉，这是教授几年没做成的实验\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p196_q4",
@@ -179822,7 +179959,7 @@
     "topicId": "cnc_p197",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他在怎样的环境里继续工作？",
+    "prompt": "《手术台就是阵地》里，他在怎样的环境里继续工作？",
     "choices": [
       {
         "key": "A",
@@ -179843,7 +179980,8 @@
     ],
     "answer": "A",
     "explanation": "危险衬出他不肯离开。助手把落在身边的火扑灭，他接着做。",
-    "verify": "\"硝烟滚滚、弹片纷飞，小庙周围很危险，他仍然镇定地取弹片\""
+    "verify": "\"硝烟滚滚、弹片纷飞，小庙周围很危险，他仍然镇定地取弹片\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p197_q4",
@@ -180270,7 +180408,7 @@
     "topicId": "cnc_p201",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗的作者是谁？",
+    "prompt": "《惠崇春江晚景》里，这首诗的作者是谁？",
     "choices": [
       {
         "key": "A",
@@ -180291,7 +180429,8 @@
     ],
     "answer": "A",
     "explanation": "惠崇是画画的人。给这幅《春江晚景》题诗的是苏轼。",
-    "verify": "\"苏轼\""
+    "verify": "\"苏轼\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p201_q4",
@@ -180466,7 +180605,7 @@
     "topicId": "cnc_p203",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "燕子的尾巴像什么？",
+    "prompt": "《燕子》里，燕子的尾巴像什么？",
     "choices": [
       {
         "key": "A",
@@ -180487,7 +180626,8 @@
     ],
     "answer": "B",
     "explanation": "剪刀似的尾巴。五线谱是用来比喻电线的。",
-    "verify": "\"剪刀\""
+    "verify": "\"剪刀\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p203_q3",
@@ -180886,7 +181026,7 @@
     "topicId": "cnc_p207",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "兔子是怎样死的？",
+    "prompt": "《守株待兔》里，兔子是怎样死的？",
     "choices": [
       {
         "key": "A",
@@ -180907,7 +181047,8 @@
     ],
     "answer": "A",
     "explanation": "兔走触株，折颈而死。株是树桩。",
-    "verify": "\"跑过来撞在树桩上，折断了脖子\""
+    "verify": "\"跑过来撞在树桩上，折断了脖子\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p207_q2",
@@ -180942,7 +181083,7 @@
     "topicId": "cnc_p207",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "结果怎样？",
+    "prompt": "《守株待兔》里，结果怎样？",
     "choices": [
       {
         "key": "A",
@@ -180963,14 +181104,15 @@
     ],
     "answer": "C",
     "explanation": "兔不可复得，而身为宋国笑。庄稼也顾不上了。",
-    "verify": "\"兔子没有再来，他自己被宋国人笑话\""
+    "verify": "\"兔子没有再来，他自己被宋国人笑话\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p207_q4",
     "topicId": "cnc_p207",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事是在说什么？",
+    "prompt": "《守株待兔》里，这个故事是在说什么？",
     "choices": [
       {
         "key": "A",
@@ -180991,7 +181133,8 @@
     ],
     "answer": "D",
     "explanation": "一次碰巧得到兔子，不等于以后还能这样。不劳而获靠不住。",
-    "verify": "\"不能凭一次侥幸，就死守老办法、不劳动\""
+    "verify": "\"不能凭一次侥幸，就死守老办法、不劳动\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p208_q1",
@@ -181026,7 +181169,7 @@
     "topicId": "cnc_p208",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "狼怎样假装自己是狗？",
+    "prompt": "《会摇尾巴的狼》里，狼怎样假装自己是狗？",
     "choices": [
       {
         "key": "A",
@@ -181047,7 +181190,8 @@
     ],
     "answer": "C",
     "explanation": "它说自己是为了救小鸡才跳下去的，又摇尾巴想证明自己是狗。狗的尾巴软，它摇的是硬尾巴。",
-    "verify": "\"说自己又忠诚又驯良，还使劲摇那条硬尾巴\""
+    "verify": "\"说自己又忠诚又驯良，还使劲摇那条硬尾巴\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p208_q3",
@@ -181082,7 +181226,7 @@
     "topicId": "cnc_p208",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这则寓言是在说什么？",
+    "prompt": "《会摇尾巴的狼》里，这则寓言是在说什么？",
     "choices": [
       {
         "key": "A",
@@ -181103,7 +181247,8 @@
     ],
     "answer": "A",
     "explanation": "伪装和摇尾巴掩盖不了干过的坏事。轻信，就会上当。",
-    "verify": "\"不能被甜言蜜语和装出来的样子骗了，要看清本性\""
+    "verify": "\"不能被甜言蜜语和装出来的样子骗了，要看清本性\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p209_q1",
@@ -181194,7 +181339,7 @@
     "topicId": "cnc_p209",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "鹿最后明白了什么？",
+    "prompt": "《鹿角和鹿腿》里，鹿最后明白了什么？",
     "choices": [
       {
         "key": "A",
@@ -181215,14 +181360,15 @@
     ],
     "answer": "B",
     "explanation": "不能只看外表喜不喜欢。自己看不上的，也许正有大用处。",
-    "verify": "\"难看的腿救了自己，好看的角差点送了命\""
+    "verify": "\"难看的腿救了自己，好看的角差点送了命\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p210_q1",
     "topicId": "cnc_p210",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "池子怎样看待河流？",
+    "prompt": "《池子与河流》里，池子怎样看待河流？",
     "choices": [
       {
         "key": "A",
@@ -181243,7 +181389,8 @@
     ],
     "answer": "D",
     "explanation": "池子觉得自己躺在柔软的泥土里最舒服，反问河流什么时候才能休息。",
-    "verify": "\"嫌它整天奔流，不肯像自己一样安闲地躺着\""
+    "verify": "\"嫌它整天奔流，不肯像自己一样安闲地躺着\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p210_q2",
@@ -181306,7 +181453,7 @@
     "topicId": "cnc_p210",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这则寓言的作者是谁？它在说什么？",
+    "prompt": "《池子与河流》里，这则寓言的作者是谁？它在说什么？",
     "choices": [
       {
         "key": "A",
@@ -181327,7 +181474,8 @@
     ],
     "answer": "C",
     "explanation": "《池子与河流》是克雷洛夫的寓言。道理是：生命要流动、要做事，不能贪图安逸。",
-    "verify": "\"克雷洛夫。不能只图安逸、不肯劳动\""
+    "verify": "\"克雷洛夫。不能只图安逸、不肯劳动\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p211_q1",
@@ -181558,7 +181706,7 @@
     "topicId": "cnc_p213",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "海底有没有声音？",
+    "prompt": "《海底世界》里，海底有没有声音？",
     "choices": [
       {
         "key": "A",
@@ -181579,14 +181727,15 @@
     ],
     "answer": "C",
     "explanation": "有的像蜜蜂嗡嗡，有的像小鸟啾啾，有的像小狗汪汪，有的还像在打鼾。",
-    "verify": "\"有。动物会发出各种声音\""
+    "verify": "\"有。动物会发出各种声音\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p213_q2",
     "topicId": "cnc_p213",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "海参怎样活动？",
+    "prompt": "《海底世界》里，海参怎样活动？",
     "choices": [
       {
         "key": "A",
@@ -181607,7 +181756,8 @@
     ],
     "answer": "D",
     "explanation": "海参行动很慢。每小时几十公里的是梭子鱼。",
-    "verify": "\"靠肌肉伸缩爬行，每小时只能前进约四米\""
+    "verify": "\"靠肌肉伸缩爬行，每小时只能前进约四米\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p213_q3",
@@ -181642,7 +181792,7 @@
     "topicId": "cnc_p213",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "课文怎样评价海底？",
+    "prompt": "《海底世界》里，课文怎样评价海底？",
     "choices": [
       {
         "key": "A",
@@ -181663,14 +181813,15 @@
     ],
     "answer": "B",
     "explanation": "海底有山有峡谷，也有森林和草地似的植物，动物的活动方式还各不相同。",
-    "verify": "\"景色奇异，物产丰富\""
+    "verify": "\"景色奇异，物产丰富\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p214_q1",
     "topicId": "cnc_p214",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这篇课文的作者是谁？",
+    "prompt": "《石蜂》里，这篇课文的作者是谁？",
     "choices": [
       {
         "key": "A",
@@ -181691,7 +181842,8 @@
     ],
     "answer": "D",
     "explanation": "法布尔把这次实验写进了观察记录。汪曾祺写的是《昆虫备忘录》，不是这篇实验。",
-    "verify": "\"法布尔\""
+    "verify": "\"法布尔\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p214_q2",
@@ -181726,7 +181878,7 @@
     "topicId": "cnc_p214",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "实验是怎样做的？",
+    "prompt": "《石蜂》里，实验是怎样做的？",
     "choices": [
       {
         "key": "A",
@@ -181747,14 +181899,15 @@
     ],
     "answer": "B",
     "explanation": "小女儿留在蜂窝旁等。带到陌生的远处，才看得出它们是不是靠记忆原路返回。",
-    "verify": "\"把石蜂装进纸袋，带到大约四公里外没去过的地方，做上白色记号再放飞\""
+    "verify": "\"把石蜂装进纸袋，带到大约四公里外没去过的地方，做上白色记号再放飞\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p214_q4",
     "topicId": "cnc_p214",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "实验说明了什么？",
+    "prompt": "《石蜂》里，实验说明了什么？",
     "choices": [
       {
         "key": "A",
@@ -181775,14 +181928,15 @@
     ],
     "answer": "C",
     "explanation": "二十只左右里，至少有十五只回到了家。沿途是陌生景物，它们仍然找得到窝。",
-    "verify": "\"不少做了记号的石蜂飞了回来，认路靠的不是记忆力，而是一种特殊的能力\""
+    "verify": "\"不少做了记号的石蜂飞了回来，认路靠的不是记忆力，而是一种特殊的能力\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p215_q1",
     "topicId": "cnc_p215",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "养虾的缸在什么地方？",
+    "prompt": "《小虾》里，养虾的缸在什么地方？",
     "choices": [
       {
         "key": "A",
@@ -181803,7 +181957,8 @@
     ],
     "answer": "A",
     "explanation": "阳光从葡萄架的空隙漏下来，水面像许多圆镜。这口闲着的缸正好养虾。",
-    "verify": "\"院子里的葡萄架下，夏天积了大半缸雨水\""
+    "verify": "\"院子里的葡萄架下，夏天积了大半缸雨水\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p215_q2",
@@ -181866,7 +182021,7 @@
     "topicId": "cnc_p215",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来缸里的小虾为什么多起来？",
+    "prompt": "《小虾》里，后来缸里的小虾为什么多起来？",
     "choices": [
       {
         "key": "A",
@@ -181887,7 +182042,8 @@
     ],
     "answer": "D",
     "explanation": "作者捉起几只较大的虾，看见腹下的卵。葡萄架的落叶掉进缸里，叶子下也会聚起许多小小的虾。",
-    "verify": "\"较大的虾腹部藏着许多圆圆的卵，不久就孵出了小虾\""
+    "verify": "\"较大的虾腹部藏着许多圆圆的卵，不久就孵出了小虾\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p216_q1",
@@ -182370,7 +182526,7 @@
     "topicId": "cnc_p220",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "蔡伦做了什么？",
+    "prompt": "《纸的发明》里，蔡伦做了什么？",
     "choices": [
       {
         "key": "A",
@@ -182391,7 +182547,8 @@
     ],
     "answer": "C",
     "explanation": "大约一千九百年前的东汉，蔡伦改进造纸方法。他不是造桥的李春，也不是画画的张择端。",
-    "verify": "\"东汉时吸取前人经验，改进了造纸术\""
+    "verify": "\"东汉时吸取前人经验，改进了造纸术\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p220_q3",
@@ -182482,7 +182639,7 @@
     "topicId": "cnc_p221",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "桥下面有桥墩吗？",
+    "prompt": "《赵州桥》里，桥下面有桥墩吗？",
     "choices": [
       {
         "key": "A",
@@ -182503,7 +182660,8 @@
     ],
     "answer": "D",
     "explanation": "桥全部用石头砌成，下面没有桥墩，只有一个大拱。",
-    "verify": "\"没有桥墩，只有一个拱形的大桥洞\""
+    "verify": "\"没有桥墩，只有一个拱形的大桥洞\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p221_q3",
@@ -182538,7 +182696,7 @@
     "topicId": "cnc_p221",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "栏板上雕刻着什么？",
+    "prompt": "《赵州桥》里，栏板上雕刻着什么？",
     "choices": [
       {
         "key": "A",
@@ -182559,7 +182717,8 @@
     ],
     "answer": "B",
     "explanation": "栏板上面雕刻着精美的龙，有的互相缠绕，有的张牙舞爪。",
-    "verify": "\"龙\""
+    "verify": "\"龙\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p222_q1",
@@ -182594,7 +182753,7 @@
     "topicId": "cnc_p222",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这幅画是谁画的？",
+    "prompt": "《一幅名扬中外的画》里，这幅画是谁画的？",
     "choices": [
       {
         "key": "A",
@@ -182615,7 +182774,8 @@
     ],
     "answer": "A",
     "explanation": "张择端是北宋画家。李春造桥，蔡伦改进造纸，都不是这幅画的作者。",
-    "verify": "\"北宋的张择端\""
+    "verify": "\"北宋的张择端\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p222_q3",
@@ -182874,7 +183034,7 @@
     "topicId": "cnc_p224",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事奇妙在哪里？",
+    "prompt": "《胡萝卜先生的长胡子》里，这个故事奇妙在哪里？",
     "choices": [
       {
         "key": "A",
@@ -182895,7 +183055,8 @@
     ],
     "answer": "A",
     "explanation": "果酱、风筝线、晾尿布，都围绕这根越来越长的胡子。人的胡子不会真的这样长。",
-    "verify": "\"一根胡子会不停变长，还一路帮了别人的忙\""
+    "verify": "\"一根胡子会不停变长，还一路帮了别人的忙\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p225_q1",
@@ -182958,7 +183119,7 @@
     "topicId": "cnc_p225",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "妈妈在树上做了什么？",
+    "prompt": "《我变成了一棵树》里，妈妈在树上做了什么？",
     "choices": [
       {
         "key": "A",
@@ -182979,14 +183140,15 @@
     ],
     "answer": "A",
     "explanation": "妈妈爬上树，看见鸟窝里放着吃的，便和小动物们一起吃。英英馋得直流口水。",
-    "verify": "\"发现鸟窝里有吃的，和小动物一起吃\""
+    "verify": "\"发现鸟窝里有吃的，和小动物一起吃\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p225_q4",
     "topicId": "cnc_p225",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事的想象奇妙在哪里？",
+    "prompt": "《我变成了一棵树》里，这个故事的想象奇妙在哪里？",
     "choices": [
       {
         "key": "A",
@@ -183007,7 +183169,8 @@
     ],
     "answer": "B",
     "explanation": "人变成树、妈妈在树上野餐，都是想象出来的，而且都围绕「变成树」这件事。",
-    "verify": "\"一个孩子真的变成了树，秘密却守不住\""
+    "verify": "\"一个孩子真的变成了树，秘密却守不住\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p226_q1",
@@ -183434,7 +183597,7 @@
     "topicId": "cnc_p229",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "第二天枝头上怎样了？",
+    "prompt": "《灰雀》里，第二天枝头上怎样了？",
     "choices": [
       {
         "key": "A",
@@ -183455,7 +183618,8 @@
     ],
     "answer": "B",
     "explanation": "鸟回到了白桦树上。男孩低着头承认，它刚才还在。列宁知道孩子改正了。",
-    "verify": "\"深红色胸脯的灰雀回来了，男孩说它刚才还在这儿\""
+    "verify": "\"深红色胸脯的灰雀回来了，男孩说它刚才还在这儿\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p230_q1",
@@ -183490,7 +183654,7 @@
     "topicId": "cnc_p230",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "她本来特别想去做什么？",
+    "prompt": "《我不能失信》里，她本来特别想去做什么？",
     "choices": [
       {
         "key": "A",
@@ -183511,7 +183675,8 @@
     ],
     "answer": "A",
     "explanation": "鸽子尖尖的嘴巴、红红的眼睛。她盼着这次做客，可是另有约定在先。",
-    "verify": "\"去伯伯家看鸽子，伯伯还说准备送她一只\""
+    "verify": "\"去伯伯家看鸽子，伯伯还说准备送她一只\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p230_q3",
@@ -183854,7 +184019,7 @@
     "topicId": "cnc_p233",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "人们怎样做？",
+    "prompt": "《暴风雨来临之前》里，人们怎样做？",
     "choices": [
       {
         "key": "A",
@@ -183875,14 +184040,15 @@
     ],
     "answer": "A",
     "explanation": "闪电已经在催人。村子里的人知道暴风雨近了。",
-    "verify": "\"急急忙忙收拾东西，要在雷雨以前赶回家\""
+    "verify": "\"急急忙忙收拾东西，要在雷雨以前赶回家\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p233_q4",
     "topicId": "cnc_p233",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来风和雷是怎样到来的？",
+    "prompt": "《暴风雨来临之前》里，后来风和雷是怎样到来的？",
     "choices": [
       {
         "key": "A",
@@ -183903,14 +184069,15 @@
     ],
     "answer": "B",
     "explanation": "课文把微风写成最初的报信者。大风把鸡的羽毛吹得乱蓬蓬的。雷声告诉人们：暴风雨来了。",
-    "verify": "\"先有凉凉的微风，接着是大风，大风过去又静了一静，然后轰隆隆的雷声响起\""
+    "verify": "\"先有凉凉的微风，接着是大风，大风过去又静了一静，然后轰隆隆的雷声响起\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p234_q1",
     "topicId": "cnc_p234",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这篇课文的作者是谁？",
+    "prompt": "《我们奇妙的世界》里，这篇课文的作者是谁？",
     "choices": [
       {
         "key": "A",
@@ -183931,7 +184098,8 @@
     ],
     "answer": "D",
     "explanation": "《我们奇妙的世界》是彼得·西摩的作品。萧红写《火烧云》，不要记成同一个人。",
-    "verify": "\"英国作家彼得·西摩\""
+    "verify": "\"英国作家彼得·西摩\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p234_q2",
@@ -184218,7 +184386,7 @@
     "topicId": "cnc_p236",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要靠什么让人发笑？",
+    "prompt": "《慢性子裁缝和急性子顾客》里，这个故事主要靠什么让人发笑？",
     "choices": [
       {
         "key": "A",
@@ -184239,7 +184407,8 @@
     ],
     "answer": "A",
     "explanation": "一个恨不得马上穿上，一个总是不着急。性格一碰，情节就好笑。",
-    "verify": "\"急性子和慢性子怎么也对不上\""
+    "verify": "\"急性子和慢性子怎么也对不上\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p237_q1",
@@ -184330,7 +184499,7 @@
     "topicId": "cnc_p237",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事好笑在哪里？",
+    "prompt": "《漏》里，这个故事好笑在哪里？",
     "choices": [
       {
         "key": "A",
@@ -184351,14 +184520,15 @@
     ],
     "answer": "B",
     "explanation": "误会把贼和老虎都吓跑了。真正的漏，只是屋顶漏雨。",
-    "verify": "\"他们害怕的「漏」根本不是怪物，却互相吓跑了\""
+    "verify": "\"他们害怕的「漏」根本不是怪物，却互相吓跑了\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p238_q1",
     "topicId": "cnc_p238",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "孩子为什么叫枣核？",
+    "prompt": "《枣核》里，孩子为什么叫枣核？",
     "choices": [
       {
         "key": "A",
@@ -184379,7 +184549,8 @@
     ],
     "answer": "D",
     "explanation": "夫妻俩成天盼着孩子。孩子生下来只有枣核那么大，就叫枣核。",
-    "verify": "\"父母说哪怕有个枣核那么大的孩子也好，后来真生了一个这么大的孩子\""
+    "verify": "\"父母说哪怕有个枣核那么大的孩子也好，后来真生了一个这么大的孩子\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p238_q2",
@@ -184442,7 +184613,7 @@
     "topicId": "cnc_p238",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这则故事主要说什么？",
+    "prompt": "《枣核》里，这则故事主要说什么？",
     "choices": [
       {
         "key": "A",
@@ -184463,7 +184634,8 @@
     ],
     "answer": "C",
     "explanation": "他不光把牲口赶了回来，还让欺负乡亲的人不敢再来。本领不由个子决定。",
-    "verify": "\"人小也能做成大事，不要只看身材\""
+    "verify": "\"人小也能做成大事，不要只看身材\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p239_q1",
@@ -185030,7 +185202,7 @@
     "topicId": "cnc_p244",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这篇童话的作者是谁？",
+    "prompt": "《一个豆荚里的五粒豆》里，这篇童话的作者是谁？",
     "choices": [
       {
         "key": "A",
@@ -185051,7 +185223,8 @@
     ],
     "answer": "B",
     "explanation": "五粒豆的故事是安徒生写的。叶至善写《一只窝囊的大老虎》，高洪波写《陀螺》。",
-    "verify": "\"安徒生\""
+    "verify": "\"安徒生\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p244_q2",
@@ -185114,7 +185287,7 @@
     "topicId": "cnc_p244",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要想说什么？",
+    "prompt": "《一个豆荚里的五粒豆》里，这个故事主要想说什么？",
     "choices": [
       {
         "key": "A",
@@ -185135,7 +185308,8 @@
     ],
     "answer": "A",
     "explanation": "别的豆说要飞到广大世界去，真正起作用的，是安静发芽的那一粒。",
-    "verify": "\"看似平常的一粒豆，也能给别人带去希望\""
+    "verify": "\"看似平常的一粒豆，也能给别人带去希望\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p245_q1",
@@ -185226,7 +185400,7 @@
     "topicId": "cnc_p245",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个实验说明了什么？",
+    "prompt": "《夜间飞行的秘密》里，这个实验说明了什么？",
     "choices": [
       {
         "key": "A",
@@ -185247,14 +185421,15 @@
     ],
     "answer": "B",
     "explanation": "嘴里发出去，碰到东西再返回来，耳朵听得见。这是科学上的解释。",
-    "verify": "\"蝙蝠靠嘴和耳朵配合，用超声波探路\""
+    "verify": "\"蝙蝠靠嘴和耳朵配合，用超声波探路\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p246_q1",
     "topicId": "cnc_p246",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这家店开头只卖什么样的帽子？",
+    "prompt": "《方帽子店》里，这家店开头只卖什么样的帽子？",
     "choices": [
       {
         "key": "A",
@@ -185275,14 +185450,15 @@
     ],
     "answer": "D",
     "explanation": "很久以前大家都戴方帽子，店里也只做这一种。",
-    "verify": "\"方帽子\""
+    "verify": "\"方帽子\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p246_q2",
     "topicId": "cnc_p246",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "后来人们为什么改戴圆帽子？",
+    "prompt": "《方帽子店》里，后来人们为什么改戴圆帽子？",
     "choices": [
       {
         "key": "A",
@@ -185303,14 +185479,15 @@
     ],
     "answer": "A",
     "explanation": "有人做出了圆帽子，大家觉得比方的合适，就换了。",
-    "verify": "\"圆的戴着更舒服，也更好看\""
+    "verify": "\"圆的戴着更舒服，也更好看\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p246_q3",
     "topicId": "cnc_p246",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "老板怎样对待这件事？",
+    "prompt": "《方帽子店》里，老板怎样对待这件事？",
     "choices": [
       {
         "key": "A",
@@ -185331,14 +185508,15 @@
     ],
     "answer": "B",
     "explanation": "他觉得方的才是帽子。别人都换了，他还是老样子。",
-    "verify": "\"坚持只卖方帽子，不肯改\""
+    "verify": "\"坚持只卖方帽子，不肯改\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p246_q4",
     "topicId": "cnc_p246",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "故事最后怎样了？",
+    "prompt": "《方帽子店》里，故事最后怎样了？",
     "choices": [
       {
         "key": "A",
@@ -185359,7 +185537,8 @@
     ],
     "answer": "C",
     "explanation": "不肯跟着改变，店就只剩下他自己。",
-    "verify": "\"大家都戴圆帽子，只剩老板自己还戴着方的\""
+    "verify": "\"大家都戴圆帽子，只剩老板自己还戴着方的\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p247_q1",
@@ -185394,7 +185573,7 @@
     "topicId": "cnc_p247",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "田忌怎样对阵才赢了？",
+    "prompt": "《田忌赛马》里，田忌怎样对阵才赢了？",
     "choices": [
       {
         "key": "A",
@@ -185415,14 +185594,15 @@
     ],
     "answer": "B",
     "explanation": "第一场故意输掉，后两场用相对较强的马去对较弱的，才能两胜一负。",
-    "verify": "\"先用下等马对齐威王的上等马，再用中等对下等，上等对中等\""
+    "verify": "\"先用下等马对齐威王的上等马，再用中等对下等，上等对中等\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p247_q3",
     "topicId": "cnc_p247",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这样排的结果是什么？",
+    "prompt": "《田忌赛马》里，这样排的结果是什么？",
     "choices": [
       {
         "key": "A",
@@ -185443,14 +185623,15 @@
     ],
     "answer": "C",
     "explanation": "第一场输，第二、第三场赢，总共还是赢。",
-    "verify": "\"三场里赢了两场\""
+    "verify": "\"三场里赢了两场\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p247_q4",
     "topicId": "cnc_p247",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事说明什么？",
+    "prompt": "《田忌赛马》里，这个故事说明什么？",
     "choices": [
       {
         "key": "A",
@@ -185471,7 +185652,8 @@
     ],
     "answer": "D",
     "explanation": "马还是那些马。改的是出场顺序，不是另外买一批马。",
-    "verify": "\"同样的马，对阵换一下，结果就可能不同\""
+    "verify": "\"同样的马，对阵换一下，结果就可能不同\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p248_q1",
@@ -186038,7 +186220,7 @@
     "topicId": "cnc_p253",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "爬山虎的脚长在哪里？",
+    "prompt": "《爬山虎的脚》里，爬山虎的脚长在哪里？",
     "choices": [
       {
         "key": "A",
@@ -186059,14 +186241,15 @@
     ],
     "answer": "C",
     "explanation": "叶圣陶写细丝一样的脚长在茎上，不是长在花上。",
-    "verify": "\"茎上\""
+    "verify": "\"茎上\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p253_q2",
     "topicId": "cnc_p253",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "脚触到墙以后会怎样？",
+    "prompt": "《爬山虎的脚》里，脚触到墙以后会怎样？",
     "choices": [
       {
         "key": "A",
@@ -186087,7 +186270,8 @@
     ],
     "answer": "D",
     "explanation": "细丝的头一触到墙，就变成小圆片，把爬山虎巴在墙上。",
-    "verify": "\"头上变成小圆片，巴住墙\""
+    "verify": "\"头上变成小圆片，巴住墙\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p253_q3",
@@ -186206,7 +186390,7 @@
     "topicId": "cnc_p254",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "它的住宅有什么特点？",
+    "prompt": "《蟋蟀的住宅》里，它的住宅有什么特点？",
     "choices": [
       {
         "key": "A",
@@ -186227,7 +186411,8 @@
     ],
     "answer": "B",
     "explanation": "选址要排水好、有阳光。内部修得很认真。",
-    "verify": "\"倾斜的隧道，有门，里面光滑，门口还有平台\""
+    "verify": "\"倾斜的隧道，有门，里面光滑，门口还有平台\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p254_q4",
@@ -186402,7 +186587,7 @@
     "topicId": "cnc_p256",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "盘古怎样把天地分开？",
+    "prompt": "《盘古开天地》里，盘古怎样把天地分开？",
     "choices": [
       {
         "key": "A",
@@ -186423,14 +186608,15 @@
     ],
     "answer": "C",
     "explanation": "他劈开以后，天每天升高，地每天加厚，他也跟着长。补天、填海、盗火是另外几则。",
-    "verify": "\"用斧头劈开，自己顶天立地\""
+    "verify": "\"用斧头劈开，自己顶天立地\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p256_q3",
     "topicId": "cnc_p256",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "盘古倒下以后怎样了？",
+    "prompt": "《盘古开天地》里，盘古倒下以后怎样了？",
     "choices": [
       {
         "key": "A",
@@ -186451,14 +186637,15 @@
     ],
     "answer": "D",
     "explanation": "呼吸变成风，眼睛变成日月，四肢和身躯变成大地的各部分。",
-    "verify": "\"身体化成了日月、山川、草木和风\""
+    "verify": "\"身体化成了日月、山川、草木和风\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p256_q4",
     "topicId": "cnc_p256",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这则神话主要在讲什么？",
+    "prompt": "《盘古开天地》里，这则神话主要在讲什么？",
     "choices": [
       {
         "key": "A",
@@ -186479,14 +186666,15 @@
     ],
     "answer": "A",
     "explanation": "开天、化身，都是在说世界的来历。夜间飞行和读书是另外的课文。",
-    "verify": "\"天地是怎样分开、万物是怎样来的\""
+    "verify": "\"天地是怎样分开、万物是怎样来的\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p257_q1",
     "topicId": "cnc_p257",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "精卫是怎样变成鸟的？",
+    "prompt": "《精卫填海》里，精卫是怎样变成鸟的？",
     "choices": [
       {
         "key": "A",
@@ -186507,14 +186695,15 @@
     ],
     "answer": "C",
     "explanation": "炎帝的小女儿女娃在东海溺死后，化成了精卫。",
-    "verify": "\"在东海淹死以后化成的\""
+    "verify": "\"在东海淹死以后化成的\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p257_q2",
     "topicId": "cnc_p257",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "精卫衔来什么想填海？",
+    "prompt": "《精卫填海》里，精卫衔来什么想填海？",
     "choices": [
       {
         "key": "A",
@@ -186535,14 +186724,15 @@
     ],
     "answer": "D",
     "explanation": "她从西山衔木石，投进东海。五色石是女娲补天用的。",
-    "verify": "\"西山的小树枝和石子\""
+    "verify": "\"西山的小树枝和石子\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p257_q3",
     "topicId": "cnc_p257",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事出自哪里？",
+    "prompt": "《精卫填海》里，这个故事出自哪里？",
     "choices": [
       {
         "key": "A",
@@ -186563,14 +186753,15 @@
     ],
     "answer": "A",
     "explanation": "精卫填海是《山海经》里的神话。王戎的故事在《世说新语》。",
-    "verify": "\"《山海经》\""
+    "verify": "\"《山海经》\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p257_q4",
     "topicId": "cnc_p257",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事赞美什么？",
+    "prompt": "《精卫填海》里，这个故事赞美什么？",
     "choices": [
       {
         "key": "A",
@@ -186591,7 +186782,8 @@
     ],
     "answer": "B",
     "explanation": "一只小鸟也天天衔木石，写的是坚持。",
-    "verify": "\"目标远大，坚持不放弃\""
+    "verify": "\"目标远大，坚持不放弃\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p258_q1",
@@ -186626,7 +186818,7 @@
     "topicId": "cnc_p258",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "宙斯怎样惩罚他？",
+    "prompt": "《普罗米修斯》里，宙斯怎样惩罚他？",
     "choices": [
       {
         "key": "A",
@@ -186647,14 +186839,15 @@
     ],
     "answer": "A",
     "explanation": "肝脏被啄还会长回来，痛苦就不停。赛马和帽子不是这个故事。",
-    "verify": "\"锁在高加索山上，派神鹰啄他的肝脏\""
+    "verify": "\"锁在高加索山上，派神鹰啄他的肝脏\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p258_q3",
     "topicId": "cnc_p258",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来是谁救了他？",
+    "prompt": "《普罗米修斯》里，后来是谁救了他？",
     "choices": [
       {
         "key": "A",
@@ -186675,14 +186868,15 @@
     ],
     "answer": "B",
     "explanation": "赫拉克勒斯路过，射下神鹰，把他放了。不要写成精卫或女娲来救。",
-    "verify": "\"大力士赫拉克勒斯射死神鹰，砸碎锁链\""
+    "verify": "\"大力士赫拉克勒斯射死神鹰，砸碎锁链\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p258_q4",
     "topicId": "cnc_p258",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这则神话主要赞美什么？",
+    "prompt": "《普罗米修斯》里，这则神话主要赞美什么？",
     "choices": [
       {
         "key": "A",
@@ -186703,7 +186897,8 @@
     ],
     "answer": "C",
     "explanation": "他把火给了人类，自己被惩罚，仍然不后悔。",
-    "verify": "\"为了别人，不怕自己受苦\""
+    "verify": "\"为了别人，不怕自己受苦\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p259_q1",
@@ -186738,7 +186933,7 @@
     "topicId": "cnc_p259",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "女娲还做了哪一件事？",
+    "prompt": "《女娲补天》里，女娲还做了哪一件事？",
     "choices": [
       {
         "key": "A",
@@ -186759,14 +186954,15 @@
     ],
     "answer": "B",
     "explanation": "课文写她除了补天，还治住猛兽和洪水。填平东海是精卫的事。",
-    "verify": "\"杀掉兴风作浪的黑龙，并堵住洪水\""
+    "verify": "\"杀掉兴风作浪的黑龙，并堵住洪水\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p259_q3",
     "topicId": "cnc_p259",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "人们为什么感激女娲？",
+    "prompt": "《女娲补天》里，人们为什么感激女娲？",
     "choices": [
       {
         "key": "A",
@@ -186787,7 +186983,8 @@
     ],
     "answer": "C",
     "explanation": "补天、撑天、止住洪水，都是为了让人能活下去。",
-    "verify": "\"她让塌了的天重新撑起来，人类才活下来\""
+    "verify": "\"她让塌了的天重新撑起来，人类才活下来\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p259_q4",
@@ -187046,7 +187243,7 @@
     "topicId": "cnc_p262",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小麻雀当时在哪里？",
+    "prompt": "《麻雀》里，小麻雀当时在哪里？",
     "choices": [
       {
         "key": "A",
@@ -187067,14 +187264,15 @@
     ],
     "answer": "D",
     "explanation": "小麻雀才长出羽毛，从树上掉在猎狗面前。",
-    "verify": "\"从巢里掉到地上\""
+    "verify": "\"从巢里掉到地上\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p262_q2",
     "topicId": "cnc_p262",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "老麻雀怎样做？",
+    "prompt": "《麻雀》里，老麻雀怎样做？",
     "choices": [
       {
         "key": "A",
@@ -187095,7 +187293,8 @@
     ],
     "answer": "A",
     "explanation": "它扎煞着羽毛，发出绝望的叫声，用身体挡在幼儿前面。",
-    "verify": "\"从树上扑下来，张开羽毛护住小麻雀\""
+    "verify": "\"从树上扑下来，张开羽毛护住小麻雀\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p262_q3",
@@ -187186,7 +187385,7 @@
     "topicId": "cnc_p263",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他们在路上遇到了谁？",
+    "prompt": "《爬天都峰》里，他们在路上遇到了谁？",
     "choices": [
       {
         "key": "A",
@@ -187207,7 +187406,8 @@
     ],
     "answer": "B",
     "explanation": "老爷爷也要爬山。后来「我」和老爷爷一起往上爬。",
-    "verify": "\"一位白发苍苍、年纪像爷爷的老爷爷\""
+    "verify": "\"一位白发苍苍、年纪像爷爷的老爷爷\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p263_q3",
@@ -187382,7 +187582,7 @@
     "topicId": "cnc_p265",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "远看长城像什么？",
+    "prompt": "《长城》里，远看长城像什么？",
     "choices": [
       {
         "key": "A",
@@ -187403,7 +187603,8 @@
     ],
     "answer": "C",
     "explanation": "很长，又随着山势弯曲，所以说像长龙。豌豆、花牛、麻雀是另外几篇。",
-    "verify": "\"一条长龙，在崇山峻岭之间蜿蜒盘旋\""
+    "verify": "\"一条长龙，在崇山峻岭之间蜿蜒盘旋\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p265_q2",
@@ -187522,7 +187723,7 @@
     "topicId": "cnc_p266",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "长廊有什么特别？",
+    "prompt": "《颐和园》里，长廊有什么特别？",
     "choices": [
       {
         "key": "A",
@@ -187543,7 +187744,8 @@
     ],
     "answer": "A",
     "explanation": "几千幅画没有哪两幅完全一样。一边是花木，一边是昆明湖。",
-    "verify": "\"很长，梁上的彩画一幅和一幅不同\""
+    "verify": "\"很长，梁上的彩画一幅和一幅不同\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p266_q3",
@@ -187662,7 +187864,7 @@
     "topicId": "cnc_p267",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这些俑的神态怎样？",
+    "prompt": "《秦兵马俑》里，这些俑的神态怎样？",
     "choices": [
       {
         "key": "A",
@@ -187683,7 +187885,8 @@
     ],
     "answer": "C",
     "explanation": "课文写它们神态各异，像一支地下的军阵。花牛甩尾巴是现代诗。",
-    "verify": "\"各不相同，有的微微颔首，有的目光炯炯\""
+    "verify": "\"各不相同，有的微微颔首，有的目光炯炯\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p267_q4",
@@ -187830,7 +188033,7 @@
     "topicId": "cnc_p269",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "大家原先怎样说鹅？",
+    "prompt": "《牛和鹅》里，大家原先怎样说鹅？",
     "choices": [
       {
         "key": "A",
@@ -187851,7 +188054,8 @@
     ],
     "answer": "C",
     "explanation": "他们说牛看人觉得人比牛大，鹅看人觉得人比鹅小。",
-    "verify": "\"鹅把人看得比自己小，所以敢欺负人\""
+    "verify": "\"鹅把人看得比自己小，所以敢欺负人\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p269_q2",
@@ -187886,7 +188090,7 @@
     "topicId": "cnc_p269",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这件事以后，「我」明白了什么？",
+    "prompt": "《牛和鹅》里，这件事以后，「我」明白了什么？",
     "choices": [
       {
         "key": "A",
@@ -187907,7 +188111,8 @@
     ],
     "answer": "A",
     "explanation": "鹅虽然把我们看得小，我们其实比它强。这个认识是自己得到的。",
-    "verify": "\"不能只听别人怎么说，要自己判断\""
+    "verify": "\"不能只听别人怎么说，要自己判断\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p269_q4",
@@ -188250,7 +188455,7 @@
     "topicId": "cnc_p272",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事表现王戎怎样？",
+    "prompt": "《王戎不取道旁李》里，这个故事表现王戎怎样？",
     "choices": [
       {
         "key": "A",
@@ -188271,7 +188476,8 @@
     ],
     "answer": "A",
     "explanation": "他由「路边还有这么多果子」推出果子是苦的。故事选自《世说新语》，不是司马光砸缸。",
-    "verify": "\"善于观察和推理\""
+    "verify": "\"善于观察和推理\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p273_q1",
@@ -188418,7 +188624,7 @@
     "topicId": "cnc_p274",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "菲科问的是什么？",
+    "prompt": "《我将无我，不负人民》里，菲科问的是什么？",
     "choices": [
       {
         "key": "A",
@@ -188439,7 +188645,8 @@
     ],
     "answer": "A",
     "explanation": "他还补充说，自己当选众议长已经很激动，中国这么大，主席会怎样想。",
-    "verify": "\"当选中国国家主席时是怎样的心情\""
+    "verify": "\"当选中国国家主席时是怎样的心情\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p274_q3",
@@ -188558,7 +188765,7 @@
     "topicId": "cnc_p275",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "周恩来怎样回答？",
+    "prompt": "《为中华之崛起而读书》里，周恩来怎样回答？",
     "choices": [
       {
         "key": "A",
@@ -188579,14 +188786,15 @@
     ],
     "answer": "C",
     "explanation": "他的声音清楚、坚定。崛起是说中华民族强大起来。后两句出自另外两篇。",
-    "verify": "\"为中华之崛起而读书\""
+    "verify": "\"为中华之崛起而读书\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p275_q4",
     "topicId": "cnc_p275",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他为什么会立下这个志向？",
+    "prompt": "《为中华之崛起而读书》里，他为什么会立下这个志向？",
     "choices": [
       {
         "key": "A",
@@ -188607,7 +188815,8 @@
     ],
     "answer": "D",
     "explanation": "中华不强大，老百姓就会被欺负。所以要把读书和国家连在一起。",
-    "verify": "\"在租界里看见中国人受欺凌，心里很难过\""
+    "verify": "\"在租界里看见中国人受欺凌，心里很难过\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p276_q1",
@@ -189034,7 +189243,7 @@
     "topicId": "cnc_p279",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "诗人赞扬项羽什么？",
+    "prompt": "《夏日绝句》里，诗人赞扬项羽什么？",
     "choices": [
       {
         "key": "A",
@@ -189055,7 +189264,8 @@
     ],
     "answer": "D",
     "explanation": "不肯过江东，是说宁可死，也不逃回去求生。",
-    "verify": "\"失败了也不肯苟且逃回去\""
+    "verify": "\"失败了也不肯苟且逃回去\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p280_q1",
@@ -189370,7 +189580,7 @@
     "topicId": "cnc_p282",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "黄蝶为什么难找了？",
+    "prompt": "《宿新市徐公店》里，黄蝶为什么难找了？",
     "choices": [
       {
         "key": "A",
@@ -189391,7 +189601,8 @@
     ],
     "answer": "C",
     "explanation": "菜花和黄蝶颜色一样，所以无处寻。",
-    "verify": "\"它飞进同样是黄色的菜花里\""
+    "verify": "\"它飞进同样是黄色的菜花里\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p283_q1",
@@ -189482,7 +189693,7 @@
     "topicId": "cnc_p283",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首词写的是什么地方的生活？",
+    "prompt": "《清平乐·村居》里，这首词写的是什么地方的生活？",
     "choices": [
       {
         "key": "A",
@@ -189503,14 +189714,15 @@
     ],
     "answer": "D",
     "explanation": "茅檐、锄豆、鸡笼和莲蓬，都是农家生活。作者是辛弃疾。",
-    "verify": "\"农家\""
+    "verify": "\"农家\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p284_q1",
     "topicId": "cnc_p284",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "屋前的瓜藤是怎样的？",
+    "prompt": "《乡下人家》里，屋前的瓜藤是怎样的？",
     "choices": [
       {
         "key": "A",
@@ -189531,14 +189743,15 @@
     ],
     "answer": "B",
     "explanation": "青、红的瓜，碧绿的藤和叶子，把屋子装饰起来。",
-    "verify": "\"攀上屋檐，花和藤构成一幅图画\""
+    "verify": "\"攀上屋檐，花和藤构成一幅图画\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p284_q2",
     "topicId": "cnc_p284",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "花是怎样开的？",
+    "prompt": "《乡下人家》里，花是怎样开的？",
     "choices": [
       {
         "key": "A",
@@ -189559,7 +189772,8 @@
     ],
     "answer": "C",
     "explanation": "课文写花依着时令，春天、夏天各有各的花。",
-    "verify": "\"依着时令，顺序开放\""
+    "verify": "\"依着时令，顺序开放\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p284_q3",
@@ -189958,7 +190172,7 @@
     "topicId": "cnc_p288",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "琥珀里面包住了什么？",
+    "prompt": "《琥珀》里，琥珀里面包住了什么？",
     "choices": [
       {
         "key": "A",
@@ -189979,7 +190193,8 @@
     ],
     "answer": "B",
     "explanation": "蜘蛛正扑向苍蝇，松脂滴下来，把它们一起包住了。",
-    "verify": "\"一只苍蝇和一只蜘蛛\""
+    "verify": "\"一只苍蝇和一只蜘蛛\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p288_q2",
@@ -190014,7 +190229,7 @@
     "topicId": "cnc_p288",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这块琥珀是谁发现的？",
+    "prompt": "《琥珀》里，这块琥珀是谁发现的？",
     "choices": [
       {
         "key": "A",
@@ -190035,14 +190250,15 @@
     ],
     "answer": "D",
     "explanation": "很久以后，孩子在海滩上踩到了它，渔夫认出那是琥珀。",
-    "verify": "\"渔夫和他的儿子\""
+    "verify": "\"渔夫和他的儿子\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p288_q4",
     "topicId": "cnc_p288",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要是怎样得来的？",
+    "prompt": "《琥珀》里，这个故事主要是怎样得来的？",
     "choices": [
       {
         "key": "A",
@@ -190063,14 +190279,15 @@
     ],
     "answer": "A",
     "explanation": "谁也没有看见当时的场面。课文是凭琥珀里的两只小虫推想出来的。",
-    "verify": "\"根据琥珀里的样子来推测\""
+    "verify": "\"根据琥珀里的样子来推测\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p289_q1",
     "topicId": "cnc_p289",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这篇要说明的主要意思是什么？",
+    "prompt": "《飞向蓝天的恐龙》里，这篇要说明的主要意思是什么？",
     "choices": [
       {
         "key": "A",
@@ -190091,7 +190308,8 @@
     ],
     "answer": "C",
     "explanation": "不是每一种恐龙都会飞。是其中一支慢慢变成了鸟。",
-    "verify": "\"恐龙的一支经过漫长演化，变成了鸟类\""
+    "verify": "\"恐龙的一支经过漫长演化，变成了鸟类\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p289_q2",
@@ -190182,7 +190400,7 @@
     "topicId": "cnc_p290",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "1纳米有多长？",
+    "prompt": "《纳米技术就在我们身边》里，1纳米有多长？",
     "choices": [
       {
         "key": "A",
@@ -190203,7 +190421,8 @@
     ],
     "answer": "D",
     "explanation": "课文说1纳米等于十亿分之一米。肉眼看不见，普通显微镜也看不清。",
-    "verify": "\"十亿分之一米，非常非常小\""
+    "verify": "\"十亿分之一米，非常非常小\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p290_q2",
@@ -191022,7 +191241,7 @@
     "topicId": "cnc_p297",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗集中写的是什么？",
+    "prompt": "《白桦》里，这首诗集中写的是什么？",
     "choices": [
       {
         "key": "A",
@@ -191043,7 +191262,8 @@
     ],
     "answer": "A",
     "explanation": "题目就是白桦。绿、小白菊和母亲的膝，分别是另外几首诗。",
-    "verify": "\"一棵披着雪的白桦\""
+    "verify": "\"一棵披着雪的白桦\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p297_q4",
@@ -191106,7 +191326,7 @@
     "topicId": "cnc_p298",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "诗人请人去哪里？",
+    "prompt": "《在天晴了的时候》里，诗人请人去哪里？",
     "choices": [
       {
         "key": "A",
@@ -191127,7 +191347,8 @@
     ],
     "answer": "A",
     "explanation": "天晴了，他请人赤着脚，到小路上看看雨后的世界。",
-    "verify": "\"到小径中去走走\""
+    "verify": "\"到小径中去走走\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p298_q3",
@@ -191470,7 +191691,7 @@
     "topicId": "cnc_p301",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "后来他为什么不敢再讨厌母鸡了？",
+    "prompt": "《母鸡》里，后来他为什么不敢再讨厌母鸡了？",
     "choices": [
       {
         "key": "A",
@@ -191491,7 +191712,8 @@
     ],
     "answer": "A",
     "explanation": "警戒、觅食、保护小鸡，这些地方让他改了看法。结尾是不敢再讨厌。",
-    "verify": "\"它成了鸡母亲，负责、慈爱、勇敢，又很辛苦\""
+    "verify": "\"它成了鸡母亲，负责、慈爱、勇敢，又很辛苦\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p301_q4",
@@ -191582,7 +191804,7 @@
     "topicId": "cnc_p302",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "白鹅吃饭有什么特别？",
+    "prompt": "《白鹅》里，白鹅吃饭有什么特别？",
     "choices": [
       {
         "key": "A",
@@ -191603,7 +191825,8 @@
     ],
     "answer": "B",
     "explanation": "它吃饭时架子很大，还必须有人站在旁边侍候。",
-    "verify": "\"非有一个人侍候不可，吃法三眼一板\""
+    "verify": "\"非有一个人侍候不可，吃法三眼一板\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p302_q4",
@@ -191778,7 +192001,7 @@
     "topicId": "cnc_p304",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "作者在哪里看日出？",
+    "prompt": "《海上日出》里，作者在哪里看日出？",
     "choices": [
       {
         "key": "A",
@@ -191799,7 +192022,8 @@
     ],
     "answer": "C",
     "explanation": "他早起，在海船上等太阳出来。不是在山洞里。",
-    "verify": "\"船上\""
+    "verify": "\"船上\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p304_q3",
@@ -191918,7 +192142,7 @@
     "topicId": "cnc_p305",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "过孔隙时，人要怎样？",
+    "prompt": "《记金华的双龙洞》里，过孔隙时，人要怎样？",
     "choices": [
       {
         "key": "A",
@@ -191939,14 +192163,15 @@
     ],
     "answer": "A",
     "explanation": "孔隙只容一只小船。人仰卧着，才感觉洞顶就在鼻子前面。",
-    "verify": "\"仰卧在小船上，船才挤得进去\""
+    "verify": "\"仰卧在小船上，船才挤得进去\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p305_q4",
     "topicId": "cnc_p305",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "内洞里能看到什么？",
+    "prompt": "《记金华的双龙洞》里，内洞里能看到什么？",
     "choices": [
       {
         "key": "A",
@@ -191967,7 +192192,8 @@
     ],
     "answer": "B",
     "explanation": "内洞一团漆黑，工人提着灯，才能看见钟乳和石笋。名字里的双龙，指的是洞顶的样子。",
-    "verify": "\"石钟乳和石笋，洞顶的样子像龙\""
+    "verify": "\"石钟乳和石笋，洞顶的样子像龙\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p306_q1",
@@ -192198,7 +192424,7 @@
     "topicId": "cnc_p308",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "雨来最擅长什么？",
+    "prompt": "《小英雄雨来》里，雨来最擅长什么？",
     "choices": [
       {
         "key": "A",
@@ -192219,7 +192445,8 @@
     ],
     "answer": "B",
     "explanation": "雨来在还乡河里长大，游泳很好。",
-    "verify": "\"游泳\""
+    "verify": "\"游泳\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p308_q2",
@@ -192450,7 +192677,7 @@
     "topicId": "cnc_p310",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "鞋是用什么编的？",
+    "prompt": "《芦花鞋》里，鞋是用什么编的？",
     "choices": [
       {
         "key": "A",
@@ -192471,14 +192698,15 @@
     ],
     "answer": "A",
     "explanation": "芦花又轻又软，编成的鞋穿着暖和。这是题目里的芦花。",
-    "verify": "\"芦花\""
+    "verify": "\"芦花\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p310_q3",
     "topicId": "cnc_p310",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他为什么要在雪天把鞋拿到镇上去？",
+    "prompt": "《芦花鞋》里，他为什么要在雪天把鞋拿到镇上去？",
     "choices": [
       {
         "key": "A",
@@ -192499,14 +192727,15 @@
     ],
     "answer": "B",
     "explanation": "家里需要钱。他懂事，才顶着雪去卖。",
-    "verify": "\"卖了钱，好贴补家里\""
+    "verify": "\"卖了钱，好贴补家里\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p310_q4",
     "topicId": "cnc_p310",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "最后那一双穿在脚上的鞋怎样了？",
+    "prompt": "《芦花鞋》里，最后那一双穿在脚上的鞋怎样了？",
     "choices": [
       {
         "key": "A",
@@ -192527,7 +192756,8 @@
     ],
     "answer": "C",
     "explanation": "买的人要他脚上那双。他脱下来，自己光脚回去。",
-    "verify": "\"也脱下来卖给了别人，他光着脚走在雪地里\""
+    "verify": "\"也脱下来卖给了别人，他光着脚走在雪地里\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p311_q1",
@@ -192842,7 +193072,7 @@
     "topicId": "cnc_p313",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗写的是什么情景？",
+    "prompt": "《塞下曲》里，这首诗写的是什么情景？",
     "choices": [
       {
         "key": "A",
@@ -192863,7 +193093,8 @@
     ],
     "answer": "B",
     "explanation": "月黑、遁逃、轻骑、弓刀，都是边塞夜追。送朋友和画梅是另外两首。",
-    "verify": "\"雪夜追赶连夜逃跑的敌军\""
+    "verify": "\"雪夜追赶连夜逃跑的敌军\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p314_q1",
@@ -193038,7 +193269,7 @@
     "topicId": "cnc_p315",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他最后是怎样完成任务的？",
+    "prompt": "《黄继光》里，他最后是怎样完成任务的？",
     "choices": [
       {
         "key": "A",
@@ -193059,7 +193290,8 @@
     ],
     "answer": "C",
     "explanation": "子弹打光、身受重伤以后，他扑上去堵住了枪口。",
-    "verify": "\"用自己的胸膛堵住敌人的枪口\""
+    "verify": "\"用自己的胸膛堵住敌人的枪口\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p315_q4",
@@ -193290,7 +193522,7 @@
     "topicId": "cnc_p317",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "作者后来做了什么？",
+    "prompt": "《挑山工》里，作者后来做了什么？",
     "choices": [
       {
         "key": "A",
@@ -193311,7 +193543,8 @@
     ],
     "answer": "B",
     "explanation": "那幅画挂在眼前，是要记住挑山工说的道理。",
-    "verify": "\"画了一幅挑山工的画，挂在书桌前，提醒自己不停地向前\""
+    "verify": "\"画了一幅挑山工的画，挂在书桌前，提醒自己不停地向前\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p318_q1",
@@ -193570,7 +193803,7 @@
     "topicId": "cnc_p320",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "巨人怎样对待孩子们？",
+    "prompt": "《巨人的花园》里，巨人怎样对待孩子们？",
     "choices": [
       {
         "key": "A",
@@ -193591,7 +193824,8 @@
     ],
     "answer": "C",
     "explanation": "他不许孩子进来。墙砌好以后，花园里的春天也走了。",
-    "verify": "\"把他们赶走，砌起围墙，还挂上不许入内的告示\""
+    "verify": "\"把他们赶走，砌起围墙，还挂上不许入内的告示\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p320_q3",
@@ -193626,7 +193860,7 @@
     "topicId": "cnc_p320",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事要说的是什么？",
+    "prompt": "《巨人的花园》里，这个故事要说的是什么？",
     "choices": [
       {
         "key": "A",
@@ -193647,7 +193881,8 @@
     ],
     "answer": "A",
     "explanation": "巨人后来拆掉围墙，花园才又成了孩子们的乐园。",
-    "verify": "\"自私会留下寒冷，和别人分享才有春天\""
+    "verify": "\"自私会留下寒冷，和别人分享才有春天\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p321_q1",
@@ -193682,7 +193917,7 @@
     "topicId": "cnc_p321",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "小人鱼救起的是谁？",
+    "prompt": "《海的女儿》里，小人鱼救起的是谁？",
     "choices": [
       {
         "key": "A",
@@ -193703,14 +193938,15 @@
     ],
     "answer": "D",
     "explanation": "王子掉进海里，小人鱼把他托出水面。船长和挑山工是另外两篇。",
-    "verify": "\"落水的王子\""
+    "verify": "\"落水的王子\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p321_q3",
     "topicId": "cnc_p321",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "她向巫婆换一双腿，付出的是什么？",
+    "prompt": "《海的女儿》里，她向巫婆换一双腿，付出的是什么？",
     "choices": [
       {
         "key": "A",
@@ -193731,7 +193967,8 @@
     ],
     "answer": "A",
     "explanation": "声音没有了，走路又非常疼。她仍然想成为人，留在王子身边。",
-    "verify": "\"自己美妙的声音。从此每走一步都像踩在刀上\""
+    "verify": "\"自己美妙的声音。从此每走一步都像踩在刀上\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p321_q4",
@@ -194718,7 +194955,7 @@
     "topicId": "cnc_p330",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他从动物的谈话里听到了什么？",
+    "prompt": "《猎人海力布》里，他从动物的谈话里听到了什么？",
     "choices": [
       {
         "key": "A",
@@ -194739,14 +194976,15 @@
     ],
     "answer": "B",
     "explanation": "鸟儿说大祸要来。他催乡亲搬家，别人却不信。",
-    "verify": "\"大山要崩塌，洪水要来，村庄会淹没\""
+    "verify": "\"大山要崩塌，洪水要来，村庄会淹没\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p330_q4",
     "topicId": "cnc_p330",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他为什么最后变成了石头？",
+    "prompt": "《猎人海力布》里，他为什么最后变成了石头？",
     "choices": [
       {
         "key": "A",
@@ -194767,7 +195005,8 @@
     ],
     "answer": "C",
     "explanation": "他宁可自己变石头，也要把灾难说清楚。乡亲们这才搬走，并纪念他。",
-    "verify": "\"为了让大家相信，他把原因说了出来\""
+    "verify": "\"为了让大家相信，他把原因说了出来\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p331_q1",
@@ -194830,7 +195069,7 @@
     "topicId": "cnc_p331",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他们哪一天可以相会？",
+    "prompt": "《牛郎织女》里，他们哪一天可以相会？",
     "choices": [
       {
         "key": "A",
@@ -194851,14 +195090,15 @@
     ],
     "answer": "C",
     "explanation": "七月初七，喜鹊飞来搭成桥，他们才能见一面。",
-    "verify": "\"七月初七\""
+    "verify": "\"七月初七\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p331_q4",
     "topicId": "cnc_p331",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事是什么体裁？",
+    "prompt": "《牛郎织女》里，这个故事是什么体裁？",
     "choices": [
       {
         "key": "A",
@@ -194879,7 +195119,8 @@
     ],
     "answer": "D",
     "explanation": "牛郎织女是口头流传的民间故事。猎人海力布也是民间故事，但情节不能对调。",
-    "verify": "\"民间故事\""
+    "verify": "\"民间故事\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p332_q1",
@@ -195586,7 +195827,7 @@
     "topicId": "cnc_p338",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "园里还收藏着什么？",
+    "prompt": "《圆明园的毁灭》里，园里还收藏着什么？",
     "choices": [
       {
         "key": "A",
@@ -195607,14 +195848,15 @@
     ],
     "answer": "A",
     "explanation": "最珍贵的历史文物、金银珠宝都在园中。",
-    "verify": "\"历代珍贵的文物、名人书画\""
+    "verify": "\"历代珍贵的文物、名人书画\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p338_q3",
     "topicId": "cnc_p338",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "是谁毁灭了圆明园？",
+    "prompt": "《圆明园的毁灭》里，是谁毁灭了圆明园？",
     "choices": [
       {
         "key": "A",
@@ -195635,7 +195877,8 @@
     ],
     "answer": "B",
     "explanation": "一八六零年，英法联军闯进圆明园，抢掠之后放火。",
-    "verify": "\"英法联军放火焚烧\""
+    "verify": "\"英法联军放火焚烧\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p338_q4",
@@ -195810,7 +196053,7 @@
     "topicId": "cnc_p340",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "第二次是什么时候去的？",
+    "prompt": "《鸟的天堂》里，第二次是什么时候去的？",
     "choices": [
       {
         "key": "A",
@@ -195831,7 +196074,8 @@
     ],
     "answer": "C",
     "explanation": "第二天早晨，鸟叫起来，他们又坐船去了。",
-    "verify": "\"早晨\""
+    "verify": "\"早晨\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p340_q3",
@@ -195866,7 +196110,7 @@
     "topicId": "cnc_p340",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "哪一句是动态描写？",
+    "prompt": "《鸟的天堂》里，哪一句是动态描写？",
     "choices": [
       {
         "key": "A",
@@ -195887,7 +196131,8 @@
     ],
     "answer": "A",
     "explanation": "飞、叫、扑翅膀，都是在动。绿和根是静态。最后作者说那「鸟的天堂」的确是鸟的天堂。",
-    "verify": "\"鸟儿飞起来，叫声和翅膀声连成一片\""
+    "verify": "\"鸟儿飞起来，叫声和翅膀声连成一片\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p341_q1",
@@ -196650,7 +196895,7 @@
     "topicId": "cnc_p347",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这篇文章最突出的感觉是什么？",
+    "prompt": "《祖父的园子》里，这篇文章最突出的感觉是什么？",
     "choices": [
       {
         "key": "A",
@@ -196671,7 +196916,8 @@
     ],
     "answer": "D",
     "explanation": "太阳下睡觉、乱闹、跟着铲地，都是没有拘束的快乐。",
-    "verify": "\"自由、快乐\""
+    "verify": "\"自由、快乐\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p348_q1",
@@ -196818,7 +197064,7 @@
     "topicId": "cnc_p349",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "箭是怎样「借」来的？",
+    "prompt": "《草船借箭》里，箭是怎样「借」来的？",
     "choices": [
       {
         "key": "A",
@@ -196839,7 +197085,8 @@
     ],
     "answer": "D",
     "explanation": "船上绑着草把，曹操不敢出兵，让弓箭手射向江面。",
-    "verify": "\"用草船趁大雾让曹军放箭\""
+    "verify": "\"用草船趁大雾让曹军放箭\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p349_q3",
@@ -196958,7 +197205,7 @@
     "topicId": "cnc_p350",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "冈上的老虎后来怎样？",
+    "prompt": "《景阳冈》里，冈上的老虎后来怎样？",
     "choices": [
       {
         "key": "A",
@@ -196979,14 +197226,15 @@
     ],
     "answer": "B",
     "explanation": "哨棒打断以后，武松按住老虎，最后把它打死。故事出自《水浒传》。",
-    "verify": "\"被武松打死了\""
+    "verify": "\"被武松打死了\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p350_q4",
     "topicId": "cnc_p350",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事突出武松什么特点？",
+    "prompt": "《景阳冈》里，这个故事突出武松什么特点？",
     "choices": [
       {
         "key": "A",
@@ -197007,14 +197255,15 @@
     ],
     "answer": "C",
     "explanation": "他过冈打虎，表现的是勇猛。他并没有听从店家留下。",
-    "verify": "\"勇猛\""
+    "verify": "\"勇猛\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p351_q1",
     "topicId": "cnc_p351",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "石猴是从哪里出来的？",
+    "prompt": "《猴王出世》里，石猴是从哪里出来的？",
     "choices": [
       {
         "key": "A",
@@ -197035,14 +197284,15 @@
     ],
     "answer": "A",
     "explanation": "仙石迸裂，产下一个石卵，化作石猴。故事出自《西游记》。",
-    "verify": "\"一块仙石迸裂\""
+    "verify": "\"一块仙石迸裂\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p351_q2",
     "topicId": "cnc_p351",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "它怎样发现水帘洞的？",
+    "prompt": "《猴王出世》里，它怎样发现水帘洞的？",
     "choices": [
       {
         "key": "A",
@@ -197063,7 +197313,8 @@
     ],
     "answer": "B",
     "explanation": "它率先跳进瀑布，才看见里面的洞。",
-    "verify": "\"跳进瀑布里面\""
+    "verify": "\"跳进瀑布里面\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p351_q3",
@@ -197462,7 +197713,7 @@
     "topicId": "cnc_p355",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "接受手术的军人是谁？",
+    "prompt": "《军神》里，接受手术的军人是谁？",
     "choices": [
       {
         "key": "A",
@@ -197483,14 +197734,15 @@
     ],
     "answer": "A",
     "explanation": "右眼受伤、不肯用麻药的是刘伯承。黄继光是堵枪口的英雄，不是这篇的主人公。",
-    "verify": "\"刘伯承\""
+    "verify": "\"刘伯承\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p355_q2",
     "topicId": "cnc_p355",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他为什么拒绝麻醉？",
+    "prompt": "《军神》里，他为什么拒绝麻醉？",
     "choices": [
       {
         "key": "A",
@@ -197511,7 +197763,8 @@
     ],
     "answer": "B",
     "explanation": "他是军人，担心麻药影响脑子。手术中他一声不吭。",
-    "verify": "\"要保持清醒的大脑\""
+    "verify": "\"要保持清醒的大脑\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p355_q3",
@@ -197910,7 +198163,7 @@
     "topicId": "cnc_p359",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "那个人先怎样夸自己的盾？",
+    "prompt": "《自相矛盾》里，那个人先怎样夸自己的盾？",
     "choices": [
       {
         "key": "A",
@@ -197931,14 +198184,15 @@
     ],
     "answer": "A",
     "explanation": "吾盾之坚，物莫能陷也。",
-    "verify": "\"没有什么能刺破它\""
+    "verify": "\"没有什么能刺破它\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p359_q2",
     "topicId": "cnc_p359",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他又怎样夸自己的矛？",
+    "prompt": "《自相矛盾》里，他又怎样夸自己的矛？",
     "choices": [
       {
         "key": "A",
@@ -197959,7 +198213,8 @@
     ],
     "answer": "B",
     "explanation": "吾矛之利，于物无不陷也。",
-    "verify": "\"没有什么刺不破\""
+    "verify": "\"没有什么刺不破\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p359_q3",
@@ -198078,7 +198333,7 @@
     "topicId": "cnc_p360",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "孙膑让田忌怎样安排？",
+    "prompt": "《田忌赛马》里，孙膑让田忌怎样安排？",
     "choices": [
       {
         "key": "A",
@@ -198099,14 +198354,15 @@
     ],
     "answer": "D",
     "explanation": "先用下等马输一场，再连赢两场。",
-    "verify": "\"下等马对上等马，上等对中等，中等对下等\""
+    "verify": "\"下等马对上等马，上等对中等，中等对下等\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p360_q4",
     "topicId": "cnc_p360",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这场比赛的结果是什么？",
+    "prompt": "《田忌赛马》里，这场比赛的结果是什么？",
     "choices": [
       {
         "key": "A",
@@ -198127,7 +198383,8 @@
     ],
     "answer": "A",
     "explanation": "输一场、赢两场，还是田忌获胜。",
-    "verify": "\"田忌两胜一负，赢了\""
+    "verify": "\"田忌两胜一负，赢了\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p361_q1",
@@ -198302,7 +198559,7 @@
     "topicId": "cnc_p362",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "课文把小艇比作什么？",
+    "prompt": "《威尼斯的小艇》里，课文把小艇比作什么？",
     "choices": [
       {
         "key": "A",
@@ -198323,7 +198580,8 @@
     ],
     "answer": "B",
     "explanation": "又窄又深像独木舟，两头翘起像新月，行动轻快像水蛇。",
-    "verify": "\"独木舟、新月和水蛇\""
+    "verify": "\"独木舟、新月和水蛇\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p362_q4",
@@ -198750,7 +199008,7 @@
     "topicId": "cnc_p366",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗的作者是谁？",
+    "prompt": "《六月二十七日望湖楼醉书》里，这首诗的作者是谁？",
     "choices": [
       {
         "key": "A",
@@ -198771,14 +199029,15 @@
     ],
     "answer": "B",
     "explanation": "望湖楼这首是苏轼的。《西江月》是辛弃疾的。",
-    "verify": "\"苏轼\""
+    "verify": "\"苏轼\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p366_q4",
     "topicId": "cnc_p366",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "诗里的雨下得怎样？",
+    "prompt": "《六月二十七日望湖楼醉书》里，诗里的雨下得怎样？",
     "choices": [
       {
         "key": "A",
@@ -198799,7 +199058,8 @@
     ],
     "answer": "C",
     "explanation": "黑云还没遮住山，雨点已经跳进船；风一来，又吹散了。",
-    "verify": "\"来得急，也去得快\""
+    "verify": "\"来得急，也去得快\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p367_q1",
@@ -199030,7 +199290,7 @@
     "topicId": "cnc_p369",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "开国大典是哪一天？",
+    "prompt": "《开国大典》里，开国大典是哪一天？",
     "choices": [
       {
         "key": "A",
@@ -199051,14 +199311,15 @@
     ],
     "answer": "C",
     "explanation": "课文写的是一九四九年十月一日。不要和别的历史日子记混。",
-    "verify": "\"一九四九年十月一日\""
+    "verify": "\"一九四九年十月一日\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p369_q2",
     "topicId": "cnc_p369",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "典礼在哪里举行？",
+    "prompt": "《开国大典》里，典礼在哪里举行？",
     "choices": [
       {
         "key": "A",
@@ -199079,7 +199340,8 @@
     ],
     "answer": "D",
     "explanation": "毛泽东主席在天安门城楼上宣读公告。",
-    "verify": "\"天安门广场\""
+    "verify": "\"天安门广场\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p369_q3",
@@ -199142,7 +199404,7 @@
     "topicId": "cnc_p370",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "竹节人是用什么做的？",
+    "prompt": "《竹节人》里，竹节人是用什么做的？",
     "choices": [
       {
         "key": "A",
@@ -199163,7 +199425,8 @@
     ],
     "answer": "D",
     "explanation": "破旧的毛笔杆被锯成一段段，装上头，就成了会斗的竹节人。",
-    "verify": "\"毛笔杆锯成小段，用线连起来\""
+    "verify": "\"毛笔杆锯成小段，用线连起来\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p370_q2",
@@ -199226,7 +199489,7 @@
     "topicId": "cnc_p370",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事最让人觉得有趣的是什么？",
+    "prompt": "《竹节人》里，这个故事最让人觉得有趣的是什么？",
     "choices": [
       {
         "key": "A",
@@ -199247,7 +199510,8 @@
     ],
     "answer": "C",
     "explanation": "破东西做成的玩具，连老师也放不下。这是课文要读者会心一笑的地方。",
-    "verify": "\"不许玩的老师，自己也玩得入了迷\""
+    "verify": "\"不许玩的老师，自己也玩得入了迷\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p371_q1",
@@ -199394,7 +199658,7 @@
     "topicId": "cnc_p372",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "这些条件都比较接近地球、被课文重点讨论的是哪一颗？",
+    "prompt": "《宇宙生命之谜》里，这些条件都比较接近地球、被课文重点讨论的是哪一颗？",
     "choices": [
       {
         "key": "A",
@@ -199415,7 +199679,8 @@
     ],
     "answer": "C",
     "explanation": "水星金星太热，更远的行星太冷。课文着重分析火星。",
-    "verify": "\"火星\""
+    "verify": "\"火星\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p372_q3",
@@ -199618,7 +199883,7 @@
     "topicId": "cnc_p374",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "桑娜把孩子怎样了？",
+    "prompt": "《穷人》里，桑娜把孩子怎样了？",
     "choices": [
       {
         "key": "A",
@@ -199639,7 +199904,8 @@
     ],
     "answer": "A",
     "explanation": "她不忍心把孩子留在死去的母亲身边。",
-    "verify": "\"抱回自己家里\""
+    "verify": "\"抱回自己家里\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p374_q3",
@@ -199674,7 +199940,7 @@
     "topicId": "cnc_p374",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事主要表现他们怎样？",
+    "prompt": "《穷人》里，这个故事主要表现他们怎样？",
     "choices": [
       {
         "key": "A",
@@ -199695,7 +199961,8 @@
     ],
     "answer": "C",
     "explanation": "他们自己已经很穷，仍然收下了邻居的孩子。",
-    "verify": "\"生活穷苦，心地善良\""
+    "verify": "\"生活穷苦，心地善良\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p375_q1",
@@ -200038,7 +200305,7 @@
     "topicId": "cnc_p378",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "两个人一起向谁学棋？",
+    "prompt": "《学弈》里，两个人一起向谁学棋？",
     "choices": [
       {
         "key": "A",
@@ -200059,14 +200326,15 @@
     ],
     "answer": "D",
     "explanation": "弈秋是全国擅长下棋的人。文章选自《孟子》，但老师是弈秋。",
-    "verify": "\"弈秋\""
+    "verify": "\"弈秋\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p378_q2",
     "topicId": "cnc_p378",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "第二个人学不好的原因是什么？",
+    "prompt": "《学弈》里，第二个人学不好的原因是什么？",
     "choices": [
       {
         "key": "A",
@@ -200087,7 +200355,8 @@
     ],
     "answer": "A",
     "explanation": "他一心以为有鸿鹄将至，没有把心放在棋上。",
-    "verify": "\"心里想着有天鹅飞来，要用弓去射\""
+    "verify": "\"心里想着有天鹅飞来，要用弓去射\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p378_q3",
@@ -200122,7 +200391,7 @@
     "topicId": "cnc_p378",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个故事说明什么？",
+    "prompt": "《学弈》里，这个故事说明什么？",
     "choices": [
       {
         "key": "A",
@@ -200143,7 +200412,8 @@
     ],
     "answer": "C",
     "explanation": "同样的老师，专心和不专心，结果不同。",
-    "verify": "\"学习要专心致志\""
+    "verify": "\"学习要专心致志\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p379_q1",
@@ -200486,7 +200756,7 @@
     "topicId": "cnc_p382",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "班长是谁？",
+    "prompt": "《狼牙山五壮士》里，班长是谁？",
     "choices": [
       {
         "key": "A",
@@ -200507,14 +200777,15 @@
     ],
     "answer": "D",
     "explanation": "班长是马宝玉。葛振林是副班长。黄继光、刘伯承是别的课文里的人。",
-    "verify": "\"马宝玉\""
+    "verify": "\"马宝玉\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p382_q2",
     "topicId": "cnc_p382",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "他们为什么往狼牙山顶峰撤？",
+    "prompt": "《狼牙山五壮士》里，他们为什么往狼牙山顶峰撤？",
     "choices": [
       {
         "key": "A",
@@ -200535,7 +200806,8 @@
     ],
     "answer": "A",
     "explanation": "完成掩护任务以后，他们有意把敌人引到棋盘陀那条绝路上。",
-    "verify": "\"把敌人引上绝路，好让部队和群众转移\""
+    "verify": "\"把敌人引上绝路，好让部队和群众转移\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p382_q3",
@@ -200906,7 +201178,7 @@
     "topicId": "cnc_p385",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这首诗写牵牛和织女怎样？",
+    "prompt": "《迢迢牵牛星》里，这首诗写牵牛和织女怎样？",
     "choices": [
       {
         "key": "A",
@@ -200927,7 +201199,8 @@
     ],
     "answer": "B",
     "explanation": "河汉清且浅，相去复几许。盈盈一水间，脉脉不得语。",
-    "verify": "\"只隔一条银河，却不能互相说话\""
+    "verify": "\"只隔一条银河，却不能互相说话\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p386_q1",
@@ -201186,7 +201459,7 @@
     "topicId": "cnc_p388",
     "difficulty": "basic",
     "type": "choice",
-    "prompt": "腊八粥是怎样的？",
+    "prompt": "《腊八粥》里，腊八粥是怎样的？",
     "choices": [
       {
         "key": "A",
@@ -201207,14 +201480,15 @@
     ],
     "answer": "C",
     "explanation": "课文把粥写得甜、浓，果料在里面。",
-    "verify": "\"稠，甜，里面有米和枣、栗子一类的果料\""
+    "verify": "\"稠，甜，里面有米和枣、栗子一类的果料\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p388_q3",
     "topicId": "cnc_p388",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "八儿为什么等得着急？",
+    "prompt": "《腊八粥》里，八儿为什么等得着急？",
     "choices": [
       {
         "key": "A",
@@ -201235,7 +201509,8 @@
     ],
     "answer": "D",
     "explanation": "越是不能马上喝到，越写出他的嘴馋和盼望。",
-    "verify": "\"粥要到夜里才能吃，他从白天就盼着\""
+    "verify": "\"粥要到夜里才能吃，他从白天就盼着\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p388_q4",
@@ -201550,7 +201825,7 @@
     "topicId": "cnc_p391",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他在岛上怎样生活？",
+    "prompt": "《鲁滨逊漂流记》里，他在岛上怎样生活？",
     "choices": [
       {
         "key": "A",
@@ -201571,7 +201846,8 @@
     ],
     "answer": "C",
     "explanation": "梗概写他在岛上生活了许多年，后来救下被称作星期五的人。",
-    "verify": "\"建住所，种粮食，养羊，还救了星期五\""
+    "verify": "\"建住所，种粮食，养羊，还救了星期五\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p391_q4",
@@ -201662,7 +201938,7 @@
     "topicId": "cnc_p392",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他是怎样旅行的？",
+    "prompt": "《骑鹅旅行记》里，他是怎样旅行的？",
     "choices": [
       {
         "key": "A",
@@ -201683,14 +201959,15 @@
     ],
     "answer": "D",
     "explanation": "雄鹅把他带走。他因此看见了野外的动物和大地。",
-    "verify": "\"骑在鹅背上，飞过许多地方\""
+    "verify": "\"骑在鹅背上，飞过许多地方\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p392_q4",
     "topicId": "cnc_p392",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "他后来为什么能变回来？",
+    "prompt": "《骑鹅旅行记》里，他后来为什么能变回来？",
     "choices": [
       {
         "key": "A",
@@ -201711,7 +201988,8 @@
     ],
     "answer": "A",
     "explanation": "梗概的结尾是：他保护了鹅群，也懂得了待人，小狐仙才让他恢复原形。",
-    "verify": "\"他在旅行中变得善良、敢于承担\""
+    "verify": "\"他在旅行中变得善良、敢于承担\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p393_q1",
@@ -202110,7 +202388,7 @@
     "topicId": "cnc_p396",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "孔子听完以后怎样？",
+    "prompt": "《两小儿辩日》里，孔子听完以后怎样？",
     "choices": [
       {
         "key": "A",
@@ -202131,14 +202409,15 @@
     ],
     "answer": "D",
     "explanation": "孔子不能决。他没有判定谁赢。",
-    "verify": "\"不能判断谁对\""
+    "verify": "\"不能判断谁对\"",
+    "fixed_from_source": "题干太短、看不出问的是哪一课，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p396_q4",
     "topicId": "cnc_p396",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这则短文出自哪里？",
+    "prompt": "《两小儿辩日》里，这则短文出自哪里？",
     "choices": [
       {
         "key": "A",
@@ -202159,7 +202438,8 @@
     ],
     "answer": "A",
     "explanation": "两小儿辩日选自《列子·汤问》。《学弈》才选自《孟子》。",
-    "verify": "\"《列子》\""
+    "verify": "\"《列子》\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p397_q1",
@@ -202474,7 +202754,7 @@
     "topicId": "cnc_p399",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "这个片段主要表现汤姆怎样？",
+    "prompt": "《汤姆·索亚历险记》里，这个片段主要表现汤姆怎样？",
     "choices": [
       {
         "key": "A",
@@ -202495,7 +202775,8 @@
     ],
     "answer": "D",
     "explanation": "小伙伴一个接一个加入，汤姆自己反而坐在旁边。这就是他的机灵。",
-    "verify": "\"机灵，会把一件苦差变成让人羡慕的事\""
+    "verify": "\"机灵，会把一件苦差变成让人羡慕的事\"",
+    "fixed_from_source": "题干只有代词，补上课文名（2026-10-27）"
   },
   {
     "id": "cnc_p400_q1",
