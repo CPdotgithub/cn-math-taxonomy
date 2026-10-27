@@ -1295,6 +1295,18 @@
     show(page);
   }
 
+  /* 知识点自带的说明和掌握标准：题目看不懂时，比「再读一遍」有用 */
+  function topicWhy(t) {
+    if (!t) return null;
+    const desc = String(t.description || '').trim();
+    const crit = (t.mastery_criteria || []).filter(Boolean).slice(0, 3);
+    if (!desc && !crit.length) return null;
+    return h('details', { class: 'q-why' },
+      h('summary', null, '这题在考什么？'),
+      desc ? h('p', { class: 'q-why-desc' }, desc) : null,
+      crit.length ? h('ul', { class: 'q-why-list' }, crit.map(function (x) { return h('li', null, x); })) : null);
+  }
+
   function renderQuestion(item) {
     const id = item.topicId;
     const gen = aiPick(item);
@@ -1331,6 +1343,9 @@
       const qt = card.querySelector('#q-text');
       if (qt) qt.insertAdjacentElement('afterend', stemFig);
     }
+    /* 题干写得省略时，孩子可以自己展开看「这个点到底在学什么」——用的是图谱里的说明，不靠模型 */
+    const why = topicWhy(t);
+    if (why) card.append(why);
 
     if (ui.phase === 'ask') {
       if (q.type === 'choice') {

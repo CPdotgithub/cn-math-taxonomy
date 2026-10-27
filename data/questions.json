@@ -12675,40 +12675,40 @@
     "topicId": "cnm_p239",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "正三角形每个角是 60°。围绕一个点拼正三角形，几个正好拼满一周？",
+    "prompt": "围着同一个点摆完全相同的正三角形，每个角是 60°。一整圈是 360°，要几个角才正好围成一圈？",
     "answer": "6",
     "explanation": "一周 360°：360÷60＝6。",
     "verify": "360//60",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "原题干太省略（没说在拼什么），改成有场景的说法（2026-10-27）"
   },
   {
     "id": "cnm_p239_q2",
     "topicId": "cnm_p239",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "正方形每个角是 90°。一个点周围要拼几个正方形？",
+    "prompt": "围着同一个点摆完全相同的正方形，每个角是 90°。一整圈是 360°，要几个角才正好围成一圈？",
     "answer": "4",
     "explanation": "360÷90＝4。",
     "verify": "360//90",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "原题干太省略（没说在拼什么），改成有场景的说法（2026-10-27）"
   },
   {
     "id": "cnm_p239_q3",
     "topicId": "cnm_p239",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "正六边形每个角是 120°。一个点周围要拼几个正六边形？",
+    "prompt": "围着同一个点摆完全相同的正六边形，每个角是 120°。一整圈是 360°，要几个角才正好围成一圈？",
     "answer": "3",
     "explanation": "360÷120＝3。",
     "verify": "360//120",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "原题干太省略（没说在拼什么），改成有场景的说法（2026-10-27）"
   },
   {
     "id": "cnm_p239_q4",
     "topicId": "cnm_p239",
     "difficulty": "standard",
     "type": "choice",
-    "prompt": "正五边形每个角是 108°。只用正五边形能不能密铺？",
+    "prompt": "正五边形每个角是 108°。用完全相同的正五边形能铺满地面吗（不留缝隙、也不重叠）？",
     "choices": [
       {
         "key": "A",
@@ -12725,7 +12725,8 @@
     ],
     "answer": "C",
     "explanation": "360÷108 不是整数，拼在一点处会留空隙或重叠，所以不能。",
-    "verify": "'不能'"
+    "verify": "'不能'",
+    "fixed_from_source": "原题干太省略（没说在拼什么），改成有场景的说法（2026-10-27）"
   },
   {
     "id": "cnm_p240_q1",

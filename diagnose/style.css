@@ -1303,3 +1303,30 @@ button.linkish {
 .probe-state.is-weak { color: var(--bad); font-weight: 600; }
 .probe-state.is-mastered { color: var(--ok); }
 .probe-state.is-unknown { color: var(--pt-ink-3); }
+
+/* 题目看不懂时展开：这个知识点在说什么、要会到什么程度 */
+.q-why { margin: 12px 0 4px; }
+.q-why summary {
+  cursor: pointer;
+  font-size: .8rem;
+  font-weight: 650;
+  color: var(--pt-blue);
+  width: fit-content;
+}
+.q-why[open] summary { margin-bottom: 4px; }
+.q-why-desc {
+  margin: 6px 0 0;
+  padding: 10px 12px;
+  font-size: .86rem;
+  line-height: 1.75;
+  color: var(--pt-ink-2);
+  background: var(--pt-surface-2);
+  border-radius: 8px;
+}
+.q-why-list {
+  margin: 6px 0 0 18px;
+  padding: 0;
+  font-size: .84rem;
+  line-height: 1.75;
+  color: var(--pt-ink-2);
+}
