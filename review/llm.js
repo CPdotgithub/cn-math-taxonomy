@@ -20,7 +20,9 @@
 (function () {
   'use strict';
 
-  var CFG = (typeof window !== 'undefined' && window.CNM_CLOUD_CONFIG) || null;
+  /* cloud-config.js 是 defer 的，在它之前执行的本文件读不到 window.CNM_CLOUD_CONFIG，
+     所以每次用时现读，不能在这时候抓一份快照。 */
+  function CFG() { return (typeof window !== 'undefined' && window.CNM_CLOUD_CONFIG) || null; }
   var LS_CHAN = 'cnmReview.chan.v1';
 
   var client = null;
@@ -91,12 +93,13 @@
     if (client) return client;
     if (!cloudOriginOk()) return null;
     if (sdkMissing()) return null;
-    if (!CFG || !CFG.endpoint || !CFG.publishableKey) return null;
+    var cfg = CFG();
+    if (!cfg || !cfg.endpoint || !cfg.publishableKey) return null;
     try {
       client = window.WorkBuddyCloud.createWorkBuddyCloud({
-        endpoint: CFG.endpoint,
-        oauthRelayBaseUrl: CFG.oauthRelayBaseUrl,
-        publishableKey: CFG.publishableKey
+        endpoint: cfg.endpoint,
+        oauthRelayBaseUrl: cfg.oauthRelayBaseUrl,
+        publishableKey: cfg.publishableKey
       });
     } catch (e) {
       client = null;
@@ -789,6 +792,8 @@
   function probeLocal() {
     if (localOk !== null) return Promise.resolve(localOk);
     if (!remotePage()) { localOk = false; return Promise.resolve(false); }
+    /* https 页面连不到本机 loopback（混合内容 + PNA 都会拒），试了只会在控制台刷红字 */
+    if (location.protocol === 'https:') { localOk = false; return Promise.resolve(false); }
     var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer = setTimeout(function () { try { if (ctl) ctl.abort(); } catch (e) {} }, 1500);
     return fetch(LOCAL_API + '/health', { cache: 'no-store', signal: ctl ? ctl.signal : undefined })

@@ -73,9 +73,14 @@
     return box;
   }
 
+  /* 诊断记录：手动确认的掌握状态也算一条 record，但它不是一次诊断，时间线和「最近」都要排掉 */
+  function diagRecords(childId) {
+    return CC.recordsOf(childId).filter(function (r) { return r.key !== 'manual:graph'; });
+  }
+
   function renderHead(child, kids) {
     head.textContent = '';
-    var recs = CC.recordsOf(child.id);
+    var recs = diagRecords(child.id);
     var st = statusOf(child, '');
     var rate = st.tested ? Math.round(st.m * 100 / st.tested) : null;
     var lastAt = recs.length ? recs[0].savedAt : '';
@@ -196,11 +201,15 @@
     main.appendChild(a);
     var meta = [SUBJECT_NAME[subjectOfId(id)]];
     if (info.root) meta.push('根因');
-    meta.push(fmtDay(info.at) + ' 诊断');
+    meta.push(info.manual ? '手动确认' : fmtDay(info.at) + ' 诊断');
     main.appendChild(el('span', 'pf-topic-meta', meta.join(' · ')));
     li.appendChild(main);
 
-    li.appendChild(tag(STATUS[info.status][1], STATUS[info.status][0]));
+    /* 状态标签可能有多个（已掌握 + 手动），包一层再放进网格，别把「再测」挤到下一行 */
+    var tags = el('span', 'pf-tags');
+    tags.appendChild(tag(STATUS[info.status][1], STATUS[info.status][0]));
+    if (info.manual) tags.appendChild(tag('manual', '手动'));
+    li.appendChild(tags);
 
     var re = el('a', 'pf-retest', '再测');
     re.href = retestHref([id]);
@@ -378,7 +387,7 @@
   }
 
   function timelineSection(child) {
-    var all = CC.recordsOf(child.id);
+    var all = diagRecords(child.id);
     var recs = all.filter(function (r) { return !subjectSel || r.subject === subjectSel; });
     var sec = el('section', 'kid-section pf-section');
     var headRow = el('div', 'pf-sec-head');

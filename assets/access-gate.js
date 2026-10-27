@@ -36,10 +36,11 @@
 
   function apiBases() {
     var localHost = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
-    var out = localHost ? [] : [LOCAL_API];
-    out.push(location.origin);
-    if (localHost) out.push(LOCAL_API);
-    return out;
+    if (localHost) return [location.origin, LOCAL_API];
+    /* 线上 https 页面碰不到本机：混合内容 / Private Network Access 会直接拒掉，
+       试了也只是往控制台刷两行红字，还拖慢解锁。直接用同源接口。 */
+    if (location.protocol === 'https:') return [location.origin];
+    return [LOCAL_API, location.origin];
   }
 
   function apiUnlock(body) {

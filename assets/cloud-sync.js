@@ -45,6 +45,16 @@
     if (isNaN(d.getTime())) return '';
     return (d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
   }
+  /* 最近同步是多久以前——比一个绝对时间更容易看出「还在不在同步」 */
+  function agoText(iso) {
+    var t = ts(iso);
+    if (!t) return '';
+    var diff = Date.now() - t;
+    if (diff < 60000) return '刚刚';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' 分钟前';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' 小时前';
+    return (new Date(t).getMonth() + 1) + '-' + pad(new Date(t).getDate());
+  }
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -81,7 +91,8 @@
       syncing: syncing,
       error: lastError,
       lastSyncAt: meta.lastSyncAt,
-      pending: outbox.length
+      pending: outbox.length,
+      retryAt: syncing ? null : (meta.retryAt || null)
     };
   }
   function emit() {
@@ -259,7 +270,9 @@
       };
       if (!row) { inserts.push(fields); return; }
       var newer = row.deleted_at ? ts(row.deleted_at) < localTs : ts(row.updated_at) < localTs;
-      if (newer) updates.push(Object.assign({ id: row.id }, fields));
+      /* 只把 row.id 当 where 条件，绝不放进 SET：id 是 identity 列，
+         带上它 Postgres 会直接报 column "id" can only be updated to DEFAULT。 */
+      if (newer) updates.push({ id: row.id, fields: fields });
     });
     if (inserts.length) {
       var r = await cloud.database.from('cnm_children').insert(inserts).select();
@@ -268,7 +281,7 @@
     }
     for (var i = 0; i < updates.length; i++) {
       var u = updates[i];
-      var r2 = await cloud.database.from('cnm_children').update(u).eq('id', u.id).select();
+      var r2 = await cloud.database.from('cnm_children').update(u.fields).eq('id', u.id).select();
       if (r2.error) throw r2.error;
       if (!Array.isArray(r2.data) || !r2.data.length) throw new Error('档案更新云端未生效');
     }
@@ -291,7 +304,7 @@
         };
         if (!row) { rInserts.push(fields); return; }
         var newer = row.deleted_at ? ts(row.deleted_at) < localTs : ts(row.updated_at) < localTs;
-        if (newer) rUpdates.push(Object.assign({ id: row.id }, fields));
+        if (newer) rUpdates.push({ id: row.id, fields: fields });
       });
     });
     if (rInserts.length) {
@@ -301,7 +314,7 @@
     }
     for (var j = 0; j < rUpdates.length; j++) {
       var ru = rUpdates[j];
-      var r4 = await cloud.database.from('cnm_records').update(ru).eq('id', ru.id).select();
+      var r4 = await cloud.database.from('cnm_records').update(ru.fields).eq('id', ru.id).select();
       if (r4.error) throw r4.error;
       if (!Array.isArray(r4.data) || !r4.data.length) throw new Error('诊断记录更新云端未生效');
     }
@@ -313,7 +326,11 @@
       return '网络不稳定，同步未完成，稍后会自动重试';
     }
     if (e && (e.code === '42501' || e.code === '401')) {
-      return '云端会话已失效，请退出后重新登录再试';
+      return '云端会话已失效，重新登录后会继续同步';
+    }
+    /* 数据库层的报错别原样丢给家长看，留一句人话 + 自动重试就够了 */
+    if (/can only be updated to DEFAULT|violates|permission denied|row-level security|null value in column/i.test(msg)) {
+      return '云端这次没接受写入（数据表限制），稍后会自动重试';
     }
     return '同步未完成：' + (msg || '未知错误');
   }
@@ -337,6 +354,8 @@
       meta.lastSyncAt = nowIso();
       meta.lastError = null;
       lastError = null;
+      retryIdx = 0;
+      meta.retryAt = null;
       saveMeta();
       if (changed.kids || changed.recs) {
         window.dispatchEvent(new CustomEvent('cnm-sync-changed'));
@@ -345,6 +364,7 @@
       lastError = friendlyError(e);
       meta.lastError = lastError;
       saveMeta();
+      scheduleRetry();     // 失败不让人去点按钮，自己退避重试
     } finally {
       syncing = false;
       emit();
@@ -356,6 +376,29 @@
     if (!session) return;
     if (syncTimer) clearTimeout(syncTimer);
     syncTimer = setTimeout(function () { syncTimer = null; syncNow(); }, SYNC_DEBOUNCE_MS);
+  }
+
+  /* 失败后的自动重试：8s → 20s → 1min → 3min → 5min，成功一次就清零 */
+  var retryTimer = null;
+  var retryIdx = 0;
+  var RETRY_STEPS = [8000, 20000, 60000, 180000, 300000];
+  function scheduleRetry() {
+    if (!session) return;
+    if (retryTimer) return;
+    var wait = RETRY_STEPS[Math.min(retryIdx, RETRY_STEPS.length - 1)];
+    retryIdx++;
+    meta.retryAt = Date.now() + wait;
+    saveMeta();
+    retryTimer = setTimeout(function () {
+      retryTimer = null;
+      syncNow();
+    }, wait);
+  }
+  function clearRetry() {
+    if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+    retryIdx = 0;
+    meta.retryAt = null;
+    saveMeta();
   }
 
   /* ---------------------------------------------------------------- 登录 / 登出 */
@@ -395,6 +438,7 @@
     if (!cloud) return;
     try { await cloud.auth.signOut(); } catch (e) { /* 忽略：本地照常退出登录态 */ }
     session = null;
+    clearRetry();
     emit();
   }
 
@@ -493,6 +537,16 @@
       if (document.visibilityState !== 'visible' || !session) return;
       if (Date.now() - ts(meta.lastSyncAt) > REFRESH_MIN_GAP_MS) syncNow();
     });
+    /* 断网重连立刻补一次，别等退避计时器 */
+    window.addEventListener('online', function () {
+      if (!session) return;
+      clearRetry();
+      syncNow();
+    });
+    /* 失败重试期间每秒刷新一下「还有几秒」 */
+    setInterval(function () {
+      if (session && meta.retryAt) emit();
+    }, 1000);
   }
 
   /* ---------------------------------------------------------------- 包装 CnmChildren：变更即同步 */
@@ -559,8 +613,8 @@
     if (s.mode === 'local') stateText = '不可用';
     else if (!s.user) stateText = '未登录';
     else if (s.syncing) stateText = '同步中…';
-    else if (s.error) stateText = '同步失败';
-    else stateText = s.lastSyncAt ? '已同步 ' + fmtTime(s.lastSyncAt) : '待同步';
+    else if (s.error) stateText = '同步失败 · 自动重试中';
+    else stateText = s.lastSyncAt ? '已同步 · ' + agoText(s.lastSyncAt) : '待同步';
     title.innerHTML = '云同步 <span class="sync-state">' + esc(stateText) + '</span>';
     main.appendChild(title);
 
@@ -568,10 +622,15 @@
     if (s.mode === 'local') {
       desc.textContent = '这个地址不支持云同步（本机预览地址常见）。档案和诊断记录照常保存在这台设备的浏览器里，不用登录也能用；换成发布后的网址就能登录同步。';
     } else if (!s.user) {
-      desc.textContent = '登录后，孩子档案和诊断记录会保存到云端：换设备、清缓存都不丢，多台设备自动合并。未登录时数据不上传。';
+      desc.textContent = '登录后，孩子档案和诊断记录会自动保存到云端：换设备、清缓存都不丢，多台设备自动合并。未登录时数据不上传。';
     } else {
-      desc.textContent = '已登录：' + (s.user.name || '云用户') + (s.pending ? '，有 ' + s.pending + ' 项待同步' : '');
-      if (s.error) desc.textContent += '。' + s.error;
+      desc.textContent = '已登录：' + (s.user.name || '云用户') + '。改动会自动同步，不用手动点' +
+        (s.pending ? '；有 ' + s.pending + ' 项正在排队' : '') + '。';
+      if (s.error) {
+        desc.textContent += ' ' + s.error + (s.retryAt
+          ? '（' + Math.max(1, Math.round((s.retryAt - Date.now()) / 1000)) + ' 秒后自动重试）'
+          : '');
+      }
     }
     main.appendChild(desc);
     row.appendChild(main);
@@ -599,16 +658,11 @@
         actions.appendChild(err);
       }
     } else {
-      var now = h('button', 'btn', s.syncing ? '同步中…' : '立即同步');
-      now.type = 'button';
-      now.disabled = s.syncing;
-      now.addEventListener('click', function () { syncNow(); });
       var out = h('button', 'btn', '退出登录');
       out.type = 'button';
       out.addEventListener('click', function () {
         if (confirm('退出登录？本地档案会保留，云端数据还在，重新登录即可继续同步。')) logout();
       });
-      actions.appendChild(now);
       actions.appendChild(out);
     }
     row.appendChild(actions);
@@ -630,13 +684,11 @@
       chip.href = 'javascript:void(0)';
       chip.innerHTML = '☁ 同步中…';
     } else if (s.error) {
-      chip.href = 'javascript:void(0)';
-      chip.innerHTML = '☁ 同步失败 <b>重试</b>';
-      chip.addEventListener('click', function (e) { e.preventDefault(); syncNow(); });
+      chip.href = '../children/';
+      chip.innerHTML = '☁ 同步失败 <b>自动重试中</b>';
     } else {
-      chip.href = 'javascript:void(0)';
-      chip.innerHTML = '☁ 已同步 ' + esc(s.lastSyncAt ? fmtTime(s.lastSyncAt) : '--');
-      chip.addEventListener('click', function (e) { e.preventDefault(); syncNow(); });
+      chip.href = '../children/';
+      chip.innerHTML = '☁ 已同步 · ' + esc(s.lastSyncAt ? agoText(s.lastSyncAt) : '--');
     }
     root.appendChild(chip);
   }

@@ -113,7 +113,12 @@
     if (i >= 0) arr[i] = Object.assign({}, rec, { savedAt: arr[i].savedAt, updatedAt: now });
     else arr.push(Object.assign({}, rec, { savedAt: now, updatedAt: now }));
     arr.sort(function (a, b) { return String(b.savedAt).localeCompare(String(a.savedAt)); });
-    all[childId] = arr.slice(0, MAX_RECORDS);
+    var kept = arr.slice(0, MAX_RECORDS);
+    /* 手动确认的掌握状态不能被一串诊断记录挤出档案 */
+    var g = null;
+    for (var k = 0; k < arr.length; k++) if (arr[k].key === GRAPH_REC) { g = arr[k]; break; }
+    if (g && kept.indexOf(g) < 0) kept = kept.slice(0, MAX_RECORDS - 1).concat([g]);
+    all[childId] = kept;
     return write(REC_KEY, all);
   }
   function hasRecord(childId, key) {
@@ -139,8 +144,108 @@
     write(REC_KEY, all);
   }
 
+  /* ---------------------------------------------------------------- 掌握状态的手动确认
+   * 家长可以直接改「这个点算掌握 / 不稳 / 薄弱」——但只能在编辑器里改完再显式确认，
+   * 保存时生成一个版本，历史只追加不覆盖。
+   *
+   * 存储：作为一条特殊记录（key = manual:graph）存在 records 里，
+   *   这样云同步、导出备份、LWW 合并全都复用现成的管线，不用再开一张表。
+   * 生效规则：手动确认的时间 >= 诊断记录的时间才盖过诊断；之后又做了诊断，以诊断为准。
+   */
+  var GRAPH_REC = 'manual:graph';
+  var MAX_REVISIONS = 20;
+
+  function graphRecord(childId) {
+    var arr = recordsOf(childId);
+    for (var i = 0; i < arr.length; i++) if (arr[i].key === GRAPH_REC) return arr[i];
+    return null;
+  }
+  function graphOf(childId) {
+    var r = graphRecord(childId);
+    return {
+      overrides: (r && r.overrides && typeof r.overrides === 'object') ? r.overrides : {},
+      revisions: (r && Array.isArray(r.revisions)) ? r.revisions : []
+    };
+  }
+  function saveGraph(childId, g, at) {
+    var stamp = at || new Date().toISOString();
+    return saveRecord(childId, {
+      key: GRAPH_REC, kind: 'manual-graph', subject: '', label: '掌握状态（手动确认）',
+      overrides: g.overrides || {}, revisions: g.revisions || [],
+      savedAt: stamp, updatedAt: stamp
+    });
+  }
+  function revId() { return 'g' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5); }
+
+  /* changes: [{ id, name, from, to }]；to 为空字符串表示「撤掉手动状态，回到诊断结果」 */
+  function commitEdits(childId, changes, opts) {
+    if (!childId) return { ok: false, error: '找不到这个孩子。' };
+    var g = graphOf(childId);
+    var at = new Date().toISOString();
+    var id = revId();
+    var applied = [];
+    (changes || []).forEach(function (c) {
+      if (!c || !c.id || (c.from || '') === (c.to || '')) return;
+      if (c.to) g.overrides[c.id] = { status: c.to, at: at, rev: id };
+      else delete g.overrides[c.id];
+      applied.push({ id: c.id, name: c.name || '', from: c.from || '', to: c.to || '' });
+    });
+    if (!applied.length) return { ok: false, error: '改动和现在一样，没有可保存的。' };
+    var rev = {
+      id: id, at: at, by: (opts && opts.by) || '本机', note: (opts && opts.note) || '',
+      changes: applied, snapshot: JSON.parse(JSON.stringify(g.overrides))
+    };
+    g.revisions.unshift(rev);
+    g.revisions = g.revisions.slice(0, MAX_REVISIONS);
+    if (!saveGraph(childId, g, at)) return { ok: false, error: '浏览器不允许保存数据，改动没有写入。' };
+    return { ok: true, rev: rev };
+  }
+
+  /* 回滚本身也是一个新版本：把目标版本的快照写回去，历史不动 */
+  function revertTo(childId, targetId, by) {
+    var g = graphOf(childId);
+    var target = null;
+    g.revisions.forEach(function (r) { if (r.id === targetId) target = r; });
+    if (!target) return { ok: false, error: '找不到这个版本。' };
+    var before = g.overrides || {};
+    var after = target.snapshot || {};
+    var at = new Date().toISOString();
+    var id = revId();
+    var seen = {}, changes = [];
+    Object.keys(before).forEach(function (k) { seen[k] = 1; });
+    Object.keys(after).forEach(function (k) { seen[k] = 1; });
+    Object.keys(seen).forEach(function (k) {
+      var b = (before[k] && before[k].status) || '';
+      var a = (after[k] && after[k].status) || '';
+      if (b !== a) changes.push({ id: k, name: '', from: b, to: a });
+    });
+    var overrides = {};
+    Object.keys(after).forEach(function (k) {
+      overrides[k] = { status: after[k].status, at: at, rev: id };
+    });
+    var rev = {
+      id: id, at: at, by: by || '本机',
+      note: '回滚到 ' + (target.at || '').slice(0, 16).replace('T', ' '),
+      changes: changes, snapshot: overrides, revertOf: target.id
+    };
+    g.overrides = overrides;
+    g.revisions.unshift(rev);
+    g.revisions = g.revisions.slice(0, MAX_REVISIONS);
+    if (!saveGraph(childId, g, at)) return { ok: false, error: '浏览器不允许保存数据，回滚没有写入。' };
+    return { ok: true, rev: rev, count: changes.length };
+  }
+
+  function subjectOf(id) {
+    var s = String(id || '');
+    if (s.indexOf('cne_') === 0) return 'english';
+    if (s.indexOf('cnp_') === 0) return 'physics';
+    if (s.indexOf('cnc_') === 0) return 'chinese';
+    return 'math';
+  }
+
   /* 把某个孩子的全部记录合成「每个知识点现在的状态」：越新的记录越说了算。
-   * 返回 { byId: { id: { status, recKey, at, label, root } } } */
+   * 手动确认过的点，只要确认时间不早于诊断时间，就按手动状态算。
+   * 返回 { byId: { id: { status, recKey, at, label, root, manual } } } */
   function latestStatus(childId, subject) {
     var recs = recordsOf(childId).filter(function (r) { return !subject || r.subject === subject; }).reverse();
     var by = {};
@@ -154,6 +259,17 @@
       put(r.shaky, 'shaky');
       put(r.weak, 'weak');
     });
+
+    var g = graphOf(childId);
+    Object.keys(g.overrides).forEach(function (id) {
+      var ov = g.overrides[id];
+      if (!ov || !ov.status) return;
+      var sub = subjectOf(id);
+      if (subject && sub !== subject) return;
+      var cur = by[id];
+      if (cur && String(cur.at || '') > String(ov.at || '')) return;  // 之后又诊断过，诊断更新
+      by[id] = { status: ov.status, recKey: GRAPH_REC, at: ov.at, label: '手动确认', root: false, subject: sub, manual: true };
+    });
     return by;
   }
 
@@ -162,6 +278,7 @@
     list: list, get: get, current: current, setCurrent: setCurrent,
     add: add, update: update, remove: remove, gradeText: gradeText,
     recordsOf: recordsOf, saveRecord: saveRecord, hasRecord: hasRecord, moveRecord: moveRecord, removeRecord: removeRecord,
-    latestStatus: latestStatus
+    latestStatus: latestStatus,
+    GRAPH_REC: GRAPH_REC, graphOf: graphOf, commitEdits: commitEdits, revertTo: revertTo, subjectOf: subjectOf
   };
 })();

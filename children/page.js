@@ -111,8 +111,13 @@
     nameIn.focus();
   }
 
+  /* 手动确认的掌握状态也是一条 record，但它不算一次诊断——计数、最近日期都要排掉 */
+  function diagRecords(childId) {
+    return CC.recordsOf(childId).filter(function (r) { return r.key !== 'manual:graph'; });
+  }
+
   function stats(c) {
-    var recs = CC.recordsOf(c.id);
+    var recs = diagRecords(c.id);
     var by = CC.latestStatus(c.id);
     var m = 0, s = 0, w = 0;
     Object.keys(by).forEach(function (id) {
@@ -168,7 +173,7 @@
     if (!box) return;
     var runs = 0, m = 0, s = 0, w = 0, lastAt = '';
     kids.forEach(function (c) {
-      var recs = CC.recordsOf(c.id);
+      var recs = diagRecords(c.id);
       runs += recs.length;
       recs.forEach(function (r) { if (r.savedAt && r.savedAt > lastAt) lastAt = r.savedAt; });
       var by = CC.latestStatus(c.id);
@@ -189,6 +194,145 @@
       tested ? '掌握 ' + m + ' · 不稳 ' + s : '等待第一次诊断', 'is-amber',
       rate == null ? '' : (rate >= 80 ? 'tone-ok' : (rate >= 50 ? '' : 'tone-bad'))));
   }
+
+  /* ---------------------------------------------------------------- 学习进度
+   * 用 poptrade 的组件（pt-panel / pt-table / pt-bar / pt-pill / pt-seg）拼一块
+   * 「按学科看掌握结构」的表：已测多少、掌握率、掌握/不稳/薄弱的分布条。
+   * 数据与档案一致（含手动确认过的点），所以跟诊断页看到的数字对得上。 */
+  var SUBJECTS = [['math', '数学'], ['chinese', '语文'], ['english', '英语'], ['physics', '物理']];
+  var progressKid = null;
+
+  function subjectStat(childId, subject) {
+    var by = CC.latestStatus(childId, subject);
+    var m = 0, s = 0, w = 0, manual = 0;
+    Object.keys(by).forEach(function (id) {
+      var st = by[id].status;
+      if (st === 'mastered') m++; else if (st === 'shaky') s++; else if (st === 'weak') w++;
+      if (by[id].manual) manual++;
+    });
+    return { m: m, s: s, w: w, tested: m + s + w, manual: manual };
+  }
+
+  function barOf(st) {
+    var bar = el('div', 'pt-bar');
+    if (!st.tested) { bar.appendChild(el('i', 'u')); return bar; }
+    [['m', st.m], ['s', st.s], ['w', st.w]].forEach(function (p) {
+      if (!p[1]) return;
+      var seg = el('i', p[0]);
+      seg.style.width = (p[1] * 100 / st.tested) + '%';
+      bar.appendChild(seg);
+    });
+    return bar;
+  }
+
+  function renderProgress(kids) {
+    var box = document.getElementById('progress');
+    if (!box) return;
+    box.textContent = '';
+    if (!kids.length) return;
+
+    var cur = kids.filter(function (k) { return k.id === progressKid; })[0] || CC.current() || kids[0];
+    progressKid = cur.id;
+
+    var panel = el('section', 'pt-panel pr-panel');
+    var head = el('div', 'pt-panel-head');
+    var h2 = el('h2');
+    var ico = el('span', 'pt-ico');
+    ico.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V9M10 19V5M16 19v-6M22 19H2"/></svg>';
+    h2.appendChild(ico);
+    h2.appendChild(document.createTextNode('学习进度'));
+    head.appendChild(h2);
+
+    if (kids.length > 1) {
+      var seg = el('div', 'pt-seg pr-kids');
+      kids.forEach(function (k) {
+        var b = el('button', k.id === cur.id ? 'on' : '', k.name);
+        b.type = 'button';
+        b.addEventListener('click', function () { progressKid = k.id; renderProgress(kids); });
+        seg.appendChild(b);
+      });
+      head.appendChild(seg);
+    }
+    panel.appendChild(head);
+
+    var body = el('div', 'pt-panel-body');
+    var total = { m: 0, s: 0, w: 0, tested: 0, manual: 0 };
+    var rows = SUBJECTS.map(function (sj) {
+      var st = subjectStat(cur.id, sj[0]);
+      total.m += st.m; total.s += st.s; total.w += st.w; total.tested += st.tested; total.manual += st.manual;
+      return { name: sj[1], st: st };
+    }).filter(function (r) { return r.st.tested > 0; });
+
+    if (!rows.length) {
+      var empty = el('div', 'pt-empty');
+      empty.appendChild(el('p', null, '「' + cur.name + '」还没有测过的知识点。做一次诊断，或者用「编辑图谱」手动标几个。'));
+      body.appendChild(empty);
+      panel.appendChild(body);
+      box.appendChild(panel);
+      return;
+    }
+
+    var table = el('table', 'pt-table pr-table');
+    var thead = el('thead');
+    var htr = el('tr');
+    [['学科', ''], ['已测', 'num'], ['掌握率', 'num'], ['掌握 / 不稳 / 薄弱', ''], ['分布', '']].forEach(function (c) {
+      var th = el('th', c[1], c[0]);
+      htr.appendChild(th);
+    });
+    thead.appendChild(htr);
+    table.appendChild(thead);
+
+    var tbody = el('tbody');
+    rows.forEach(function (r) {
+      var rate = Math.round(r.st.m * 100 / r.st.tested);
+      var tr = el('tr');
+      tr.appendChild(el('td', null, r.name));
+      tr.appendChild(el('td', 'num', String(r.st.tested)));
+      var rateTd = el('td', 'num');
+      var pill = el('span', 'pt-pill ' + (rate >= 80 ? 'is-green' : rate >= 50 ? 'is-amber' : 'is-red'), rate + '%');
+      rateTd.appendChild(pill);
+      tr.appendChild(rateTd);
+      var mix = el('td', 'pr-mix');
+      mix.appendChild(el('i', 'm', String(r.st.m)));
+      mix.appendChild(el('i', 's', String(r.st.s)));
+      mix.appendChild(el('i', 'w', String(r.st.w)));
+      tr.appendChild(mix);
+      var barTd = el('td', 'pr-bar-cell');
+      barTd.appendChild(barOf(r.st));
+      tr.appendChild(barTd);
+      tbody.appendChild(tr);
+    });
+
+    /* 合计行 */
+    if (rows.length > 1) {
+      var trAll = el('tr', 'pr-total');
+      trAll.appendChild(el('td', null, '合计'));
+      trAll.appendChild(el('td', 'num', String(total.tested)));
+      var tRate = Math.round(total.m * 100 / total.tested);
+      var tdRate = el('td', 'num');
+      tdRate.appendChild(el('span', 'pt-pill ' + (tRate >= 80 ? 'is-green' : tRate >= 50 ? 'is-amber' : 'is-red'), tRate + '%'));
+      trAll.appendChild(tdRate);
+      var tMix = el('td', 'pr-mix');
+      tMix.appendChild(el('i', 'm', String(total.m)));
+      tMix.appendChild(el('i', 's', String(total.s)));
+      tMix.appendChild(el('i', 'w', String(total.w)));
+      trAll.appendChild(tMix);
+      var tBar = el('td', 'pr-bar-cell');
+      tBar.appendChild(barOf(total));
+      trAll.appendChild(tBar);
+      tbody.appendChild(trAll);
+    }
+    table.appendChild(tbody);
+    body.appendChild(table);
+
+    var foot = el('p', 'muted small pr-foot');
+    foot.textContent = '按知识点算：测过 ' + total.tested + ' 个，掌握 ' + total.m + '、不稳 ' + total.s + '、薄弱 ' + total.w + '。' +
+      (total.manual ? '其中 ' + total.manual + ' 个是手动确认的。' : '');
+    body.appendChild(foot);
+    panel.appendChild(body);
+    box.appendChild(panel);
+  }
+
 
   function emptyState() {
     var box = el('div', 'pt-empty');
@@ -256,10 +400,16 @@
     var hist = el('a', 'btn', '打开档案');
     hist.href = 'history.html?child=' + encodeURIComponent(c.id);
     row.appendChild(hist);
-    var edit = el('button', null, '编辑');
+    /* 「编辑」= 改知识图谱上的掌握状态（草稿 + 确认 + 版本链）；
+       改昵称年级这种资料，另有「改资料」，别把两件事塞进同一个按钮。 */
+    var edit = el('button', 'primary', '编辑图谱');
     edit.type = 'button';
-    edit.addEventListener('click', function () { startEdit(c); });
+    edit.addEventListener('click', function () { openGraphEditor(c.id); });
     row.appendChild(edit);
+    var info = el('button', null, '改资料');
+    info.type = 'button';
+    info.addEventListener('click', function () { startEdit(c); });
+    row.appendChild(info);
     var del = el('button', 'danger', '删除');
     del.type = 'button';
     del.addEventListener('click', function () {
@@ -279,6 +429,7 @@
     var cur = CC.current();
     listBox.textContent = '';
     renderOverview(kids);
+    renderProgress(kids);
     var countEl = document.getElementById('kid-count');
     if (countEl) countEl.textContent = kids.length + ' 个';
     if (!kids.length) {
@@ -309,6 +460,13 @@
 
   /* 云端合并更新了本地档案后重排（cloud-sync.js 派发） */
   window.addEventListener('cnm-sync-changed', function () { render(); });
+  /* 掌握状态确认保存 / 回滚后重算（graph-edit.js 派发） */
+  window.addEventListener('cnm-graph-changed', function () { render(); });
+
+  function openGraphEditor(id) {
+    if (window.CnmGraphEditor) window.CnmGraphEditor.open(id);
+    else startEdit(CC.get(id));   // 老缓存里没有编辑器时，退回改资料，别让按钮点了没反应
+  }
 
 
   /* ---------------------------------------------------------------- 本机数据备份 */
