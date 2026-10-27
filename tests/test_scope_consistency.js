@@ -137,6 +137,43 @@ const CHILD = {
     dom.window.close();
   }
 
+  console.log('\nD 旧存档把范围写歪了（targets 六年级 / scope 五上）+ 已答 2 题');
+  {
+    const dom = await mount('/diagnose/?mode=grade', function (w) {
+      w.localStorage.setItem('cnmChildren.v1', JSON.stringify(CHILD));
+      w.localStorage.setItem('cnmDiagnose.session.v2', JSON.stringify({
+        v: 3, mode: 'screen', targets: ids, base: [], finished: false, open: true, limit: 0,
+        label: '六年级（整体筛查）',
+        scope: { grade: '五', term: '上' },
+        answers: [{ id: ids[0], result: 'correct' }, { id: ids[1], result: 'wrong' }],
+        seed: 's1', avoid: [], savedAt: '2026-10-26T10:00:00.000Z'
+      }));
+    });
+    const i = info(dom.window.document);
+    ok('自动续上这一轮', /本轮：/.test(i.body));
+    ok('顶栏跟着题走：六年级 / 整学年（不是档案的五年级上册）', i.grade === '六年级' && i.term === '整学年', i.grade + '/' + i.term);
+    ok('本轮也是六年级（两边一致）', /六年级/.test(i.round), '实际 ' + i.round);
+    ok('全站范围同步成六年级（复习页接着用）', dom.window.CnmScope.get('math').grade === '六', JSON.stringify(dom.window.CnmScope.get('math')));
+    dom.window.close();
+  }
+
+  console.log('\nE 存档标题写的是五年级，题却是六年级');
+  {
+    const dom = await mount('/diagnose/?mode=grade', function (w) {
+      w.localStorage.setItem('cnmChildren.v1', JSON.stringify(CHILD));
+      w.localStorage.setItem('cnmDiagnose.session.v2', JSON.stringify({
+        v: 3, mode: 'screen', targets: ids, base: [], finished: false, open: true, limit: 0,
+        label: '五年级（年级诊断）', scope: null,
+        answers: [{ id: ids[0], result: 'correct' }],
+        seed: 's1', avoid: [], savedAt: '2026-10-26T10:00:00.000Z'
+      }));
+    });
+    const i = info(dom.window.document);
+    ok('本轮标题按题改成六年级', /六年级/.test(i.round), '实际 ' + i.round);
+    ok('顶栏六年级', i.grade === '六年级', i.grade);
+    dom.window.close();
+  }
+
   console.log('\n通过 ' + pass + ' / ' + (pass + fail));
   process.exit(fail ? 1 : 0);
 })();

@@ -886,11 +886,25 @@ main#root > .dx-stage:not(.dx-start) {
   white-space: nowrap;
 }
 .dx-topbar-back:hover { background: var(--pt-blue-50); }
+/* 范围和家长档案差几个年级：超前考察是正常用法，标出来免得被当成 bug */
+.dx-gap {
+  flex: none;
+  padding: 2px 7px;
+  font-size: .72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: #9a6212;
+  background: #fdf3e0;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.dx-gap.is-behind { color: var(--pt-ink-3); background: #eef1f5; }
 @media (max-width: 620px) {
   .dx-topbar { gap: 6px 10px; padding: 8px 11px; }
   .dx-topbar-cell { flex: 1 1 100%; }
   .dx-topbar-cell.is-scope { margin-left: 0; }
   .dx-topbar select { flex: 1 1 0; min-width: 0; max-width: none; }
+  .dx-gap { display: none; }
 }
 
 /* 答题页头部：进度 + 随时结束 */

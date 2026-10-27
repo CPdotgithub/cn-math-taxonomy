@@ -303,6 +303,9 @@
   /* ------------------------------------------------------------ 会话 */
   function save() {
     if (demo || !session) return;
+    /* 存档里的范围一律按这一轮实际在考的题重算，别把手滑写歪的旧值再传下去 */
+    const derived = scopeFromTargets(session.targets);
+    if (derived) sessionMeta.scope = derived;
     lsSet(sessionKey(), {
       v: 3, mode: session.mode, targets: session.targets, base: session.base || [], finished: !!finished,
       open: !!session.open, limit: isFinite(session.limit) ? session.limit : 0,
@@ -318,8 +321,10 @@
       mode: mode, open: true,
       base: mode === 'screen' ? base : null, seed: newSeed(), avoid: seenList()
     });
-    // 没显式给范围就按本轮题目反推，保证顶栏和「本轮」说的是同一件事
-    sessionMeta = { label: label, scope: scope || scopeFromTargets(targets) || null };
+    // 范围以这一轮实际在考的题为准；反推不出来才用调用方给的
+    const derived = scopeFromTargets(targets) || (scope && scope.grade ? scope : null);
+    sessionMeta = { label: roundLabel(label, derived), scope: derived || null };
+    if (mode === 'screen' && derived) { gradeSel = derived.grade; volSel = volFor(derived.grade, derived.term); syncScopeState(derived); }
     resetUi();
     save();
     render();
@@ -331,14 +336,37 @@
         mode: saved.mode, seed: saved.seed, avoid: saved.avoid, base: saved.base,
         open: saved.open !== false, limit: saved.limit || null
       });
-      // 老存档（旧版本没写 scope）同样反推，别让顶栏退回孩子档案的年级
+      /* 老存档（旧版本没写 scope，或按孩子档案写歪了）也按题重算，
+         顶栏写五年级、这一轮其实是六年级的情况必须在这一步就纠正 */
+      const derived = scopeFromTargets(saved.targets) ||
+        (saved.scope && saved.scope.grade ? saved.scope : null);
       sessionMeta = {
-        label: saved.label || saved.targets.map(nameOf).join('、'),
-        scope: saved.scope || scopeFromTargets(saved.targets) || null
+        label: roundLabel(saved.label || saved.targets.map(nameOf).join('、'), derived),
+        scope: derived || null
       };
+      if ((saved.mode || 'target') === 'screen' && derived) {
+        gradeSel = derived.grade;
+        volSel = volFor(derived.grade, derived.term);
+        syncScopeState(derived);
+      }
       finished = !!saved.finished;
       return true;
     } catch (e) { return false; }
+  }
+
+  /* 这一轮的范围就是全站的范围：顶栏显示什么，复习页就按什么出题。
+     范围正好落在孩子档案上就回到「跟档案」，不钉成手动。 */
+  function syncScopeState(scope) {
+    if (!SC || !scope || !scope.grade) return;
+    const cur = SC.get(subject);
+    const from = SC.childScope ? SC.childScope() : null;
+    const onChild = !!from && from.grade === scope.grade && volFor(from.grade, from.term) === (scope.term || '');
+    if (onChild) {
+      if (cur && cur.manual) SC.clear(subject);
+      return;
+    }
+    if (cur && cur.manual && cur.grade === scope.grade && (cur.term || '') === (scope.term || '')) return;
+    SC.set(subject, { grade: scope.grade, term: scope.term });
   }
 
   function restart() {
@@ -782,30 +810,50 @@
   }
 
   /* 从这一轮的目标知识点反推考察范围：册次 → 年级 + 学期。
-     老存档没有 scope、或者从 URL 直接开的一轮，都靠它把顶栏对齐到实际在考的题，
-     不能拿孩子档案的年级去冒充——那样顶栏写五年级、题却是六年级。 */
+     这是顶栏唯一可信的来源——存档里写的 scope 只当兜底，因为它可能是旧版本按孩子档案
+     写歪的（档案五年级、这一轮却开的是六年级）。多个册次混着就取占多数的那个。 */
   function scopeFromTargets(ids) {
     if (!ids || !ids.length || !D || !D.graph || !E || !E.parseChapter) return null;
+    const byGrade = Object.create(null);   // '六' -> {n, terms:Set}
     for (let i = 0; i < ids.length; i++) {
       const t = D.graph.byId[ids[i]];
       if (!t) continue;
       const vol = String(E.parseChapter(t.chapter || '').volume || '');
-      if (!vol) continue;
-      const k = scopeKey(vol);
-      if (k) return k;
+      const k = vol && scopeKey(vol);
+      if (!k || !k.grade) continue;
+      const g = byGrade[k.grade] || (byGrade[k.grade] = { n: 0, terms: Object.create(null) });
+      g.n++;
+      if (k.term) g.terms[k.term] = 1;
     }
-    return null;
+    let grade = '', best = 0;
+    Object.keys(byGrade).forEach(function (k) { if (byGrade[k].n > best) { best = byGrade[k].n; grade = k; } });
+    if (!grade) return null;
+    const terms = Object.keys(byGrade[grade].terms);
+    /* 跨册的一轮（整学年 / 九年一贯的「全」）不能只报其中一册，不然顶栏又跟题打脸 */
+    return { grade: grade, term: terms.length === 1 ? terms[0] : '' };
   }
 
-  /* 这一轮在看什么范围：本轮开出来的范围 > 从本轮题目反推 > 全站共享状态 > 页面上的选择 */
+  /* 这一轮在看什么范围：本轮实际在考的题 > 存档记的范围 > 全站共享状态 > 页面上的选择。
+     顺序不能倒——否则顶栏会写五年级、题却是六年级，两句话互相打脸。 */
   function scopeOf() {
-    const meta = sessionMeta && sessionMeta.scope;
-    if (meta && meta.grade) return { grade: meta.grade, term: meta.term || '' };
     const derived = session ? scopeFromTargets(session.targets) : null;
     if (derived) return derived;
+    const meta = sessionMeta && sessionMeta.scope;
+    if (meta && meta.grade) return { grade: meta.grade, term: meta.term || '' };
     const sc = SC && SC.get(subject);
     if (sc && sc.grade) return { grade: sc.grade, term: sc.term || '' };
     return { grade: gradeSel, term: volSel };
+  }
+
+  /* 「本轮」的标题也得跟着实际范围走：范围六年级、标题却写五年级一样是打脸。
+     只改「X年级（…）」这种开头，单点、整章的标题不动。 */
+  function roundLabel(label, scope) {
+    const s = String(label || '');
+    if (!scope || !scope.grade) return s;
+    const m = /^([一二三四五六七八九]年级|高一|高二|必修[一二三]|选必[一二三四])（(.+?)）$/.exec(s);
+    if (!m) return s;
+    const want = SC && SC.fullGrade ? SC.fullGrade(scope.grade) : scope.grade + '年级';
+    return m[1] === want ? s : want + '（' + m[2] + '）';
   }
 
   /* 顶栏的「考察范围」：年级（+ 册次）。没设置过的时候就是当前孩子档案里的年级。 */
@@ -829,8 +877,14 @@
       out.push(tsel);
     }
 
-    /* 手选的范围和档案不一致时，给一条回档案的路（不然「孩子五上、在测六年级」看着莫名其妙） */
+    /* 手选的范围和档案不一致时，先标一句「超前 / 低于档案」，再给一条回档案的路
+       —— 不然「孩子五上、在测六年级」看着像出了 bug */
     const from = SC && SC.childScope();
+    const diff = from && from.grade !== now.grade ? gradeGap(from.grade, now.grade) : 0;
+    if (diff) {
+      out.push(h('span', { class: 'dx-gap' + (diff > 0 ? '' : ' is-behind') },
+        diff > 0 ? '超前 ' + diff + ' 年' : '低于档案 ' + (-diff) + ' 年'));
+    }
     if (from && (from.grade !== now.grade || volFor(from.grade, from.term) !== now.term)) {
       out.push(h('button', {
         type: 'button', class: 'dx-topbar-back',
@@ -838,6 +892,16 @@
       }, '回到档案（' + SC.text(from) + '）'));
     }
     return out;
+  }
+
+  /* 两个年级差几档（'五' → 5）。高中/必修这类不是年级序号的返回 0，不参与比较 */
+  function gradeNum(k) {
+    const m = /^([一二三四五六七八九])$/.exec(String(k == null ? '' : k));
+    return m ? '一二三四五六七八九'.indexOf(m[1]) + 1 : 0;
+  }
+  function gradeGap(a, b) {
+    const x = gradeNum(a), y = gradeNum(b);
+    return x && y ? y - x : 0;
   }
 
   /* 换范围：写回全站状态，按新范围原地开一轮。已答过题就先问一句。 */
