@@ -755,7 +755,9 @@
     )]));
 
     var inner = h('div', { class: 'rv-adv-body' });
-    if (LLM.isWeb()) {
+    if (LLM.isDirect()) {
+      inner.appendChild(directCfgField());
+    } else if (LLM.isWeb()) {
       inner.appendChild(webCfgField());
       if (LLM.WEB_MODELS.length > 1) inner.appendChild(webModelField());
     } else {
@@ -784,8 +786,9 @@
     var wrap = h('div', { class: 'rv-field rv-field-col' });
     wrap.appendChild(h('span', { class: 'rv-label', text: '出题通道' }));
     var seg = h('div', { class: 'pt-seg rv-seg rv-chan', role: 'group', 'aria-label': '出题通道' });
-    [['cloud', '云端'], ['web', '网页版']].forEach(function (k) {
-      var on = LLM.isWeb() === (k[0] === 'web');
+    [['cloud', '云端'], ['direct', '官方 API'], ['web', '网页版']].forEach(function (k) {
+      var nowK = LLM.isWeb() ? 'web' : (LLM.isDirect() ? 'direct' : 'cloud');
+      var on = nowK === k[0];
       seg.appendChild(h('button', {
         type: 'button', class: on ? 'on' : '', text: k[1],
         'aria-pressed': on ? 'true' : 'false',
@@ -795,19 +798,22 @@
     wrap.appendChild(seg);
     wrap.appendChild(h('p', {
       class: 'rv-hint',
-      text: LLM.isWeb()
-        ? '走你自己的 DeepSeek 网页账号，自带联网搜索与深度思考，手写照片也能一起判。'
-        : '免密钥，稳定；只能发文字，不能传照片。'
+      text: LLM.isDirect()
+        ? '走 DeepSeek 官方接口（api.deepseek.com），按用量计费；云端部署也能用，最稳。'
+        : LLM.isWeb()
+          ? '走你自己的 DeepSeek 网页账号；只能在本机用（DeepSeek 按设备校验）。'
+          : 'WorkBuddy 自己的模型额度，免密钥；登录后即可用，只能发文字。'
     }));
     return wrap;
   }
 
   function switchChannel(kind) {
-    if (LLM.isWeb() === (kind === 'web')) return;
+    var nowKind = LLM.isWeb() ? 'web' : (LLM.isDirect() ? 'direct' : 'cloud');
+    if (nowKind === kind) return;
     LLM.setWeb({ kind: kind });
     ST.chanNote = '';
     ST.chanTone = '';
-    if (kind === 'web') ST.advanced = true;
+    if (kind === 'web' || kind === 'direct') ST.advanced = true;
     savePrefs();
     ST.busy = 'models';
     ST.models = [];
@@ -848,6 +854,68 @@
     var cur = LLM.WEB_MODELS.filter(function (m) { return m.id === ST.model; })[0];
     if (cur && cur.descriptionZh) wrap.appendChild(h('p', { class: 'rv-hint', text: cur.descriptionZh }));
     return wrap;
+  }
+
+  /* 官方 API：一个 sk- Key + 选模型，云端部署也能用 */
+  function directCfgField() {
+    var cfg = LLM.web();
+    var box = h('div', { class: 'rv-webcfg' });
+    box.appendChild(h('p', { class: 'rv-hint',
+      text: '在 platform.deepseek.com 生成一个 API Key（sk- 开头）贴进来。按用量计费，云端部署也能用。' }));
+
+    var inp = h('input', {
+      type: 'password', class: 'rv-input rv-input-sm', value: cfg.apiKey || '',
+      placeholder: 'sk-...', 'aria-label': 'DeepSeek API Key', autocomplete: 'off'
+    });
+    box.appendChild(h('label', { class: 'rv-field rv-field-col rv-field-tight' }, [
+      h('span', { class: 'rv-label', text: 'API Key' }), inp
+    ]));
+
+    var sel = h('select', { class: 'rv-select', 'aria-label': 'API 模型' });
+    LLM.DIRECT_MODELS.forEach(function (m) {
+      sel.appendChild(h('option', {
+        value: m.id, text: m.name,
+        selected: m.id === (cfg.apiModel || 'deepseek-chat') ? true : null
+      }));
+    });
+    box.appendChild(h('label', { class: 'rv-field rv-field-col rv-field-tight' }, [
+      h('span', { class: 'rv-label', text: '模型' }), sel
+    ]));
+
+    var acts = h('div', { class: 'rv-webcfg-acts' });
+    acts.appendChild(h('button', {
+      type: 'button', class: 'rv-btn is-primary rv-btn-sm', text: '保存并测试',
+      onclick: function () {
+        var v = String(inp.value || '').trim();
+        if (!/^sk-/.test(v)) {
+          ST.chanNote = 'Key 应该以 sk- 开头，重新复制一次。';
+          ST.chanTone = 'is-warn';
+          renderSide();
+          return;
+        }
+        LLM.setWeb({ kind: 'direct', apiKey: v, apiModel: sel.value });
+        LLM.credPush().then(function (ok) {
+          if (ok) { ST.chanNote = '已保存，并存到服务端（换设备不用重贴）'; renderSide(); }
+        });
+        ST.chanNote = '';
+        ST.chanTone = '';
+        renderSide();
+        testChannel(false);
+      }
+    }));
+    acts.appendChild(h('button', {
+      type: 'button', class: 'rv-btn rv-btn-sm', text: '连接诊断',
+      onclick: function () { runSelfCheck(); }
+    }));
+    box.appendChild(acts);
+    box.appendChild(h('div', { class: 'rv-diag' }));
+
+    var note = h('p', { class: 'rv-hint' + (ST.chanTone ? ' ' + ST.chanTone : '') });
+    note.textContent = ST.chanNote || (cfg.apiKey
+      ? '已保存 Key（' + cfg.apiKey.slice(0, 6) + '…' + cfg.apiKey.slice(-4) + '），换设备会自动取回。'
+      : '还没填 Key。');
+    box.appendChild(note);
+    return box;
   }
 
   /* 网页版：家长只需要贴一条 curl。转发、端口这些都不露出来——普通用户看不懂，
@@ -1013,7 +1081,7 @@
     ST.chanNote = '正在测试…';
     ST.chanTone = '';
     renderSide();
-    LLM.probe().then(function (j) {
+    LLM.ping().then(function (j) {
       if (j && j.ok) {
         ST.chanNote = '连接正常' + (j.name ? ' · ' + j.name : '');
         ST.chanTone = 'is-ok';

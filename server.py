@@ -438,9 +438,12 @@ def make_handler(relay):
             if not c:
                 return self._json({"ok": True, "cred": None})
             return self._json({"ok": True, "cred": {
+                "kind": c.get("kind", ""),
                 "token": c.get("token", ""), "cookie": c.get("cookie", ""),
                 "ua": c.get("ua", ""), "hdr": c.get("hdr", ""),
-                "model": c.get("model", ""), "savedAt": c.get("savedAt", "")
+                "model": c.get("model", ""),
+                "apiKey": c.get("apiKey", ""), "apiBase": c.get("apiBase", ""), "apiModel": c.get("apiModel", ""),
+                "savedAt": c.get("savedAt", "")
             }})
 
         def _api_cred_put(self):
@@ -454,14 +457,19 @@ def make_handler(relay):
             except Exception:
                 return self._json({"ok": False, "error": "bad json"}, 400)
             tok = str(payload.get("token") or "").strip()
-            if len(tok) < 8:
-                return self._json({"ok": False, "error": "token 太短"}, 400)
+            api_key = str(payload.get("apiKey") or "").strip()
+            if len(tok) < 8 and len(api_key) < 8:
+                return self._json({"ok": False, "error": "没有可保存的凭据"}, 400)
             rec = {
+                "kind": str(payload.get("kind") or ("direct" if api_key else "web")),
                 "token": tok,
                 "cookie": str(payload.get("cookie") or ""),
                 "ua": str(payload.get("ua") or ""),
                 "hdr": str(payload.get("hdr") or ""),
                 "model": str(payload.get("model") or "deepseek"),
+                "apiKey": api_key,
+                "apiBase": str(payload.get("apiBase") or "https://api.deepseek.com"),
+                "apiModel": str(payload.get("apiModel") or "deepseek-chat"),
                 "savedAt": time.strftime("%Y-%m-%dT%H:%M:%S"),
             }
             cred_write(rec)

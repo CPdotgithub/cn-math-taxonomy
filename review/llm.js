@@ -33,8 +33,18 @@
     { id: 'deepseek', name: 'DeepSeek 网页版', descriptionZh: '自带联网搜索与深度思考，不用另外设置。' }
   ];
 
+  /* 官方 API（api.deepseek.com，sk- 开头）。浏览器直连，它会给我们的 Origin 放行。 */
+  var DIRECT_MODELS = [
+    { id: 'deepseek-chat', name: 'DeepSeek Chat（V3，快）' },
+    { id: 'deepseek-reasoner', name: 'DeepSeek Reasoner（R1，慢但稳）' }
+  ];
+  var DEFAULT_API_BASE = 'https://api.deepseek.com';
+
   var WEB_DEFAULT = {
     kind: 'cloud',
+    apiKey: '',
+    apiBase: DEFAULT_API_BASE,
+    apiModel: 'deepseek-chat',
     relay: '',                 /* 留空 = 用本站 /api/ds；只有 file:// 才回落到 8790 */
 
     token: '',
@@ -103,7 +113,7 @@
     Object.keys(WEB_DEFAULT).forEach(function (k) {
       out[k] = (v && v[k] !== undefined && v[k] !== null) ? v[k] : WEB_DEFAULT[k];
     });
-    if (out.kind !== 'web') out.kind = 'cloud';
+    if (out.kind !== 'web' && out.kind !== 'direct') out.kind = 'cloud';
     /* 本机 / 预览地址用不了云端（SDK 不给登录），没手动选过就默认走网页版，
        否则一进来就是「通道不可用」，还得自己猜要切哪里。 */
     if (out.kind === 'cloud' && !cloudOriginOk() && !(v && v.kind)) out.kind = 'web';
@@ -120,6 +130,98 @@
   }
 
   function isWeb() { return web().kind === 'web'; }
+  function isDirect() { return web().kind === 'direct'; }
+  function apiBaseUrl() { return String(web().apiBase || DEFAULT_API_BASE).replace(/\/+$/, ''); }
+
+  /* 官方 API：流式，和云端/网页版同一套回调 */
+  function directComplete(o) {
+    var cfg = web();
+    var key = String(cfg.apiKey || '').trim();
+    if (!key) return Promise.reject(makeErr('api_no_key', '还没填 DeepSeek API Key'));
+    var base = apiBaseUrl();
+    var text = '';
+    function feed(j) {
+      var ch = j && j.choices && j.choices[0];
+      var d = ch && ch.delta;
+      if (d && d.content) {
+        text += d.content;
+        if (o.onProgress) { try { o.onProgress(text.length, 0); } catch (e) {} }
+      }
+    }
+    function line(payload) {
+      if (!payload || payload === '[DONE]') return;
+      var j;
+      try { j = JSON.parse(payload); } catch (e) { return; }
+      if (j && j.error) {
+        var code = j.error.code || 'api_failed';
+        if (code === 'invalid_api_key' || code === 'authentication_error') notifyAuth(j.error.message);
+        throw makeErr(code, j.error.message || code);
+      }
+      feed(j);
+    }
+    return fetch(base + '/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + key },
+      body: JSON.stringify({
+        model: o.model || cfg.apiModel || 'deepseek-chat',
+        stream: true,
+        messages: [
+          { role: 'system', content: o.system },
+          { role: 'user', content: userContent(o) }
+        ]
+      }),
+      signal: o.signal
+    }).catch(function (e) {
+      if (e && (e.name === 'AbortError' || /abort/i.test(String(e.message)))) throw e;
+      throw makeErr('api_offline', '连不上 ' + base);
+    }).then(function (res) {
+      if (!res.ok) {
+        return res.text().then(function (raw) {
+          var j = null;
+          try { j = JSON.parse(raw); } catch (e) {}
+          var err = (j && j.error) || {};
+          var code = err.code || ('api_http_' + res.status);
+          if (res.status === 401 || code === 'invalid_api_key') notifyAuth(err.message);
+          throw makeErr(code, err.message || ('HTTP ' + res.status));
+        });
+      }
+      if (!res.body || !res.body.getReader) {
+        return res.text().then(function (raw) {
+          raw.split('\n').forEach(function (l) {
+            var t = l.trim();
+            if (t.indexOf('data:') === 0) line(t.slice(5).trim());
+          });
+          return text;
+        });
+      }
+      var reader = res.body.getReader();
+      var dec = new TextDecoder('utf-8');
+      var buf = '';
+      function pump() {
+        return reader.read().then(function (r) {
+          if (r.done) {
+            if (buf.trim()) buf.split('\n').forEach(function (l) {
+              var t = l.trim();
+              if (t.indexOf('data:') === 0) line(t.slice(5).trim());
+            });
+            return text;
+          }
+          buf += dec.decode(r.value, { stream: true });
+          var cut;
+          while ((cut = buf.indexOf('\n\n')) >= 0) {
+            var block = buf.slice(0, cut);
+            buf = buf.slice(cut + 2);
+            block.split('\n').forEach(function (l) {
+              var t = l.trim();
+              if (t.indexOf('data:') === 0) line(t.slice(5).trim());
+            });
+          }
+          return pump();
+        });
+      }
+      return pump();
+    });
+  }
 
   /* 从浏览器 DevTools 里「Copy as cURL」粘过来的那串里取凭据。
      只要 token 也能用：整段就是一个长串，没有冒号的，当作 userToken。
@@ -207,6 +309,7 @@
   /* ---------------------------------------------------------------- 通道状态 */
 
   function available() {
+    if (isDirect()) return !!String(web().apiKey || '').trim();
     if (isWeb()) {
       var c = web();
       return !!c.token && /^https?:\/\//.test(String(relayBase(c) || ''));
@@ -217,6 +320,10 @@
   function usable(m) { return m && m.disabled !== true && m.enabled !== false; }
 
   function listModels() {
+    if (isDirect()) {
+      modelsCache = DIRECT_MODELS.slice();
+      return Promise.resolve(modelsCache);
+    }
     if (isWeb()) {
       modelsCache = WEB_MODELS.slice();
       return Promise.resolve(modelsCache);
@@ -436,6 +543,7 @@
       temperature: o.temperature, signal: o.signal, onProgress: o.onProgress
     };
 
+    if (isDirect()) return directComplete(base);
     if (isWeb()) {
       /* 静态托管的地址（预览面板 / 只跑了个文件服务器）会被 POST 501 或 404 掉。
          这不是用户填错了什么——自动找一次能用的转发，找到就悄悄换过去重发一次。 */
@@ -636,13 +744,16 @@
 
   function credPush() {
     var cfg = web();
-    if (!cfg.token) return Promise.resolve(false);
+    if (!cfg.token && !cfg.apiKey) return Promise.resolve(false);
     return probeLocal().then(function () {
       if (!apiOrigin()) return false;
       return fetch(apiOrigin() + '/api/cred', {
       method: 'POST',
       headers: authHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ token: cfg.token, cookie: cfg.cookie, ua: cfg.ua, hdr: cfg.hdr, model: cfg.model })
+      body: JSON.stringify({
+        kind: cfg.kind, token: cfg.token, cookie: cfg.cookie, ua: cfg.ua, hdr: cfg.hdr, model: cfg.model,
+        apiKey: cfg.apiKey, apiBase: cfg.apiBase, apiModel: cfg.apiModel
+      })
     }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { return !!(j && j.ok); })
       .catch(function () { return false; });
@@ -690,7 +801,8 @@
     if (force) credPromise = null;
     if (credPromise) return credPromise;
     credPromise = (function () {
-      if (web().token) return Promise.resolve(false);   /* 本地已有，不动 */
+      var now = web();
+      if (now.token || now.apiKey) return Promise.resolve(false);   /* 本地已有，不动 */
       return probeLocal().then(function () {
       if (!apiOrigin()) return false;
       return fetch(apiOrigin() + '/api/cred', { cache: 'no-store', headers: authHeaders() })
@@ -699,9 +811,10 @@
           var c = j && j.cred;
           if (!c || !c.token) return false;
           setWeb({
-            kind: 'web',   /* 存了 curl 就是网页版通道，别停在「云端」上 */
-            token: c.token, cookie: c.cookie || '', ua: c.ua || '', hdr: c.hdr || '',
-            model: c.model || 'deepseek', savedAt: c.savedAt || ''
+            kind: c.kind || (c.apiKey ? 'direct' : 'web'),
+            token: c.token || '', cookie: c.cookie || '', ua: c.ua || '', hdr: c.hdr || '',
+            model: c.model || 'deepseek', savedAt: c.savedAt || '',
+            apiKey: c.apiKey || '', apiBase: c.apiBase || DEFAULT_API_BASE, apiModel: c.apiModel || 'deepseek-chat'
           });
           return true;
         })
@@ -710,6 +823,19 @@
     })();
     return credPromise;
   }
+
+  /* 通道自检：官方 API 发一句最短的话，网页版走 /v1/probe，云端读模型列表 */
+  function ping() {
+    if (isDirect()) {
+      var model = web().apiModel || 'deepseek-chat';
+      return complete({ model: model, system: '只回答两个字', user: '在吗', temperature: 0 })
+        .then(function (t) { return { ok: true, name: (t || '').slice(0, 12) || '已响应' }; });
+    }
+    if (isWeb()) return probe({});
+    return listModels().then(function (list) { return { ok: true, name: (list[0] && list[0].id) || '' }; });
+  }
+
+  function onLocalHostExport() { return onLocalHost(); }
 
   function health() {
     var base = relayBase(web());
@@ -800,6 +926,10 @@
     if (code === 'model_empty') return '模型这次什么都没返回，再点一次「重新生成」通常就好。';
     if (code === 'model_bad_json') return '模型返回的题目格式不对，点「重新生成」再试一次。';
     if (code === 'image_dropped') return '照片没被云端接收，这次只按文字批改。想拍照批改，把通道换成「网页版」。';
+    if (code === 'api_no_key') return '还没填 DeepSeek API Key（sk- 开头那串）。';
+    if (code === 'api_offline') return '连不上 api.deepseek.com，检查网络或代理。';
+    if (code === 'invalid_api_key' || code === 'api_http_401') return 'API Key 无效或已过期，去 platform.deepseek.com 重新生成一个。';
+    if (code === 'api_http_402' || code === 'insufficient_balance') return 'DeepSeek 账户余额不足，充值后再试。';
     if (code === 'web_no_relay') return '网页版的转发没准备好，重新用「启动.command」打开页面再试。';
     if (code === 'web_no_token') return '还没贴登录凭据。在 chat.deepseek.com 上复制一条 curl 贴进来。';
     if (code === 'web_offline') return '转发服务没响应，等几秒再试一次；一直不行就重新用「启动.command」打开页面。';
@@ -835,6 +965,8 @@
     web: web,
     setWeb: setWeb,
     isWeb: isWeb,
+    isDirect: isDirect,
+    DIRECT_MODELS: DIRECT_MODELS,
     parseCurl: parseCurl,
     probe: probe,
     health: health,
@@ -843,6 +975,8 @@
     relayBase: relayBase,
     cloudOriginOk: cloudOriginOk,
     selfCheck: selfCheck,
+    ping: ping,
+    onLocalHost: onLocalHostExport,
     credPush: credPush,
     ensureCred: ensureCred,
     usingSiteRelay: function () { return /\/api\/ds$/.test(relayBase()); },
