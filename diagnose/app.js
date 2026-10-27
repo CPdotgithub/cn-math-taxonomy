@@ -49,6 +49,12 @@
   let shareBlobUrl = null;
   let shareToken = 0;
 
+  /* AI 现出题（DeepSeek）：逻辑在 assets/aiq.js，这里只管「什么时候找它要题、要不到怎么办」 */
+  const AIQ = window.CnmAIQ;
+  let aiSkip = {};     // topicId#attempt → 这一道不等 AI，直接用题库
+  const aiDead = function () { return !!(AIQ && AIQ.fails() >= 2); };  // 连续失败 2 次：本轮先回题库
+  let aiAsked = [];    // 这一轮已经出过的 AI 题干，提示模型别重复
+
   /* ------------------------------------------------------------ 小工具 */
   function h(tag, attrs) {
     const el = document.createElement(tag);
@@ -378,6 +384,8 @@
   }
 
   function commit(result) {
+    /* 自评 / 判错了这两条路没经过 judgeAndGo，这里补一次预取；已经预取过的会复用 */
+    aiPrefetchNext(result);
     const item = E.nextItem(D.graph, session);
     session = E.applyAnswer(D.graph, session, item.topicId, result, { text: ui.answer });
     markSeen(item.question.id);
@@ -552,6 +560,47 @@
           : null);
     };
 
+    /* 出题方式：题库 / AI 现出。AI 没通道时不给假开关，直接说去哪配 */
+    const aiFieldRow = function () {
+      if (!AIQ) return null;
+      const ready = AIQ.available();
+      /* 没通道时不给「选中了 AI 其实用不了」的错觉，显示题库 + 一句去哪配 */
+      const mine = (ready && AIQ.on()) ? 'ai' : 'bank';
+      const note = !ready
+        ? h('p', { class: 'dx-ai-note is-warn' },
+          '还没连上 DeepSeek：先去', h('a', { class: 'dx-ai-link', href: '../review/' }, '复习页'), '配一次（网页版贴一条 curl 就行），这里就能用 AI 现出题。')
+        : (mine === 'ai'
+          ? h('p', { class: 'dx-ai-note' },
+            '每道题由 DeepSeek 按这个知识点 + 孩子的档案临时命；连不上就自动退回题库，不卡人。')
+          : h('p', { class: 'dx-ai-note' }, '用本地题库的题（8992 道），秒出。'));
+      return h('div', { class: 'dx-field' },
+        h('span', { class: 'dx-field-label' }, '出题'),
+        h('div', { class: 'dx-field-main' },
+          h('div', { class: 'pt-seg dx-ai-seg', role: 'tablist', 'aria-label': '出题方式' },
+            [['bank', '题库'], ['ai', 'AI 现出']].map(function (o) {
+              const off = o[0] === 'ai' && !ready;
+              return h('button', {
+                type: 'button', role: 'tab',
+                class: (mine === o[0] ? 'on' : '') + (off ? ' is-off' : ''),
+                'aria-selected': mine === o[0] ? 'true' : 'false',
+                title: off ? '还没连上 DeepSeek' : null,
+                onclick: function (ev) {
+                  ev.currentTarget.blur();
+                  if (off) {
+                    alert('还没连上 DeepSeek。去「复习」页配一次（网页版只要贴一条 curl），这边就能用 AI 现出题。');
+                    return;
+                  }
+                  if (AIQ.on() === (o[0] === 'ai')) return;
+                  AIQ.setOn(o[0] === 'ai');
+                  AIQ.resetFails();
+                  aiSkip = {};
+                  fill();
+                }
+              }, o[1]);
+            })),
+          note));
+    };
+
     const fill = function () {
       while (box.firstChild) box.removeChild(box.firstChild);
       const cur = CC.current();
@@ -597,7 +646,8 @@
                 : null)),
           h('div', { class: 'dx-field' },
             h('span', { class: 'dx-field-label' }, '科目'),
-            h('div', { class: 'dx-field-main' }, subjectSeg()))),
+            h('div', { class: 'dx-field-main' }, subjectSeg())),
+          aiFieldRow()),
 
         h('div', { class: 'dx-launch-go' },
           h('p', { class: 'dx-launch-kicker' }, '本次范围'),
@@ -1047,6 +1097,68 @@
   }
 
   /* ------------------------------------------------------------ 出题页 */
+  /* AI 现出题：把「这道题的知识点 + 孩子档案」交给 DeepSeek 临时命一道。
+     范围写的是题所在的年级，不是孩子的年级——超前考察时不能让模型把题拉回档案年级。 */
+  function aiCtxOf(item) {
+    if (!AIQ || !D || !D.graph || !item) return null;
+    const t = D.graph.byId[item.topicId];
+    if (!t) return null;
+    const sc = scopeOf();
+    return {
+      subject: subject,
+      topic: t,
+      attempt: item.attempt,
+      difficulty: item.attempt > 1 ? 'basic' : 'standard',
+      scopeText: sc && sc.grade ? (SC ? SC.text(sc) : sc.grade) : '',
+      bankPrompt: item.question && item.question.prompt,
+      avoid: aiAsked,
+      nameOf: nameOf
+    };
+  }
+  function aiKeyOf(item) { return item.topicId + '#' + item.attempt; }
+  function currentKey() {
+    if (!session || !D) return '';
+    const it = E.nextItem(D.graph, session);
+    return it ? aiKeyOf(it) : '';
+  }
+
+  /* 这道题用什么：{q} 用 AI 的题 / 'wait' 还在出 / null 用题库 */
+  function aiPick(item) {
+    if (!AIQ || !AIQ.enabled() || aiDead()) return null;
+    if (aiSkip[aiKeyOf(item)]) return null;
+    const ctx = aiCtxOf(item);
+    if (!ctx) return null;
+    const mine = aiKeyOf(item);
+    /* 一定要走 warm：它会把「出好了」的回调挂上，正在出的那道才有人通知刷新 */
+    const st = AIQ.warm(ctx, function () {
+      if (currentKey() === mine) render();
+    });
+    if (!st) return null;
+    if (st.state === 'ok' && st.q) return { q: st.q };
+    if (st.state === 'loading') return 'wait';
+    return null;
+  }
+
+  /* 答完一题就顺手把下一道备好：孩子看解析、点「下一题」这几秒正好够模型出完 */
+  function aiPrefetchNext(result) {
+    if (!AIQ || !AIQ.enabled() || aiDead()) return;
+    try {
+      const item = E.nextItem(D.graph, session);
+      if (!item) return;
+      const next = E.applyAnswer(D.graph, session, item.topicId, result, { text: ui.answer });
+      const nx = E.nextItem(D.graph, next);
+      if (!nx) return;
+      const ctx = aiCtxOf(nx);
+      if (ctx) AIQ.warm(ctx);
+    } catch (e) { /* 预取失败不影响答题 */ }
+  }
+
+  function noteAiQuestion(q) {
+    if (!q || !q.ai) return;
+    const s = String(q.prompt || '');
+    if (s && aiAsked.indexOf(s) < 0) { aiAsked.push(s); if (aiAsked.length > 12) aiAsked.shift(); }
+  }
+
   function reasonFor(item) {
     const id = item.topicId;
     if (item.attempt === 2) return '第一题没答对，再出一道' + (item.question.difficulty === 'basic' ? '更基础' : '同级或更容易') + '的题确认：这一题也错才算薄弱，答对则标为「不稳」。';
@@ -1062,12 +1174,15 @@
   }
 
   function judgeAndGo(item) {
-    const q = item.question;
+    /* 判分必须对着屏幕上这道题：AI 现出的题跟题库那道不是一回事 */
+    const q = (ui.q && ui.q.ai) ? ui.q : item.question;
     const val = ui.answer.trim();
     if (!val) { const el = document.getElementById('ans'); if (el) el.focus(); return; }
     const r = E.judgeQuestion(q, val);
     ui.verdict = r;
     ui.phase = r.verdict === 'manual' ? 'self' : 'auto';
+    /* 判定已经知道答案了：趁孩子看解析的这几秒，把下一道 AI 题先出出来 */
+    if (r.verdict === 'correct' || r.verdict === 'wrong') aiPrefetchNext(r.verdict);
     renderQuestion(item);
   }
 
@@ -1085,12 +1200,47 @@
       q.explanation ? h('div', { class: 'explain', id: 'explain' }, h('b', null, '解析：'), q.explanation) : null);
   }
 
+  /* 等 AI 出题时的占位卡：不留一个白屏，也不让人干等——题库就在旁边 */
+  function renderAiWait(item) {
+    const t = D.graph.byId[item.topicId];
+    const baseSet = new Set(session.base || []);
+    const seen = Object.keys(session.attempts).filter(function (k) { return !baseSet.has(k); }).length;
+    const total = session.stack.length || 1;
+    const pct = Math.min(100, Math.round(seen / total * 100));
+    const card = h('div', { class: 'card' },
+      h('div', { class: 'row q-head' },
+        h('span', { class: 'muted q-head-label' }, '本轮：' + sessionMeta.label),
+        h('span', { class: 'grow' }),
+        h('span', { class: 'muted q-progress-num' }, '已测 ' + seen + ' / ' + total + ' 个'),
+        h('button', { class: 'q-end', onclick: endNow, title: '保留已答的记录，直接出结果' }, '结束')),
+      h('div', { class: 'progress' }, h('i', { style: 'width:' + pct + '%' })),
+      h('h2', { class: 'q-title' }, t.name, ' ', h('span', { class: 'tag', text: t.chapter })),
+      h('div', { class: 'row small', style: 'margin:2px 0' },
+        h('span', { class: 'tag is-ai' }, 'AI 现出'),
+        h('span', { class: 'tag', text: '本知识点第 ' + item.attempt + ' 题' })),
+      h('div', { class: 'ai-wait' }, h('i', { class: 'ai-dot' }), '正在按这个知识点和孩子的档案出题…'),
+      h('p', { class: 'muted small' }, '一般几秒。等不及可以先用题库的题，这一轮照样算。'),
+      h('div', { class: 'row' },
+        h('button', { onclick: function () { aiSkip[aiKeyOf(item)] = true; render(); } }, '先用题库的题'),
+        h('button', { onclick: function () { AIQ.setOn(false); render(); } }, '这一轮改用题库')));
+    const page = h('div');
+    if (demo) page.append(demoBanner());
+    const qBar = childBar('question');
+    if (qBar) page.append(qBar);
+    page.append(card);
+    show(page);
+  }
+
   function renderQuestion(item) {
     const id = item.topicId;
-    const q = item.question;
+    const gen = aiPick(item);
+    if (gen === 'wait') return renderAiWait(item);
+    const q = gen && gen.q ? gen.q : item.question;
+    if (gen && gen.q) noteAiQuestion(gen.q);
     const t = D.graph.byId[id];
     const key = id + '#' + item.attempt;
     if (ui.key !== key) ui = { key: key, phase: 'ask', answer: '', verdict: null, picked: null };
+    ui.q = q;
     const n = session.answers.length;
     const baseSet = new Set(session.base || []);
     const seen = Object.keys(session.attempts).filter(function (k) { return !baseSet.has(k); }).length;
@@ -1108,6 +1258,7 @@
       h('div', { class: 'row small', style: 'margin:2px 0' },
         h('span', { class: 'tag diff-' + q.difficulty, text: DIFF_LABEL[q.difficulty] || q.difficulty }),
         h('span', { class: 'tag', text: TYPE_LABEL[q.type] || q.type }),
+        q.ai ? h('span', { class: 'tag is-ai', title: 'DeepSeek 按这个点和孩子档案现出的题' }, 'AI 现出') : null,
         h('span', { class: 'tag', text: '本知识点第 ' + item.attempt + ' 题' })),
       h('div', { class: 'reason', text: reasonFor(item) }),
       h('div', { class: 'q-text', id: 'q-text', text: q.prompt }));
@@ -1147,7 +1298,7 @@
       card.append(h('div', { class: 'row', style: 'margin-top:10px' },
         q.type === 'self' ? null : h('button', { class: 'primary', id: 'btn-submit', onclick: function () { judgeAndGo(item); } }, '提交答案'),
         q.type === 'choice' ? null : h('button', { id: 'btn-peek', onclick: function () { ui.phase = 'self'; ui.verdict = null; renderQuestion(item); } }, '看参考答案并自评'),
-        h('button', { id: 'btn-skip', onclick: function () { ui.phase = 'skip'; renderQuestion(item); } }, '不会')));
+        h('button', { id: 'btn-skip', onclick: function () { ui.phase = 'skip'; aiPrefetchNext('skip'); renderQuestion(item); } }, '不会')));
     } else if (ui.phase === 'auto') {
       const ok = ui.verdict.verdict === 'correct';
       card.append(
@@ -1179,6 +1330,21 @@
     card.append(h('div', { class: 'row no-print', style: 'margin-top:12px' },
       n > 0 ? h('button', { class: 'small', onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null,
       h('button', { class: 'small', onclick: function () { if (confirm('确定放弃当前诊断并回到开始页吗？')) restart(); } }, '重新开始')));
+    if (q.ai) {
+      card.append(h('p', { class: 'muted small ai-flag' },
+        'AI 现出：DeepSeek 按这个知识点和孩子的档案临时命的一道题，判分照旧按参考答案比对。', ' ',
+        h('button', {
+          class: 'linkish', type: 'button',
+          onclick: function () { aiSkip[aiKeyOf(item)] = true; render(); }
+        }, '换成题库那道')));
+    } else if (AIQ && AIQ.enabled() && aiDead()) {
+      card.append(h('p', { class: 'muted small ai-flag is-warn' },
+        '「AI 现出」连不上模型，这一轮先用题库的题。', ' ',
+        h('button', {
+          class: 'linkish', type: 'button',
+          onclick: function () { AIQ.resetFails(); AIQ.forgetFailed(); render(); }
+        }, '再试一次')));
+    }
     const page = h('div');
     if (demo) page.append(demoBanner());
     const qBar = childBar('question');
@@ -1976,6 +2142,8 @@
       }
     }
     applySubjectChrome();
+    const aiWant = new URLSearchParams(location.search).get('ai');
+    if (AIQ && (aiWant === '1' || aiWant === '0')) AIQ.setOn(aiWant === '1');
     try { await loadData(); } catch (e) {
       clearRoot();
       root.append(h('div', { class: 'card' }, h('h2', { class: 'err', text: '数据加载失败' }),
@@ -1984,6 +2152,16 @@
       return;
     }
     const params = new URLSearchParams(location.search);
+    /* 云端的 SDK 是 defer 加载的：等一下再渲染，免得「出题方式」先摆出一个假的「没通道」 */
+    if (AIQ && !AIQ.available() && !window.__CNM_SDK_FAILED) {
+      await new Promise(function (done) {
+        const t0 = Date.now();
+        (function tick() {
+          if (AIQ.available() || Date.now() - t0 > 1200) return done();
+          setTimeout(tick, 120);
+        })();
+      });
+    }
     let resolved = null;
     try { resolved = resolveTargets(params); } catch (e) { renderStart(e.message); return; }
     if (params.get('seed')) seedParam = params.get('seed');

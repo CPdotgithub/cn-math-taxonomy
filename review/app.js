@@ -766,6 +766,15 @@
     det.appendChild(inner);
     body.appendChild(det);
 
+    /* 整册摸底：不挑点，按考察范围一个点一个点现出题，走诊断那套「掌握/不稳/薄弱」判定。
+       这个入口的意义是把「题库不行」这条短路掉：题由模型按孩子档案现命。 */
+    if (LLM.available()) {
+      body.appendChild(h('div', { class: 'rv-whole' }, [
+        h('p', { class: 'rv-hint', text: '不想挑点：按当前考察范围逐个知识点现出题，像单元测一样从头做到尾，判定结果同样进档案。' }),
+        h('a', { class: 'rv-btn rv-btn-narrow', href: '../diagnose/?mode=grade&ai=1', text: '整册摸底 · AI 逐点出题' })
+      ]));
+    }
+
     p.appendChild(body);
     return p;
   }

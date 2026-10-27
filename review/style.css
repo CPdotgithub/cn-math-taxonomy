@@ -1116,3 +1116,11 @@ body.has-modal { overflow: hidden; }
   .rv-modal { display: none; }
 }
 
+
+/* 整册摸底入口：不挑点，按考察范围逐点现出题 */
+.rv-whole {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--pt-line-soft);
+}
+.rv-whole .rv-btn { margin-top: 8px; }
