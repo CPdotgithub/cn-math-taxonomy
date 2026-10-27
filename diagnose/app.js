@@ -316,6 +316,7 @@
       v: 3, mode: session.mode, targets: session.targets, base: session.base || [], finished: !!finished,
       open: !!session.open, limit: isFinite(session.limit) ? session.limit : 0,
       label: sessionMeta.label, scope: sessionMeta.scope || null, answers: session.answers,
+      probes: sessionMeta.probes || null,
       seed: session.seed, avoid: session.avoid, savedAt: new Date().toISOString()
     });
   }
@@ -329,7 +330,7 @@
     });
     // 范围以这一轮实际在考的题为准；反推不出来才用调用方给的
     const derived = scopeFromTargets(targets) || (scope && scope.grade ? scope : null);
-    sessionMeta = { label: roundLabel(label, derived), scope: derived || null };
+    sessionMeta = { label: roundLabel(label, derived), scope: derived || null, probes: {} };
     if (mode === 'screen' && derived) { gradeSel = derived.grade; volSel = volFor(derived.grade, derived.term); syncScopeState(derived); }
     resetUi();
     save();
@@ -348,7 +349,8 @@
         (saved.scope && saved.scope.grade ? saved.scope : null);
       sessionMeta = {
         label: roundLabel(saved.label || saved.targets.map(nameOf).join('、'), derived),
-        scope: derived || null
+        scope: derived || null,
+        probes: saved.probes && typeof saved.probes === 'object' ? saved.probes : {}
       };
       if ((saved.mode || 'target') === 'screen' && derived) {
         gradeSel = derived.grade;
@@ -383,12 +385,38 @@
     render();
   }
 
-  function commit(result) {
-    /* 自评 / 判错了这两条路没经过 judgeAndGo，这里补一次预取；已经预取过的会复用 */
-    aiPrefetchNext(result);
+  /* 把当前这一题的作答并进会话：记探针、按探针调整回溯顺序、顺手预取下一道。
+     不负责重绘——「下一题」和「结束」都要用它。 */
+  function recordAnswer(result) {
     const item = E.nextItem(D.graph, session);
+    if (!item) return false;
+    const probe = (ui.q && ui.q.ai && ui.q.probe) ? ui.q.probe : null;
     session = E.applyAnswer(D.graph, session, item.topicId, result, { text: ui.answer });
+    /* 答错才记探针：它说的是「这道题卡在哪一步」，是我们往下追的线索 */
+    if (probe && result !== 'correct') {
+      sessionMeta.probes = sessionMeta.probes || {};
+      sessionMeta.probes[item.topicId] = {
+        id: probe.id, name: probe.name, step: probe.step, reason: probe.reason,
+        self: !!probe.self, at: session.answers.length
+      };
+      /* 本点已判薄弱：先查探针指的那条先修，别按默认顺序一个个摸 */
+      if (!probe.self && E.statusOf(session, item.topicId) === 'weak') promoteProbe(item.topicId);
+    }
+    /* 探针可能把队列换过头，按最终队列补一次预取（已备好的会复用） */
+    aiPrefetchFor(session);
     markSeen(item.question.id);
+    return true;
+  }
+
+  /* 已经判过、还没点「下一题」的这一题：结束后也要算进去 */
+  function pendingResult() {
+    if (ui.phase === 'auto' && ui.verdict) return ui.verdict.verdict === 'correct' ? 'correct' : 'wrong';
+    if (ui.phase === 'skip') return 'skip';
+    return null;
+  }
+
+  function commit(result) {
+    if (!recordAnswer(result)) return;
     resetUi();
     save();
     // 边答边记：随时中断、随时关页面都不丢
@@ -458,7 +486,14 @@
 
   /* 随时结束：保留已答的记录，直接进结果页 */
   function endNow() {
-    if (!session || !session.answers.length) return;
+    if (!session) return;
+    /* 已经判过、还没点「下一题」的那一题，结束前先记进去——不然最后答的这题白答了，
+       探针也跟着丢，回溯就少一层证据 */
+    const pending = pendingResult();
+    if (pending && recordAnswer(pending)) {
+      try { saveToChild(E.summarize(D.graph, session), true); } catch (e) { /* 记录失败不影响结果 */ }
+    }
+    if (!session.answers.length) return;
     finished = true;
     save();
     render();
@@ -1104,6 +1139,16 @@
     const t = D.graph.byId[item.topicId];
     if (!t) return null;
     const sc = scopeOf();
+    /* 探针候选：本点 + 它在图谱里的可测先修（硬先修在前）。
+       有了这份名单，模型才可能出一道「卡在某一层」的题，答错才有得追。 */
+    const probeOptions = [{ id: t.id, name: t.name }].concat(
+      (D.graph.prereqs[t.id] || [])
+        .filter(function (p) { return E.isTestable(D.graph, p.id) && D.graph.byId[p.id]; })
+        .slice(0, 6)
+        .map(function (p) {
+          const pt = D.graph.byId[p.id];
+          return { id: p.id, name: pt.name, strength: p.strength, desc: pt.description || '' };
+        }));
     return {
       subject: subject,
       topic: t,
@@ -1112,7 +1157,8 @@
       scopeText: sc && sc.grade ? (SC ? SC.text(sc) : sc.grade) : '',
       bankPrompt: item.question && item.question.prompt,
       avoid: aiAsked,
-      nameOf: nameOf
+      nameOf: nameOf,
+      probeOptions: probeOptions
     };
   }
   function aiKeyOf(item) { return item.topicId + '#' + item.attempt; }
@@ -1139,17 +1185,24 @@
     return null;
   }
 
+  /* 按「已经定下来的一轮状态」把下一道备好 */
+  function aiPrefetchFor(s) {
+    if (!AIQ || !AIQ.enabled() || aiDead() || !s) return;
+    try {
+      const nx = E.nextItem(D.graph, s);
+      if (!nx) return;
+      const ctx = aiCtxOf(nx);
+      if (ctx) AIQ.warm(ctx);
+    } catch (e) { /* 预取失败不影响答题 */ }
+  }
+
   /* 答完一题就顺手把下一道备好：孩子看解析、点「下一题」这几秒正好够模型出完 */
   function aiPrefetchNext(result) {
     if (!AIQ || !AIQ.enabled() || aiDead()) return;
     try {
       const item = E.nextItem(D.graph, session);
       if (!item) return;
-      const next = E.applyAnswer(D.graph, session, item.topicId, result, { text: ui.answer });
-      const nx = E.nextItem(D.graph, next);
-      if (!nx) return;
-      const ctx = aiCtxOf(nx);
-      if (ctx) AIQ.warm(ctx);
+      aiPrefetchFor(E.applyAnswer(D.graph, session, item.topicId, result, { text: ui.answer }));
     } catch (e) { /* 预取失败不影响答题 */ }
   }
 
@@ -1157,6 +1210,17 @@
     if (!q || !q.ai) return;
     const s = String(q.prompt || '');
     if (s && aiAsked.indexOf(s) < 0) { aiAsked.push(s); if (aiAsked.length > 12) aiAsked.shift(); }
+  }
+
+  /* 探针指向的那条先修，挪到出题队列最前面：下一个问的就是它 */
+  function promoteProbe(topicId) {
+    const p = sessionMeta && sessionMeta.probes && sessionMeta.probes[topicId];
+    if (!p || !p.id || p.id === topicId) return;
+    if (!session || session.stack.indexOf(p.id) < 0) return;
+    session.stack = [p.id].concat(session.stack.filter(function (x) { return x !== p.id; }));
+    if (Array.isArray(session.follow)) {
+      session.follow = [p.id].concat(session.follow.filter(function (x) { return x !== p.id; }));
+    }
   }
 
   function reasonFor(item) {
@@ -1523,6 +1587,51 @@
     return out;
   }
 
+  /* 「AI 探针」：每道 AI 题都指向图谱里的一个节点（本点或某条先修）。
+     答错时它就是一条「继续往下追」的线索；这里把线索和这次实际测到的结果对在一起。 */
+  function probeCardEl() {
+    const all = (sessionMeta && sessionMeta.probes) || {};
+    const ids = Object.keys(all).filter(function (id) {
+      const p = all[id];
+      return p && !p.self && p.id && D.graph.byId[id] && D.graph.byId[p.id];
+    });
+    if (!ids.length) return null;
+    return h('div', { class: 'card', id: 'probe' },
+      h('h2', null, 'AI 探针：卡在哪一步（' + ids.length + '）'),
+      h('p', { class: 'muted small' }, 'AI 出的题不是随手一道题：每道都指向知识图谱里的一个节点。答错时它会给出「最可能是这一步没掌握」的判断，下面把判断和这次实际测到的结果对在一起——已确认的那一层，就是真正断掉的地方。'),
+      h('div', { class: 'probe-list' }, ids.map(function (id) {
+        const p = all[id];
+        const st = E.statusOf(session, p.id);
+        const tried = ((session.attempts && session.attempts[p.id]) || []).length;
+        const stText = st === 'weak' ? '已确认：这一层确实薄弱'
+          : st === 'shaky' ? '这一层不太稳，建议巩固'
+            : st === 'mastered' ? '这一层其实会做——断口在本点，不在下面'
+              : tried ? '这一层这次答了一次还没定性，再答一题才能判'
+                : '这一层这次没测到，还没排除';
+        const askOne = function () {
+          const nm = nameOf(p.id);
+          if (!confirm('这会结束当前这一轮（结果已经存进档案），只查「' + nm + '」这一个点？')) return;
+          startSession([p.id], nm);
+        };
+        return h('div', { class: 'probe-row' + (st === 'weak' ? ' is-hit' : '') },
+          h('div', { class: 'probe-line' },
+            h('b', null, nameOf(id)), ' → ', h('span', { class: 'probe-step' }, p.step || nameOf(p.id))),
+          h('div', { class: 'probe-sub' },
+            '指向的先修：' + [
+              /* 标题里已经写着点名字时不再重复，只补教材位置和理由 */
+              (p.step && p.step !== nameOf(p.id)) ? nameOf(p.id) : '',
+              (D.graph.byId[p.id] && D.graph.byId[p.id].chapter) || '',
+              p.reason || ''
+            ].filter(Boolean).join(' · ')),
+          h('div', { class: 'probe-state is-' + (st || 'unknown') },
+            stText,
+            st === 'unknown' || st === 'mastered'
+              ? [' ', h('button', { type: 'button', class: 'small', onclick: askOne },
+                st === 'unknown' ? '只查这个点' : '仍要查这一步')]
+              : null));
+      })));
+  }
+
   function renderResult() {
     const sum = E.summarize(D.graph, session);
     const rootSet = new Set(sum.roots.map(function (r) { return r.id; }));
@@ -1587,6 +1696,8 @@
         h('button', { onclick: function () { if (confirm('重新开始会清除当前进度，确定吗？')) restart(); } }, '重新开始'),
         session.answers.length ? h('button', { onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null));
     page.append(summaryCard);
+    const pc = probeCardEl();
+    if (pc) page.append(pc);
     if (screen) page.append(chaptersCard(chapters, outOfScope));
     if (sum.foundation && sum.foundation.checked.length) page.append(foundationCard(sum, rootSet, targetSet));
 
@@ -2170,7 +2281,7 @@
       session = E.createSession(D.graph, resolved.ids, {
         mode: resolved.mode, open: true, base: resolved.base, seed: seedParam == null ? 'demo' : seedParam
       });
-      sessionMeta = { label: resolved.label, scope: resolved.scope || scopeFromTargets(resolved.ids) || null };
+      sessionMeta = { label: resolved.label, scope: resolved.scope || scopeFromTargets(resolved.ids) || null, probes: {} };
       const step = parseInt(params.get('step'), 10);
       runDemo(step >= 0 ? step : Infinity);
       render();

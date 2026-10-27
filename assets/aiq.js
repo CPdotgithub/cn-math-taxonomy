@@ -89,7 +89,8 @@
   }
 
   /* ctx: { subject, topic:{id,name,chapter,description,mastery_criteria},
-            attempt, difficulty, scopeText, avoid:[题干], bankPrompt } */
+            attempt, difficulty, scopeText, avoid:[题干], bankPrompt,
+            probeOptions:[{id,name,strength,desc}] —— 本点 + 它在图谱里的可测先修 } */
   function buildPrompt(ctx) {
     var t = ctx.topic || {};
     var L = [];
@@ -107,6 +108,21 @@
       L.push('- 学生应该会：' + t.mastery_criteria.slice(0, 3).map(function (x) { return clip(x, 40); }).join('；'));
     }
     L.push('');
+
+    /* 图谱上下文：这道题不是孤立的，答错要能顺着先修往下追 */
+    var opts = (ctx.probeOptions || []);
+    var pre = opts.filter(function (p) { return p.id !== t.id; });
+    if (pre.length) {
+      L.push('【它在知识图谱里的位置】');
+      L.push('先修（越靠前越硬：不会它，本点基本做不对）：');
+      pre.slice(0, 6).forEach(function (p, i) {
+        L.push((i + 1) + '. [' + p.id + '] ' + p.name + (p.strength === 'soft' ? '（软先修）' : '（硬先修）') +
+          (p.desc ? '：' + clip(p.desc, 40) : ''));
+      });
+      L.push('这些先修是诊断的分叉口：孩子答错时，我们要能判断是本点没掌握，还是下面某一层断了。');
+      L.push('');
+    }
+
     L.push('【难度】' + (ctx.difficulty === 'basic'
       ? '基础：直接考这个点本身，单步或两步，答对说明会了'
       : '标准：这个点的常规应用，两步左右'));
@@ -122,9 +138,22 @@
     L.push('B 选择题 —— 3 或 4 个选项，只有一个正确。type="choice"。');
     L.push('概念辨析、说法对错这类天然不适合算数的点，用选择题；其余尽量用数值题。');
     L.push('');
+
+    /* 探针：这是整套系统能「回溯定位」的前提，必须逼模型说清这道题卡在哪一步 */
+    L.push('【探针：这道题卡在哪一步】');
+    if (pre.length) {
+      L.push('出完题再回答一句：这道题做错，最可能说明哪一步没掌握？只能选一个：');
+      L.push('- 若这道题必须先用某个先修才能做对 → probe.id 填那个先修的 id，并且**让这道题只依赖这一个先修**，不要同时用上其它先修的难点；');
+      L.push('- 若这道题只考本点、不需要任何先修 → probe.id 填本点 id（' + t.id + '）；');
+      L.push('- 一道题只能指向一个 probe。不要出「先修 + 本点」都要绕几道弯的综合题，那样答错了也判不出断在哪。');
+    } else {
+      L.push('这个点在图谱里没有可测的先修，probe.id 一律填本点 id（' + t.id + '），step 写这道题具体在验哪一项。');
+    }
+    L.push('step 写这一步在做什么（不超过 14 字，例如「两位数乘法的进位」）；reason 写答错为什么能推出这一步没掌握（不超过 30 字）。');
+    L.push('');
     L.push('【输出】只给 JSON，二选一：');
-    L.push('{"type":"numeric","prompt":"题干","answer":"7","accept":["7 个","7个"],"explanation":"30–80 字讲评：思路 + 常见错因"}');
-    L.push('{"type":"choice","prompt":"题干","choices":[{"key":"A","text":"…"},{"key":"B","text":"…"}],"answer":"A","explanation":"30–80 字讲评"}');
+    L.push('{"type":"numeric","prompt":"题干","answer":"7","accept":["7 个","7个"],"probe":{"id":"' + (pre[0] ? pre[0].id : t.id) + '","step":"…","reason":"…"},"explanation":"30–80 字讲评：思路 + 常见错因"}');
+    L.push('{"type":"choice","prompt":"题干","choices":[{"key":"A","text":"…"},{"key":"B","text":"…"}],"answer":"A","probe":{"id":"' + (pre[0] ? pre[0].id : t.id) + '","step":"…","reason":"…"},"explanation":"30–80 字讲评"}');
     L.push('accept 只放同一答案的常见写法（可省略）；题干里不要写「本题」「以下选项」，不要自带「答案：」。');
     return L.join('\n');
   }
@@ -173,9 +202,35 @@
           .filter(function (x) { return x && x !== a; }).slice(0, 4);
         if (acc.length) q.accept = acc;
       }
-      return q;
+    } else {
+      return null;
     }
-    return null;
+
+    /* 探针：只能指向「本点」或「它在图谱里的某个可测先修」，指到别处就当没给。
+       这一条决定了答错时能不能顺着先修往下追。 */
+    var opts = ctx.probeOptions || [];
+    var pr = obj.probe || {};
+    var pid = String(pr.id || pr.topicId || '').trim();
+    var hit = null;
+    if (pid) {
+      hit = opts.filter(function (p) { return p.id === pid || p.name === pid; })[0] || null;
+    }
+    if (hit) {
+      /* step 里混进 id 是最常见的走样（「这一步：先修 cnm_p037」），清掉，空了就用点名字 */
+      var step = clip(pr.step || '', 24).replace(/\b(?:cnm|cnc|cnp)_[A-Za-z0-9_]+\b/gi, '')
+        .replace(/^(?:这一步|这一步是|step)\s*[:：]?\s*/i, '')
+        .replace(/^[\s:：·-]+|[\s:：·-]+$/g, '')
+        .trim();
+      if (step.length <= 2) step = '';   // 只剩「先修」「这步」这种虚词，就用点名字
+      q.probe = {
+        id: hit.id,
+        name: hit.name,
+        step: step || hit.name,
+        reason: clip(pr.reason || '', 60).replace(/\b(?:cnm|cnc|cnp)_[A-Za-z0-9_]+\b/gi, '').trim(),
+        self: hit.id === t.id
+      };
+    }
+    return q;
   }
 
   /* ---------------------------------------------------------------- 调用 */

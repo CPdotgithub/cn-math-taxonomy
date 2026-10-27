@@ -1285,3 +1285,21 @@ button.linkish {
 }
 .dx-ai-note.is-warn { color: #9a6212; }
 .dx-ai-link { color: var(--pt-blue); font-weight: 650; }
+
+/* AI 探针：这道题卡在哪一步（结果页） */
+.probe-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.probe-row {
+  padding: 10px 12px;
+  background: var(--pt-surface-2);
+  border: 1px solid var(--pt-line);
+  border-left: 3px solid var(--pt-line);
+  border-radius: 9px;
+}
+.probe-row.is-hit { border-left-color: var(--bad); background: var(--bad-bg); }
+.probe-line { font-size: .95rem; line-height: 1.6; }
+.probe-step { font-weight: 650; }
+.probe-sub { margin-top: 3px; font-size: .8rem; color: var(--pt-ink-3); line-height: 1.6; }
+.probe-state { margin-top: 5px; font-size: .82rem; color: var(--pt-ink-2); }
+.probe-state.is-weak { color: var(--bad); font-weight: 600; }
+.probe-state.is-mastered { color: var(--ok); }
+.probe-state.is-unknown { color: var(--pt-ink-3); }
