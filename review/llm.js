@@ -35,7 +35,8 @@
 
   var WEB_DEFAULT = {
     kind: 'cloud',
-    relay: 'http://127.0.0.1:8790',
+    relay: '',                 /* 留空 = 用本站 /api/ds；只有 file:// 才回落到 8790 */
+
     token: '',
     cookie: '',
     ua: '',
@@ -169,11 +170,14 @@
   /* 中转地址：部署在云上时走「同站转发」（页面和转发在同一个服务里，没有跨域这回事，
      手机、别人电脑都能用，也不用在自己电脑上开 8790）；本机调试才用 127.0.0.1。 */
   function defaultRelay() {
-    var h = location.hostname;
-    if (location.protocol === 'file:' || h === '127.0.0.1' || h === 'localhost') {
-      return 'http://127.0.0.1:8790';
-    }
+    /* 双击「启动.command」起的服务本身就把 /api/ds 带上了，页面和转发同源——
+       本机也不例外，不用再另开 8790 那个中转。只有直接 file:// 打开才退回落。 */
+    if (location.protocol === 'file:') return 'http://127.0.0.1:8790';
     return location.origin + '/api/ds';
+  }
+  function sameSiteRelay() {
+    if (location.protocol === 'file:') return '';
+    return String(location.origin || '') + '/api/ds';
   }
 
   function relayBase(cfg) {
@@ -457,6 +461,30 @@
     }).then(function (r) { return r.json(); });
   }
 
+  /* 老配置里存的是 127.0.0.1:8790（以前要单独起中转）。现在页面本身就带着 /api/ds，
+     进页面时探一次，探到就把地址改回「本站」，免得人以为还得再开一个服务。
+     各页不用各写一份，等它就好。 */
+  var relayPromise = null;
+  function ensureRelay() {
+    if (relayPromise) return relayPromise;
+    relayPromise = (function () {
+      if (!/^https?:$/.test(location.protocol)) return Promise.resolve(false);
+      var cfg = web();
+      if (!/^http:\/\/(127\.0\.0\.1|localhost):87\d\d$/.test(String(cfg.relay || ''))) return Promise.resolve(false);
+      var site = sameSiteRelay();
+      if (!site) return Promise.resolve(false);
+      return fetch(site + '/health', { method: 'GET' })
+        .then(function (r) { return r.json(); })
+        .then(function (j) {
+          if (!j || j.service !== 'dsweb-relay') return false;
+          setWeb({ relay: '' });
+          return true;
+        })
+        .catch(function () { return false; });
+    })();
+    return relayPromise;
+  }
+
   function health() {
     var base = relayBase(web());
     if (!base) return Promise.reject(makeErr('web_no_relay'));
@@ -482,6 +510,8 @@
   function detectRelay() {
     var cur = relayBase(web());
     var cands = [];
+    var site = sameSiteRelay();
+    if (site && site !== cur) cands.push(site);
     if (cur) cands.push(cur);
     ['127.0.0.1', 'localhost'].forEach(function (h) {
       for (var p = 8790; p <= 8795; p++) {
@@ -557,6 +587,8 @@
     return msg || '出错了，请稍后重试。';
   }
 
+  ensureRelay();
+
   window.RvLLM = {
     available: available,
     listModels: listModels,
@@ -576,6 +608,8 @@
     relayBase: relayBase,
     cloudOriginOk: cloudOriginOk,
     usingSiteRelay: function () { return /\/api\/ds$/.test(relayBase()); },
+    sameSiteRelay: sameSiteRelay,
+    ensureRelay: ensureRelay,
     WEB_MODELS: WEB_MODELS
   };
 })();

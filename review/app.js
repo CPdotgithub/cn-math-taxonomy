@@ -954,9 +954,9 @@
         ['在开发者工具的网络面板里找到那条 completion 请求，右键「以 cURL 格式复制」，粘到上面保存。']
       ]
       : [
-        ['在电脑上双击项目里的 tools/start-dsweb.command，会弹出一个黑窗口，别关它。',
-          '没有图形界面就运行：python3 tools/dsweb-relay.py'],
-        ['上面那个地址填黑窗口里显示的地址，默认就是 http://127.0.0.1:8790。'],
+        ['双击项目里的「启动.command」：它把页面和转发一起起在 http://127.0.0.1:8981，用这个地址打开本站。',
+          '没有图形界面就运行：PORT=8981 python3 server.py'],
+        ['地址留空即可（默认用本站 /api/ds）；只有自己单独跑了 tools/dsweb-relay.py 才填 http://127.0.0.1:8790。'],
         ['浏览器打开 chat.deepseek.com 随便发一句话，在开发者工具的网络面板里找到那条 completion 请求，右键「以 cURL 格式复制」，粘到上面保存。']
       ];
     steps.forEach(function (x) {
@@ -1014,7 +1014,9 @@
           } else {
             ST.chanNote = LLM.usingSiteRelay()
               ? '本站转发暂时没响应，等几秒再点一次；一直不行就刷新页面。'
-              : '没找到在跑的中转。先在电脑上双击 tools/start-dsweb.command，再把窗口里显示的地址填到这里。';
+              : (/^https?:$/.test(location.protocol)
+                ? '这个地址没有内置转发。双击项目里的「启动.command」，它会同时起页面和转发，用它打开的地址再试。'
+                : '没找到在跑的中转。先在电脑上双击项目里的「启动.command」（或 tools/start-dsweb.command），再把显示的地址填到这里。');
             ST.chanTone = 'is-warn';
             renderSide();
           }
@@ -2494,6 +2496,9 @@
     if (LLM.isWeb() && !LLM.web().token) ST.advanced = true;
     /* 凭据过期时不让人对着「格式不对」发呆，直接弹窗说清楚 */
     LLM.onAuthFail(showCurlModal);
+    /* 老配置里存着 127.0.0.1:8790：这个地址本身带着 /api/ds 就自动升级成同站转发，
+       省得人以为还要另外开一个中转。检查完再重绘一次。 */
+    LLM.ensureRelay().then(function (changed) { if (changed) renderSide(); });
     render();
 
     loadData().then(function () {
