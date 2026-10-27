@@ -2082,9 +2082,11 @@
       return;
     }
     if (!LLM.available()) {
-      ST.err = LLM.isWeb()
-        ? '网页版通道还没配好：填好本机中转地址，再贴一条 chat.deepseek.com 的 curl。'
-        : '云端模型通道没加载成功（网络或授权问题）。也可以展开「模型与联网素材」，把通道切到「网页版」用自己的账号。';
+      ST.err = LLM.isDirect()
+        ? '还没填 DeepSeek API Key：点左边「出题通道」那行的「设置」，把 sk- 开头的 Key 贴进去。'
+        : LLM.isWeb()
+          ? '网页版通道已停用：在「设置」里把出题通道切成「官方 API」。'
+          : '云端模型通道没加载成功（网络或授权问题）。点左边「出题通道」那行的「设置」看一眼，或者换成「官方 API」。';
       render();
       return;
     }
@@ -2389,7 +2391,7 @@
           /* 云端不认图片时，退回文字结果，别让整张卷子判不了 */
           if (e && e.droppedImages && e.text) {
             text = e.text;
-            ST.photoNote = '照片没被云端接收，这次只按文字批改。想拍照批改，把通道换成「网页版」。';
+            ST.photoNote = '照片没被云端接收，这次只按文字批改；云端通道只能发文字。';
           } else {
             throw e;
           }

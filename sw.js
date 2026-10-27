@@ -3,7 +3,7 @@
  * 改了 SHELL 或 DATA 列表、或数据结构变了，就把 VERSION 加一。 */
 'use strict';
 
-var VERSION = 'v55';
+var VERSION = 'v56';
 var CACHE = 'cnm-pwa-' + VERSION;
 var SCOPE = self.registration.scope;
 
@@ -52,6 +52,7 @@ var SHELL = [
   'assets/pwa.css',
   'assets/access-gate.css',
   'assets/access-gate.js',
+  'assets/vendor/workbuddy-cloud-sdk.js',
   'assets/vendor/cytoscape.min.js',
   'assets/vendor/cytoscape-dagre.js',
   'assets/vendor/dagre.min.js',
