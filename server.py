@@ -23,9 +23,10 @@ import os
 import sys
 import json
 import time
+import threading
 import importlib.util
 from http.server import ThreadingHTTPServer
-from urllib.parse import unquote, urlparse
+from urllib.parse import unquote, urlparse, parse_qs
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 RELAY = os.path.join(ROOT, "tools", "dsweb-relay.py")
@@ -51,6 +52,62 @@ MIME = {
     ".md": "text/plain; charset=utf-8",
     ".pdf": "application/pdf",
 }
+
+
+# ---------------------------------------------------------------- AI 题的本地题库
+# 浏览器 localStorage 会被清掉（清缓存、换设备、隐私模式），所以 AI 现出的题存一份到
+# 服务端：页面照旧先用本地缓存（快），本地没有就问这里，再没有才去调模型。
+STORE_PATH = os.path.join(ROOT, ".aiq-store.json")
+STORE_LOCK = threading.Lock()
+STORE_PER_KEY = 5        # 同一个知识点最多留几个版本
+STORE_TOTAL = 2000       # 总量上限，超了按时间淘汰最旧的
+
+
+def _store_read():
+    try:
+        with open(STORE_PATH, "r", encoding="utf-8") as f:
+            v = json.load(f)
+        if isinstance(v, dict) and isinstance(v.get("items"), dict):
+            return v
+    except Exception:
+        pass
+    return {"v": 1, "items": {}}
+
+
+def _store_write(d):
+    tmp = STORE_PATH + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(d, f, ensure_ascii=False)
+    os.replace(tmp, STORE_PATH)
+
+
+def store_get(key):
+    if not key:
+        return []
+    with STORE_LOCK:
+        return _store_read()["items"].get(key, [])
+
+
+def store_put(key, q):
+    """同一个 prompt 不重复存；新的放最前；每点 ≤5 版、总量 ≤2000。"""
+    if not (key and isinstance(q, dict) and q.get("prompt")):
+        return 0
+    with STORE_LOCK:
+        d = _store_read()
+        items = d["items"]
+        arr = [it for it in items.get(key, []) if it.get("q", {}).get("prompt") != q.get("prompt")]
+        arr.insert(0, {"q": q, "at": int(time.time() * 1000)})
+        items[key] = arr[:STORE_PER_KEY]
+        flat = [(k, it) for k, lst in items.items() for it in lst]
+        if len(flat) > STORE_TOTAL:
+            flat.sort(key=lambda x: x[1].get("at") or 0)
+            drop = set(id(it) for _, it in flat[:len(flat) - STORE_TOTAL])
+            for k in list(items.keys()):
+                items[k] = [it for it in items[k] if id(it) not in drop]
+                if not items[k]:
+                    del items[k]
+        _store_write(d)
+        return len(items.get(key, []))
 
 
 def load_relay():
@@ -147,6 +204,10 @@ def make_handler(relay):
                 return relay.Handler.do_GET(self)
             if path in ("/health",):
                 return self._health()
+            if path == "/api/q":
+                qs = parse_qs(urlparse(self.path).query)
+                key = (qs.get("key") or [""])[0]
+                return self._json({"ok": True, "items": store_get(key)})
             return self._static(path, head_only)
 
         def do_HEAD(self):
@@ -158,6 +219,8 @@ def make_handler(relay):
             if api is not None and relay:
                 self.path = api
                 return relay.Handler.do_POST(self)
+            if path == "/api/q":
+                return self._api_q_put()
             return self._plain(404, "not found")
 
         def do_OPTIONS(self):
@@ -167,12 +230,37 @@ def make_handler(relay):
             self.send_header("Content-Length", "0")
             self.end_headers()
 
+        def _json(self, obj, code=200):
+            body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(body)
+
+        def _api_q_put(self):
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                raw = self.rfile.read(n) if n > 0 else b"{}"
+                payload = json.loads(raw.decode("utf-8"))
+            except Exception:
+                return self._json({"ok": False, "error": "bad json"}, 400)
+            key = str(payload.get("key") or "")
+            q = payload.get("q")
+            if not key or not isinstance(q, dict) or not q.get("prompt") or q.get("answer") in (None, ""):
+                return self._json({"ok": False, "error": "bad payload"}, 400)
+            total = store_put(key, q)
+            return self._json({"ok": True, "count": total})
+
         def _health(self):
             st = relay.env_status() if relay else {"node": None}
             body = json.dumps({
                 "ok": bool(relay and st.get("node") and st.get("solver") and st.get("wasm")),
                 "service": "cnm-site",
                 "hasRelay": bool(relay),
+                "hasStore": True,
                 "env": st,
                 "root": ROOT,
             }, ensure_ascii=False).encode("utf-8")

@@ -296,6 +296,41 @@
     saveStore();
   }
 
+  /* ---- 服务端题库（同站 /api/q）：localStorage 清了、换设备了，题还在 ---- */
+  var remoteState = 'unknown';   /* unknown | on | off */
+
+  function apiBase() {
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') return '';
+    return location.origin;
+  }
+
+  function remoteLoad(key) {
+    if (remoteState === 'off' || !apiBase() || !key) return Promise.resolve(null);
+    var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = setTimeout(function () { try { if (ctl) ctl.abort(); } catch (e) {} }, 1500);
+    return fetch(apiBase() + '/api/q?key=' + encodeURIComponent(key), {
+      cache: 'no-store', signal: ctl ? ctl.signal : undefined
+    }).then(function (r) {
+      clearTimeout(timer);
+      if (!r.ok) { remoteState = 'off'; return null; }
+      remoteState = 'on';
+      return r.json();
+    }).then(function (j) {
+      return (j && j.ok && Array.isArray(j.items)) ? j.items : null;
+    }).catch(function () { clearTimeout(timer); remoteState = 'off'; return null; });
+  }
+
+  function remotePut(key, q) {
+    if (remoteState === 'off' || !apiBase() || !key || !q) return;
+    try {
+      fetch(apiBase() + '/api/q', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: key, q: q })
+      }).then(function (r) { remoteState = r.ok ? 'on' : 'off'; }).catch(function () { /* 断网就算了 */ });
+    } catch (e) { /* ignore */ }
+  }
+
   function view(e) {
     var list = (e && e.list) || [];
     var idx = Math.min(Math.max(0, (e && e.idx) || 0), Math.max(0, list.length - 1));
@@ -385,22 +420,40 @@
     }
 
     e.state = 'loading'; e.err = '';
-    inflight[k] = one(ctx).then(function (q) {
-      e.list = [q].concat((e.list || []).filter(function (x) { return x.prompt !== q.prompt; }));
-      e.idx = 0; e.state = 'ok'; e.err = ''; e.at = Date.now();
-      fails = 0;
-      storePut(k, q);
+
+    function finish() {
       delete inflight[k];
-      if (done) { try { done(view(e)); } catch (err) {} }
+      if (done) { try { done(view(e)); } catch (x) {} }
       return view(e);
-    }, function (err) {
-      e.state = 'error';
-      e.err = (err && err.error && err.error.code) || String((err && err.message) || err);
-      fails++;
-      delete inflight[k];
-      if (done) { try { done(view(e)); } catch (e2) {} }
-      return view(e);
-    });
+    }
+    function generate() {
+      return one(ctx).then(function (q) {
+        e.list = [q].concat((e.list || []).filter(function (x) { return x.prompt !== q.prompt; }));
+        e.idx = 0; e.state = 'ok'; e.err = ''; e.at = Date.now();
+        fails = 0;
+        storePut(k, q);
+        remotePut(k, q);          /* 本地留一份，服务端也留一份 */
+        return finish();
+      }, function (err) {
+        e.state = 'error';
+        e.err = (err && err.error && err.error.code) || String((err && err.message) || err);
+        fails++;
+        return finish();
+      });
+    }
+
+    /* 换一题（force）只打模型；首次取题先问服务端有没有现成的 */
+    inflight[k] = (force ? generate() : remoteLoad(k).then(function (items) {
+      if (items && items.length) {
+        var list = items.map(function (it) { return it.q; }).filter(function (x) { return x && x.prompt; });
+        if (list.length) {
+          e.list = list; e.idx = 0; e.state = 'ok'; e.err = ''; fails = 0;
+          storePut(k, list[0]);   /* 顺手回填本地，下次更快 */
+          return finish();
+        }
+      }
+      return generate();
+    }));
     return view(e);
   }
 
@@ -420,6 +473,7 @@
     arr.unshift({ q: chosen, at: Date.now() });
     s.items[k] = arr;
     saveStore();
+    remotePut(k, chosen);
     return view(e);
   }
   function variants(ctx) {
