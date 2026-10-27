@@ -227,6 +227,25 @@
       var idx = -1;
       for (var i = 0; i < arr.length; i++) if (arr[i].key === row.rec_key) { idx = i; break; }
       var local = idx >= 0 ? arr[idx] : null;
+
+      /* AI 用量：两台设备各自计数，合并不是「谁新谁赢」，而是逐日逐设备取最大值 */
+      if (row.rec_key === 'usage:ai' && !row.deleted_at) {
+        var U = window.CnmUsage;
+        if (!U) return;
+        var mine = (local && local.days) || {};
+        var merged = U.mergeDays(mine, (row.payload || {}).days || {});
+        if (JSON.stringify(merged) !== JSON.stringify(mine)) {
+          var rec = Object.assign({}, local || { key: 'usage:ai', kind: 'usage', subject: '', label: 'AI 用量' });
+          rec.days = merged;
+          rec.updatedAt = nowIso();
+          rec.savedAt = rec.savedAt || rec.updatedAt;
+          if (idx >= 0) arr[idx] = rec; else arr.push(rec);
+          recs[row.child_id] = arr;
+          changed.recs++;
+        }
+        return;
+      }
+
       if (row.deleted_at) {
         if (local && ts(row.deleted_at) > ts(local.updatedAt || local.savedAt)) {
           arr.splice(idx, 1);
@@ -304,6 +323,12 @@
         };
         if (!row) { rInserts.push(fields); return; }
         var newer = row.deleted_at ? ts(row.deleted_at) < localTs : ts(row.updated_at) < localTs;
+        /* 用量记录：只要本地累计的调用次数比云端多，就该推上去（updated_at 先后不代表数据更全） */
+        if (rec.key === 'usage:ai' && window.CnmUsage) {
+          var localCalls = window.CnmUsage.callsOf(rec.days);
+          var cloudCalls = window.CnmUsage.callsOf(((row.payload || {}).days) || {});
+          if (localCalls > cloudCalls) newer = true;
+        }
         if (newer) rUpdates.push({ id: row.id, fields: fields });
       });
     });

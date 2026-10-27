@@ -2143,6 +2143,7 @@
         user: user,
         temperature: 0.8,
         signal: abortCtl.signal,
+        usage: { kind: '出卷', childId: ST.child ? ST.child.id : '' },
         onProgress: function (chars) {
           ST.chars = chars;
           var el = stageEl.querySelector('.rv-gen .rv-hint');
@@ -2381,7 +2382,8 @@
         try {
           text = await LLM.complete({
             model: ST.model, system: PR.SYSTEM, user: user,
-            images: images, temperature: 0.2, signal: abortCtl.signal
+            images: images, temperature: 0.2, signal: abortCtl.signal,
+            usage: { kind: '批改', childId: ST.child ? ST.child.id : '' }
           });
         } catch (e) {
           /* 云端不认图片时，退回文字结果，别让整张卷子判不了 */

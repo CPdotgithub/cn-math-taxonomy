@@ -113,7 +113,7 @@
 
   /* 手动确认的掌握状态也是一条 record，但它不算一次诊断——计数、最近日期都要排掉 */
   function diagRecords(childId) {
-    return CC.recordsOf(childId).filter(function (r) { return r.key !== 'manual:graph'; });
+    return CC.recordsOf(childId).filter(function (r) { return CC.isDiagRecord ? CC.isDiagRecord(r) : r.key !== 'manual:graph'; });
   }
 
   function stats(c) {
@@ -334,6 +334,144 @@
   }
 
 
+  /* ---------------------------------------------------------------- AI 用量
+   * 学生每出一道 AI 题、批一次卷子，都会把这次调用的 token 记下来（assets/usage.js）。
+   * 这里只做展示：总数 / 今天 / 近 7 天 / 按孩子拆。数字来自各通道返回的真实 usage，
+   * 拿不到用量的调用单独标出来，不拿字数估算冒充真数。 */
+  function renderUsage(kids) {
+    var box = document.getElementById('usage');
+    if (!box) return;
+    box.textContent = '';
+    var U = window.CnmUsage;
+    if (!U) return;
+
+    var s;
+    try { s = U.summary(); } catch (e) { return; }
+    var panel = el('section', 'pt-panel us-panel');
+    var head = el('div', 'pt-panel-head');
+    var h2 = el('h2');
+    var ico = el('span', 'pt-ico');
+    ico.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v18M7 7.5h6.4a2.6 2.6 0 0 1 0 5.2H8.6a2.6 2.6 0 0 0 0 5.2H16"/></svg>';
+    h2.appendChild(ico);
+    h2.appendChild(document.createTextNode('AI 用量'));
+    head.appendChild(h2);
+    var pill = el('span', 'pt-pill is-gray', s.total.calls ? (s.days + ' 天有记录') : '还没有记录');
+    head.appendChild(pill);
+    panel.appendChild(head);
+
+    var body = el('div', 'pt-panel-body');
+    if (!s.total.calls) {
+      var empty = el('div', 'pt-empty');
+      empty.appendChild(el('p', null, '还没有 AI 调用。用「AI 现出」做题或者让模型批改解答题之后，这里会统计消耗的 token。'));
+      body.appendChild(empty);
+      panel.appendChild(body);
+      box.appendChild(panel);
+      return;
+    }
+
+    /* 三个数：总计 / 今天 / 近 7 天 */
+    var kpis = el('div', 'pt-kpis us-kpis');
+    [['总消耗（token）', U.fmt(s.total.t), s.total.calls + ' 次调用'],
+     ['今天', U.fmt(s.today.t), s.today.calls ? s.today.calls + ' 次' : '今天还没用'],
+     ['近 7 天', U.fmt(s.week.t), s.week.calls + ' 次']].forEach(function (k) {
+      var c = el('div', 'pt-kpi us-kpi');
+      c.appendChild(el('span', 'pt-kpi-label', k[0]));
+      var v = el('strong', 'pt-kpi-value', k[1]);
+      c.appendChild(v);
+      c.appendChild(el('span', 'pt-kpi-meta', k[2]));
+      kpis.appendChild(c);
+    });
+    body.appendChild(kpis);
+
+    /* 近 7 天小柱状：看得出哪天用得多 */
+    var max = 1;
+    s.series.forEach(function (d) { if (d.t > max) max = d.t; });
+    var chart = el('div', 'us-chart');
+    s.series.forEach(function (d) {
+      var col = el('div', 'us-col' + (d.t ? '' : ' is-empty'));
+      col.title = d.day + '：' + d.calls + ' 次 · ' + d.t + ' token';
+      var bar = el('i');
+      bar.style.height = Math.max(d.t ? 6 : 2, Math.round(d.t * 100 / max)) + '%';
+      col.appendChild(bar);
+      col.appendChild(el('span', 'us-col-label', d.label));
+      chart.appendChild(col);
+    });
+    var chartWrap = el('div', 'us-chart-wrap');
+    chartWrap.appendChild(el('div', 'us-chart-head', '近 7 天'));
+    chartWrap.appendChild(chart);
+    body.appendChild(chartWrap);
+
+    /* 按孩子拆 */
+    var table = el('table', 'pt-table us-table');
+    var thead = el('thead');
+    var htr = el('tr');
+    [['孩子', ''], ['调用', 'num'], ['输入', 'num'], ['输出', 'num'], ['合计 token', 'num']].forEach(function (c) {
+      htr.appendChild(el('th', c[1], c[0]));
+    });
+    thead.appendChild(htr);
+    table.appendChild(thead);
+    var tbody = el('tbody');
+    s.kids.forEach(function (k) {
+      var tr = el('tr');
+      tr.appendChild(el('td', null, k.name));
+      tr.appendChild(el('td', 'num', String(k.all.calls)));
+      tr.appendChild(el('td', 'num', U.fmt(k.all.p)));
+      tr.appendChild(el('td', 'num', U.fmt(k.all.c)));
+      tr.appendChild(el('td', 'num', U.fmt(k.all.t)));
+      tbody.appendChild(tr);
+    });
+    if (s.total.calls > s.kids.reduce(function (n, k) { return n + k.all.calls; }, 0)) {
+      trUnattributed(tbody, s, U);
+    }
+    if (s.kids.length > 1) {
+      var trSum = el('tr', 'us-sum');
+      trSum.appendChild(el('td', null, '合计'));
+      trSum.appendChild(el('td', 'num', String(s.total.calls)));
+      trSum.appendChild(el('td', 'num', U.fmt(s.total.p)));
+      trSum.appendChild(el('td', 'num', U.fmt(s.total.c)));
+      trSum.appendChild(el('td', 'num', U.fmt(s.total.t)));
+      tbody.appendChild(trSum);
+    }
+    table.appendChild(tbody);
+    body.appendChild(table);
+
+    /* 按用途 */
+    var kinds = Object.keys(s.total.kinds || {});
+    if (kinds.length) {
+      var chips = el('div', 'us-kinds');
+      kinds.forEach(function (k) {
+        var v = s.total.kinds[k];
+        var chip = el('span', 'us-chip');
+        chip.appendChild(el('b', null, k));
+        chip.appendChild(document.createTextNode(' ' + v.calls + ' 次 · ' + U.fmt(v.t) + ' token'));
+        chips.appendChild(chip);
+      });
+      body.appendChild(chips);
+    }
+
+    var foot = el('p', 'muted small us-foot');
+    foot.textContent = '数字来自模型接口返回的 usage（输入 + 输出）。' +
+      (s.total.u ? '其中 ' + s.total.u + ' 次没拿到用量（网页版通道常不带），只计了次数。' : '') +
+      '云端通道消耗的是 WorkBuddy 额度，官方 API 通道按 token 计费。';
+    body.appendChild(foot);
+    panel.appendChild(body);
+    box.appendChild(panel);
+  }
+
+  function trUnattributed(tbody, s, U) {
+    var covered = s.kids.reduce(function (n, k) { return n + k.all.calls; }, 0);
+    var rest = s.total.calls - covered;
+    if (rest <= 0) return;
+    var tr = el('tr');
+    tr.appendChild(el('td', null, '（没挂在孩子名下）'));
+    tr.appendChild(el('td', 'num', String(rest)));
+    tr.appendChild(el('td', 'num', '—'));
+    tr.appendChild(el('td', 'num', '—'));
+    tr.appendChild(el('td', 'num', '—'));
+    tbody.appendChild(tr);
+  }
+
+
   function emptyState() {
     var box = el('div', 'pt-empty');
     var ico = el('div', 'pt-empty-ico');
@@ -430,6 +568,7 @@
     listBox.textContent = '';
     renderOverview(kids);
     renderProgress(kids);
+    renderUsage(kids);
     var countEl = document.getElementById('kid-count');
     if (countEl) countEl.textContent = kids.length + ' 个';
     if (!kids.length) {
@@ -462,6 +601,8 @@
   window.addEventListener('cnm-sync-changed', function () { render(); });
   /* 掌握状态确认保存 / 回滚后重算（graph-edit.js 派发） */
   window.addEventListener('cnm-graph-changed', function () { render(); });
+  /* 又调了一次模型：用量面板跟着涨（assets/usage.js 派发） */
+  window.addEventListener('cnm-usage-changed', function () { renderUsage(CC.list()); });
 
   function openGraphEditor(id) {
     if (window.CnmGraphEditor) window.CnmGraphEditor.open(id);

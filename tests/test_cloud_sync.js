@@ -33,7 +33,7 @@ async function boot(opts) {
   const ls = makeLS();
   const calls = [];
   const kids = [{ id: 11, child_id: 'k1', name: '云端名', grade: '五年级', textbook: '人教版', created_at: '2026-10-01T00:00:00.000Z', updated_at: '2026-10-01T00:00:00.000Z', deleted_at: null }];
-  const recs = [];
+  const recs = opts.cloudRecs || [];
 
   function table(name) {
     const api = {
@@ -108,10 +108,11 @@ async function boot(opts) {
   ls.setItem('cnmChildren.v1', JSON.stringify({ v: 1, current: 'k1', children: [
     { id: 'k1', name: '张瑞涵', grade: '五年级', term: '上', textbook: '人教版', createdAt: '2026-10-01T00:00:00.000Z', updatedAt: '2026-10-05T00:00:00.000Z' }
   ] }));
-  ls.setItem('cnmChildren.records.v1', JSON.stringify({ k1: [] }));
+  ls.setItem('cnmChildren.records.v1', JSON.stringify({ k1: opts.localRecs || [] }));
 
   vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'assets', 'children.js'), 'utf8'), ctx, { filename: 'children.js' });
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'assets', 'usage.js'), 'utf8'), ctx, { filename: 'usage.js' });
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'assets', 'cloud-sync.js'), 'utf8'), ctx, { filename: 'cloud-sync.js' });
   await wait(30);
   return { win, ls, calls, CC: win.CnmChildren, Sync: win.CnmSync };
@@ -153,6 +154,33 @@ async function boot(opts) {
     const recPushed = inserts.some(c => (Array.isArray(c.payload) ? c.payload : [c.payload]).some(r => r.rec_key === 'manual:graph'));
     const upd = A.calls.filter(c => c.op === 'update' && c.table === 'cnm_records').some(c => c.payload.rec_key === 'manual:graph');
     assert.ok(recPushed || upd, 'manual:graph 没有同步出去（insert ' + (before2) + ' 次）');
+  });
+
+  /* 用量跨设备合并：云端有另一台设备的计数，本地这台也有自己的，同步后要都在 */
+  const day = (function () { const d = new Date(); const p = n => ('0' + n).slice(-2); return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()); })();
+  const cloudUsage = [{
+    child_id: 'k1', rec_key: 'usage:ai', id: 21,
+    payload: { key: 'usage:ai', kind: 'usage', days: (function () { const o = {}; o[day] = { devices: { 'dev-cloud': { calls: 4, p: 400, c: 500, t: 900, u: 0, kinds: { '出题': { calls: 4, p: 400, c: 500, t: 900, u: 0 } } } } }; return o; })() },
+    saved_at: '2026-10-27T00:00:00.000Z', updated_at: '2026-10-27T00:00:00.000Z', deleted_at: null
+  }];
+  const localUsage = [{
+    key: 'usage:ai', kind: 'usage', savedAt: '2026-10-26T00:00:00.000Z', updatedAt: '2026-10-26T00:00:00.000Z',
+    days: (function () { const o = {}; o[day] = { devices: { 'dev-local': { calls: 2, p: 200, c: 100, t: 300, u: 0, kinds: { '出题': { calls: 2, p: 200, c: 100, t: 300, u: 0 } } } } }; return o; })()
+  }];
+  const C = await boot({ cloudRecs: cloudUsage, localRecs: localUsage });
+  test('用量跨设备合并：两台设备的计数都在，调用数相加', () => {
+    const rec = C.CC.recordsOf('k1').find(r => r.key === 'usage:ai');
+    assert.ok(rec, '本地没有 usage:ai 记录');
+    const devs = rec.days[day].devices;
+    assert.ok(devs['dev-local'], '本地设备的数据丢了');
+    assert.ok(devs['dev-cloud'], '云端另一台设备的数据没合并进来');
+    assert.strictEqual(C.win.CnmUsage.callsOf(rec.days), 6);
+    assert.strictEqual(C.win.CnmUsage.summary().total.t, 1200);
+  });
+
+  test('用量不会被当成诊断记录', () => {
+    const rec = C.CC.recordsOf('k1').find(r => r.key === 'usage:ai');
+    assert.strictEqual(C.CC.isDiagRecord(rec), false);
   });
 
   const B = await boot({ session: false });

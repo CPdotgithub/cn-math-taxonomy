@@ -75,7 +75,7 @@
 
   /* 诊断记录：手动确认的掌握状态也算一条 record，但它不是一次诊断，时间线和「最近」都要排掉 */
   function diagRecords(childId) {
-    return CC.recordsOf(childId).filter(function (r) { return r.key !== 'manual:graph'; });
+    return CC.recordsOf(childId).filter(function (r) { return CC.isDiagRecord ? CC.isDiagRecord(r) : r.key !== 'manual:graph'; });
   }
 
   function renderHead(child, kids) {

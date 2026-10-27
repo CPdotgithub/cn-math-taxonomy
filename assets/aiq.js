@@ -412,7 +412,11 @@
         e.error = { code: 'no_model', message: '没有可用模型' };
         throw e;
       }
-      return withTimeout(L.complete({ model: model, system: system, user: user, temperature: 0.5 }), TIMEOUT);
+      var kid = (window.CnmChildren && window.CnmChildren.current && window.CnmChildren.current()) || null;
+      return withTimeout(L.complete({
+        model: model, system: system, user: user, temperature: 0.5,
+        usage: { kind: '出题', childId: kid ? kid.id : '' }
+      }), TIMEOUT);
     }).then(function (raw) {
       var obj = L.parseJson(raw);
       var q = normQuestion(obj, ctx);

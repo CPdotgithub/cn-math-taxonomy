@@ -145,7 +145,7 @@
     if (!body) return;
     var child = CC.current() || CC.list()[0] || null;
     /* 手动确认的掌握状态也是一条 record，但不是一次诊断，别混进「最近记录」 */
-    var recs = child ? CC.recordsOf(child.id).filter(function (r) { return r.key !== 'manual:graph'; }).slice(-3).reverse() : [];
+    var recs = child ? CC.recordsOf(child.id).filter(function (r) { return CC.isDiagRecord ? CC.isDiagRecord(r) : r.key !== 'manual:graph'; }).slice(-3).reverse() : [];
 
     body.textContent = '';
 

@@ -170,6 +170,7 @@
       if (!payload || payload === '[DONE]') return;
       var j;
       try { j = JSON.parse(payload); } catch (e) { return; }
+      if (j && j.usage && o.onUsage) { try { o.onUsage(j.usage); } catch (e) {} }
       if (j && j.error) {
         var code = j.error.code || 'api_failed';
         if (code === 'invalid_api_key' || code === 'authentication_error') notifyAuth(j.error.message);
@@ -183,6 +184,7 @@
       body: JSON.stringify({
         model: o.model || cfg.apiModel || 'deepseek-chat',
         stream: true,
+        stream_options: { include_usage: true },
         messages: [
           { role: 'system', content: o.system },
           { role: 'user', content: userContent(o) }
@@ -427,6 +429,7 @@
         signal: o.signal
       });
       for await (var chunk of stream) {
+        if (chunk && chunk.usage && o.onUsage) { try { o.onUsage(chunk.usage); } catch (e) {} }
         var ch = chunk && chunk.choices && chunk.choices[0];
         var d = ch && ch.delta;
         if (d && d.content) {
@@ -484,6 +487,7 @@
       if (!payload || payload === '[DONE]') return;
       var j;
       try { j = JSON.parse(payload); } catch (e) { return; }
+      if (j && j.usage && o.onUsage) { try { o.onUsage(j.usage); } catch (e) {} }
       if (j && j.error) {
         var code = j.error.code || 'web_failed';
         if (code === 'token_invalid' || code === 'token_missing') notifyAuth(j.error.message);
@@ -549,23 +553,49 @@
     });
   }
 
-  /* opts: { model, system, user, images, temperature, signal, onProgress }
-     onProgress(chars, reasoningChars) 在每收到一段内容时回调。 */
+  /* 用量记账：各通道的流里带了 usage 就按真值记；没带就记一次「用量未知」的调用，
+     至少让家长知道调了几次，不拿估算冒充真数。 */
+  function logUsage(meta, u, model) {
+    var U = window.CnmUsage;
+    if (!U) return;
+    meta = meta || {};
+    var p = (u && (u.prompt_tokens || u.promptTokens)) || 0;
+    var c = (u && (u.completion_tokens || u.completionTokens)) || 0;
+    var t = (u && (u.total_tokens || u.totalTokens)) || (p + c);
+    try {
+      U.record({
+        kind: meta.kind || '其他', childId: meta.childId || '', model: model || '',
+        prompt: p, completion: c, total: t, unknown: !u
+      });
+    } catch (e) { /* 记账不能影响出题 */ }
+  }
+
+  /* opts: { model, system, user, images, temperature, signal, onProgress, usage }
+     onProgress(chars, reasoningChars) 在每收到一段内容时回调。
+     usage: { kind, childId } —— 只用于统计，不参与请求。 */
   function complete(opts) {
     var o = opts || {};
     var system = o.system || '你是一位严谨的中小学教研员。只输出要求的 JSON。';
     var user = o.user || '';
     if (!user) return Promise.reject(makeErr('request_empty', '题目要求为空'));
+    var seenUsage = null;
     var base = {
       model: o.model, system: system, user: user, images: o.images,
-      temperature: o.temperature, signal: o.signal, onProgress: o.onProgress
+      temperature: o.temperature, signal: o.signal, onProgress: o.onProgress,
+      onUsage: function (u) { if (u) seenUsage = u; }
     };
+    function done(p) {
+      return p.then(function (text) {
+        logUsage(o.usage, seenUsage, o.model);
+        return text;
+      });
+    }
 
-    if (isDirect()) return directComplete(base);
+    if (isDirect()) return done(directComplete(base));
     if (isWeb()) {
       /* 静态托管的地址（预览面板 / 只跑了个文件服务器）会被 POST 501 或 404 掉。
          这不是用户填错了什么——自动找一次能用的转发，找到就悄悄换过去重发一次。 */
-      return webComplete(base).catch(function (e) {
+      return done(webComplete(base).catch(function (e) {
         var code = (e && e.error && e.error.code) || '';
         /* 静态服务器有的回 501/404，有的直接断连（web_offline）——都当成「这个地址不转发」 */
         if (!/^web_http_(404|405|501)$/.test(code) && code !== 'web_offline') throw e;
@@ -574,11 +604,11 @@
           setWeb({ relay: hit.base === sameSiteRelay() ? '' : hit.base, auto: hit.base !== sameSiteRelay() });
           return webComplete(base);
         });
-      });
+      }));
     }
 
     /* 云端不保证支持图片。带了图但被拒时，退回纯文字再批一次，别让整张卷子卡住。 */
-    return cloudComplete(base).catch(function (e) {
+    return done(cloudComplete(base).catch(function (e) {
       var code = (e && e.error && e.error.code) || '';
       if (base.images && base.images.length && /^(request_|model_|gateway_|internal_)/.test(code)) {
         var retry = {};
@@ -592,7 +622,7 @@
         });
       }
       throw e;
-    });
+    }));
   }
 
   /* 网页版自检：顺带把 node/wasm 状态带回来，出问题能一眼看出卡在哪 */

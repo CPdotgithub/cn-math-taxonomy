@@ -600,3 +600,59 @@ body.has-ge { overflow: hidden; }
 
 /* 一条知识点可能有多个标签（状态 + 手动），包一层保住网格列数 */
 .pf-tags { display: flex; align-items: center; gap: 4px; justify-content: flex-end; flex-wrap: wrap; }
+
+/* ============================================================================
+   AI 用量（assets/usage.js + page.js renderUsage）
+   ========================================================================== */
+.us-panel { margin-bottom: 14px; }
+.us-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 14px; }
+.us-kpi { padding: 12px 14px; }
+.us-kpi .pt-kpi-value { font-size: 1.32rem; }
+.us-chart-wrap { margin-bottom: 14px; }
+.us-chart-head { font-size: .78rem; color: var(--pt-ink-3); margin-bottom: 6px; }
+.us-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 88px;
+  padding: 6px 2px 0;
+}
+.us-col {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+.us-col > i {
+  display: block;
+  width: 100%;
+  max-width: 34px;
+  border-radius: 5px 5px 2px 2px;
+  background: linear-gradient(180deg, #6D8CFF, var(--pt-blue));
+  min-height: 2px;
+}
+.us-col.is-empty > i { background: #E4E9F2; }
+.us-col-label { font-size: .7rem; color: var(--pt-ink-3); font-variant-numeric: tabular-nums; }
+.us-table { margin-top: 2px; }
+.us-table td, .us-table th { font-variant-numeric: tabular-nums; }
+.us-kinds { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.us-chip {
+  font-size: .78rem;
+  color: var(--pt-ink-2);
+  background: var(--pt-surface-2);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.us-chip b { color: var(--pt-ink); font-weight: 700; }
+.us-foot { margin: 10px 0 0; }
+
+@media (max-width: 760px) {
+  .us-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .us-kpis .us-kpi:last-child { grid-column: 1 / -1; }
+  .us-chart { height: 72px; gap: 5px; }
+}
+.us-table tr.us-sum td { background: var(--pt-surface-2); font-weight: 700; }

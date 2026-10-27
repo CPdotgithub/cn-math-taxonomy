@@ -235,6 +235,14 @@
     return { ok: true, rev: rev, count: changes.length };
   }
 
+  /* 档案里除了诊断记录，还挂着两类「元记录」：手动确认的掌握状态、AI 用量。
+     它们不是一次诊断，凡是要按「诊断次数 / 时间线」统计的地方都得排掉。 */
+  function isDiagRecord(r) {
+    if (!r) return false;
+    if (r.kind === 'manual-graph' || r.kind === 'usage') return false;
+    return r.key !== 'manual:graph' && r.key !== 'usage:ai';
+  }
+
   function subjectOf(id) {
     var s = String(id || '');
     if (s.indexOf('cne_') === 0) return 'english';
@@ -279,6 +287,7 @@
     add: add, update: update, remove: remove, gradeText: gradeText,
     recordsOf: recordsOf, saveRecord: saveRecord, hasRecord: hasRecord, moveRecord: moveRecord, removeRecord: removeRecord,
     latestStatus: latestStatus,
-    GRAPH_REC: GRAPH_REC, graphOf: graphOf, commitEdits: commitEdits, revertTo: revertTo, subjectOf: subjectOf
+    GRAPH_REC: GRAPH_REC, graphOf: graphOf, commitEdits: commitEdits, revertTo: revertTo, subjectOf: subjectOf,
+    isDiagRecord: isDiagRecord
   };
 })();
