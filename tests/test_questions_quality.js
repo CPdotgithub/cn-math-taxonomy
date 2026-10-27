@@ -125,6 +125,16 @@ ok('q1 答案与 diagnostic_question 一致', primary.filter(function (q) {
 console.log('\n[数学]');
 ok('应用类知识点没有裸算式', math.filter(function (q) { return isDrill(q) && isApplied(T[q.topicId]); }));
 
+/* 可能性 / 概率类知识点：题干必须真的在说「可能」，不能是一道数数题
+   （真实踩坑：「可能性的大小」配「两种球一共多少个？」） */
+ok('可能性类题干提到「可能」', math.filter(function (q) {
+  const t = T[q.topicId];
+  if (!/可能性|概率/.test(t.name || '')) return false;
+  /* 选择题的概念词常常在选项里，题干选项一起看 */
+  const text = String(q.prompt || '') + ' ' + (q.choices || []).map(function (c) { return c.text; }).join(' ');
+  return !/可能|一定|不可能|随机|概率/.test(text);
+}));
+
 console.log('\n[语文]');
 ok('课文类题干带课文名', chinese.filter(function (q) {
   const name = textOf(T[q.topicId]);
