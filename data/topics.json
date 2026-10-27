@@ -635,7 +635,7 @@
     ],
     "diagnostic_question": {
       "question": "破十法是先把十几分成 10 和几。算 13－9，先把 13 分成 10 和几？",
-      "answer": "先把十几分成 10 和几"
+      "answer": "3"
     },
     "external": false,
     "standards": [

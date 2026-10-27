@@ -69,10 +69,11 @@
     "topicId": "cnm_p002",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：5－1＝？",
+    "prompt": "小红有 5 颗糖，小明有 1 颗。小红比小明多几颗？",
     "answer": "4",
     "explanation": "5－1＝4，所以 5 比 1 大。",
-    "verify": "5-1"
+    "verify": "5-1",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p002_q3",
@@ -404,10 +405,11 @@
     "topicId": "cnm_p009",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：10－7＝？",
+    "prompt": "10 和 7 比，10 比 7 多几？",
     "answer": "3",
     "explanation": "10－7＝3。",
-    "verify": "10-7"
+    "verify": "10-7",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p009_q3",
@@ -957,10 +959,11 @@
     "topicId": "cnm_p019",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：9＋1＝？",
+    "prompt": "用凑十法算 9＋4，先把 4 分成 1 和 3。9＋1 得几？",
     "answer": "10",
     "explanation": "9＋1＝10，这是凑十的第一步。",
-    "verify": "9+1"
+    "verify": "9+1",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p019_q3",
@@ -978,10 +981,11 @@
     "topicId": "cnm_p019",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：8＋2＝？",
+    "prompt": "用凑十法算 8＋5，先把 5 分成 2 和 3。8＋2 得几？",
     "answer": "10",
     "explanation": "8＋2＝10。",
-    "verify": "8+2"
+    "verify": "8+2",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p020_q1",
@@ -1543,10 +1547,11 @@
     "topicId": "cnm_p029",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：35－30＝？",
+    "prompt": "35 和 30 比，35 比 30 多几？",
     "answer": "5",
     "explanation": "十位相同，比个位，35－30＝5。",
-    "verify": "35-30"
+    "verify": "35-30",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p029_q3",
@@ -2483,11 +2488,11 @@
     "topicId": "cnm_p047",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有人说 36÷6＝5。用乘法检查：6×5 是多少？和 36 一样吗？先算出 6×5。结果是几？",
+    "prompt": "用乘法检查 36÷6：6×5 得多少？",
     "answer": "30",
     "explanation": "6×5＝30，不等于 36，所以商不是 5。",
     "verify": "6*5",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p047_q4",
@@ -2504,20 +2509,22 @@
     "topicId": "cnm_p048",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：3×6＝？",
+    "prompt": "每排站 3 人，站 6 排，一共多少人？",
     "answer": "18",
     "explanation": "3×6＝18。",
-    "verify": "3*6"
+    "verify": "3*6",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p048_q2",
     "topicId": "cnm_p048",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：4×7＝？",
+    "prompt": "每盒 4 支，7 盒一共多少支？",
     "answer": "28",
     "explanation": "4×7＝28。",
-    "verify": "4*7"
+    "verify": "4*7",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p048_q3",
@@ -2674,110 +2681,121 @@
     "topicId": "cnm_p050",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "13 颗糖，每 5 颗装一袋。先写商，再写余数。商和余数：13÷5",
+    "prompt": "13 颗糖，每 5 颗装一袋。13÷5 的商和余数各是多少？",
     "answer": "2，3",
     "explanation": "13÷5＝2（袋）余 3，余数 3 比除数 5 小。",
-    "verify": "(13//5, 13%5)"
+    "verify": "(13//5, 13%5)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p050_q3",
     "topicId": "cnm_p050",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "17 本本子，每 3 本捆一捆。先写商，再写余数。商和余数：17÷3",
+    "prompt": "17 本本子，每 3 本捆一捆。17÷3 的商和余数各是多少？",
     "answer": "5，2",
     "explanation": "17÷3＝5 余 2。",
-    "verify": "(17//3, 17%3)"
+    "verify": "(17//3, 17%3)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p050_q4",
     "topicId": "cnm_p050",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "先写商，再写余数。商和余数：20÷6",
+    "prompt": "20÷6 的商和余数各是多少？",
     "answer": "3，2",
     "explanation": "20÷6＝3 余 2。",
-    "verify": "(20//6, 20%6)"
+    "verify": "(20//6, 20%6)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p051_q1",
     "topicId": "cnm_p051",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "先写商，再写余数。商和余数：14÷4",
+    "prompt": "14÷4 的商和余数各是多少？",
     "answer": "3，2",
     "explanation": "4×3＝12，14－12＝2，商 3 余 2。",
-    "verify": "(14//4, 14%4)"
+    "verify": "(14//4, 14%4)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p051_q2",
     "topicId": "cnm_p051",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "先写商，再写余数。商和余数：25÷7",
+    "prompt": "25÷7 的商和余数各是多少？",
     "answer": "3，4",
     "explanation": "7×3＝21，25－21＝4，商 3 余 4。",
-    "verify": "(25//7, 25%7)"
+    "verify": "(25//7, 25%7)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p051_q3",
     "topicId": "cnm_p051",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "30 个苹果，每袋装 8 个。先写商，再写余数。商和余数：30÷8",
+    "prompt": "30 个苹果，每袋装 8 个。30÷8 的商和余数各是多少？",
     "answer": "3，6",
     "explanation": "8×3＝24，30－24＝6，商 3 余 6。",
-    "verify": "(30//8, 30%8)"
+    "verify": "(30//8, 30%8)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p051_q4",
     "topicId": "cnm_p051",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "先写商，再写余数。商和余数：45÷6",
+    "prompt": "45÷6 的商和余数各是多少？",
     "answer": "7，3",
     "explanation": "6×7＝42，45－42＝3，商 7 余 3。",
-    "verify": "(45//6, 45%6)"
+    "verify": "(45//6, 45%6)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p052_q1",
     "topicId": "cnm_p052",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "23 个皮球，每 5 个装一袋。先写商，再写余数。商和余数：23÷5",
+    "prompt": "23 个皮球，每 5 个装一袋。23÷5 的商和余数各是多少？",
     "answer": "4，3",
     "explanation": "23÷5＝4 余 3，能装 4 袋，剩 3 个。",
-    "verify": "(23//5, 23%5)"
+    "verify": "(23//5, 23%5)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p052_q2",
     "topicId": "cnm_p052",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "先写商，再写余数。商和余数：19÷4",
+    "prompt": "19÷4 的商和余数各是多少？",
     "answer": "4，3",
     "explanation": "19÷4＝4 余 3。",
-    "verify": "(19//4, 19%4)"
+    "verify": "(19//4, 19%4)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p052_q3",
     "topicId": "cnm_p052",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "28 人租船，每条船坐 6 人。先写商，再写余数。商和余数：28÷6",
+    "prompt": "28 人租船，每条船坐 6 人。28÷6 的商和余数各是多少？",
     "answer": "4，4",
     "explanation": "28÷6＝4 余 4。",
-    "verify": "(28//6, 28%6)"
+    "verify": "(28//6, 28%6)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p052_q4",
     "topicId": "cnm_p052",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "先写商，再写余数。商和余数：50÷8",
+    "prompt": "50÷8 的商和余数各是多少？",
     "answer": "6，2",
     "explanation": "50÷8＝6 余 2。",
-    "verify": "(50//8, 50%8)"
+    "verify": "(50//8, 50%8)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p053_q1",
@@ -2835,10 +2853,11 @@
     "topicId": "cnm_p054",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：3200－2800＝？",
+    "prompt": "3200 和 2800 比，3200 比 2800 多几？",
     "answer": "400",
     "explanation": "3200－2800＝400。",
-    "verify": "3200-2800"
+    "verify": "3200-2800",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p054_q3",
@@ -3089,20 +3108,22 @@
     "topicId": "cnm_p059",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：20＋15－8＝？",
+    "prompt": "车上原有 20 人，上来 15 人，又下去 8 人。现在车上有多少人？",
     "answer": "27",
     "explanation": "先 20＋15＝35，再 35－8＝27。",
-    "verify": "20+15-8"
+    "verify": "20+15-8",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p059_q2",
     "topicId": "cnm_p059",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：40－12－10＝？",
+    "prompt": "有 40 元，买笔用 12 元，买本用 10 元。还剩多少元？",
     "answer": "18",
     "explanation": "40－12＝28，28－10＝18。",
-    "verify": "40-12-10"
+    "verify": "40-12-10",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p059_q3",
@@ -3422,11 +3443,11 @@
     "topicId": "cnm_p066",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一件衣服 198 元，一顶帽子 102 元。大约一共多少元？把它们看成 200 元和 100 元来算。结果是几？",
+    "prompt": "一件衣服 198 元，一顶帽子 102 元。把它们看成 200 元和 100 元来估算，大约一共多少元？",
     "answer": "300",
     "explanation": "198 接近 200，102 接近 100，大约 300 元。",
     "verify": "200+100",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p066_q4",
@@ -4056,20 +4077,22 @@
     "topicId": "cnm_p079",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：1÷2＝？（用小数作答）",
+    "prompt": "把一张纸平均分成 2 份，其中 1 份是这张纸的几分之几？用小数表示。",
     "answer": "0.5",
     "explanation": "把 1 个饼平均分成 2 份，每份是 1/2。",
-    "verify": "1/2"
+    "verify": "1/2",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p079_q3",
     "topicId": "cnm_p079",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：1÷4＝？（用小数作答）",
+    "prompt": "把一根绳子平均分成 4 份，其中 1 份是这根绳子的几分之几？用小数表示。",
     "answer": "0.25",
     "explanation": "平均分成 4 份，每份是 1/4。",
-    "verify": "1/4"
+    "verify": "1/4",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p079_q4",
@@ -4277,20 +4300,22 @@
     "topicId": "cnm_p084",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：96÷3＝？",
+    "prompt": "96 个苹果平均放进 3 筐，每筐多少个？",
     "answer": "32",
     "explanation": "96÷3＝32。",
-    "verify": "96/3"
+    "verify": "96/3",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p084_q2",
     "topicId": "cnm_p084",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：75÷5＝？",
+    "prompt": "75 元买 5 本同样的本子，每本多少元？",
     "answer": "15",
     "explanation": "75÷5＝15。",
-    "verify": "75/5"
+    "verify": "75/5",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p084_q3",
@@ -4308,10 +4333,11 @@
     "topicId": "cnm_p084",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：200÷8＝？",
+    "prompt": "200 本本子平均分给 8 个班，每班多少本？",
     "answer": "25",
     "explanation": "200÷8＝25。",
-    "verify": "200/8"
+    "verify": "200/8",
+    "fixed_from_source": "应用类知识点里的无情境算式，改成一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p085_q1",
@@ -4329,10 +4355,11 @@
     "topicId": "cnm_p085",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：18－11＝？",
+    "prompt": "统计表里男生 18 人、女生 11 人。男生比女生多几人？",
     "answer": "7",
     "explanation": "喜欢跳绳的 18 人，喜欢跑步的 11 人，多 7 人。",
-    "verify": "18-11"
+    "verify": "18-11",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p085_q3",
@@ -4402,20 +4429,22 @@
     "topicId": "cnm_p087",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：16×12＝？",
+    "prompt": "每盒 16 个，12 盒一共多少个？",
     "answer": "192",
     "explanation": "16×12＝192。",
-    "verify": "16*12"
+    "verify": "16*12",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p087_q2",
     "topicId": "cnm_p087",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：25×14＝？",
+    "prompt": "每排 25 人，14 排一共多少人？",
     "answer": "350",
     "explanation": "25×14＝350。",
-    "verify": "25*14"
+    "verify": "25*14",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p087_q3",
@@ -4433,10 +4462,11 @@
     "topicId": "cnm_p087",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：18×15＝？",
+    "prompt": "每箱 18 瓶，15 箱一共多少瓶？",
     "answer": "270",
     "explanation": "18×15＝270。",
-    "verify": "18*15"
+    "verify": "18*15",
+    "fixed_from_source": "应用类知识点里的无情境算式，改成一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p088_q1",
@@ -4676,21 +4706,22 @@
     "topicId": "cnm_p092",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "火车 16 时开。16 时是下午几时？用 16－12 来算。结果是几？",
+    "prompt": "火车 16 时开。16 时是下午几时？",
     "answer": "4",
     "explanation": "16－12＝4，是下午 4 时。",
     "verify": "16-12",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p092_q4",
     "topicId": "cnm_p092",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：12＋6＝？",
+    "prompt": "中午 12 时再过 6 小时是几时？用 24 时记时法表示。",
     "answer": "18",
     "explanation": "下午 6 时是 18 时。",
-    "verify": "12+6"
+    "verify": "12+6",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p093_q1",
@@ -4708,10 +4739,11 @@
     "topicId": "cnm_p093",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：0.8－0.3＝？（用小数作答）",
+    "prompt": "一支笔 0.8 元，一块橡皮 0.3 元。笔比橡皮贵多少元？",
     "answer": "0.5",
     "explanation": "0.8－0.3＝0.5。",
-    "verify": "0.8-0.3"
+    "verify": "0.8-0.3",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p093_q3",
@@ -4843,10 +4875,11 @@
     "topicId": "cnm_p096",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：10000＋2000＝？",
+    "prompt": "一万再加二千，一共是多少？",
     "answer": "12000",
     "explanation": "1 万加 2 千是 12000。",
-    "verify": "10000+2000"
+    "verify": "10000+2000",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p096_q3",
@@ -4885,10 +4918,11 @@
     "topicId": "cnm_p097",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：48000÷10000＝？（用小数作答）",
+    "prompt": "48000 人改写成用万作单位，是多少万？",
     "answer": "4.8",
     "explanation": "48000 是 4.8 万。",
-    "verify": "48000/10000"
+    "verify": "48000/10000",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p097_q3",
@@ -4906,10 +4940,11 @@
     "topicId": "cnm_p097",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：3500÷1000＝？（用小数作答）",
+    "prompt": "3500 里面有几个 1000？",
     "answer": "3.5",
     "explanation": "精确到千位时，3500 本身就是 3.5 个千。",
-    "verify": "3500/1000"
+    "verify": "3500/1000",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p098_q1",
@@ -5432,10 +5467,11 @@
     "topicId": "cnm_p107",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：120÷40＝？",
+    "prompt": "120÷40，被除数和除数都除以 10，商是几？",
     "answer": "3",
     "explanation": "120÷40＝3。",
-    "verify": "120/40"
+    "verify": "120/40",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p108_q1",
@@ -5466,10 +5502,11 @@
     "topicId": "cnm_p108",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：12－7＝？",
+    "prompt": "条形统计图里，12 人比 7 人多几人？",
     "answer": "5",
     "explanation": "最高的直条是 12，另一条是 7，相差 5。",
-    "verify": "12-7"
+    "verify": "12-7",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p108_q3",
@@ -5487,11 +5524,11 @@
     "topicId": "cnm_p108",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "四天借书本数是 8、6、10、5。哪两天合起来是 14 本？先算 8＋6。结果是几？",
+    "prompt": "四天借书本数是 8、6、10、5。8 和 6 合起来是多少本？",
     "answer": "14",
     "explanation": "8＋6＝14，是第一天和第二天；其他两天合起来都不是 14 本。",
     "verify": "8+6",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p110_q1",
@@ -5941,10 +5978,11 @@
     "topicId": "cnm_p118",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：1.0－0.6＝？（用小数作答）",
+    "prompt": "1 元比 0.6 元多多少元？",
     "answer": "0.4",
     "explanation": "1.0－0.6＝0.4。",
-    "verify": "1.0-0.6"
+    "verify": "1.0-0.6",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p118_q3",
@@ -6001,10 +6039,11 @@
     "topicId": "cnm_p119",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：1.6－1.2＝？（用小数作答）",
+    "prompt": "1.6 比 1.2 多多少？",
     "answer": "0.4",
     "explanation": "整数部分都是 1，十分位 6 比 2 大，相差 0.4。",
-    "verify": "1.6-1.2"
+    "verify": "1.6-1.2",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p119_q3",
@@ -6061,10 +6100,11 @@
     "topicId": "cnm_p120",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：35÷10＝？（用小数作答）",
+    "prompt": "35 的小数点向左移一位，得多少？",
     "answer": "3.5",
     "explanation": "35 的小数点向左移一位是 3.5。",
-    "verify": "35/10"
+    "verify": "35/10",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p120_q3",
@@ -6267,10 +6307,11 @@
     "topicId": "cnm_p123",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：3＋4＝？",
+    "prompt": "三角形两条边分别长 3 厘米、4 厘米，第三条边要小于多少厘米？",
     "answer": "7",
     "explanation": "3 和 4 的和是 7，比第三边 5 大，可以围成。",
-    "verify": "3+4"
+    "verify": "3+4",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p123_q3",
@@ -6448,20 +6489,22 @@
     "topicId": "cnm_p126",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：10－3.6＝？（用小数作答）",
+    "prompt": "带 10 元买一枝 3.6 元的笔，还剩多少元？",
     "answer": "6.4",
     "explanation": "10 元买东西用去 3.6 元，找回 6.4 元。",
-    "verify": "10-3.6"
+    "verify": "10-3.6",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p126_q2",
     "topicId": "cnm_p126",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：2.5＋1.5＝？（用小数作答）",
+    "prompt": "一块橡皮 2.5 元，一把尺子 1.5 元。一共多少元？",
     "answer": "4",
     "explanation": "2.5＋1.5＝4。",
-    "verify": "2.5+1.5"
+    "verify": "2.5+1.5",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p126_q3",
@@ -6719,10 +6762,11 @@
     "topicId": "cnm_p130",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：9＋15＝？",
+    "prompt": "条形统计图里，9 人和 15 人合起来是几人？",
     "answer": "24",
     "explanation": "两组分别是 9 和 15，合起来是 24。",
-    "verify": "9+15"
+    "verify": "9+15",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p130_q3",
@@ -6949,20 +6993,22 @@
     "topicId": "cnm_p134",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：2.5×6＝？（用小数作答）",
+    "prompt": "每千克 2.5 元，买 6 千克一共多少元？",
     "answer": "15",
     "explanation": "每千克 2.5 元，6 千克是 15 元。",
-    "verify": "2.5*6"
+    "verify": "2.5*6",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p134_q2",
     "topicId": "cnm_p134",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：0.8×10＝？（用小数作答）",
+    "prompt": "每支 0.8 元，买 10 支一共多少元？",
     "answer": "8",
     "explanation": "0.8×10＝8。",
-    "verify": "0.8*10"
+    "verify": "0.8*10",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p134_q3",
@@ -7019,21 +7065,22 @@
     "topicId": "cnm_p135",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "3.84 保留一位小数，百分位是 4，不向十分位进 1。保留到十分位可以先算 38÷10。结果是几？",
+    "prompt": "3.84 保留一位小数是多少？",
     "answer": "3.8",
     "explanation": "38÷10＝3.8。",
     "verify": "38/10",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p135_q3",
     "topicId": "cnm_p135",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：0.8×0.8＝？（用小数作答）",
+    "prompt": "0.8×0.8 的积是多少？",
     "answer": "0.64",
     "explanation": "0.8×0.8＝0.64。",
-    "verify": "0.8*0.8"
+    "verify": "0.8*0.8",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p135_q4",
@@ -7259,20 +7306,22 @@
     "topicId": "cnm_p139",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：7.2÷8＝？（用小数作答）",
+    "prompt": "7.2 升水平均装进 8 个瓶子，每瓶装多少升？",
     "answer": "0.9",
     "explanation": "7.2÷8＝0.9。",
-    "verify": "7.2/8"
+    "verify": "7.2/8",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p139_q2",
     "topicId": "cnm_p139",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：4.5÷0.5＝？（用小数作答）",
+    "prompt": "4.5 米长的绳子，每 0.5 米剪一段，能剪几段？",
     "answer": "9",
     "explanation": "4.5÷0.5＝9。",
-    "verify": "4.5/0.5"
+    "verify": "4.5/0.5",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p139_q3",
@@ -8517,10 +8566,11 @@
     "topicId": "cnm_p161",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：3×3×6＝？",
+    "prompt": "棱长 3 厘米的正方体，表面积是多少平方厘米？",
     "answer": "54",
     "explanation": "正方体一个面 3×3＝9，六个面是 54。",
-    "verify": "3*3*6"
+    "verify": "3*3*6",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p161_q3",
@@ -8786,10 +8836,11 @@
     "topicId": "cnm_p166",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "先写商，再写余数。商和余数：9÷4",
+    "prompt": "9÷4 的商和余数各是多少？",
     "answer": "2，1",
     "explanation": "9÷4＝2 余 1，所以 9/4＝2 又 1/4。",
-    "verify": "(9//4, 9%4)"
+    "verify": "(9//4, 9%4)",
+    "fixed_from_source": "题干末尾原来挂着一个裸算式，补成完整的问句（2026-10-27）"
   },
   {
     "id": "cnm_p167_q2",
@@ -8828,10 +8879,11 @@
     "topicId": "cnm_p168",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：4÷10＝？",
+    "prompt": "4/10 约成最简分数是多少？",
     "answer": "2/5",
     "explanation": "4/10＝2/5。",
-    "verify": "4/10"
+    "verify": "4/10",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p168_q3",
@@ -8898,11 +8950,11 @@
     "topicId": "cnm_p169",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一条绳子用去 3/8，另一条用去 5/8。谁用得多？先算差。结果是几？",
+    "prompt": "一条绳子用去 3/8，另一条用去 5/8。两条绳子用去的相差多少？",
     "answer": "1/4",
     "explanation": "5/8－3/8＝2/8＝1/4。",
     "verify": "5/8-3/8",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p169_q4",
@@ -8948,10 +9000,11 @@
     "topicId": "cnm_p170",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：25÷100＝？（用小数作答）",
+    "prompt": "25/100 化成小数是多少？",
     "answer": "0.25",
     "explanation": "25/100＝0.25。",
-    "verify": "25/100"
+    "verify": "25/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p170_q3",
@@ -8969,10 +9022,11 @@
     "topicId": "cnm_p170",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：4÷10＝？（用小数作答）",
+    "prompt": "4/10 化成小数是多少？",
     "answer": "0.4",
     "explanation": "4/10＝0.4。",
-    "verify": "4/10"
+    "verify": "4/10",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p171_q1",
@@ -9416,20 +9470,22 @@
     "topicId": "cnm_p179",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：20×1/4＝？",
+    "prompt": "20 米的 1/4 是多少米？",
     "answer": "5",
     "explanation": "20 的 1/4 是 5。",
-    "verify": "20*1/4"
+    "verify": "20*1/4",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p179_q2",
     "topicId": "cnm_p179",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：18×2/3＝？",
+    "prompt": "18 个苹果的 2/3 是多少个？",
     "answer": "12",
     "explanation": "18 的 2/3 是 12。",
-    "verify": "18*2/3"
+    "verify": "18*2/3",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p179_q3",
@@ -9670,20 +9726,22 @@
     "topicId": "cnm_p184",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：12÷（3/4）＝？",
+    "prompt": "一个数的 3/4 是 12，这个数是多少？",
     "answer": "16",
     "explanation": "一个数的 3/4 是 12，这个数是 12÷3/4＝16。",
-    "verify": "12/(3/4)"
+    "verify": "12/(3/4)",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p184_q2",
     "topicId": "cnm_p184",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：6÷（2/5）＝？",
+    "prompt": "一个数的 2/5 是 6，这个数是多少？",
     "answer": "15",
     "explanation": "6÷2/5＝15。",
-    "verify": "6/(2/5)"
+    "verify": "6/(2/5)",
+    "fixed_from_source": "这个知识点是「解决问题」，原来却是裸算式，改成同数的一步应用题（2026-10-27）"
   },
   {
     "id": "cnm_p184_q3",
@@ -9870,21 +9928,22 @@
     "topicId": "cnm_p187",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：40÷（1＋3）＝？",
+    "prompt": "40 按 1:3 分给两人，先拿 1 份的那个人得多少？",
     "answer": "10",
     "explanation": "一共 4 份，每份 10。",
-    "verify": "40/(1+3)"
+    "verify": "40/(1+3)",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p187_q3",
     "topicId": "cnm_p187",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "56 本本子按 3：4 分给两个班。先求每份多少本。结果是几？",
+    "prompt": "56 本本子按 3:4 分给两个班，每份是多少本？",
     "answer": "8",
     "explanation": "56÷7＝8，每份 8 本。",
     "verify": "56/(3+4)",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p187_q4",
@@ -10018,31 +10077,33 @@
     "topicId": "cnm_p189",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：10×314/100＝？（用小数作答）",
+    "prompt": "直径 10 厘米的圆，周长是多少厘米？圆周率按 314/100。",
     "answer": "31.4",
     "explanation": "直径 10 厘米，周长约 31.4 厘米。",
-    "verify": "10*314/100"
+    "verify": "10*314/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p189_q3",
     "topicId": "cnm_p189",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "直径 2 厘米的圆，周长大约多少厘米？圆周率按 314/100。结果是几？",
+    "prompt": "直径 2 厘米的圆，周长大约多少厘米？圆周率按 314/100。",
     "answer": "6.28",
     "explanation": "2×3.14＝6.28。",
     "verify": "2*314/100",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p189_q4",
     "topicId": "cnm_p189",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：5×314÷100＝？（用小数作答）",
+    "prompt": "直径 5 厘米的圆，周长是多少厘米？圆周率按 314/100。",
     "answer": "15.7",
     "explanation": "直径 5 厘米，周长约 15.7 厘米。",
-    "verify": "5*314/100"
+    "verify": "5*314/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p190_q1",
@@ -10080,10 +10141,11 @@
     "topicId": "cnm_p190",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：2×314×1÷100＝？（用小数作答）",
+    "prompt": "半径 1 厘米的圆，周长是多少厘米？圆周率按 314/100。",
     "answer": "6.28",
     "explanation": "半径 1 厘米，周长是 6.28 厘米。",
-    "verify": "2*314*1/100"
+    "verify": "2*314*1/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p191_q1",
@@ -10100,31 +10162,33 @@
     "topicId": "cnm_p191",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：314/100×10＝？（用小数作答）",
+    "prompt": "圆形桌面的直径是 10 分米，围一圈花边要多少分米？圆周率按 314/100。",
     "answer": "31.4",
     "explanation": "直径 10 厘米，一圈约 31.4 厘米。",
-    "verify": "314/100*10"
+    "verify": "314/100*10",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p191_q3",
     "topicId": "cnm_p191",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "圆形花坛直径 20 米，围一圈篱笆大约多少米？圆周率按 314/100。结果是几？",
+    "prompt": "圆形花坛直径 20 米，围一圈篱笆大约多少米？圆周率按 314/100。",
     "answer": "62.8",
     "explanation": "20×3.14＝62.8。",
     "verify": "20*314/100",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p191_q4",
     "topicId": "cnm_p191",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：4×314÷100＝？（用小数作答）",
+    "prompt": "一棵树的树干直径是 4 分米，绕一圈要多少分米？圆周率按 314/100。",
     "answer": "12.56",
     "explanation": "直径 4 厘米，周长 12.56 厘米。",
-    "verify": "4*314/100"
+    "verify": "4*314/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p192_q1",
@@ -10162,10 +10226,11 @@
     "topicId": "cnm_p192",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：314×1×1÷100＝？（用小数作答）",
+    "prompt": "半径 1 厘米的圆，面积是多少平方厘米？圆周率按 314/100。",
     "answer": "3.14",
     "explanation": "半径 1 厘米，面积 3.14 平方厘米。",
-    "verify": "314*1*1/100"
+    "verify": "314*1*1/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p193_q1",
@@ -10183,22 +10248,23 @@
     "topicId": "cnm_p193",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：90÷360＝？（用小数作答）",
+    "prompt": "圆心角 90° 的扇形，占整个圆的几分之几？用小数表示。",
     "answer": "0.25",
     "explanation": "圆心角 90 度是整圆 360 度的 1/4。",
-    "verify": "90/360"
+    "verify": "90/360",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p193_q3",
     "topicId": "cnm_p193",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "圆心角 180 度，是整圆的几分之几？先算 180÷360。结果是几？",
+    "prompt": "圆心角 180° 的扇形，占整个圆的几分之几？用小数表示。",
     "answer": "0.5",
     "explanation": "180÷360＝0.5，是整圆的一半。",
     "verify": "180/360",
     "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 164 258\"><path d=\"M 36 130 L 36 30 A 100 100 0 0 1 36 230 Z\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><path d=\"M 36 130 L 36 30 A 100 100 0 0 1 36 230 Z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 36 102 A 28 28 0 0 1 36 158\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"82\" y=\"135.6\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">180°</text></svg>",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p193_q4",
@@ -10315,10 +10381,11 @@
     "topicId": "cnm_p195",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：0.4×100＝？（用小数作答）",
+    "prompt": "把小数 0.4 化成百分数，是多少？",
     "answer": "40",
     "explanation": "0.4＝40%。这里算出百分号前面的 40。",
-    "verify": "0.4*100"
+    "verify": "0.4*100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p195_q3",
@@ -10336,10 +10403,11 @@
     "topicId": "cnm_p195",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：8÷100＝？（用小数作答）",
+    "prompt": "把百分数 8% 化成小数，是多少？",
     "answer": "0.08",
     "explanation": "8%＝0.08。",
-    "verify": "8/100"
+    "verify": "8/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p196_q1",
@@ -10415,21 +10483,22 @@
     "topicId": "cnm_p197",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：15÷50×100＝？",
+    "prompt": "50 人里有 15 人优秀，优秀率是百分之几？",
     "answer": "30",
     "explanation": "15 是 50 的 30%。",
-    "verify": "15/50*100"
+    "verify": "15/50*100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p197_q3",
     "topicId": "cnm_p197",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "40 人里有 10 人达标。达标的占百分之多少？先算 10÷40×100。结果是几？",
+    "prompt": "40 人里有 10 人达标。达标率是百分之几？",
     "answer": "25",
     "explanation": "10÷40×100＝25，是 25%。",
     "verify": "10/40*100",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p197_q4",
@@ -10475,10 +10544,11 @@
     "topicId": "cnm_p198",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：30÷0.5＝？（用小数作答）",
+    "prompt": "一个数的 50% 是 30，这个数是多少？",
     "answer": "60",
     "explanation": "一个数的 50% 是 30，这个数是 60。",
-    "verify": "30/0.5"
+    "verify": "30/0.5",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p198_q3",
@@ -10979,10 +11049,11 @@
     "topicId": "cnm_p207",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：314×3×3×2÷100＝？（用小数作答）",
+    "prompt": "底面半径 3 厘米、高 2 厘米的圆柱，体积是多少立方厘米？圆周率按 314/100。",
     "answer": "56.52",
     "explanation": "半径 3、高 2，体积 56.52 立方厘米。",
-    "verify": "314*3*3*2/100"
+    "verify": "314*3*3*2/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p208_q1",
@@ -11000,10 +11071,11 @@
     "topicId": "cnm_p208",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：25.12＋31.4＝？（用小数作答）",
+    "prompt": "圆柱的侧面积是 25.12 平方厘米，两个底面一共 31.4 平方厘米。表面积是多少平方厘米？",
     "answer": "56.52",
     "explanation": "底面积和 25.12，侧面积 31.4，表面积 56.52。",
-    "verify": "25.12+31.4"
+    "verify": "25.12+31.4",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p208_q3",
@@ -11075,10 +11147,11 @@
     "topicId": "cnm_p209",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：18.84÷3＝？（用小数作答）",
+    "prompt": "一个圆柱的体积是 18.84 立方厘米，和它等底等高的圆锥体积是多少？",
     "answer": "6.28",
     "explanation": "等底等高圆柱体积 18.84，圆锥是它的三分之一，18.84÷3＝6.28。",
-    "verify": "18.84/3"
+    "verify": "18.84/3",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p209_q3",
@@ -11097,10 +11170,11 @@
     "topicId": "cnm_p209",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算：314×3×3×6÷3÷100＝？（用小数作答）",
+    "prompt": "底面半径 3 厘米、高 6 厘米的圆锥，体积是多少立方厘米？圆周率按 314/100。",
     "answer": "56.52",
     "explanation": "半径 3、高 6 的圆锥体积是 56.52。",
-    "verify": "314*3*3*6/3/100"
+    "verify": "314*3*3*6/3/100",
+    "fixed_from_source": "原来是一句跟考点无关的裸算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p210_q1",
@@ -11201,11 +11275,11 @@
     "topicId": "cnm_p211",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "6：x＝2：5。先算 6×5÷2。结果是几？",
+    "prompt": "在 6:x＝2:5 中，x 是多少？",
     "answer": "15",
     "explanation": "2x＝30，x＝15。",
     "verify": "6*5/2",
-    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
+    "fixed_from_source": "去掉「先算…结果是几」的脚手架，问成一句话（2026-10-27）"
   },
   {
     "id": "cnm_p211_q4",
