@@ -364,6 +364,7 @@ body.has-rail main#root.rv {
   cursor: pointer;
 }
 .rv-mini:hover { text-decoration: underline; }
+.rv-mini-inline { align-self: flex-start; }
 
 /* ------------------------------------------------------------------ 高级设置 */
 
@@ -1147,3 +1148,55 @@ body.has-modal { overflow: hidden; }
 /* 凭据粘贴框：够高、等宽，能看到整段 curl */
 .rv-curl { min-height: 132px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; line-height: 1.55; }
 .rv-curl-hint { margin: 6px 0 0; }
+
+/* 设置弹窗：通道 / 凭据 / 模型 / 联网素材
+   注意：类名独立成 rv-set-*，不要复用 .rv-modal（那是凭据过期弹窗的整屏遮罩） */
+.rv-set-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 16px 56px;
+  background: rgba(16, 24, 40, .46);
+  backdrop-filter: blur(2px);
+  overflow: auto;
+}
+.rv-set-card {
+  width: min(560px, 100%);
+  margin: auto;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgba(16, 24, 40, .28);
+  overflow: hidden;
+}
+.rv-set-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--pt-line-soft);
+}
+.rv-set-head h2 { margin: 0; font-size: 1rem; font-weight: 700; color: var(--pt-ink); }
+.rv-set-x {
+  flex: none;
+  height: 30px;
+  padding: 0 12px;
+  font-size: .82rem;
+  color: var(--pt-ink-2);
+  background: var(--pt-surface-2);
+  border: 1px solid var(--pt-line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.rv-set-x:hover { color: var(--pt-ink); }
+.rv-set-body { display: flex; flex-direction: column; gap: 14px; padding: 16px 18px 20px; }
+.rv-set-sec { display: flex; flex-direction: column; gap: 10px; }
+.rv-set-body .rv-field { padding-top: 0; }
+
+/* 出题设置里的通道摘要 */
+.rv-chan-sum { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.rv-chan-note { font-size: .78rem; color: var(--pt-ink-3); }
+.rv-chan-open { margin-left: auto; }

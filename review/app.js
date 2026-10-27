@@ -386,7 +386,8 @@
       meta.appendChild(pill('未建档', 'amber'));
       meta.appendChild(pill(PR.SUBJECT_NAME[ST.subject] || '数学', 'gray'));
     }
-    if (LLM.isWeb()) meta.appendChild(pill('网页版', 'gray'));
+    if (LLM.isDirect()) meta.appendChild(pill('官方 API', 'gray'));
+    else if (LLM.isWeb()) meta.appendChild(pill('网页版', 'gray'));
     headEl.appendChild(h('div', { class: 'rv-head' }, [
       h('div', { class: 'rv-head-copy' }, [
         h('h1', { text: '复习与考察' }),
@@ -718,6 +719,57 @@
     hit.forEach(function (t) { box.appendChild(topicRow(t, null, true)); });
   }
 
+  /* 设置：通道 / 凭据 / 模型 / 联网素材。出题设置里只留一个入口 */
+  var refreshSettings = null;
+
+  function openSettings() {
+    var mask = h('div', { class: 'rv-set-mask' });
+    function close() {
+      mask.remove();
+      refreshSettings = null;
+      document.body.classList.remove('has-modal');
+      document.removeEventListener('keydown', esc);
+    }
+    var card = h('div', { class: 'rv-set-card', role: 'dialog', 'aria-modal': 'true', 'aria-label': '设置' });
+    card.appendChild(h('div', { class: 'rv-set-head' }, [
+      h('h2', { text: '设置' }),
+      h('button', { type: 'button', class: 'rv-set-x', text: '关闭', onclick: close })
+    ]));
+    var body = h('div', { class: 'rv-set-body' });
+
+    /* 通道一换，凭据区就得跟着换（云端是模型列表，官方 API 是 Key） */
+    function fill(el) {
+      clear(el);
+      el.appendChild(channelField());
+      var cred = h('div', { class: 'rv-set-sec' });
+      if (LLM.isDirect()) cred.appendChild(directCfgField());
+      else if (LLM.isWeb()) cred.appendChild(webCfgField());
+      else {
+        cred.appendChild(modelField());
+        cred.appendChild(webField());
+      }
+      el.appendChild(cred);
+    }
+
+    fill(body);
+    refreshSettings = function () {
+      var b = card.querySelector('.rv-set-body');
+      if (!b) return;
+      fill(b);
+      var key = b.querySelector('.rv-cfg-key, input[type=password]');
+      if (key) key.focus({ preventScroll: true });
+    };
+    card.appendChild(body);
+    mask.appendChild(card);
+    mask.addEventListener('click', function (e) { if (e.target === mask) close(); });
+    function esc(e) { if (e.key === 'Escape') close(); }
+    document.addEventListener('keydown', esc);
+    document.body.classList.add('has-modal');
+    document.body.appendChild(mask);
+    var q = card.querySelector('.rv-curl');
+    if (q) q.focus({ preventScroll: true });
+  }
+
   function settingPanel() {
     var p = h('div', { class: 'pt-panel rv-panel' });
     p.appendChild(h('div', { class: 'pt-panel-head' }, [h('h2', { text: '出题设置' })]));
@@ -741,32 +793,22 @@
       text: '低 / 中 / 高三档各 ' + ST.count + ' 题，共 ' + (ST.count * 3) + ' 题。选择题 + 填空 + 解答各一档。'
     }));
 
-    /* 通道放在明面上：换到网页版是家长会主动找的动作，别藏在折叠里 */
-    var chan = channelField();
-    chan.classList.add('rv-chanfield');
-    body.appendChild(chan);
-
-    /* 高级：模型 / 凭据 / 联网 */
-    var det = h('details', { class: 'rv-adv' });
-    if (ST.advanced) det.setAttribute('open', '');
-    det.addEventListener('toggle', function () { ST.advanced = det.open; savePrefs(); });
-    det.appendChild(h('summary', null, [document.createTextNode(
-      LLM.isWeb() ? '网页版凭据' : '模型与联网素材'
-    )]));
-
-    var inner = h('div', { class: 'rv-adv-body' });
-    if (LLM.isDirect()) {
-      inner.appendChild(directCfgField());
-    } else if (LLM.isWeb()) {
-      inner.appendChild(webCfgField());
-      if (LLM.WEB_MODELS.length > 1) inner.appendChild(webModelField());
-    } else {
-      inner.appendChild(modelField());
-      /* 联网素材靠抓网页/搜索源，网页版自己有搜索，不需要这一套 */
-      inner.appendChild(webField());
-    }
-    det.appendChild(inner);
-    body.appendChild(det);
+    /* 通道 / 模型 / 凭据 / 联网素材都收进「设置」，这里是出题的参数，不是配置 */
+    body.appendChild(h('div', { class: 'rv-field' }, [
+      h('span', { class: 'rv-label', text: '出题通道' }),
+      h('div', { class: 'rv-chan-sum' }, [
+        h('b', { text: LLM.isDirect() ? '官方 API' : '云端' }),
+        h('span', { class: 'rv-chan-note', text: LLM.retiredFromWeb()
+          ? '网页版通道已停用，已切到官方 API'
+          : LLM.isDirect()
+            ? 'DeepSeek 官方接口 · ' + (LLM.web().apiModel || 'deepseek-chat')
+            : 'WorkBuddy 模型额度 · 免密钥' }),
+        h('button', {
+          type: 'button', class: 'rv-btn rv-btn-sm rv-chan-open',
+          text: '设置', onclick: openSettings
+        })
+      ])
+    ]));
 
     /* 整册摸底：不挑点，按考察范围一个点一个点现出题，走诊断那套「掌握/不稳/薄弱」判定。
        这个入口的意义是把「题库不行」这条短路掉：题由模型按孩子档案现命。 */
@@ -786,7 +828,7 @@
     var wrap = h('div', { class: 'rv-field rv-field-col' });
     wrap.appendChild(h('span', { class: 'rv-label', text: '出题通道' }));
     var seg = h('div', { class: 'pt-seg rv-seg rv-chan', role: 'group', 'aria-label': '出题通道' });
-    [['cloud', '云端'], ['direct', '官方 API'], ['web', '网页版']].forEach(function (k) {
+    [['cloud', '云端'], ['direct', '官方 API']].forEach(function (k) {
       var nowK = LLM.isWeb() ? 'web' : (LLM.isDirect() ? 'direct' : 'cloud');
       var on = nowK === k[0];
       seg.appendChild(h('button', {
@@ -807,31 +849,37 @@
     return wrap;
   }
 
-  function switchChannel(kind) {
-    var nowKind = LLM.isWeb() ? 'web' : (LLM.isDirect() ? 'direct' : 'cloud');
-    if (nowKind === kind) return;
-    LLM.setWeb({ kind: kind });
-    ST.chanNote = '';
-    ST.chanTone = '';
-    if (kind === 'web' || kind === 'direct') ST.advanced = true;
-    savePrefs();
+  function loadModels() {
     ST.busy = 'models';
-    ST.models = [];
-    render();
     LLM.listModels().then(function (list) {
       ST.models = list;
       ST.modelsErr = '';
-      if (!list.some(function (m) { return m.id === ST.model; })) {
+      if (!ST.model || !list.some(function (m) { return m.id === ST.model; })) {
         ST.model = LLM.pickDefault(list);
       }
       if (LLM.isWeb() && ST.model) LLM.setWeb({ model: ST.model });
-      savePrefs();
+      if (ST.model) savePrefs();
     }).catch(function (e) {
       ST.modelsErr = LLM.describeError(e);
     }).then(function () {
       ST.busy = '';
       render();
+      if (refreshSettings) refreshSettings();
     });
+  }
+
+  function switchChannel(kind) {
+    var nowKind = LLM.isWeb() ? 'web' : (LLM.isDirect() ? 'direct' : 'cloud');
+    if (nowKind === kind) return;
+    LLM.setWeb({ kind: kind });
+    if (refreshSettings) refreshSettings();
+    ST.chanNote = '';
+    ST.chanTone = '';
+    if (kind === 'web' || kind === 'direct') ST.advanced = true;
+    savePrefs();
+    ST.models = [];
+    render();
+    loadModels();
   }
 
   function webModelField() {
@@ -861,7 +909,7 @@
     var cfg = LLM.web();
     var box = h('div', { class: 'rv-webcfg' });
     box.appendChild(h('p', { class: 'rv-hint',
-      text: '在 platform.deepseek.com 生成一个 API Key（sk- 开头）贴进来。按用量计费，云端部署也能用。' }));
+      text: '在 platform.deepseek.com 生成一个 Key（sk- 开头）贴进来。' }));
 
     var inp = h('input', {
       type: 'password', class: 'rv-input rv-input-sm', value: cfg.apiKey || '',
@@ -1142,6 +1190,10 @@
     wrap.appendChild(h('span', { class: 'rv-label', text: '出题模型' }));
     if (ST.modelsErr) {
       wrap.appendChild(h('p', { class: 'rv-hint is-warn', text: ST.modelsErr }));
+      wrap.appendChild(h('button', {
+        type: 'button', class: 'rv-mini rv-mini-inline', text: '重试',
+        onclick: function () { ST.modelsErr = ''; ST.busy = 'models'; refreshSettings && refreshSettings(); loadModels(); }
+      }));
       return wrap;
     }
     if (!ST.models.length) {
@@ -2620,21 +2672,7 @@
       render();
     });
 
-    ST.busy = 'models';
-    LLM.listModels().then(function (list) {
-      ST.models = list;
-      ST.modelsErr = '';
-      if (!ST.model || !list.some(function (m) { return m.id === ST.model; })) {
-        ST.model = LLM.pickDefault(list);
-      }
-      if (LLM.isWeb() && ST.model) LLM.setWeb({ model: ST.model });
-      if (ST.model) savePrefs();
-    }).catch(function (e) {
-      ST.modelsErr = LLM.describeError(e);
-    }).then(function () {
-      ST.busy = '';
-      render();
-    });
+    loadModels();
   }
 
   boot();

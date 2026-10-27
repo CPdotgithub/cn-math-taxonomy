@@ -611,7 +611,7 @@
       const mine = (ready && AIQ.on()) ? 'ai' : 'bank';
       const note = !ready
         ? h('p', { class: 'dx-ai-note is-warn' },
-          '还没连上 DeepSeek：先去', h('a', { class: 'dx-ai-link', href: '../review/' }, '复习页'), '配一次（网页版贴一条 curl 就行），这里就能用 AI 现出题。')
+          '还没连上 DeepSeek：先去', h('a', { class: 'dx-ai-link', href: '../review/' }, '复习页'), '的「设置」里配一次（贴一个 DeepSeek Key 就行），这里就能用 AI 现出题。')
         : (mine === 'ai'
           ? h('p', { class: 'dx-ai-note' },
             '每道题由 DeepSeek 按这个知识点 + 孩子的档案临时命；连不上就自动退回题库，不卡人。')
@@ -630,7 +630,7 @@
                 onclick: function (ev) {
                   ev.currentTarget.blur();
                   if (off) {
-                    alert('还没连上 DeepSeek。去「复习」页配一次（网页版只要贴一条 curl），这边就能用 AI 现出题。');
+                    alert('还没连上 DeepSeek。去「复习」页的「设置」里配一次（贴一个 DeepSeek Key 就行），这边就能用 AI 现出题。');
                     return;
                   }
                   if (AIQ.on() === (o[0] === 'ai')) return;

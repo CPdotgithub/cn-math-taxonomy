@@ -114,10 +114,25 @@
       out[k] = (v && v[k] !== undefined && v[k] !== null) ? v[k] : WEB_DEFAULT[k];
     });
     if (out.kind !== 'web' && out.kind !== 'direct') out.kind = 'cloud';
-    /* 本机 / 预览地址用不了云端（SDK 不给登录），没手动选过就默认走网页版，
+    /* 本机 / 预览地址用不了云端（SDK 不给登录），没手动选过就默认走官方 API，
        否则一进来就是「通道不可用」，还得自己猜要切哪里。 */
-    if (out.kind === 'cloud' && !cloudOriginOk() && !(v && v.kind)) out.kind = 'web';
+    if (out.kind === 'cloud' && !cloudOriginOk() && !(v && v.kind)) out.kind = 'direct';
     return out;
+  }
+
+  /* 网页版通道已下线（DeepSeek 按设备校验，换个主机就被拒）。
+     老配置里的 kind:'web' 就地迁到「官方 API」，凭据留着但不再生效；
+     迁过之后给界面一个标记，提示一次「填个 Key 就行」。 */
+  var retiredFromWeb = false;
+
+  function retireWebChannel() {
+    var v = null;
+    try { v = JSON.parse(localStorage.getItem(LS_CHAN)); } catch (e) { return; }
+    if (!v || v.kind !== 'web') return;
+    v.kind = v.apiKey ? 'direct' : (cloudOriginOk() ? 'cloud' : 'direct');
+    v.retiredWeb = true;
+    try { localStorage.setItem(LS_CHAN, JSON.stringify(v)); } catch (e) {}
+    retiredFromWeb = true;
   }
 
   function setWeb(patch) {
@@ -922,24 +937,24 @@
     var code = (err && err.error && err.error.code) || (err && err.code) || '';
     var msg = (err && err.error && err.error.message) || (err && err.message) || '';
     if (code === 'sdk') {
-      if (!cloudOriginOk()) return '云端通道只在发布后的网址上能用；这个地址请把出题通道切到「网页版」（用你自己的 DeepSeek 账号）。';
+      if (!cloudOriginOk()) return '云端额度只能在发布后的网址上用。这个地址请把出题通道切到「官方 API」，填一个 DeepSeek Key（sk- 开头）。';
       return '云端模型通道没加载成功，检查网络后刷新页面再试。';
     }
     if (code === 'request_empty') return '还没准备好题目要求，请重新选择知识点。';
     if (code === 'model_empty') return '模型这次什么都没返回，再点一次「重新生成」通常就好。';
     if (code === 'model_bad_json') return '模型返回的题目格式不对，点「重新生成」再试一次。';
-    if (code === 'image_dropped') return '照片没被云端接收，这次只按文字批改。想拍照批改，把通道换成「网页版」。';
+    if (code === 'image_dropped') return '照片没被云端接收，这次只按文字批改；云端通道只能发文字。';
     if (code === 'api_no_key') return '还没填 DeepSeek API Key（sk- 开头那串）。';
     if (code === 'api_offline') return '连不上 api.deepseek.com，检查网络或代理。';
     if (code === 'invalid_api_key' || code === 'api_http_401') return 'API Key 无效或已过期，去 platform.deepseek.com 重新生成一个。';
     if (code === 'api_http_402' || code === 'insufficient_balance') return 'DeepSeek 账户余额不足，充值后再试。';
-    if (code === 'web_no_relay') return '网页版的转发没准备好，重新用「启动.command」打开页面再试。';
-    if (code === 'web_no_token') return '还没贴登录凭据。在 chat.deepseek.com 上复制一条 curl 贴进来。';
-    if (code === 'web_offline') return '转发服务没响应，等几秒再试一次；一直不行就重新用「启动.command」打开页面。';
-    if (/^web_http_(404|405|501)$/.test(code)) return '这个地址没有转发能力（静态预览常见）。用「启动.command」打开的页面，或者发布后的网址。';
-    if (code === 'token_missing' || code === 'token_invalid') return 'DeepSeek 登录凭据过期了。重新在浏览器里复制一条 curl 贴上就好。';
-    if (code === 'node_missing') return '转发那边没找到 Node.js（网页版解开挑战要靠它），本机调试的话装好 Node 再重启。';
-    if (code === 'solver_missing') return '转发服务缺少 tools/dsweb 里的求解文件。';
+    if (code === 'web_no_relay') return '网页版通道已停用：在「设置」里把出题通道切成「官方 API」。';
+    if (code === 'web_no_token') return '网页版通道已停用：在「设置」里把出题通道切成「官方 API」。';
+    if (code === 'web_offline') return '网页版通道已停用：在「设置」里把出题通道切成「官方 API」。';
+    if (/^web_http_(404|405|501)$/.test(code)) return '网页版通道已停用：在「设置」里把出题通道切成「官方 API」。';
+    if (code === 'token_missing' || code === 'token_invalid') return '网页版登录凭据过期了，而且这个通道已停用：切到「官方 API」更省事。';
+    if (code === 'node_missing') return '网页版通道已停用：在「设置」里把出题通道切成「官方 API」。';
+    if (code === 'solver_missing') return '网页版通道已停用：在「设置」里把出题通道切成「官方 API」。';
     if (code === 'image_too_large') return '照片太大，压缩后重拍一张（8MB 以内）。';
     if (code === 'upload_failed') return '照片没传上去，重拍一张或先只交文字。';
     if (code === 'empty' || code === 'web_failed') return 'DeepSeek 这次没返回内容，隔十几秒再试；也可能是内容被风控拦了。';
@@ -955,6 +970,7 @@
     return msg || '出错了，请稍后重试。';
   }
 
+  retireWebChannel();
   probeLocal().then(function () { ensureRelay(); ensureCred(); });
 
   window.RvLLM = {
@@ -985,6 +1001,7 @@
     usingSiteRelay: function () { return /\/api\/ds$/.test(relayBase()); },
     sameSiteRelay: sameSiteRelay,
     ensureRelay: ensureRelay,
-    WEB_MODELS: WEB_MODELS
+    WEB_MODELS: WEB_MODELS,
+    retiredFromWeb: function () { return retiredFromWeb; }
   };
 })();
