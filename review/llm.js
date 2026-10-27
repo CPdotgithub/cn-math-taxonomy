@@ -612,6 +612,49 @@
       });
   }
 
+  /* ---- 凭据托管：本机服务也存一份，换浏览器 / 清缓存不用重贴 ----
+     服务端只接受本机请求（127.0.0.1），拿不到 token 就等于拿到账号，不能对公网开放。 */
+  var credPromise = null;
+
+  function credPush() {
+    var cfg = web();
+    if (!cfg.token || !apiOrigin()) return Promise.resolve(false);
+    return fetch(apiOrigin() + '/api/cred', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: cfg.token, cookie: cfg.cookie, ua: cfg.ua, hdr: cfg.hdr, model: cfg.model })
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { return !!(j && j.ok); })
+      .catch(function () { return false; });
+  }
+
+  function apiOrigin() {
+    if (location.protocol !== 'http:' && location.protocol !== 'https:') return '';
+    return location.origin;
+  }
+
+  /* 本地没有凭据时，问一次本机服务；拿回来了就写进 localStorage 并返回 true */
+  function ensureCred() {
+    if (credPromise) return credPromise;
+    credPromise = (function () {
+      if (!apiOrigin()) return Promise.resolve(false);
+      if (web().token) return Promise.resolve(false);   /* 本地已有，不动 */
+      return fetch(apiOrigin() + '/api/cred', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          var c = j && j.cred;
+          if (!c || !c.token) return false;
+          setWeb({
+            token: c.token, cookie: c.cookie || '', ua: c.ua || '', hdr: c.hdr || '',
+            model: c.model || 'deepseek', savedAt: c.savedAt || ''
+          });
+          return true;
+        })
+        .catch(function () { return false; });
+    })();
+    return credPromise;
+  }
+
   function health() {
     var base = relayBase(web());
     if (!base) return Promise.reject(makeErr('web_no_relay'));
@@ -723,6 +766,7 @@
   }
 
   ensureRelay();
+  ensureCred();
 
   window.RvLLM = {
     available: available,
@@ -743,6 +787,8 @@
     relayBase: relayBase,
     cloudOriginOk: cloudOriginOk,
     selfCheck: selfCheck,
+    credPush: credPush,
+    ensureCred: ensureCred,
     usingSiteRelay: function () { return /\/api\/ds$/.test(relayBase()); },
     sameSiteRelay: sameSiteRelay,
     ensureRelay: ensureRelay,

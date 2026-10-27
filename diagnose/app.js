@@ -2361,6 +2361,13 @@
       return;
     }
     const params = new URLSearchParams(location.search);
+    /* 凭据可能只存在于本机服务里（换过浏览器）：先取一次，再判断有没有通道 */
+    if (window.RvLLM && window.RvLLM.ensureCred) {
+      await Promise.race([
+        window.RvLLM.ensureCred(),
+        new Promise(function (r) { setTimeout(r, 1200); })
+      ]);
+    }
     /* 云端的 SDK 是 defer 加载的：等一下再渲染，免得「出题方式」先摆出一个假的「没通道」 */
     if (AIQ && !AIQ.available() && !window.__CNM_SDK_FAILED) {
       await new Promise(function (done) {

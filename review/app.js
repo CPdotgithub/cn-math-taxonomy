@@ -902,6 +902,12 @@
         ST.chanNote = '';
         ST.chanTone = '';
         renderSide();
+        /* 顺手托管一份到本机服务：换浏览器、清缓存都不用重贴 */
+        LLM.credPush().then(function (ok) {
+          if (!ok) return;
+          ST.chanNote = '已保存，并存到本机服务（换浏览器不用重贴）';
+          renderSide();
+        });
         testChannel(false);
       }
     }));
@@ -918,7 +924,7 @@
 
     var note = h('p', { class: 'rv-hint' + (ST.chanTone ? ' ' + ST.chanTone : '') });
     note.textContent = ST.chanNote || (cfg.token
-      ? '凭据存在这台设备的浏览器里' + (cfg.savedAt ? '（更新于 ' + fmtMin(cfg.savedAt) + '）' : '') + '，换设备要重贴。'
+      ? '凭据存在这台设备的浏览器里' + (cfg.savedAt ? '（更新于 ' + fmtMin(cfg.savedAt) + '）' : '') + '；用「启动.command」打开时还会存一份到本机服务，换浏览器、清缓存都不用重贴。'
       : '还没配凭据。');
     box.appendChild(note);
 
@@ -2483,6 +2489,9 @@
     /* 老配置里存着 127.0.0.1:8790：这个地址本身带着 /api/ds 就自动升级成同站转发，
        省得人以为还要另外开一个中转。检查完再重绘一次。 */
     LLM.ensureRelay().then(function (changed) { if (changed) renderSide(); });
+    LLM.ensureCred().then(function (got) {
+      if (got) { ST.chanNote = '已从本机服务取回凭据，不用重贴'; renderSide(); }
+    });
     render();
 
     loadData().then(function () {

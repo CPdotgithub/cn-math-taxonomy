@@ -58,6 +58,10 @@ MIME = {
 # 浏览器 localStorage 会被清掉（清缓存、换设备、隐私模式），所以 AI 现出的题存一份到
 # 服务端：页面照旧先用本地缓存（快），本地没有就问这里，再没有才去调模型。
 STORE_PATH = os.path.join(ROOT, ".aiq-store.json")
+# DeepSeek 网页版的登录凭据（一条 curl）。只对本机（127.0.0.1 / ::1）开放，
+# 别把它当成公开接口——拿到 token 就等于拿到了账号。
+CRED_PATH = os.path.join(ROOT, ".ds-cred.json")
+CRED_LOCK = threading.Lock()
 STORE_LOCK = threading.Lock()
 STORE_PER_KEY = 5        # 同一个知识点最多留几个版本
 STORE_TOTAL = 2000       # 总量上限，超了按时间淘汰最旧的
@@ -108,6 +112,29 @@ def store_put(key, q):
                     del items[k]
         _store_write(d)
         return len(items.get(key, []))
+
+
+def cred_read():
+    try:
+        with open(CRED_PATH, "r", encoding="utf-8") as f:
+            v = json.load(f)
+        if isinstance(v, dict) and v.get("token"):
+            return v
+    except Exception:
+        pass
+    return {}
+
+
+def cred_write(d):
+    tmp = CRED_PATH + ".tmp"
+    with CRED_LOCK:
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(d, f, ensure_ascii=False)
+        os.replace(tmp, CRED_PATH)
+        try:
+            os.chmod(CRED_PATH, 0o600)
+        except OSError:
+            pass
 
 
 def load_relay():
@@ -208,6 +235,8 @@ def make_handler(relay):
                 qs = parse_qs(urlparse(self.path).query)
                 key = (qs.get("key") or [""])[0]
                 return self._json({"ok": True, "items": store_get(key)})
+            if path == "/api/cred":
+                return self._api_cred_get()
             return self._static(path, head_only)
 
         def do_HEAD(self):
@@ -221,6 +250,8 @@ def make_handler(relay):
                 return relay.Handler.do_POST(self)
             if path == "/api/q":
                 return self._api_q_put()
+            if path == "/api/cred":
+                return self._api_cred_put()
             return self._plain(404, "not found")
 
         def do_OPTIONS(self):
@@ -254,6 +285,51 @@ def make_handler(relay):
             total = store_put(key, q)
             return self._json({"ok": True, "count": total})
 
+        def _is_local(self):
+            """只有本机来的请求能读写凭据。"""
+            try:
+                h = self.client_address[0]
+            except Exception:
+                return False
+            return h in ("127.0.0.1", "::1", "::ffff:127.0.0.1")
+
+        def _api_cred_get(self):
+            if not self._is_local():
+                return self._json({"ok": False, "code": "forbidden",
+                                   "error": "凭据只对本机开放"}, 403)
+            c = cred_read()
+            if not c:
+                return self._json({"ok": True, "cred": None})
+            return self._json({"ok": True, "cred": {
+                "token": c.get("token", ""), "cookie": c.get("cookie", ""),
+                "ua": c.get("ua", ""), "hdr": c.get("hdr", ""),
+                "model": c.get("model", ""), "savedAt": c.get("savedAt", "")
+            }})
+
+        def _api_cred_put(self):
+            if not self._is_local():
+                return self._json({"ok": False, "code": "forbidden",
+                                   "error": "凭据只对本机开放"}, 403)
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                raw = self.rfile.read(n) if n > 0 else b"{}"
+                payload = json.loads(raw.decode("utf-8"))
+            except Exception:
+                return self._json({"ok": False, "error": "bad json"}, 400)
+            tok = str(payload.get("token") or "").strip()
+            if len(tok) < 8:
+                return self._json({"ok": False, "error": "token 太短"}, 400)
+            rec = {
+                "token": tok,
+                "cookie": str(payload.get("cookie") or ""),
+                "ua": str(payload.get("ua") or ""),
+                "hdr": str(payload.get("hdr") or ""),
+                "model": str(payload.get("model") or "deepseek"),
+                "savedAt": time.strftime("%Y-%m-%dT%H:%M:%S"),
+            }
+            cred_write(rec)
+            return self._json({"ok": True, "savedAt": rec["savedAt"]})
+
         def _health(self):
             st = relay.env_status() if relay else {"node": None}
             body = json.dumps({
@@ -261,6 +337,7 @@ def make_handler(relay):
                 "service": "cnm-site",
                 "hasRelay": bool(relay),
                 "hasStore": True,
+                "hasCred": bool(cred_read()),
                 "env": st,
                 "root": ROOT,
             }, ensure_ascii=False).encode("utf-8")
