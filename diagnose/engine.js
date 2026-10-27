@@ -221,11 +221,21 @@
    *    难度优先于“没出过”，同档里仍优先没出过的；
    *  - 档内用 seed 决定的伪随机数选一道。
    */
+  /* 只写着「计算：12＋9＝？」这种纯算式：跟考点没关系，能不用就不用。
+     题库里这种是补题量时凑的，孩子看了只会问「这是什么题」。 */
+  function isDrill(q) {
+    const p = String((q && q.prompt) || '').trim();
+    return /^计算[:：]/.test(p) && /[＝=]\s*[？?]/.test(p);
+  }
+
   function pickQuestion(graph, session, id, attempt) {
     const all = graph.bank[id] || [];
     const tried = (session.attempts[id] || []).map(function (a) { return a.qid; });
-    const pool = all.filter(function (q) { return tried.indexOf(q.id) < 0; });
+    let pool = all.filter(function (q) { return tried.indexOf(q.id) < 0; });
     if (!pool.length) return null;
+    /* 有带情境的题就先用它；整册都是纯算式（低年级口算）才退回原样 */
+    const real = pool.filter(function (q) { return !isDrill(q); });
+    if (real.length) pool = real;
     const avoid = new Set(session.avoid || []);
     const freshFirst = function (list) {
       const f = list.filter(function (q) { return !avoid.has(q.id); });

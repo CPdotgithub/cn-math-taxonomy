@@ -58,10 +58,11 @@
     "topicId": "cnm_p002",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：4－2＝？",
+    "prompt": "4 和 2 比，4 比 2 多几？",
     "answer": "2",
     "explanation": "4 比 2 大，4－2＝2。",
-    "verify": "4-2"
+    "verify": "4-2",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p002_q2",
@@ -78,10 +79,11 @@
     "topicId": "cnm_p002",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "小明有 5 颗珠子，小红有 3 颗。小明比小红多几颗？计算：5－3＝？",
+    "prompt": "小明有 5 颗珠子，小红有 3 颗。小明比小红多几颗？",
     "answer": "2",
     "explanation": "多几颗用减法，5－3＝2。",
-    "verify": "5-3"
+    "verify": "5-3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p002_q4",
@@ -180,10 +182,11 @@
     "topicId": "cnm_p004",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 4 个圆片，又放进来 1 个。一共有多少个？计算：4＋1＝？",
+    "prompt": "有 4 个圆片，又放进来 1 个。一共有多少个？",
     "answer": "5",
     "explanation": "把两部分合起来，4＋1＝5。",
-    "verify": "4+1"
+    "verify": "4+1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p004_q4",
@@ -262,10 +265,11 @@
     "topicId": "cnm_p006",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 2 朵花，又放进来 2 朵。一共有多少朵？计算：2＋2＝？",
+    "prompt": "有 2 朵花，又放进来 2 朵。一共有多少朵？",
     "answer": "4",
     "explanation": "把两部分合起来，2＋2＝4。",
-    "verify": "2+2"
+    "verify": "2+2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p006_q4",
@@ -320,10 +324,11 @@
     "topicId": "cnm_p007",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 5 个气球，拿走 3 个。还剩多少个？计算：5－3＝？",
+    "prompt": "有 5 个气球，拿走 3 个。还剩多少个？",
     "answer": "2",
     "explanation": "从总数里去掉一部分，5－3＝2。",
-    "verify": "5-3"
+    "verify": "5-3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p007_q4",
@@ -388,10 +393,11 @@
     "topicId": "cnm_p009",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：9－6＝？",
+    "prompt": "9 和 6 比，9 比 6 多几？",
     "answer": "3",
     "explanation": "9－6＝3。",
-    "verify": "9-6"
+    "verify": "9-6",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p009_q2",
@@ -408,10 +414,11 @@
     "topicId": "cnm_p009",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一串有 10 颗珠子，另一串有 8 颗。10 颗的比 8 颗的多几颗？计算：10－8＝？",
+    "prompt": "一串有 10 颗珠子，另一串有 8 颗。10 颗的比 8 颗的多几颗？",
     "answer": "2",
     "explanation": "10－8＝2。",
-    "verify": "10-8"
+    "verify": "10-8",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p009_q4",
@@ -466,10 +473,11 @@
     "topicId": "cnm_p010",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 4 支铅笔，又放进来 5 支。一共有多少支？计算：4＋5＝？",
+    "prompt": "有 4 支铅笔，又放进来 5 支。一共有多少支？",
     "answer": "9",
     "explanation": "把两部分合起来，4＋5＝9。",
-    "verify": "4+5"
+    "verify": "4+5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p010_q4",
@@ -524,10 +532,11 @@
     "topicId": "cnm_p011",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 8 颗糖果，拿走 2 颗。还剩多少颗？计算：8－2＝？",
+    "prompt": "有 8 颗糖果，拿走 2 颗。还剩多少颗？",
     "answer": "6",
     "explanation": "从总数里去掉一部分，8－2＝6。",
-    "verify": "8-2"
+    "verify": "8-2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p011_q4",
@@ -582,20 +591,22 @@
     "topicId": "cnm_p012",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "树上先停 1 只鸟，又飞来 6 只，再飞来 2 只。现在有几只？计算：1＋6＋2＝？",
+    "prompt": "树上先停 1 只鸟，又飞来 6 只，再飞来 2 只。现在有几只？",
     "answer": "9",
     "explanation": "1＋6＝7，7＋2＝9。",
-    "verify": "1+6+2"
+    "verify": "1+6+2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p012_q4",
     "topicId": "cnm_p012",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 10 块饼干，吃了 1 块，又吃了 4 块。还剩几块？计算：10－1－4＝？",
+    "prompt": "有 10 块饼干，吃了 1 块，又吃了 4 块。还剩几块？",
     "answer": "5",
     "explanation": "10－1＝9，9－4＝5。",
-    "verify": "10-1-4"
+    "verify": "10-1-4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p013_q1",
@@ -622,10 +633,11 @@
     "topicId": "cnm_p013",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 4 支笔，又买来 5 支，送出 6 支。还剩几支？计算：4＋5－6＝？",
+    "prompt": "有 4 支笔，又买来 5 支，送出 6 支。还剩几支？",
     "answer": "3",
     "explanation": "4＋5＝9，9－6＝3。",
-    "verify": "4+5-6"
+    "verify": "4+5-6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p013_q4",
@@ -778,20 +790,22 @@
     "topicId": "cnm_p015",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "书架上面有 3 本书，下面有 2 本书。上下一共有几本？计算：3＋2＝？",
+    "prompt": "书架上面有 3 本书，下面有 2 本书。上下一共有几本？",
     "answer": "5",
     "explanation": "3＋2＝5。",
-    "verify": "3+2"
+    "verify": "3+2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p015_q4",
     "topicId": "cnm_p015",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "前面有 4 个同学，后面有 1 个同学。前后一共有几人？计算：4＋1＝？",
+    "prompt": "前面有 4 个同学，后面有 1 个同学。前后一共有几人？",
     "answer": "5",
     "explanation": "4＋1＝5。",
-    "verify": "4+1"
+    "verify": "4+1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p016_q1",
@@ -898,10 +912,11 @@
     "topicId": "cnm_p018",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 11 支彩笔，又拿来 4 支。一共有几支？计算：11＋4＝？",
+    "prompt": "有 11 支彩笔，又拿来 4 支。一共有几支？",
     "answer": "15",
     "explanation": "11＋4＝15。",
-    "verify": "11+4"
+    "verify": "11+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p018_q4",
@@ -952,10 +967,11 @@
     "topicId": "cnm_p019",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "盒子里有 9 块糖，再放进 4 块。先凑成 10，一共有几块？计算：9＋4＝？",
+    "prompt": "盒子里有 9 块糖，再放进 4 块。先凑成 10，一共有几块？",
     "answer": "13",
     "explanation": "9＋1＝10，10＋3＝13。",
-    "verify": "9+4"
+    "verify": "9+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p019_q4",
@@ -992,10 +1008,11 @@
     "topicId": "cnm_p020",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 9 张贴纸，又放进来 4 张。一共有多少张？计算：9＋4＝？",
+    "prompt": "有 9 张贴纸，又放进来 4 张。一共有多少张？",
     "answer": "13",
     "explanation": "把两部分合起来，9＋4＝13。",
-    "verify": "9+4"
+    "verify": "9+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p020_q4",
@@ -1050,10 +1067,11 @@
     "topicId": "cnm_p021",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 6 个皮球，又放进来 6 个。一共有多少个？计算：6＋6＝？",
+    "prompt": "有 6 个皮球，又放进来 6 个。一共有多少个？",
     "answer": "12",
     "explanation": "把两部分合起来，6＋6＝12。",
-    "verify": "6+6"
+    "verify": "6+6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p021_q4",
@@ -1112,20 +1130,22 @@
     "topicId": "cnm_p022",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "游戏里数出三角 4 个、圆 3 个。一共有几个图形？计算：4＋3＝？",
+    "prompt": "游戏里数出三角 4 个、圆 3 个。一共有几个图形？",
     "answer": "7",
     "explanation": "4＋3＝7。",
-    "verify": "4+3"
+    "verify": "4+3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p022_q4",
     "topicId": "cnm_p022",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "同学按男女分成两组，男生 6 人、女生 4 人。一共有几人？计算：6＋4＝？",
+    "prompt": "同学按男女分成两组，男生 6 人、女生 4 人。一共有几人？",
     "answer": "10",
     "explanation": "6＋4＝10。",
-    "verify": "6+4"
+    "verify": "6+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p023_q1",
@@ -1258,21 +1278,23 @@
     "topicId": "cnm_p024",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "用 2 个三角形和 1 个正方形拼图。一共用了几个图形？计算：2＋1＝？",
+    "prompt": "用 2 个三角形和 1 个正方形拼图。一共用了几个图形？",
     "answer": "3",
     "explanation": "2＋1＝3。",
     "verify": "2+1",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 130\"><polygon points=\"20,30 70,110 20,110\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><polygon points=\"20,30 70,110 20,110\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"90,30 140,110 90,110\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><polygon points=\"90,30 140,110 90,110\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"160\" y=\"40\" width=\"70\" height=\"70\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"160\" y=\"40\" width=\"70\" height=\"70\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 250 130\"><polygon points=\"20,30 70,110 20,110\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><polygon points=\"20,30 70,110 20,110\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"90,30 140,110 90,110\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><polygon points=\"90,30 140,110 90,110\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"160\" y=\"40\" width=\"70\" height=\"70\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"160\" y=\"40\" width=\"70\" height=\"70\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p024_q4",
     "topicId": "cnm_p024",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "七巧板里拿出 4 块，又放回 1 块。还在外面的有几块？计算：4－1＝？",
+    "prompt": "七巧板里拿出 4 块，又放回 1 块。还在外面的有几块？",
     "answer": "3",
     "explanation": "4－1＝3。",
-    "verify": "4-1"
+    "verify": "4-1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p025_q1",
@@ -1313,10 +1335,11 @@
     "topicId": "cnm_p025",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 15 支笔，用去 9 支。还剩几支？计算：15－9＝？",
+    "prompt": "有 15 支笔，用去 9 支。还剩几支？",
     "answer": "6",
     "explanation": "15－9＝6。",
-    "verify": "15-9"
+    "verify": "15-9",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p025_q4",
@@ -1371,10 +1394,11 @@
     "topicId": "cnm_p026",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 15 个小球，拿走 6 个。还剩多少个？计算：15－6＝？",
+    "prompt": "有 15 个小球，拿走 6 个。还剩多少个？",
     "answer": "9",
     "explanation": "从总数里去掉一部分，15－6＝9。",
-    "verify": "15-6"
+    "verify": "15-6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p026_q4",
@@ -1429,10 +1453,11 @@
     "topicId": "cnm_p027",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 12 颗纽扣，拿走 3 颗。还剩多少颗？计算：12－3＝？",
+    "prompt": "有 12 颗纽扣，拿走 3 颗。还剩多少颗？",
     "answer": "9",
     "explanation": "从总数里去掉一部分，12－3＝9。",
-    "verify": "12-3"
+    "verify": "12-3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p027_q4",
@@ -1507,10 +1532,11 @@
     "topicId": "cnm_p029",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：40－20＝？",
+    "prompt": "40 和 20 比，40 比 20 多几？",
     "answer": "20",
     "explanation": "40 比 20 大 20。",
-    "verify": "40-20"
+    "verify": "40-20",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p029_q2",
@@ -1527,10 +1553,11 @@
     "topicId": "cnm_p029",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "小华拍球 28 下，小丽拍球 20 下。小华比小丽多几下？计算：28－20＝？",
+    "prompt": "小华拍球 28 下，小丽拍球 20 下。小华比小丽多几下？",
     "answer": "8",
     "explanation": "28－20＝8。",
-    "verify": "28-20"
+    "verify": "28-20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p029_q4",
@@ -1585,10 +1612,11 @@
     "topicId": "cnm_p030",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 4 捆小棒，每捆 10 根，另外还有 8 根。一共有多少根？计算：40＋8＝？",
+    "prompt": "有 4 捆小棒，每捆 10 根，另外还有 8 根。一共有多少根？",
     "answer": "48",
     "explanation": "40＋8＝48。",
-    "verify": "40+8"
+    "verify": "40+8",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p030_q4",
@@ -1639,10 +1667,11 @@
     "topicId": "cnm_p031",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "停车处有 34 辆车，又开来 20 辆。现在有多少辆？计算：34＋20＝？",
+    "prompt": "停车处有 34 辆车，又开来 20 辆。现在有多少辆？",
     "answer": "54",
     "explanation": "34＋20＝54。",
-    "verify": "34+20"
+    "verify": "34+20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p031_q4",
@@ -1693,10 +1722,11 @@
     "topicId": "cnm_p032",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 46 本故事书，借出 20 本。还剩多少本？计算：46－20＝？",
+    "prompt": "有 46 本故事书，借出 20 本。还剩多少本？",
     "answer": "26",
     "explanation": "46－20＝26。",
-    "verify": "46-20"
+    "verify": "46-20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p032_q4",
@@ -1733,10 +1763,11 @@
     "topicId": "cnm_p033",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一班 27 人、二班 16 人去植树。两班一共有多少人？计算：27＋16＝？",
+    "prompt": "一班 27 人、二班 16 人去植树。两班一共有多少人？",
     "answer": "43",
     "explanation": "个位 7＋6＝13，进 1，得 43。",
-    "verify": "27+16"
+    "verify": "27+16",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p033_q4",
@@ -1773,10 +1804,11 @@
     "topicId": "cnm_p034",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有 52 张纸，用去 18 张。还剩多少张？计算：52－18＝？",
+    "prompt": "有 52 张纸，用去 18 张。还剩多少张？",
     "answer": "34",
     "explanation": "个位不够减，退位后得 34。",
-    "verify": "52-18"
+    "verify": "52-18",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p034_q4",
@@ -1793,20 +1825,22 @@
     "topicId": "cnm_p035",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "果园里有桃树和梨树共 40 棵，桃树 18 棵。梨树有多少棵？计算：40－18＝？",
+    "prompt": "果园里有桃树和梨树共 40 棵，桃树 18 棵。梨树有多少棵？",
     "answer": "22",
     "explanation": "40－18＝22。",
-    "verify": "40-18"
+    "verify": "40-18",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p035_q4",
     "topicId": "cnm_p035",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "男生 16 人，女生 14 人。全班一共有多少人？计算：16＋14＝？",
+    "prompt": "男生 16 人，女生 14 人。全班一共有多少人？",
     "answer": "30",
     "explanation": "16＋14＝30。",
-    "verify": "16+14"
+    "verify": "16+14",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p036_q1",
@@ -1857,10 +1891,11 @@
     "topicId": "cnm_p036",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一本本子 2 元，一块橡皮 1 元。一共要付多少元？计算：2＋1＝？",
+    "prompt": "一本本子 2 元，一块橡皮 1 元。一共要付多少元？",
     "answer": "3",
     "explanation": "2＋1＝3。",
-    "verify": "2+1"
+    "verify": "2+1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p037_q1",
@@ -1891,20 +1926,22 @@
     "topicId": "cnm_p037",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "红色扣子 7 颗，蓝色扣子 4 颗。红色比蓝色多几颗？计算：7－4＝？",
+    "prompt": "红色扣子 7 颗，蓝色扣子 4 颗。红色比蓝色多几颗？",
     "answer": "3",
     "explanation": "7－4＝3。",
-    "verify": "7-4"
+    "verify": "7-4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p037_q4",
     "topicId": "cnm_p037",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "三角形 6 个，圆形 6 个。两种图形一共有多少个？计算：6＋6＝？",
+    "prompt": "三角形 6 个，圆形 6 个。两种图形一共有多少个？",
     "answer": "12",
     "explanation": "6＋6＝12。",
-    "verify": "6+6"
+    "verify": "6+6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p038_q1",
@@ -1955,10 +1992,11 @@
     "topicId": "cnm_p038",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每组有 3 人，有这样的 2 组。一共有多少人？计算：3＋3＝？",
+    "prompt": "每组有 3 人，有这样的 2 组。一共有多少人？",
     "answer": "6",
     "explanation": "2 个 3 是 6。",
-    "verify": "3+3"
+    "verify": "3+3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p039_q1",
@@ -1985,10 +2023,11 @@
     "topicId": "cnm_p039",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每盒有 5 个皮球，一共 6 盒。一共有多少个？计算：5×6＝？",
+    "prompt": "每盒有 5 个皮球，一共 6 盒。一共有多少个？",
     "answer": "30",
     "explanation": "求 6 个 5 的和，用乘法，5×6＝30。",
-    "verify": "5*6"
+    "verify": "5*6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p039_q4",
@@ -2067,10 +2106,11 @@
     "topicId": "cnm_p040",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一根纸条长 6 厘米，剪去 2 厘米。还剩多少厘米？计算：6－2＝？",
+    "prompt": "一根纸条长 6 厘米，剪去 2 厘米。还剩多少厘米？",
     "answer": "4",
     "explanation": "6－2＝4。",
-    "verify": "6-2"
+    "verify": "6-2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p041_q1",
@@ -2121,10 +2161,11 @@
     "topicId": "cnm_p041",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "旗杆高约 3 米，讲台长约 1 米。旗杆比讲台大约高几米？计算：3－1＝？",
+    "prompt": "旗杆高约 3 米，讲台长约 1 米。旗杆比讲台大约高几米？",
     "answer": "2",
     "explanation": "3－1＝2。",
-    "verify": "3-1"
+    "verify": "3-1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p042_q1",
@@ -2151,10 +2192,11 @@
     "topicId": "cnm_p042",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每盒有 8 本本子，一共 6 盒。一共有多少本？计算：8×6＝？",
+    "prompt": "每盒有 8 本本子，一共 6 盒。一共有多少本？",
     "answer": "48",
     "explanation": "求 6 个 8 的和，用乘法，8×6＝48。",
-    "verify": "8*6"
+    "verify": "8*6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p042_q4",
@@ -2233,20 +2275,22 @@
     "topicId": "cnm_p043",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "12 颗糖平均分给 3 个同学。每人几颗？计算：12÷3＝？",
+    "prompt": "12 颗糖平均分给 3 个同学。每人几颗？",
     "answer": "4",
     "explanation": "12÷3＝4。",
-    "verify": "12/3"
+    "verify": "12/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p044_q1",
     "topicId": "cnm_p044",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：56÷7＝？",
+    "prompt": "56 元买 7 元一支的笔，能买几支？",
     "answer": "8",
     "explanation": "56÷7＝8。",
-    "verify": "56/7"
+    "verify": "56/7",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p044_q2",
@@ -2263,10 +2307,11 @@
     "topicId": "cnm_p044",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "63 个气球，平均分成 9 份。每份有多少个？计算：63÷9＝？",
+    "prompt": "63 个气球，平均分成 9 份。每份有多少个？",
     "answer": "7",
     "explanation": "63÷9＝7。",
-    "verify": "63/9"
+    "verify": "63/9",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p044_q4",
@@ -2325,40 +2370,44 @@
     "topicId": "cnm_p045",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一拃大约 1 分米，也就是 10 厘米。3 拃大约是多少厘米？计算：3×10＝？",
+    "prompt": "一拃大约 1 分米，也就是 10 厘米。3 拃大约是多少厘米？",
     "answer": "30",
     "explanation": "1 分米＝10 厘米，3 拃大约 30 厘米。",
-    "verify": "3*10"
+    "verify": "3*10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p045_q3",
     "topicId": "cnm_p045",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "课桌大约 2 拃，一拃按 10 厘米算。课桌大约多少厘米？计算：2×10＝？",
+    "prompt": "课桌大约 2 拃，一拃按 10 厘米算。课桌大约多少厘米？",
     "answer": "20",
     "explanation": "2×10＝20。",
-    "verify": "2*10"
+    "verify": "2*10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p045_q4",
     "topicId": "cnm_p045",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "用尺量出绳子长 15 厘米，估测是 12 厘米。量出的比估的多几厘米？计算：15－12＝？",
+    "prompt": "用尺量出绳子长 15 厘米，估测是 12 厘米。量出的比估的多几厘米？",
     "answer": "3",
     "explanation": "15－12＝3。",
-    "verify": "15-12"
+    "verify": "15-12",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p046_q1",
     "topicId": "cnm_p046",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：18÷3＝？",
+    "prompt": "18 个苹果平均放进 3 个盘子，每盘放几个？",
     "answer": "6",
     "explanation": "18÷3＝6。",
-    "verify": "18/3"
+    "verify": "18/3",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p046_q2",
@@ -2375,10 +2424,11 @@
     "topicId": "cnm_p046",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "20 张贴纸，平均分成 4 份。每份有多少张？计算：20÷4＝？",
+    "prompt": "20 张贴纸，平均分成 4 份。每份有多少张？",
     "answer": "5",
     "explanation": "20÷4＝5。",
-    "verify": "20/4"
+    "verify": "20/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p046_q4",
@@ -2433,10 +2483,11 @@
     "topicId": "cnm_p047",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "有人说 36÷6＝5。用乘法检查：6×5 是多少？和 36 一样吗？先算出 6×5。计算：6×5＝？",
+    "prompt": "有人说 36÷6＝5。用乘法检查：6×5 是多少？和 36 一样吗？先算出 6×5。结果是几？",
     "answer": "30",
     "explanation": "6×5＝30，不等于 36，所以商不是 5。",
-    "verify": "6*5"
+    "verify": "6*5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p047_q4",
@@ -2473,10 +2524,11 @@
     "topicId": "cnm_p048",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每盒有 5 个鸡蛋，一共 8 盒。一共有多少个？计算：5×8＝？",
+    "prompt": "每盒有 5 个鸡蛋，一共 8 盒。一共有多少个？",
     "answer": "40",
     "explanation": "求 8 个 5 的和，用乘法，5×8＝40。",
-    "verify": "5*8"
+    "verify": "5*8",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p048_q4",
@@ -2587,10 +2639,11 @@
     "topicId": "cnm_p049",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "从校门向北走 40 米，再向南走 10 米。这时在校门北面多少米？计算：40－10＝？",
+    "prompt": "从校门向北走 40 米，再向南走 10 米。这时在校门北面多少米？",
     "answer": "30",
     "explanation": "向南走是往回，40－10＝30。",
-    "verify": "40-10"
+    "verify": "40-10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p050_q1",
@@ -2771,10 +2824,11 @@
     "topicId": "cnm_p054",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：1000－999＝？",
+    "prompt": "1000 比 999 多几？",
     "answer": "1",
     "explanation": "1000 比 999 大 1。",
-    "verify": "1000-999"
+    "verify": "1000-999",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p054_q2",
@@ -2791,10 +2845,11 @@
     "topicId": "cnm_p054",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "图书馆有故事书 2500 本，科技书 1800 本。故事书比科技书多多少本？计算：2500－1800＝？",
+    "prompt": "图书馆有故事书 2500 本，科技书 1800 本。故事书比科技书多多少本？",
     "answer": "700",
     "explanation": "2500－1800＝700。",
-    "verify": "2500-1800"
+    "verify": "2500-1800",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p054_q4",
@@ -2913,10 +2968,11 @@
     "topicId": "cnm_p056",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一袋盐 500 克，两袋一共多少克？计算：500＋500＝？",
+    "prompt": "一袋盐 500 克，两袋一共多少克？",
     "answer": "1000",
     "explanation": "500＋500＝1000，也就是 1 千克。",
-    "verify": "500+500"
+    "verify": "500+500",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p057_q1",
@@ -2967,10 +3023,11 @@
     "topicId": "cnm_p057",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每盒 4 支笔，买 3 盒，又单买 2 支。一共有多少支？计算：4×3＋2＝？",
+    "prompt": "每盒 4 支笔，买 3 盒，又单买 2 支。一共有多少支？",
     "answer": "14",
     "explanation": "先算 4×3＝12，再加 2 得 14。",
-    "verify": "4*3+2"
+    "verify": "4*3+2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p058_q1",
@@ -3021,10 +3078,11 @@
     "topicId": "cnm_p058",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "8 个同学平均分成 2 组，每组再来 3 人。这时每组有几人？计算：（8÷2）＋3＝？",
+    "prompt": "8 个同学平均分成 2 组，每组再来 3 人。这时每组有几人？",
     "answer": "7",
     "explanation": "先算 8÷2＝4，再加 3 得 7。",
-    "verify": "(8/2)+3"
+    "verify": "(8/2)+3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p059_q1",
@@ -3051,60 +3109,66 @@
     "topicId": "cnm_p059",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "书店运来 25 本，又运来 17 本，卖出 13 本。还剩多少本？计算：25＋17－13＝？",
+    "prompt": "书店运来 25 本，又运来 17 本，卖出 13 本。还剩多少本？",
     "answer": "29",
     "explanation": "25＋17＝42，42－13＝29。",
-    "verify": "25+17-13"
+    "verify": "25+17-13",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p059_q4",
     "topicId": "cnm_p059",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "上午 18 人、下午 12 人来借书，其中 6 人是重复来的。不同的有多少人？计算：（18＋12）－6＝？",
+    "prompt": "上午 18 人、下午 12 人来借书，其中 6 人是重复来的。不同的有多少人？",
     "answer": "24",
     "explanation": "先算 18＋12＝30，再减 6 得 24。",
-    "verify": "(18+12)-6"
+    "verify": "(18+12)-6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p060_q1",
     "topicId": "cnm_p060",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一列数 2，5，8。每次增加的一样多，8 的后面是多少？计算：8＋3＝？",
+    "prompt": "一列数 2，5，8。每次增加的一样多，8 的后面是多少？",
     "answer": "11",
     "explanation": "5－2＝3，每次加 3，8＋3＝11。",
-    "verify": "8+3"
+    "verify": "8+3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p060_q2",
     "topicId": "cnm_p060",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一列数 16，14，12。每次减少的一样多，12 的后面是多少？计算：12－2＝？",
+    "prompt": "一列数 16，14，12。每次减少的一样多，12 的后面是多少？",
     "answer": "10",
     "explanation": "每次减 2，12－2＝10。",
-    "verify": "12-2"
+    "verify": "12-2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p060_q3",
     "topicId": "cnm_p060",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一列数 3，6，9，12。按每次加 3，12 的后面是多少？计算：12＋3＝？",
+    "prompt": "一列数 3，6，9，12。按每次加 3，12 的后面是多少？",
     "answer": "15",
     "explanation": "每次加 3，12＋3＝15。",
-    "verify": "12+3"
+    "verify": "12+3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p060_q4",
     "topicId": "cnm_p060",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一列数 30，25，20，15。按每次减 5，15 的后面是多少？计算：15－5＝？",
+    "prompt": "一列数 30，25，20，15。按每次减 5，15 的后面是多少？",
     "answer": "10",
     "explanation": "15－5＝10。",
-    "verify": "15-5"
+    "verify": "15-5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p061_q1",
@@ -3209,30 +3273,33 @@
     "topicId": "cnm_p062",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一节课 40 分，课间 10 分。从上课到下课铃后再过完课间，一共经过多少分？计算：40＋10＝？",
+    "prompt": "一节课 40 分，课间 10 分。从上课到下课铃后再过完课间，一共经过多少分？",
     "answer": "50",
     "explanation": "40＋10＝50。",
-    "verify": "40+10"
+    "verify": "40+10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p063_q3",
     "topicId": "cnm_p063",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "电影 7 时 15 分开始，7 时 50 分结束。放了多少分？计算：50－15＝？",
+    "prompt": "电影 7 时 15 分开始，7 时 50 分结束。放了多少分？",
     "answer": "35",
     "explanation": "都在 7 时里，50－15＝35。",
-    "verify": "50-15"
+    "verify": "50-15",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p063_q4",
     "topicId": "cnm_p063",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "跑步从 3 时 40 分开始，4 时整结束。跑了多少分？计算：60－40＝？",
+    "prompt": "跑步从 3 时 40 分开始，4 时整结束。跑了多少分？",
     "answer": "20",
     "explanation": "从 40 分到整点是 20 分。",
-    "verify": "60-40"
+    "verify": "60-40",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p064_q1",
@@ -3259,10 +3326,11 @@
     "topicId": "cnm_p064",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一箱 180 本，另一箱 140 本。两箱一共多少本？计算：180＋140＝？",
+    "prompt": "一箱 180 本，另一箱 140 本。两箱一共多少本？",
     "answer": "320",
     "explanation": "180＋140＝320。",
-    "verify": "180+140"
+    "verify": "180+140",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p064_q4",
@@ -3299,10 +3367,11 @@
     "topicId": "cnm_p065",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "图书馆有 730 本书，借出 280 本。还剩多少本？计算：730－280＝？",
+    "prompt": "图书馆有 730 本书，借出 280 本。还剩多少本？",
     "answer": "450",
     "explanation": "730－280＝450。",
-    "verify": "730-280"
+    "verify": "730-280",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p065_q4",
@@ -3353,10 +3422,11 @@
     "topicId": "cnm_p066",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一件衣服 198 元，一顶帽子 102 元。大约一共多少元？把它们看成 200 元和 100 元来算。计算：200＋100＝？",
+    "prompt": "一件衣服 198 元，一顶帽子 102 元。大约一共多少元？把它们看成 200 元和 100 元来算。结果是几？",
     "answer": "300",
     "explanation": "198 接近 200，102 接近 100，大约 300 元。",
-    "verify": "200+100"
+    "verify": "200+100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p066_q4",
@@ -3393,10 +3463,11 @@
     "topicId": "cnm_p067",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "钉子长 2 厘米，另一颗长 15 毫米。哪颗更长？先把 2 厘米化成毫米再比。2 厘米是多少毫米？计算：2×10＝？",
+    "prompt": "钉子长 2 厘米，另一颗长 15 毫米。哪颗更长？先把 2 厘米化成毫米再比。2 厘米是多少毫米？",
     "answer": "20",
     "explanation": "2 厘米＝20 毫米，比 15 毫米长。",
-    "verify": "2*10"
+    "verify": "2*10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p067_q4",
@@ -3433,10 +3504,11 @@
     "topicId": "cnm_p068",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "课桌高约 7 分米。7 分米是多少厘米？计算：7×10＝？",
+    "prompt": "课桌高约 7 分米。7 分米是多少厘米？",
     "answer": "70",
     "explanation": "7×10＝70。",
-    "verify": "7*10"
+    "verify": "7*10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p068_q4",
@@ -3497,10 +3569,11 @@
     "topicId": "cnm_p069",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "学校到公园 2 千米，公园再到图书馆 1 千米。学校到图书馆一共多少千米？计算：2＋1＝？",
+    "prompt": "学校到公园 2 千米，公园再到图书馆 1 千米。学校到图书馆一共多少千米？",
     "answer": "3",
     "explanation": "2＋1＝3。",
-    "verify": "2+1"
+    "verify": "2+1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p070_q1",
@@ -3551,10 +3624,11 @@
     "topicId": "cnm_p070",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一辆卡车载重 4 吨，已经装了 1 吨。还能再装多少吨？计算：4－1＝？",
+    "prompt": "一辆卡车载重 4 吨，已经装了 1 吨。还能再装多少吨？",
     "answer": "3",
     "explanation": "4－1＝3。",
-    "verify": "4-1"
+    "verify": "4-1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p071_q1",
@@ -3581,10 +3655,11 @@
     "topicId": "cnm_p071",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "两个仓库分别有 368 箱和 475 箱。一共有多少箱？计算：368＋475＝？",
+    "prompt": "两个仓库分别有 368 箱和 475 箱。一共有多少箱？",
     "answer": "843",
     "explanation": "个位 8＋5＝13，十位 6＋7＋1＝14，得 843。",
-    "verify": "368+475"
+    "verify": "368+475",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p071_q4",
@@ -3635,10 +3710,11 @@
     "topicId": "cnm_p072",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "书架上有 600 本书，搬走 248 本。还剩多少本？计算：600－248＝？",
+    "prompt": "书架上有 600 本书，搬走 248 本。还剩多少本？",
     "answer": "352",
     "explanation": "600－248＝352。",
-    "verify": "600-248"
+    "verify": "600-248",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p072_q4",
@@ -3655,10 +3731,11 @@
     "topicId": "cnm_p073",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：6×3＝？",
+    "prompt": "6 的 3 倍是多少？",
     "answer": "18",
     "explanation": "6×3＝18。",
-    "verify": "6*3"
+    "verify": "6*3",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p073_q2",
@@ -3675,10 +3752,11 @@
     "topicId": "cnm_p073",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每盒有 7 朵红花，一共 5 盒。一共有多少朵？计算：7×5＝？",
+    "prompt": "每盒有 7 朵红花，一共 5 盒。一共有多少朵？",
     "answer": "35",
     "explanation": "求 5 个 7 的和，用乘法，7×5＝35。",
-    "verify": "7*5"
+    "verify": "7*5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p073_q4",
@@ -3733,10 +3811,11 @@
     "topicId": "cnm_p074",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每盒彩笔 36 元，买 4 盒。一共多少元？计算：36×4＝？",
+    "prompt": "每盒彩笔 36 元，买 4 盒。一共多少元？",
     "answer": "144",
     "explanation": "36×4＝144。",
-    "verify": "36*4"
+    "verify": "36*4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p074_q4",
@@ -3773,10 +3852,11 @@
     "topicId": "cnm_p075",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每箱 105 个，4 箱一共多少个？计算：105×4＝？",
+    "prompt": "每箱 105 个，4 箱一共多少个？",
     "answer": "420",
     "explanation": "105×4＝420。",
-    "verify": "105*4"
+    "verify": "105*4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p075_q4",
@@ -3827,10 +3907,11 @@
     "topicId": "cnm_p076",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "编号从 1 编到 30。一共要编多少个号？计算：30－0＝？",
+    "prompt": "编号从 1 编到 30。一共要编多少个号？",
     "answer": "30",
     "explanation": "从 1 到 30 共 30 个号。",
-    "verify": "30-0"
+    "verify": "30-0",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p077_q1",
@@ -3940,10 +4021,11 @@
     "topicId": "cnm_p078",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一块长方形菜地长 8 米、宽 3 米。篱笆至少要多少米？计算：（8＋3）×2＝？",
+    "prompt": "一块长方形菜地长 8 米、宽 3 米。篱笆至少要多少米？",
     "answer": "22",
     "explanation": "周长＝（8＋3）×2＝22。",
-    "verify": "(8+3)*2"
+    "verify": "(8+3)*2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p079_q1",
@@ -4024,10 +4106,11 @@
     "topicId": "cnm_p080",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一条绳子用去 2/8，又用去 3/8。一共用去几分之几？计算：2/8＋3/8＝？",
+    "prompt": "一条绳子用去 2/8，又用去 3/8。一共用去几分之几？",
     "answer": "5/8",
     "explanation": "2/8＋3/8＝5/8。",
-    "verify": "Fraction(2,8)+Fraction(3,8)"
+    "verify": "Fraction(2,8)+Fraction(3,8)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p080_q4",
@@ -4068,10 +4151,11 @@
     "topicId": "cnm_p081",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "语文小组 10 人，数学小组 9 人，两个小组都参加的有 4 人。只算一次的话，一共有多少人？计算：10＋9－4＝？",
+    "prompt": "语文小组 10 人，数学小组 9 人，两个小组都参加的有 4 人。只算一次的话，一共有多少人？",
     "answer": "15",
     "explanation": "10＋9－4＝15。",
-    "verify": "10+9-4"
+    "verify": "10+9-4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p082_q1",
@@ -4130,20 +4214,22 @@
     "topicId": "cnm_p082",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "向东走 40 米，再向北走 30 米。向东走了多少米？计算：40－0＝？",
+    "prompt": "向东走 40 米，再向北走 30 米。向东走了多少米？",
     "answer": "40",
     "explanation": "向东的路程是 40 米。",
-    "verify": "40-0"
+    "verify": "40-0",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p082_q4",
     "topicId": "cnm_p082",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "从广场向东南走到商店 50 米，再原路返回 20 米。现在离广场多少米？计算：50－20＝？",
+    "prompt": "从广场向东南走到商店 50 米，再原路返回 20 米。现在离广场多少米？",
     "answer": "30",
     "explanation": "50－20＝30。",
-    "verify": "50-20"
+    "verify": "50-20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p083_q1",
@@ -4170,10 +4256,11 @@
     "topicId": "cnm_p083",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "84 支铅笔平均分给 4 个组。每组多少支？计算：84÷4＝？",
+    "prompt": "84 支铅笔平均分给 4 个组。每组多少支？",
     "answer": "21",
     "explanation": "84÷4＝21。",
-    "verify": "84/4"
+    "verify": "84/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p083_q4",
@@ -4210,10 +4297,11 @@
     "topicId": "cnm_p084",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "128 人平均坐 4 辆车。每辆坐多少人？计算：128÷4＝？",
+    "prompt": "128 人平均坐 4 辆车。每辆坐多少人？",
     "answer": "32",
     "explanation": "128÷4＝32。",
-    "verify": "128/4"
+    "verify": "128/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p084_q4",
@@ -4230,10 +4318,11 @@
     "topicId": "cnm_p085",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：12＋9＝？",
+    "prompt": "统计表里男生 12 人、女生 9 人，一共几人？",
     "answer": "21",
     "explanation": "男生 12 人、女生 9 人，合计 21 人。",
-    "verify": "12+9"
+    "verify": "12+9",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p085_q2",
@@ -4250,20 +4339,22 @@
     "topicId": "cnm_p085",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "上半年借出故事书 46 本、科技书 35 本。两类一共借出多少本？计算：46＋35＝？",
+    "prompt": "上半年借出故事书 46 本、科技书 35 本。两类一共借出多少本？",
     "answer": "81",
     "explanation": "46＋35＝81。",
-    "verify": "46+35"
+    "verify": "46+35",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p085_q4",
     "topicId": "cnm_p085",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一班 28 人参加，二班 23 人参加。一班比二班多几人？计算：28－23＝？",
+    "prompt": "一班 28 人参加，二班 23 人参加。一班比二班多几人？",
     "answer": "5",
     "explanation": "28－23＝5。",
-    "verify": "28-23"
+    "verify": "28-23",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p086_q1",
@@ -4290,10 +4381,11 @@
     "topicId": "cnm_p086",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每盒 24 支，13 盒一共多少支？计算：24×13＝？",
+    "prompt": "每盒 24 支，13 盒一共多少支？",
     "answer": "312",
     "explanation": "24×13＝312。",
-    "verify": "24*13"
+    "verify": "24*13",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p086_q4",
@@ -4330,10 +4422,11 @@
     "topicId": "cnm_p087",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每排 32 个座位，有 21 排。一共有多少个座位？计算：32×21＝？",
+    "prompt": "每排 32 个座位，有 21 排。一共有多少个座位？",
     "answer": "672",
     "explanation": "32×21＝672。",
-    "verify": "32*21"
+    "verify": "32*21",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p087_q4",
@@ -4428,10 +4521,11 @@
     "topicId": "cnm_p089",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "黑板长 4 米、宽 1 米。面积是多少平方米？计算：4×1＝？",
+    "prompt": "黑板长 4 米、宽 1 米。面积是多少平方米？",
     "answer": "4",
     "explanation": "4×1＝4。",
-    "verify": "4*1"
+    "verify": "4*1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p089_q4",
@@ -4468,10 +4562,11 @@
     "topicId": "cnm_p090",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一块地 3 平方米。用平方分米表示是多少？计算：3×100＝？",
+    "prompt": "一块地 3 平方米。用平方分米表示是多少？",
     "answer": "300",
     "explanation": "3×100＝300。",
-    "verify": "3*100"
+    "verify": "3*100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p090_q4",
@@ -4560,10 +4655,11 @@
     "topicId": "cnm_p092",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：12＋1＝？",
+    "prompt": "下午 1 时用 24 时记时法表示是几时？",
     "answer": "13",
     "explanation": "下午 1 时是 13 时。",
-    "verify": "12+1"
+    "verify": "12+1",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p092_q2",
@@ -4580,10 +4676,11 @@
     "topicId": "cnm_p092",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "火车 16 时开。16 时是下午几时？用 16－12 来算。计算：16－12＝？",
+    "prompt": "火车 16 时开。16 时是下午几时？用 16－12 来算。结果是几？",
     "answer": "4",
     "explanation": "16－12＝4，是下午 4 时。",
-    "verify": "16-12"
+    "verify": "16-12",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p092_q4",
@@ -4600,10 +4697,11 @@
     "topicId": "cnm_p093",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：0.1＋0.2＝？（用小数作答）",
+    "prompt": "0.1 元加 0.2 元，一共几元？",
     "answer": "0.3",
     "explanation": "1 角加 2 角是 3 角，也就是 0.3 元。",
-    "verify": "0.1+0.2"
+    "verify": "0.1+0.2",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p093_q2",
@@ -4620,10 +4718,11 @@
     "topicId": "cnm_p093",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一支笔 0.6 元，一块橡皮 0.2 元。一共多少元？计算：0.6＋0.2＝？（用小数作答）",
+    "prompt": "一支笔 0.6 元，一块橡皮 0.2 元。一共多少元？",
     "answer": "0.8",
     "explanation": "0.6＋0.2＝0.8。",
-    "verify": "0.6+0.2"
+    "verify": "0.6+0.2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p093_q4",
@@ -4678,10 +4777,11 @@
     "topicId": "cnm_p094",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "绳子 1.2 米，又接上 0.4 米。现在长多少米？计算：1.2＋0.4＝？（用小数作答）",
+    "prompt": "绳子 1.2 米，又接上 0.4 米。现在长多少米？",
     "answer": "1.6",
     "explanation": "1.2＋0.4＝1.6。",
-    "verify": "Fraction('1.2')+Fraction('0.4')"
+    "verify": "Fraction('1.2')+Fraction('0.4')",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p094_q4",
@@ -4722,10 +4822,11 @@
     "topicId": "cnm_p095",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "3 种面包和 2 种饮料，每种面包配每种饮料。一共有多少种搭配？计算：3×2＝？",
+    "prompt": "3 种面包和 2 种饮料，每种面包配每种饮料。一共有多少种搭配？",
     "answer": "6",
     "explanation": "3×2＝6。",
-    "verify": "3*2"
+    "verify": "3*2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p096_q1",
@@ -4762,20 +4863,22 @@
     "topicId": "cnm_p096",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一所学校约 2000 人，另一所约 3000 人。两所大约一共多少人？计算：2000＋3000＝？",
+    "prompt": "一所学校约 2000 人，另一所约 3000 人。两所大约一共多少人？",
     "answer": "5000",
     "explanation": "2000＋3000＝5000。",
-    "verify": "2000+3000"
+    "verify": "2000+3000",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p097_q1",
     "topicId": "cnm_p097",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：230000÷10000＝？",
+    "prompt": "230000 里面有几个万？",
     "answer": "23",
     "explanation": "230000＝23 万。",
-    "verify": "230000/10000"
+    "verify": "230000/10000",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p097_q2",
@@ -4792,10 +4895,11 @@
     "topicId": "cnm_p097",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一座城市约 1260000 人。改写成用万作单位是多少万？计算：1260000÷10000＝？",
+    "prompt": "一座城市约 1260000 人。改写成用万作单位是多少万？",
     "answer": "126",
     "explanation": "1260000＝126 万。",
-    "verify": "1260000/10000"
+    "verify": "1260000/10000",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p097_q4",
@@ -4856,10 +4960,11 @@
     "topicId": "cnm_p098",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "公园占地 4 公顷，学校占地 1 公顷。公园比学校大多少公顷？计算：4－1＝？",
+    "prompt": "公园占地 4 公顷，学校占地 1 公顷。公园比学校大多少公顷？",
     "answer": "3",
     "explanation": "4－1＝3。",
-    "verify": "4-1"
+    "verify": "4-1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p099_q1",
@@ -4900,10 +5005,11 @@
     "topicId": "cnm_p099",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "从家到学校，沿街走 400 米，抄近路走 250 米。近路少走多少米？计算：400－250＝？",
+    "prompt": "从家到学校，沿街走 400 米，抄近路走 250 米。近路少走多少米？",
     "answer": "150",
     "explanation": "两点之间线段最短，400－250＝150。",
-    "verify": "400-250"
+    "verify": "400-250",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p099_q4",
@@ -4940,20 +5046,22 @@
     "topicId": "cnm_p100",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个角是 35 度，另一个角是 20 度。两个角拼起来是多少度？计算：35＋20＝？",
+    "prompt": "一个角是 35 度，另一个角是 20 度。两个角拼起来是多少度？",
     "answer": "55",
     "explanation": "35＋20＝55。",
-    "verify": "35+20"
+    "verify": "35+20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p100_q4",
     "topicId": "cnm_p100",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "把一个 80 度的角平均分成 2 份。每份多少度？计算：80÷2＝？",
+    "prompt": "把一个 80 度的角平均分成 2 份。每份多少度？",
     "answer": "40",
     "explanation": "80÷2＝40。",
-    "verify": "80/2"
+    "verify": "80/2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p101_q1",
@@ -5050,10 +5158,11 @@
     "topicId": "cnm_p102",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每箱 125 瓶，16 箱一共多少瓶？计算：125×16＝？",
+    "prompt": "每箱 125 瓶，16 箱一共多少瓶？",
     "answer": "2000",
     "explanation": "125×16＝2000。",
-    "verify": "125*16"
+    "verify": "125*16",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p102_q4",
@@ -5104,10 +5213,11 @@
     "topicId": "cnm_p103",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一根旗杆和地面相交成直角。这个角是多少度？计算：45＋45＝？",
+    "prompt": "一根旗杆和地面相交成直角。这个角是多少度？",
     "answer": "90",
     "explanation": "直角是 90 度。",
-    "verify": "45+45"
+    "verify": "45+45",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p103_q4",
@@ -5158,10 +5268,11 @@
     "topicId": "cnm_p104",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "铁轨的两根钢轨平行。若一段长 20 米，另一段也是 20 米。两段相差多少米？计算：20－20＝？",
+    "prompt": "铁轨的两根钢轨平行。若一段长 20 米，另一段也是 20 米。两段相差多少米？",
     "answer": "0",
     "explanation": "平行线段可以一样长，差是 0。",
-    "verify": "20-20"
+    "verify": "20-20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p104_q4",
@@ -5268,10 +5379,11 @@
     "topicId": "cnm_p106",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "288 本本子，每 16 本捆一捆。可以捆多少捆？计算：288÷16＝？",
+    "prompt": "288 本本子，每 16 本捆一捆。可以捆多少捆？",
     "answer": "18",
     "explanation": "288÷16＝18。",
-    "verify": "288/16"
+    "verify": "288/16",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p106_q4",
@@ -5288,10 +5400,11 @@
     "topicId": "cnm_p107",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：80÷20＝？",
+    "prompt": "80÷20，被除数和除数都除以 10 变成 8÷2，商是几？",
     "answer": "4",
     "explanation": "80÷20＝4，被除数和除数都缩小 10 倍后 8÷2 仍是 4。",
-    "verify": "80/20"
+    "verify": "80/20",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p107_q2",
@@ -5308,10 +5421,11 @@
     "topicId": "cnm_p107",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "600÷30 可以同时去掉一个 0，先算 60÷3。60÷3 是多少？计算：60÷3＝？",
+    "prompt": "600÷30 可以同时去掉一个 0，先算 60÷3。60÷3 是多少？",
     "answer": "20",
     "explanation": "60÷3＝20，所以 600÷30＝20。",
-    "verify": "60/3"
+    "verify": "60/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p107_q4",
@@ -5362,20 +5476,22 @@
     "topicId": "cnm_p108",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "喜欢苹果的有 15 人，喜欢香蕉的有 9 人。苹果比香蕉多几人？计算：15－9＝？",
+    "prompt": "喜欢苹果的有 15 人，喜欢香蕉的有 9 人。苹果比香蕉多几人？",
     "answer": "6",
     "explanation": "15－9＝6。",
-    "verify": "15-9"
+    "verify": "15-9",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p108_q4",
     "topicId": "cnm_p108",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "四天借书本数是 8、6、10、5。哪两天合起来是 14 本？先算 8＋6。计算：8＋6＝？",
+    "prompt": "四天借书本数是 8、6、10、5。哪两天合起来是 14 本？先算 8＋6。结果是几？",
     "answer": "14",
     "explanation": "8＋6＝14，是第一天和第二天；其他两天合起来都不是 14 本。",
-    "verify": "8+6"
+    "verify": "8+6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p110_q1",
@@ -5402,10 +5518,11 @@
     "topicId": "cnm_p110",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "两个数相加得 70，其中一个是 28。另一个是多少？计算：70－28＝？",
+    "prompt": "两个数相加得 70，其中一个是 28。另一个是多少？",
     "answer": "42",
     "explanation": "70－28＝42。",
-    "verify": "70-28"
+    "verify": "70-28",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p110_q4",
@@ -5460,10 +5577,11 @@
     "topicId": "cnm_p111",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "故事书 24 本，科技书 18 本。两类书一共多少本？计算：24＋18＝？",
+    "prompt": "故事书 24 本，科技书 18 本。两类书一共多少本？",
     "answer": "42",
     "explanation": "总量等于两个分量相加，24＋18＝42。",
-    "verify": "24+18"
+    "verify": "24+18",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p111_q4",
@@ -5528,10 +5646,11 @@
     "topicId": "cnm_p112",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "3 盒笔，每盒 12 支，又拿出 6 支。一共多少支？计算：12×3＋6＝？",
+    "prompt": "3 盒笔，每盒 12 支，又拿出 6 支。一共多少支？",
     "answer": "42",
     "explanation": "先算 12×3＝36，再加 6 得 42。",
-    "verify": "12*3+6"
+    "verify": "12*3+6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p113_q1",
@@ -5563,11 +5682,12 @@
     "topicId": "cnm_p113",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "从正面看有 5 个小方块，从侧面看有 3 个。正面比侧面多看到几个？计算：5－3＝？",
+    "prompt": "从正面看有 5 个小方块，从侧面看有 3 个。正面比侧面多看到几个？",
     "answer": "2",
     "explanation": "5－3＝2。",
     "verify": "5-3",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 430 90\"><g transform=\"translate(0,0)\"><text x=\"16\" y=\"22\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">正面</text><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"142\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"142\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"184\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"184\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></g><g transform=\"translate(230,0)\"><text x=\"16\" y=\"22\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">侧面</text><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></g></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 430 90\"><g transform=\"translate(0,0)\"><text x=\"16\" y=\"22\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">正面</text><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"142\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"142\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"184\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"184\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></g><g transform=\"translate(230,0)\"><text x=\"16\" y=\"22\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">侧面</text><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"16\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"58\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"100\" y=\"32\" width=\"36\" height=\"36\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.3\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></g></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p114_q1",
@@ -5594,10 +5714,11 @@
     "topicId": "cnm_p114",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "计算 46＋98 时，可以先算 46＋100 再减 2。46＋100 是多少？计算：46＋100＝？",
+    "prompt": "计算 46＋98 时，可以先算 46＋100 再减 2。46＋100 是多少？",
     "answer": "146",
     "explanation": "46＋100＝146，再减 2 才是 144。这里先算 46＋100。",
-    "verify": "46+100"
+    "verify": "46+100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p114_q4",
@@ -5652,10 +5773,11 @@
     "topicId": "cnm_p115",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每排 25 人，有 4 排。一共多少人？计算：25×4＝？",
+    "prompt": "每排 25 人，有 4 排。一共多少人？",
     "answer": "100",
     "explanation": "25×4＝100。",
-    "verify": "25*4"
+    "verify": "25*4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p115_q4",
@@ -5710,10 +5832,11 @@
     "topicId": "cnm_p116",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "买 4 支笔和 6 支笔，每支 8 元。一共多少元？计算：8×（4＋6）＝？",
+    "prompt": "买 4 支笔和 6 支笔，每支 8 元。一共多少元？",
     "answer": "80",
     "explanation": "先算 4＋6＝10，再算 8×10＝80。",
-    "verify": "8*(4+6)"
+    "verify": "8*(4+6)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p116_q4",
@@ -5768,10 +5891,11 @@
     "topicId": "cnm_p117",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每本 48 元，买 2 本。可以先算 50×2 再减 2×2。50×2 是多少？计算：50×2＝？",
+    "prompt": "每本 48 元，买 2 本。可以先算 50×2 再减 2×2。50×2 是多少？",
     "answer": "100",
     "explanation": "50×2＝100，再减 4 才是 96。",
-    "verify": "50*2"
+    "verify": "50*2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p117_q4",
@@ -5806,10 +5930,11 @@
     "topicId": "cnm_p118",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：0.3＋0.4＝？（用小数作答）",
+    "prompt": "0.3 加 0.4 一共是多少？",
     "answer": "0.7",
     "explanation": "0.3 是 3 个 0.1，0.4 是 4 个 0.1，合起来 0.7。",
-    "verify": "0.3+0.4"
+    "verify": "0.3+0.4",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p118_q2",
@@ -5826,10 +5951,11 @@
     "topicId": "cnm_p118",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "把 1 米平均分成 10 份，取 7 份。用一位小数表示是多少米？计算：0.1×7＝？（用小数作答）",
+    "prompt": "把 1 米平均分成 10 份，取 7 份。用一位小数表示是多少米？",
     "answer": "0.7",
     "explanation": "7 个 0.1 米是 0.7 米。",
-    "verify": "0.1*7"
+    "verify": "0.1*7",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p118_q4",
@@ -5864,10 +5990,11 @@
     "topicId": "cnm_p119",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：3.5－2.8＝？（用小数作答）",
+    "prompt": "3.5 比 2.8 多多少？",
     "answer": "0.7",
     "explanation": "3.5 比 2.8 大，相差 0.7。",
-    "verify": "3.5-2.8"
+    "verify": "3.5-2.8",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p119_q2",
@@ -5884,10 +6011,11 @@
     "topicId": "cnm_p119",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一根绳子 2.4 米，另一根 1.9 米。长的比短的多多少米？计算：2.4－1.9＝？（用小数作答）",
+    "prompt": "一根绳子 2.4 米，另一根 1.9 米。长的比短的多多少米？",
     "answer": "0.5",
     "explanation": "2.4－1.9＝0.5。",
-    "verify": "2.4-1.9"
+    "verify": "2.4-1.9",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p119_q4",
@@ -5922,10 +6050,11 @@
     "topicId": "cnm_p120",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：1.2×10＝？（用小数作答）",
+    "prompt": "1.2 的小数点向右移一位，得多少？",
     "answer": "12",
     "explanation": "1.2 的小数点向右移一位是 12。",
-    "verify": "1.2*10"
+    "verify": "1.2*10",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p120_q2",
@@ -5942,10 +6071,11 @@
     "topicId": "cnm_p120",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "0.8 扩大到 100 倍是多少？计算：0.8×100＝？（用小数作答）",
+    "prompt": "0.8 扩大到 100 倍是多少？",
     "answer": "80",
     "explanation": "小数点向右移两位，0.8 变成 80。",
-    "verify": "0.8*100"
+    "verify": "0.8*100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p120_q4",
@@ -5980,30 +6110,33 @@
     "topicId": "cnm_p121",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "3.8 四舍五入到个位，看十分位。十分位是 8，要进 1。个位 3 加 1 是多少？计算：3＋1＝？",
+    "prompt": "3.8 四舍五入到个位，看十分位。十分位是 8，要进 1。个位 3 加 1 是多少？",
     "answer": "4",
     "explanation": "十分位满 5 向个位进 1，近似数是 4。",
-    "verify": "3+1"
+    "verify": "3+1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p121_q2",
     "topicId": "cnm_p121",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "6.3 四舍五入到个位，十分位是 3，不去进位。近似数的个位是多少？计算：6＋0＝？",
+    "prompt": "6.3 四舍五入到个位，十分位是 3，不去进位。近似数的个位是多少？",
     "answer": "6",
     "explanation": "十分位小于 5，近似数是 6。",
-    "verify": "6+0"
+    "verify": "6+0",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p121_q3",
     "topicId": "cnm_p121",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "2.46 保留一位小数，看百分位 6，要向十分位进 1。十分位 4 加 1 是多少？计算：4＋1＝？",
+    "prompt": "2.46 保留一位小数，看百分位 6，要向十分位进 1。十分位 4 加 1 是多少？",
     "answer": "5",
     "explanation": "百分位满 5 向十分位进 1，近似数是 2.5。",
-    "verify": "4+1"
+    "verify": "4+1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p121_q4",
@@ -6144,10 +6277,11 @@
     "topicId": "cnm_p123",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "两条边是 2 厘米和 3 厘米。它们的和是多少厘米？计算：2＋3＝？",
+    "prompt": "两条边是 2 厘米和 3 厘米。它们的和是多少厘米？",
     "answer": "5",
     "explanation": "2＋3＝5。如果第三边不小于 5，就围不成。",
-    "verify": "2+3"
+    "verify": "2+3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p123_q4",
@@ -6216,10 +6350,11 @@
     "topicId": "cnm_p124",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "直角三角形的一个锐角是 35 度。另一个锐角是多少度？计算：90－35＝？",
+    "prompt": "直角三角形的一个锐角是 35 度。另一个锐角是多少度？",
     "answer": "55",
     "explanation": "直角是 90 度，另一个锐角是 90－35＝55 度。",
-    "verify": "90-35"
+    "verify": "90-35",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p124_q4",
@@ -6274,10 +6409,11 @@
     "topicId": "cnm_p125",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一本笔记本 3.5 元，一块橡皮 0.8 元。一共多少元？计算：3.5＋0.8＝？（用小数作答）",
+    "prompt": "一本笔记本 3.5 元，一块橡皮 0.8 元。一共多少元？",
     "answer": "4.3",
     "explanation": "3.5＋0.8＝4.3。",
-    "verify": "3.5+0.8"
+    "verify": "3.5+0.8",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p125_q4",
@@ -6332,10 +6468,11 @@
     "topicId": "cnm_p126",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "跳绳 1.8 米，另一个人跳 1.2 米。两人一共跳了多少米？计算：1.8＋1.2＝？（用小数作答）",
+    "prompt": "跳绳 1.8 米，另一个人跳 1.2 米。两人一共跳了多少米？",
     "answer": "3",
     "explanation": "1.8＋1.2＝3。",
-    "verify": "1.8+1.2"
+    "verify": "1.8+1.2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p126_q4",
@@ -6404,10 +6541,11 @@
     "topicId": "cnm_p127",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "图形左边有 5 个小方格，右边应对称地再画同样多。一共要画多少格？计算：5＋5＝？",
+    "prompt": "图形左边有 5 个小方格，右边应对称地再画同样多。一共要画多少格？",
     "answer": "10",
     "explanation": "5＋5＝10。",
-    "verify": "5+5"
+    "verify": "5+5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p127_q4",
@@ -6476,10 +6614,11 @@
     "topicId": "cnm_p128",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个点在第 2 格，向右平移 5 格。到了第几格？计算：2＋5＝？",
+    "prompt": "一个点在第 2 格，向右平移 5 格。到了第几格？",
     "answer": "7",
     "explanation": "2＋5＝7。",
-    "verify": "2+5"
+    "verify": "2+5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p128_q4",
@@ -6558,20 +6697,22 @@
     "topicId": "cnm_p129",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "三次成绩是 80、90、100。总分是多少？计算：80＋90＋100＝？",
+    "prompt": "三次成绩是 80、90、100。总分是多少？",
     "answer": "270",
     "explanation": "80＋90＋100＝270，再除以 3 才是平均数 90。这里先求总和。",
-    "verify": "80+90+100"
+    "verify": "80+90+100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p130_q1",
     "topicId": "cnm_p130",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：18－12＝？",
+    "prompt": "条形统计图里，18 人比 12 人多几人？",
     "answer": "6",
     "explanation": "同一项目上，甲是 18、乙是 12，甲比乙多 6。",
-    "verify": "18-12"
+    "verify": "18-12",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p130_q2",
@@ -6588,10 +6729,11 @@
     "topicId": "cnm_p130",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一班喜欢跳绳的有 16 人，二班有 11 人。一班比二班多几人？计算：16－11＝？",
+    "prompt": "一班喜欢跳绳的有 16 人，二班有 11 人。一班比二班多几人？",
     "answer": "5",
     "explanation": "16－11＝5。",
-    "verify": "16-11"
+    "verify": "16-11",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p130_q4",
@@ -6650,10 +6792,11 @@
     "topicId": "cnm_p131",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "实际有 26 条腿，假设全是鸡只有 16 条。多出多少条？计算：26－16＝？",
+    "prompt": "实际有 26 条腿，假设全是鸡只有 16 条。多出多少条？",
     "answer": "10",
     "explanation": "26－16＝10。每把一只鸡换成兔会多 2 条腿。",
-    "verify": "26-16"
+    "verify": "26-16",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p131_q4",
@@ -6708,10 +6851,11 @@
     "topicId": "cnm_p132",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每支笔 1.2 元，买 4 支。一共多少元？计算：1.2×4＝？（用小数作答）",
+    "prompt": "每支笔 1.2 元，买 4 支。一共多少元？",
     "answer": "4.8",
     "explanation": "1.2×4＝4.8。",
-    "verify": "1.2*4"
+    "verify": "1.2*4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p132_q4",
@@ -6766,10 +6910,11 @@
     "topicId": "cnm_p133",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "长 1.5 米、宽 0.4 米的长方形，面积是多少平方米？计算：1.5×0.4＝？（用小数作答）",
+    "prompt": "长 1.5 米、宽 0.4 米的长方形，面积是多少平方米？",
     "answer": "0.6",
     "explanation": "1.5×0.4＝0.6。",
-    "verify": "1.5*0.4"
+    "verify": "1.5*0.4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p133_q4",
@@ -6824,10 +6969,11 @@
     "topicId": "cnm_p134",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每小时行 3.5 千米，行 2 小时。一共多少千米？计算：3.5×2＝？（用小数作答）",
+    "prompt": "每小时行 3.5 千米，行 2 小时。一共多少千米？",
     "answer": "7",
     "explanation": "3.5×2＝7。",
-    "verify": "3.5*2"
+    "verify": "3.5*2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p134_q4",
@@ -6862,20 +7008,22 @@
     "topicId": "cnm_p135",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：1.6×2.4＝？（用小数作答）",
+    "prompt": "1.6×2.4 的积是多少？",
     "answer": "3.84",
     "explanation": "1.6×2.4＝3.84。",
-    "verify": "1.6*2.4"
+    "verify": "1.6*2.4",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p135_q2",
     "topicId": "cnm_p135",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "3.84 保留一位小数，百分位是 4，不向十分位进 1。保留到十分位可以先算 38÷10。计算：38÷10＝？（用小数作答）",
+    "prompt": "3.84 保留一位小数，百分位是 4，不向十分位进 1。保留到十分位可以先算 38÷10。结果是几？",
     "answer": "3.8",
     "explanation": "38÷10＝3.8。",
-    "verify": "38/10"
+    "verify": "38/10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p135_q3",
@@ -6954,10 +7102,11 @@
     "topicId": "cnm_p136",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "点在第 3 列第 5 行。列数和行数相加是多少？计算：3＋5＝？",
+    "prompt": "点在第 3 列第 5 行。列数和行数相加是多少？",
     "answer": "8",
     "explanation": "3＋5＝8。",
-    "verify": "3+5"
+    "verify": "3+5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p136_q4",
@@ -7012,10 +7161,11 @@
     "topicId": "cnm_p137",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "3 条同样的绳子共长 4.5 米。每条多少米？计算：4.5÷3＝？（用小数作答）",
+    "prompt": "3 条同样的绳子共长 4.5 米。每条多少米？",
     "answer": "1.5",
     "explanation": "4.5÷3＝1.5。",
-    "verify": "4.5/3"
+    "verify": "4.5/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p137_q4",
@@ -7070,10 +7220,11 @@
     "topicId": "cnm_p138",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每块橡皮 0.4 元，2.4 元可以买几块？计算：2.4÷0.4＝？（用小数作答）",
+    "prompt": "每块橡皮 0.4 元，2.4 元可以买几块？",
     "answer": "6",
     "explanation": "2.4÷0.4＝6。",
-    "verify": "2.4/0.4"
+    "verify": "2.4/0.4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p138_q4",
@@ -7128,10 +7279,11 @@
     "topicId": "cnm_p139",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "9.6 千米走了 3 小时。平均每小时多少千米？计算：9.6÷3＝？（用小数作答）",
+    "prompt": "9.6 千米走了 3 小时。平均每小时多少千米？",
     "answer": "3.2",
     "explanation": "9.6÷3＝3.2。",
-    "verify": "9.6/3"
+    "verify": "9.6/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p139_q4",
@@ -7286,10 +7438,11 @@
     "topicId": "cnm_p141",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "袋中红球 4 个、黄球 4 个。两种球一共多少个？计算：4＋4＝？",
+    "prompt": "袋中红球 4 个、黄球 4 个。两种球一共多少个？",
     "answer": "8",
     "explanation": "4＋4＝8，两种颜色一样多，可能性相等。",
-    "verify": "4+4"
+    "verify": "4+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p141_q4",
@@ -7348,20 +7501,22 @@
     "topicId": "cnm_p142",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "a＝6 时，5×a 是多少？计算：5×6＝？",
+    "prompt": "a＝6 时，5×a 是多少？",
     "answer": "30",
     "explanation": "5×6＝30。",
-    "verify": "5*6"
+    "verify": "5*6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p142_q3",
     "topicId": "cnm_p142",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每本笔记本 x 元，买 3 本。x＝4 时要付多少元？计算：4×3＝？",
+    "prompt": "每本笔记本 x 元，买 3 本。x＝4 时要付多少元？",
     "answer": "12",
     "explanation": "4×3＝12。",
-    "verify": "4*3"
+    "verify": "4*3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p142_q4",
@@ -7406,10 +7561,11 @@
     "topicId": "cnm_p143",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "未知数 x 加上 6 等于 15。x 是多少？计算：15－6＝？",
+    "prompt": "未知数 x 加上 6 等于 15。x 是多少？",
     "answer": "9",
     "explanation": "15－6＝9。",
-    "verify": "15-6"
+    "verify": "15-6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p143_q4",
@@ -7468,10 +7624,11 @@
     "topicId": "cnm_p144",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "x－4＝9。两边同时加上 4，x 是多少？计算：9＋4＝？",
+    "prompt": "x－4＝9。两边同时加上 4，x 是多少？",
     "answer": "13",
     "explanation": "9＋4＝13。",
-    "verify": "9+4"
+    "verify": "9+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p144_q4",
@@ -7506,40 +7663,44 @@
     "topicId": "cnm_p145",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "2x＋5＝17。先算 17－5，再看 x。17－5 是多少？计算：17－5＝？",
+    "prompt": "2x＋5＝17。先算 17－5，再看 x。17－5 是多少？",
     "answer": "12",
     "explanation": "17－5＝12，2x＝12，x＝6。",
-    "verify": "17-5"
+    "verify": "17-5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p146_q1",
     "topicId": "cnm_p146",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "买 4 个同样的文具盒付了 28 元。每个多少元？计算：28÷4＝？",
+    "prompt": "买 4 个同样的文具盒付了 28 元。每个多少元？",
     "answer": "7",
     "explanation": "4x＝28，x＝7。",
-    "verify": "28/4"
+    "verify": "28/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p146_q2",
     "topicId": "cnm_p146",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一条绳子用去 15 米，还剩 9 米。原来多少米？计算：15＋9＝？",
+    "prompt": "一条绳子用去 15 米，还剩 9 米。原来多少米？",
     "answer": "24",
     "explanation": "x－15＝9，x＝24。",
-    "verify": "15+9"
+    "verify": "15+9",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p146_q3",
     "topicId": "cnm_p146",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每小时行 12 千米，行了 x 小时共 36 千米。x 是多少？计算：36÷12＝？",
+    "prompt": "每小时行 12 千米，行了 x 小时共 36 千米。x 是多少？",
     "answer": "3",
     "explanation": "12x＝36，x＝3。",
-    "verify": "36/12"
+    "verify": "36/12",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p146_q4",
@@ -7595,10 +7756,11 @@
     "topicId": "cnm_p147",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一块平行四边形草地底 12 米、高 6 米。面积是多少平方米？计算：12×6＝？",
+    "prompt": "一块平行四边形草地底 12 米、高 6 米。面积是多少平方米？",
     "answer": "72",
     "explanation": "12×6＝72。",
-    "verify": "12*6"
+    "verify": "12*6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p147_q4",
@@ -7654,10 +7816,11 @@
     "topicId": "cnm_p148",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一块三角形布料底 10 厘米、高 6 厘米。面积是多少平方厘米？计算：10×6÷2＝？",
+    "prompt": "一块三角形布料底 10 厘米、高 6 厘米。面积是多少平方厘米？",
     "answer": "30",
     "explanation": "10×6÷2＝30。",
-    "verify": "10*6/2"
+    "verify": "10*6/2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p148_q4",
@@ -7713,10 +7876,11 @@
     "topicId": "cnm_p149",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一块梯形田上底 4 米、下底 8 米、高 5 米。面积是多少平方米？计算：（4＋8）×5÷2＝？",
+    "prompt": "一块梯形田上底 4 米、下底 8 米、高 5 米。面积是多少平方米？",
     "answer": "30",
     "explanation": "（4＋8）×5÷2＝30。",
-    "verify": "(4+8)*5/2"
+    "verify": "(4+8)*5/2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p149_q4",
@@ -7761,10 +7925,11 @@
     "topicId": "cnm_p150",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一个长方形面积 24 平方厘米，旁边拼上一个面积 10 平方厘米的三角形。一共多少平方厘米？计算：24＋10＝？",
+    "prompt": "一个长方形面积 24 平方厘米，旁边拼上一个面积 10 平方厘米的三角形。一共多少平方厘米？",
     "answer": "34",
     "explanation": "24＋10＝34。",
-    "verify": "24+10"
+    "verify": "24+10",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p150_q4",
@@ -7823,10 +7988,11 @@
     "topicId": "cnm_p151",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一条路长 20 米，每隔 4 米种一棵，两端都种。间隔数是多少？计算：20÷4＝？",
+    "prompt": "一条路长 20 米，每隔 4 米种一棵，两端都种。间隔数是多少？",
     "answer": "5",
     "explanation": "20÷4＝5，两端都种则是 6 棵。",
-    "verify": "20/4"
+    "verify": "20/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p151_q4",
@@ -7886,11 +8052,12 @@
     "topicId": "cnm_p152",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "上面看到 4 个方块，正面看到的层数是 2。如果每列都是 2 个高，一共多少个？计算：4×2＝？",
+    "prompt": "上面看到 4 个方块，正面看到的层数是 2。如果每列都是 2 个高，一共多少个？",
     "answer": "8",
     "explanation": "4×2＝8。",
     "verify": "4*2",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 115.9 110.4\"><polygon points=\"29.4,83.2 57.4,83.2 57.4,55.2 29.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"29.4,55.2 57.4,55.2 70.9,44 42.9,44\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"57.4,83.2 70.9,72 70.9,44 57.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"29.4\" y1=\"83.2\" x2=\"42.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"72\" x2=\"70.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"72\" x2=\"42.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"83.2\" x2=\"57.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"83.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"29.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"29.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"83.2\" x2=\"70.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"72\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"44\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"42.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"44\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"58.4,83.2 86.4,83.2 86.4,55.2 58.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"58.4,55.2 86.4,55.2 99.9,44 71.9,44\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"86.4,83.2 99.9,72 99.9,44 86.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"58.4\" y1=\"83.2\" x2=\"71.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"72\" x2=\"99.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"72\" x2=\"71.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"83.2\" x2=\"86.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"83.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"58.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"58.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"83.2\" x2=\"99.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"72\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"44\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"71.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"44\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"29.4,55.2 57.4,55.2 57.4,27.2 29.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"29.4,27.2 57.4,27.2 70.9,16 42.9,16\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"57.4,55.2 70.9,44 70.9,16 57.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"42.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"44\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"44\" x2=\"42.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"27.2\" x2=\"29.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"27.2\" x2=\"29.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"44\" x2=\"70.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"16\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"27.2\" x2=\"42.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"16\" x2=\"70.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"58.4,55.2 86.4,55.2 86.4,27.2 58.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"58.4,27.2 86.4,27.2 99.9,16 71.9,16\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"86.4,55.2 99.9,44 99.9,16 86.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"71.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"44\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"44\" x2=\"71.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"27.2\" x2=\"58.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"27.2\" x2=\"58.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"44\" x2=\"99.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"16\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"27.2\" x2=\"71.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"16\" x2=\"99.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"16,94.4 44,94.4 44,66.4 16,66.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"16,66.4 44,66.4 57.4,55.2 29.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"44,94.4 57.4,83.2 57.4,55.2 44,66.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"16\" y1=\"94.4\" x2=\"44\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"94.4\" x2=\"44\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"66.4\" x2=\"16\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"66.4\" x2=\"16\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"94.4\" x2=\"57.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"83.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"44\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"66.4\" x2=\"29.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"45,94.4 73,94.4 73,66.4 45,66.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"45,66.4 73,66.4 86.4,55.2 58.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"73,94.4 86.4,83.2 86.4,55.2 73,66.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"45\" y1=\"94.4\" x2=\"73\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"94.4\" x2=\"73\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"66.4\" x2=\"45\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"66.4\" x2=\"45\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"94.4\" x2=\"86.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"83.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"73\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"66.4\" x2=\"58.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"16,66.4 44,66.4 44,38.4 16,38.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"16,38.4 44,38.4 57.4,27.2 29.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"44,66.4 57.4,55.2 57.4,27.2 44,38.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"16\" y1=\"66.4\" x2=\"44\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"66.4\" x2=\"44\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"38.4\" x2=\"16\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"38.4\" x2=\"16\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"66.4\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"27.2\" x2=\"44\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"38.4\" x2=\"29.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"27.2\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"45,66.4 73,66.4 73,38.4 45,38.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"45,38.4 73,38.4 86.4,27.2 58.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"73,66.4 86.4,55.2 86.4,27.2 73,38.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"45\" y1=\"66.4\" x2=\"73\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"66.4\" x2=\"73\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"38.4\" x2=\"45\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"38.4\" x2=\"45\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"66.4\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"27.2\" x2=\"73\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"38.4\" x2=\"58.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"27.2\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 115.9 110.4\"><polygon points=\"29.4,83.2 57.4,83.2 57.4,55.2 29.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"29.4,55.2 57.4,55.2 70.9,44 42.9,44\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"57.4,83.2 70.9,72 70.9,44 57.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"29.4\" y1=\"83.2\" x2=\"42.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"72\" x2=\"70.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"72\" x2=\"42.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"83.2\" x2=\"57.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"83.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"29.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"29.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"83.2\" x2=\"70.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"72\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"44\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"42.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"44\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"58.4,83.2 86.4,83.2 86.4,55.2 58.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"58.4,55.2 86.4,55.2 99.9,44 71.9,44\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"86.4,83.2 99.9,72 99.9,44 86.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"58.4\" y1=\"83.2\" x2=\"71.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"72\" x2=\"99.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"72\" x2=\"71.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"83.2\" x2=\"86.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"83.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"58.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"58.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"83.2\" x2=\"99.9\" y2=\"72\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"72\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"44\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"71.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"44\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"29.4,55.2 57.4,55.2 57.4,27.2 29.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"29.4,27.2 57.4,27.2 70.9,16 42.9,16\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"57.4,55.2 70.9,44 70.9,16 57.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"42.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"44\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"44\" x2=\"42.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"27.2\" x2=\"29.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"27.2\" x2=\"29.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"70.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"44\" x2=\"70.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"70.9\" y1=\"16\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"27.2\" x2=\"42.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"42.9\" y1=\"16\" x2=\"70.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"58.4,55.2 86.4,55.2 86.4,27.2 58.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"58.4,27.2 86.4,27.2 99.9,16 71.9,16\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"86.4,55.2 99.9,44 99.9,16 86.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"71.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"44\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"44\" x2=\"71.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"27.2\" x2=\"58.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"27.2\" x2=\"58.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"99.9\" y2=\"44\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"44\" x2=\"99.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"99.9\" y1=\"16\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"27.2\" x2=\"71.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"71.9\" y1=\"16\" x2=\"99.9\" y2=\"16\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"16,94.4 44,94.4 44,66.4 16,66.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"16,66.4 44,66.4 57.4,55.2 29.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"44,94.4 57.4,83.2 57.4,55.2 44,66.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"16\" y1=\"94.4\" x2=\"44\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"94.4\" x2=\"44\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"66.4\" x2=\"16\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"66.4\" x2=\"16\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"94.4\" x2=\"57.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"83.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"44\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"66.4\" x2=\"29.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"55.2\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"45,94.4 73,94.4 73,66.4 45,66.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"45,66.4 73,66.4 86.4,55.2 58.4,55.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"73,94.4 86.4,83.2 86.4,55.2 73,66.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"45\" y1=\"94.4\" x2=\"73\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"94.4\" x2=\"73\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"66.4\" x2=\"45\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"66.4\" x2=\"45\" y2=\"94.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"94.4\" x2=\"86.4\" y2=\"83.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"83.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"73\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"66.4\" x2=\"58.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"55.2\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"16,66.4 44,66.4 44,38.4 16,38.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"16,38.4 44,38.4 57.4,27.2 29.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"44,66.4 57.4,55.2 57.4,27.2 44,38.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"16\" y1=\"66.4\" x2=\"44\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"66.4\" x2=\"44\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"38.4\" x2=\"16\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"38.4\" x2=\"16\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"66.4\" x2=\"57.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"55.2\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"57.4\" y1=\"27.2\" x2=\"44\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"16\" y1=\"38.4\" x2=\"29.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"29.4\" y1=\"27.2\" x2=\"57.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><polygon points=\"45,66.4 73,66.4 73,38.4 45,38.4\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"45,38.4 73,38.4 86.4,27.2 58.4,27.2\" fill=\"currentColor\" fill-opacity=\"0.22\" stroke=\"none\"/><polygon points=\"73,66.4 86.4,55.2 86.4,27.2 73,38.4\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><line x1=\"45\" y1=\"66.4\" x2=\"73\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"66.4\" x2=\"73\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"38.4\" x2=\"45\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"38.4\" x2=\"45\" y2=\"66.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"73\" y1=\"66.4\" x2=\"86.4\" y2=\"55.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"55.2\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"86.4\" y1=\"27.2\" x2=\"73\" y2=\"38.4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"45\" y1=\"38.4\" x2=\"58.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"58.4\" y1=\"27.2\" x2=\"86.4\" y2=\"27.2\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p152_q4",
@@ -7945,10 +8112,11 @@
     "topicId": "cnm_p153",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "18 的一个因数是 6。18÷6 是多少？计算：18÷6＝？",
+    "prompt": "18 的一个因数是 6。18÷6 是多少？",
     "answer": "3",
     "explanation": "18÷6＝3，3 也是 18 的因数。",
-    "verify": "18/6"
+    "verify": "18/6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p154_q1",
@@ -8041,10 +8209,11 @@
     "topicId": "cnm_p155",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "判断 27 是不是 3 的倍数，先算 2＋7。2＋7 是多少？计算：2＋7＝？",
+    "prompt": "判断 27 是不是 3 的倍数，先算 2＋7。2＋7 是多少？",
     "answer": "9",
     "explanation": "2＋7＝9，9 能被 3 整除，所以 27 是。",
-    "verify": "2+7"
+    "verify": "2+7",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p155_q4",
@@ -8189,10 +8358,11 @@
     "topicId": "cnm_p158",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "18 和 24 的最大公因数是 6。18÷6 是多少？计算：18÷6＝？",
+    "prompt": "18 和 24 的最大公因数是 6。18÷6 是多少？",
     "answer": "3",
     "explanation": "18÷6＝3。",
-    "verify": "18/6"
+    "verify": "18/6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p158_q4",
@@ -8237,10 +8407,11 @@
     "topicId": "cnm_p159",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "2 和 8 的最小公倍数就是 8。8÷2 是多少？计算：8÷2＝？",
+    "prompt": "2 和 8 的最小公倍数就是 8。8÷2 是多少？",
     "answer": "4",
     "explanation": "8÷2＝4，8 是 2 的倍数。",
-    "verify": "8/2"
+    "verify": "8/2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p160_q1",
@@ -8335,10 +8506,11 @@
     "topicId": "cnm_p161",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：（5×4＋5×3＋4×3）×2＝？",
+    "prompt": "长 5、宽 4、高 3 的长方体，表面积是多少？",
     "answer": "94",
     "explanation": "三个不同的面分别是 20、15、12，和是 47，再乘 2 得 94。",
-    "verify": "(5*4+5*3+4*3)*2"
+    "verify": "(5*4+5*3+4*3)*2",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p161_q2",
@@ -8355,11 +8527,12 @@
     "topicId": "cnm_p161",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个正方体棱长 2 厘米。一个面的面积是多少平方厘米？计算：2×2＝？",
+    "prompt": "一个正方体棱长 2 厘米。一个面的面积是多少平方厘米？",
     "answer": "4",
     "explanation": "2×2＝4，六个面一共 24。",
     "verify": "2*2",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 214 212\"><polygon points=\"40,174 140,174 140,74 40,74\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"40,74 140,74 192,34 92,34\" fill=\"currentColor\" fill-opacity=\"0.20\" stroke=\"none\"/><polygon points=\"140,174 192,134 192,34 140,74\" fill=\"currentColor\" fill-opacity=\"0.15\" stroke=\"none\"/><line x1=\"40\" y1=\"174\" x2=\"92\" y2=\"134\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"92\" y1=\"134\" x2=\"192\" y2=\"134\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"92\" y1=\"134\" x2=\"92\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"40\" y1=\"174\" x2=\"140\" y2=\"174\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"140\" y1=\"174\" x2=\"140\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"140\" y1=\"74\" x2=\"40\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"40\" y1=\"74\" x2=\"40\" y2=\"174\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"140\" y1=\"174\" x2=\"192\" y2=\"134\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"192\" y1=\"134\" x2=\"192\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"192\" y1=\"34\" x2=\"140\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"40\" y1=\"74\" x2=\"92\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"92\" y1=\"34\" x2=\"192\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"90\" y1=\"167\" x2=\"90\" y2=\"181\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"133\" y1=\"124\" x2=\"147\" y2=\"124\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"47\" y1=\"124\" x2=\"33\" y2=\"124\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"161.7\" y1=\"148.5\" x2=\"170.3\" y2=\"159.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"185\" y1=\"84\" x2=\"199\" y2=\"84\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"61.7\" y1=\"48.5\" x2=\"70.3\" y2=\"59.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"90\" y=\"196\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">2 cm</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 214 212\"><polygon points=\"40,174 140,174 140,74 40,74\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"40,74 140,74 192,34 92,34\" fill=\"currentColor\" fill-opacity=\"0.20\" stroke=\"none\"/><polygon points=\"140,174 192,134 192,34 140,74\" fill=\"currentColor\" fill-opacity=\"0.15\" stroke=\"none\"/><line x1=\"40\" y1=\"174\" x2=\"92\" y2=\"134\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"92\" y1=\"134\" x2=\"192\" y2=\"134\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"92\" y1=\"134\" x2=\"92\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"40\" y1=\"174\" x2=\"140\" y2=\"174\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"140\" y1=\"174\" x2=\"140\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"140\" y1=\"74\" x2=\"40\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"40\" y1=\"74\" x2=\"40\" y2=\"174\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"140\" y1=\"174\" x2=\"192\" y2=\"134\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"192\" y1=\"134\" x2=\"192\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"192\" y1=\"34\" x2=\"140\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"40\" y1=\"74\" x2=\"92\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"92\" y1=\"34\" x2=\"192\" y2=\"34\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"90\" y1=\"167\" x2=\"90\" y2=\"181\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"133\" y1=\"124\" x2=\"147\" y2=\"124\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"47\" y1=\"124\" x2=\"33\" y2=\"124\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"161.7\" y1=\"148.5\" x2=\"170.3\" y2=\"159.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"185\" y1=\"84\" x2=\"199\" y2=\"84\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"61.7\" y1=\"48.5\" x2=\"70.3\" y2=\"59.5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"90\" y=\"196\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">2 cm</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p161_q4",
@@ -8428,10 +8601,11 @@
     "topicId": "cnm_p162",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "1 立方米等于 1000 立方分米。3 立方米是多少立方分米？计算：3×1000＝？",
+    "prompt": "1 立方米等于 1000 立方分米。3 立方米是多少立方分米？",
     "answer": "3000",
     "explanation": "3×1000＝3000。",
-    "verify": "3*1000"
+    "verify": "3*1000",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p162_q4",
@@ -8488,11 +8662,12 @@
     "topicId": "cnm_p163",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个长方体容器长 8 厘米、宽 5 厘米、高 2 厘米。容积是多少立方厘米？计算：8×5×2＝？",
+    "prompt": "一个长方体容器长 8 厘米、宽 5 厘米、高 2 厘米。容积是多少立方厘米？",
     "answer": "80",
     "explanation": "8×5×2＝80。",
     "verify": "8*5*2",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 434.6 154\"><polygon points=\"104,116 272,116 272,74 104,74\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"104,74 272,74 326.6,32 158.6,32\" fill=\"currentColor\" fill-opacity=\"0.20\" stroke=\"none\"/><polygon points=\"272,116 326.6,74 326.6,32 272,74\" fill=\"currentColor\" fill-opacity=\"0.15\" stroke=\"none\"/><line x1=\"104\" y1=\"116\" x2=\"158.6\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"158.6\" y1=\"74\" x2=\"326.6\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"158.6\" y1=\"74\" x2=\"158.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"104\" y1=\"116\" x2=\"272\" y2=\"116\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"272\" y1=\"116\" x2=\"272\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"272\" y1=\"74\" x2=\"104\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"104\" y1=\"74\" x2=\"104\" y2=\"116\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"272\" y1=\"116\" x2=\"326.6\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"326.6\" y1=\"74\" x2=\"326.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"326.6\" y1=\"32\" x2=\"272\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"104\" y1=\"74\" x2=\"158.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"158.6\" y1=\"32\" x2=\"326.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"188\" y=\"138\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">8 cm</text><text x=\"92\" y=\"100\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"end\">2 cm</text><text x=\"311.3\" y=\"111\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">5 cm</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 434.6 154\"><polygon points=\"104,116 272,116 272,74 104,74\" fill=\"currentColor\" fill-opacity=\"0.10\" stroke=\"none\"/><polygon points=\"104,74 272,74 326.6,32 158.6,32\" fill=\"currentColor\" fill-opacity=\"0.20\" stroke=\"none\"/><polygon points=\"272,116 326.6,74 326.6,32 272,74\" fill=\"currentColor\" fill-opacity=\"0.15\" stroke=\"none\"/><line x1=\"104\" y1=\"116\" x2=\"158.6\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"158.6\" y1=\"74\" x2=\"326.6\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"158.6\" y1=\"74\" x2=\"158.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"104\" y1=\"116\" x2=\"272\" y2=\"116\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"272\" y1=\"116\" x2=\"272\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"272\" y1=\"74\" x2=\"104\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"104\" y1=\"74\" x2=\"104\" y2=\"116\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"272\" y1=\"116\" x2=\"326.6\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"326.6\" y1=\"74\" x2=\"326.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"326.6\" y1=\"32\" x2=\"272\" y2=\"74\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"104\" y1=\"74\" x2=\"158.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"158.6\" y1=\"32\" x2=\"326.6\" y2=\"32\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"188\" y=\"138\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">8 cm</text><text x=\"92\" y=\"100\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"end\">2 cm</text><text x=\"311.3\" y=\"111\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">5 cm</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p163_q4",
@@ -8527,10 +8702,11 @@
     "topicId": "cnm_p164",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "瓶中有 750 毫升水，又倒进 250 毫升。一共多少毫升？计算：750＋250＝？",
+    "prompt": "瓶中有 750 毫升水，又倒进 250 毫升。一共多少毫升？",
     "answer": "1000",
     "explanation": "750＋250＝1000，也就是 1 升。",
-    "verify": "750+250"
+    "verify": "750+250",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p164_q4",
@@ -8575,10 +8751,11 @@
     "topicId": "cnm_p165",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "8 块糖平均分成 4 份，每份是几块？计算：8÷4＝？",
+    "prompt": "8 块糖平均分成 4 份，每份是几块？",
     "answer": "2",
     "explanation": "8÷4＝2，每份是这些糖的 1/4，也就是 2 块。",
-    "verify": "8/4"
+    "verify": "8/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p166_q1",
@@ -8629,20 +8806,22 @@
     "topicId": "cnm_p167",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "4/8 的分子和分母同时除以 4，分子变成多少？计算：4÷4＝？",
+    "prompt": "4/8 的分子和分母同时除以 4，分子变成多少？",
     "answer": "1",
     "explanation": "4÷4＝1，所以 4/8＝1/2。",
-    "verify": "4/4"
+    "verify": "4/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p168_q1",
     "topicId": "cnm_p168",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：6÷8＝？",
+    "prompt": "6/8 约成最简分数是多少？",
     "answer": "3/4",
     "explanation": "6 和 8 的最大公因数是 2，6/8＝3/4。",
-    "verify": "6/8"
+    "verify": "6/8",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p168_q2",
@@ -8659,10 +8838,11 @@
     "topicId": "cnm_p168",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "把 8/12 约分，先算 8 和 12 的最大公因数。12÷4 是多少？计算：12÷4＝？",
+    "prompt": "把 8/12 约分，先算 8 和 12 的最大公因数。12÷4 是多少？",
     "answer": "3",
     "explanation": "最大公因数是 4，12÷4＝3，8/12＝2/3。",
-    "verify": "12/4"
+    "verify": "12/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p168_q4",
@@ -8697,10 +8877,11 @@
     "topicId": "cnm_p169",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：3/5－1/5＝？",
+    "prompt": "3/5 比 1/5 多多少？",
     "answer": "2/5",
     "explanation": "分母相同，3/5 比 1/5 大，相差 2/5。",
-    "verify": "3/5-1/5"
+    "verify": "3/5-1/5",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p169_q2",
@@ -8717,10 +8898,11 @@
     "topicId": "cnm_p169",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一条绳子用去 3/8，另一条用去 5/8。谁用得多？先算差。计算：5/8－3/8＝？",
+    "prompt": "一条绳子用去 3/8，另一条用去 5/8。谁用得多？先算差。结果是几？",
     "answer": "1/4",
     "explanation": "5/8－3/8＝2/8＝1/4。",
-    "verify": "5/8-3/8"
+    "verify": "5/8-3/8",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p169_q4",
@@ -8755,10 +8937,11 @@
     "topicId": "cnm_p170",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：3÷10＝？（用小数作答）",
+    "prompt": "3/10 写成小数是多少？",
     "answer": "0.3",
     "explanation": "3/10＝0.3。",
-    "verify": "3/10"
+    "verify": "3/10",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p170_q2",
@@ -8775,10 +8958,11 @@
     "topicId": "cnm_p170",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "0.7 是多少个 0.1？计算：0.7÷0.1＝？（用小数作答）",
+    "prompt": "0.7 是多少个 0.1？",
     "answer": "7",
     "explanation": "0.7＝7/10。",
-    "verify": "0.7/0.1"
+    "verify": "0.7/0.1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p170_q4",
@@ -8877,10 +9061,11 @@
     "topicId": "cnm_p172",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "要把 1/6 和 1/3 通分，公分母可以是 6。1/3 的分母变成 6，要乘几？计算：6÷3＝？",
+    "prompt": "要把 1/6 和 1/3 通分，公分母可以是 6。1/3 的分母变成 6，要乘几？",
     "answer": "2",
     "explanation": "6÷3＝2，1/3＝2/6。",
-    "verify": "6/3"
+    "verify": "6/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p173_q1",
@@ -8907,10 +9092,11 @@
     "topicId": "cnm_p173",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一块地，小麦占 1/2，玉米占 1/3。两种一共占这块地的几分之几？计算：1/2＋1/3＝？",
+    "prompt": "一块地，小麦占 1/2，玉米占 1/3。两种一共占这块地的几分之几？",
     "answer": "5/6",
     "explanation": "1/2＋1/3＝3/6＋2/6＝5/6。",
-    "verify": "1/2+1/3"
+    "verify": "1/2+1/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p173_q4",
@@ -8965,10 +9151,11 @@
     "topicId": "cnm_p174",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一杯水先喝去 1/5，又喝去 2/5。一共喝去几分之几？计算：1/5＋2/5＝？",
+    "prompt": "一杯水先喝去 1/5，又喝去 2/5。一共喝去几分之几？",
     "answer": "3/5",
     "explanation": "1/5＋2/5＝3/5。",
-    "verify": "1/5+2/5"
+    "verify": "1/5+2/5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p174_q4",
@@ -9037,10 +9224,11 @@
     "topicId": "cnm_p175",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "星期一借出 20 本，星期二借出 15 本。星期二比星期一少几本？计算：20－15＝？",
+    "prompt": "星期一借出 20 本，星期二借出 15 本。星期二比星期一少几本？",
     "answer": "5",
     "explanation": "20－15＝5。",
-    "verify": "20-15"
+    "verify": "20-15",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p175_q4",
@@ -9099,10 +9287,11 @@
     "topicId": "cnm_p176",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "81 个零件，每次分成 3 份。第一次每份多少个？计算：81÷3＝？",
+    "prompt": "81 个零件，每次分成 3 份。第一次每份多少个？",
     "answer": "27",
     "explanation": "81÷3＝27。",
-    "verify": "81/3"
+    "verify": "81/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p177_q1",
@@ -9129,10 +9318,11 @@
     "topicId": "cnm_p177",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每瓶有 3/5 升果汁，4 瓶一共多少升？计算：3/5×4＝？",
+    "prompt": "每瓶有 3/5 升果汁，4 瓶一共多少升？",
     "answer": "12/5",
     "explanation": "3/5×4＝12/5。",
-    "verify": "3/5*4"
+    "verify": "3/5*4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p177_q4",
@@ -9187,10 +9377,11 @@
     "topicId": "cnm_p178",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一条路修了 1/2，其中 2/3 是上午修的。上午修了全程的几分之几？计算：1/2×2/3＝？",
+    "prompt": "一条路修了 1/2，其中 2/3 是上午修的。上午修了全程的几分之几？",
     "answer": "1/3",
     "explanation": "1/2×2/3＝1/3。",
-    "verify": "1/2*2/3"
+    "verify": "1/2*2/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p178_q4",
@@ -9245,10 +9436,11 @@
     "topicId": "cnm_p179",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一桶油 30 升，用去 2/5。用去多少升？计算：30×2/5＝？",
+    "prompt": "一桶油 30 升，用去 2/5。用去多少升？",
     "answer": "12",
     "explanation": "30×2/5＝12。",
-    "verify": "30*2/5"
+    "verify": "30*2/5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p179_q4",
@@ -9321,10 +9513,11 @@
     "topicId": "cnm_p181",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "先向东 120 米，再向南 80 米。两段一共多少米？计算：120＋80＝？",
+    "prompt": "先向东 120 米，再向南 80 米。两段一共多少米？",
     "answer": "200",
     "explanation": "120＋80＝200。",
-    "verify": "120+80"
+    "verify": "120+80",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p181_q4",
@@ -9379,10 +9572,11 @@
     "topicId": "cnm_p182",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "3/4 米绳子平均剪成 3 段。每段多少米？计算：3/4÷3＝？",
+    "prompt": "3/4 米绳子平均剪成 3 段。每段多少米？",
     "answer": "1/4",
     "explanation": "3/4÷3＝1/4。",
-    "verify": "(3/4)/3"
+    "verify": "(3/4)/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p182_q4",
@@ -9437,10 +9631,11 @@
     "topicId": "cnm_p183",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一张纸的 6/7 平均分成 2/7 一份。可以分成多少份？计算：（6/7）÷（2/7）＝？",
+    "prompt": "一张纸的 6/7 平均分成 2/7 一份。可以分成多少份？",
     "answer": "3",
     "explanation": "6/7÷2/7＝3。",
-    "verify": "(6/7)/(2/7)"
+    "verify": "(6/7)/(2/7)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p183_q4",
@@ -9495,10 +9690,11 @@
     "topicId": "cnm_p184",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "修一条路，已经修了 2/5，长 8 千米。这条路全长多少千米？计算：8÷（2/5）＝？",
+    "prompt": "修一条路，已经修了 2/5，长 8 千米。这条路全长多少千米？",
     "answer": "20",
     "explanation": "8÷2/5＝20。",
-    "verify": "8/(2/5)"
+    "verify": "8/(2/5)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p184_q4",
@@ -9663,10 +9859,11 @@
     "topicId": "cnm_p187",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：30÷（2＋3）×2＝？",
+    "prompt": "30 按 2:3 分给两人，先拿 2 份的那个人得多少？",
     "answer": "12",
     "explanation": "总份数 5，每份 6，前项 2 份是 12。",
-    "verify": "30/(2+3)*2"
+    "verify": "30/(2+3)*2",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p187_q2",
@@ -9683,10 +9880,11 @@
     "topicId": "cnm_p187",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "56 本本子按 3：4 分给两个班。先求每份多少本。计算：56÷（3＋4）＝？",
+    "prompt": "56 本本子按 3：4 分给两个班。先求每份多少本。结果是几？",
     "answer": "8",
     "explanation": "56÷7＝8，每份 8 本。",
-    "verify": "56/(3+4)"
+    "verify": "56/(3+4)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p187_q4",
@@ -9756,11 +9954,12 @@
     "topicId": "cnm_p188",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "直径 10 厘米。半径是多少厘米？计算：10÷2＝？",
+    "prompt": "直径 10 厘米。半径是多少厘米？",
     "answer": "5",
     "explanation": "10÷2＝5。",
     "verify": "10/2",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 190\"><circle cx=\"120\" cy=\"100\" r=\"70\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"50\" y1=\"100\" x2=\"190\" y2=\"100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"120\" cy=\"100\" r=\"3\" fill=\"currentColor\"/><text x=\"120\" y=\"90\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">10 cm</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 220 190\"><circle cx=\"120\" cy=\"100\" r=\"70\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"50\" y1=\"100\" x2=\"190\" y2=\"100\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><circle cx=\"120\" cy=\"100\" r=\"3\" fill=\"currentColor\"/><text x=\"120\" y=\"90\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">10 cm</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p188_q4",
@@ -9829,10 +10028,11 @@
     "topicId": "cnm_p189",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "直径 2 厘米的圆，周长大约多少厘米？圆周率按 314/100。计算：2×314/100＝？（用小数作答）",
+    "prompt": "直径 2 厘米的圆，周长大约多少厘米？圆周率按 314/100。结果是几？",
     "answer": "6.28",
     "explanation": "2×3.14＝6.28。",
-    "verify": "2*314/100"
+    "verify": "2*314/100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p189_q4",
@@ -9869,10 +10069,11 @@
     "topicId": "cnm_p190",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个圆的直径是 4 厘米。先算半径。半径是多少厘米？计算：4÷2＝？",
+    "prompt": "一个圆的直径是 4 厘米。先算半径。半径是多少厘米？",
     "answer": "2",
     "explanation": "半径是 2 厘米，周长再乘 2×3.14。",
-    "verify": "4/2"
+    "verify": "4/2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p190_q4",
@@ -9909,10 +10110,11 @@
     "topicId": "cnm_p191",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "圆形花坛直径 20 米，围一圈篱笆大约多少米？圆周率按 314/100。计算：20×314/100＝？（用小数作答）",
+    "prompt": "圆形花坛直径 20 米，围一圈篱笆大约多少米？圆周率按 314/100。结果是几？",
     "answer": "62.8",
     "explanation": "20×3.14＝62.8。",
-    "verify": "20*314/100"
+    "verify": "20*314/100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p191_q4",
@@ -9949,10 +10151,11 @@
     "topicId": "cnm_p192",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "半径 5 厘米。先算半径乘半径。5×5 是多少？计算：5×5＝？",
+    "prompt": "半径 5 厘米。先算半径乘半径。5×5 是多少？",
     "answer": "25",
     "explanation": "5×5＝25，再乘 3.14 才是面积。",
-    "verify": "5*5"
+    "verify": "5*5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p192_q4",
@@ -9969,10 +10172,11 @@
     "topicId": "cnm_p193",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：2＋1＝？",
+    "prompt": "一个圆的 1 份扇形占 1/4；要拼出 3/4 的扇形，需要几份？",
     "answer": "3",
     "explanation": "扇形有 2 条半径和 1 条弧，三种线段一共数 3。",
-    "verify": "2+1"
+    "verify": "2+1",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p193_q2",
@@ -9989,11 +10193,12 @@
     "topicId": "cnm_p193",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "圆心角 180 度，是整圆的几分之几？先算 180÷360。计算：180÷360＝？（用小数作答）",
+    "prompt": "圆心角 180 度，是整圆的几分之几？先算 180÷360。结果是几？",
     "answer": "0.5",
     "explanation": "180÷360＝0.5，是整圆的一半。",
     "verify": "180/360",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 164 258\"><path d=\"M 36 130 L 36 30 A 100 100 0 0 1 36 230 Z\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><path d=\"M 36 130 L 36 30 A 100 100 0 0 1 36 230 Z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 36 102 A 28 28 0 0 1 36 158\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"82\" y=\"135.6\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">180°</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 164 258\"><path d=\"M 36 130 L 36 30 A 100 100 0 0 1 36 230 Z\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><path d=\"M 36 130 L 36 30 A 100 100 0 0 1 36 230 Z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 36 102 A 28 28 0 0 1 36 158\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.2\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"82\" y=\"135.6\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">180°</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p193_q4",
@@ -10120,10 +10325,11 @@
     "topicId": "cnm_p195",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "3/4 化成百分数，先写成小数。3÷4 是多少？计算：3÷4＝？（用小数作答）",
+    "prompt": "3/4 化成百分数，先写成小数。3÷4 是多少？",
     "answer": "0.75",
     "explanation": "3÷4＝0.75，也就是 75%。",
-    "verify": "3/4"
+    "verify": "3/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p195_q4",
@@ -10198,10 +10404,11 @@
     "topicId": "cnm_p197",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：20÷80×100＝？",
+    "prompt": "80 人里有 20 人达标，达标率是百分之几？",
     "answer": "25",
     "explanation": "20 是 80 的 25%。这里算出 25。",
-    "verify": "20/80*100"
+    "verify": "20/80*100",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p197_q2",
@@ -10218,10 +10425,11 @@
     "topicId": "cnm_p197",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "40 人里有 10 人达标。达标的占百分之多少？先算 10÷40×100。计算：10÷40×100＝？",
+    "prompt": "40 人里有 10 人达标。达标的占百分之多少？先算 10÷40×100。结果是几？",
     "answer": "25",
     "explanation": "10÷40×100＝25，是 25%。",
-    "verify": "10/40*100"
+    "verify": "10/40*100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p197_q4",
@@ -10256,10 +10464,11 @@
     "topicId": "cnm_p198",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：20÷0.4＝？（用小数作答）",
+    "prompt": "一个数的 40% 是 20，这个数是多少？",
     "answer": "50",
     "explanation": "一个数的 40% 是 20，这个数是 50。",
-    "verify": "20/0.4"
+    "verify": "20/0.4",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p198_q2",
@@ -10276,10 +10485,11 @@
     "topicId": "cnm_p198",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一本书看了 25%，正好 40 页。全书多少页？计算：40÷0.25＝？（用小数作答）",
+    "prompt": "一本书看了 25%，正好 40 页。全书多少页？",
     "answer": "160",
     "explanation": "40÷0.25＝160。",
-    "verify": "40/0.25"
+    "verify": "40/0.25",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p198_q4",
@@ -10348,10 +10558,11 @@
     "topicId": "cnm_p199",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "全班 50 人，喜欢足球的占 40%。喜欢足球的有多少人？计算：50×40÷100＝？",
+    "prompt": "全班 50 人，喜欢足球的占 40%。喜欢足球的有多少人？",
     "answer": "20",
     "explanation": "50×40÷100＝20。",
-    "verify": "50*40/100"
+    "verify": "50*40/100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p199_q4",
@@ -10406,10 +10617,11 @@
     "topicId": "cnm_p200",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "正方形点阵：1，4，9。9 的后面一个是 9＋7。9＋7 是多少？计算：9＋7＝？",
+    "prompt": "正方形点阵：1，4，9。9 的后面一个是 9＋7。9＋7 是多少？",
     "answer": "16",
     "explanation": "后一个平方数是 16。",
-    "verify": "9+7"
+    "verify": "9+7",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p200_q4",
@@ -10492,10 +10704,11 @@
     "topicId": "cnm_p201",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "温度从零上 3 度降到零下 2 度。下降了多少度？计算：3＋2＝？",
+    "prompt": "温度从零上 3 度降到零下 2 度。下降了多少度？",
     "answer": "5",
     "explanation": "从 +3 到 0 是 3 度，再降 2 度，一共下降 5 度。",
-    "verify": "3+2"
+    "verify": "3+2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p201_q4",
@@ -10550,10 +10763,11 @@
     "topicId": "cnm_p202",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "电梯上升 12 层，又下降 5 层。比起点高多少层？计算：12－5＝？",
+    "prompt": "电梯上升 12 层，又下降 5 层。比起点高多少层？",
     "answer": "7",
     "explanation": "12－5＝7。",
-    "verify": "12-5"
+    "verify": "12-5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p203_q1",
@@ -10624,10 +10838,11 @@
     "topicId": "cnm_p204",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "把 1000 元存一年，年利率 4%。利息是多少元？计算：1000×4÷100＝？",
+    "prompt": "把 1000 元存一年，年利率 4%。利息是多少元？",
     "answer": "40",
     "explanation": "1000×4%＝40。",
-    "verify": "1000*4/100"
+    "verify": "1000*4/100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p205_q1",
@@ -10644,10 +10859,11 @@
     "topicId": "cnm_p205",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "去年 40 人，今年 50 人。增加了多少人？计算：50－40＝？",
+    "prompt": "去年 40 人，今年 50 人。增加了多少人？",
     "answer": "10",
     "explanation": "50－40＝10，10÷40＝25%，增长了 25%。",
-    "verify": "50-40"
+    "verify": "50-40",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p206_q1",
@@ -10689,11 +10905,12 @@
     "topicId": "cnm_p206",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "圆柱高 10 厘米，底面半径 2 厘米。只问高是多少厘米？计算：10＋0＝？",
+    "prompt": "圆柱高 10 厘米，底面半径 2 厘米。只问高是多少厘米？",
     "answer": "10",
     "explanation": "高是 10 厘米。",
     "verify": "10+0",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 212\"><path d=\"M 56 180 A 28 12 0 0 0 112 180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"56\" y1=\"40\" x2=\"56\" y2=\"180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"112\" y1=\"40\" x2=\"112\" y2=\"180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 56 180 A 28 12 0 0 1 112 180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><ellipse cx=\"84\" cy=\"40\" rx=\"28\" ry=\"12\" fill=\"currentColor\" fill-opacity=\"0.18\" stroke=\"none\"/><ellipse cx=\"84\" cy=\"40\" rx=\"28\" ry=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"84\" y1=\"40\" x2=\"112\" y2=\"40\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><circle cx=\"84\" cy=\"40\" r=\"2.4\" fill=\"currentColor\"/><text x=\"96.6\" y=\"32\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">r = 2 cm</text><text x=\"126\" y=\"115\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">h = 10 cm</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 240 212\"><path d=\"M 56 180 A 28 12 0 0 0 112 180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"56\" y1=\"40\" x2=\"56\" y2=\"180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"112\" y1=\"40\" x2=\"112\" y2=\"180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 56 180 A 28 12 0 0 1 112 180\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><ellipse cx=\"84\" cy=\"40\" rx=\"28\" ry=\"12\" fill=\"currentColor\" fill-opacity=\"0.18\" stroke=\"none\"/><ellipse cx=\"84\" cy=\"40\" rx=\"28\" ry=\"12\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"84\" y1=\"40\" x2=\"112\" y2=\"40\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\" stroke-linecap=\"round\"/><circle cx=\"84\" cy=\"40\" r=\"2.4\" fill=\"currentColor\"/><text x=\"96.6\" y=\"32\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">r = 2 cm</text><text x=\"126\" y=\"115\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">h = 10 cm</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p206_q4",
@@ -10750,11 +10967,12 @@
     "topicId": "cnm_p207",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "底面积 12 平方厘米、高 4 厘米的圆柱，体积是多少立方厘米？计算：12×4＝？",
+    "prompt": "底面积 12 平方厘米、高 4 厘米的圆柱，体积是多少立方厘米？",
     "answer": "48",
     "explanation": "12×4＝48。",
     "verify": "12*4",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 312 194\"><path d=\"M 56 136 A 64 18 0 0 0 184 136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"56\" y1=\"46\" x2=\"56\" y2=\"136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"184\" y1=\"46\" x2=\"184\" y2=\"136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 56 136 A 64 18 0 0 1 184 136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><ellipse cx=\"120\" cy=\"46\" rx=\"64\" ry=\"18\" fill=\"currentColor\" fill-opacity=\"0.18\" stroke=\"none\"/><ellipse cx=\"120\" cy=\"46\" rx=\"64\" ry=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"198\" y=\"96\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">h = 4 cm</text><text x=\"120\" y=\"176\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">底面积 12 cm²</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 312 194\"><path d=\"M 56 136 A 64 18 0 0 0 184 136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"56\" y1=\"46\" x2=\"56\" y2=\"136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"184\" y1=\"46\" x2=\"184\" y2=\"136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 56 136 A 64 18 0 0 1 184 136\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><ellipse cx=\"120\" cy=\"46\" rx=\"64\" ry=\"18\" fill=\"currentColor\" fill-opacity=\"0.18\" stroke=\"none\"/><ellipse cx=\"120\" cy=\"46\" rx=\"64\" ry=\"18\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.6\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"198\" y=\"96\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"start\">h = 4 cm</text><text x=\"120\" y=\"176\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">底面积 12 cm²</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p207_q4",
@@ -10771,10 +10989,11 @@
     "topicId": "cnm_p208",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：12.56＋12.56＝？（用小数作答）",
+    "prompt": "圆柱两个底面的面积都是 12.56 平方厘米，两个底面一共多少？",
     "answer": "25.12",
     "explanation": "两个底面各 12.56，合起来 25.12。",
-    "verify": "12.56+12.56"
+    "verify": "12.56+12.56",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p208_q2",
@@ -10791,11 +11010,12 @@
     "topicId": "cnm_p208",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "侧面展开是长 6.28 厘米、宽 5 厘米的长方形。侧面积是多少平方厘米？计算：6.28×5＝？（用小数作答）",
+    "prompt": "侧面展开是长 6.28 厘米、宽 5 厘米的长方形。侧面积是多少平方厘米？",
     "answer": "31.4",
     "explanation": "6.28×5＝31.4。",
     "verify": "6.28*5",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 310 200\"><rect x=\"30\" y=\"36\" width=\"200\" height=\"120\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"30\" y=\"36\" width=\"200\" height=\"120\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"130\" y=\"28\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">6.28 cm</text><text x=\"246\" y=\"100\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"start\">5 cm</text><text x=\"130\" y=\"180\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">侧面展开成的长方形</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 310 200\"><rect x=\"30\" y=\"36\" width=\"200\" height=\"120\" fill=\"currentColor\" fill-opacity=\"0.12\" stroke=\"none\"/><rect x=\"30\" y=\"36\" width=\"200\" height=\"120\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"130\" y=\"28\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">6.28 cm</text><text x=\"246\" y=\"100\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"start\">5 cm</text><text x=\"130\" y=\"180\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">侧面展开成的长方形</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p208_q4",
@@ -10865,11 +11085,12 @@
     "topicId": "cnm_p209",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "圆柱体积 30 立方厘米，等底等高的圆锥体积是多少？计算：30÷3＝？",
+    "prompt": "圆柱体积 30 立方厘米，等底等高的圆锥体积是多少？",
     "answer": "10",
     "explanation": "30÷3＝10。",
     "verify": "30/3",
-    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 204\"><text x=\"185\" y=\"20\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">等底等高</text><path d=\"M 44 132 A 46 14 0 0 0 136 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.1\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"36\" x2=\"44\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"136\" y1=\"36\" x2=\"136\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 44 132 A 46 14 0 0 1 136 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><ellipse cx=\"90\" cy=\"36\" rx=\"46\" ry=\"14\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><ellipse cx=\"90\" cy=\"36\" rx=\"46\" ry=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 234 132 A 46 14 0 0 0 326 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.1\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"280\" y1=\"36\" x2=\"234\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"280\" y1=\"36\" x2=\"326\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 234 132 A 46 14 0 0 1 326 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"90\" y=\"168\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">圆柱</text><text x=\"90\" y=\"188\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"14\" text-anchor=\"middle\">体积 30 cm³</text><text x=\"280\" y=\"168\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">圆锥</text></svg>"
+    "figure": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 400 204\"><text x=\"185\" y=\"20\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"16\" text-anchor=\"middle\">等底等高</text><path d=\"M 44 132 A 46 14 0 0 0 136 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.1\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"44\" y1=\"36\" x2=\"44\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"136\" y1=\"36\" x2=\"136\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 44 132 A 46 14 0 0 1 136 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><ellipse cx=\"90\" cy=\"36\" rx=\"46\" ry=\"14\" fill=\"currentColor\" fill-opacity=\"0.16\" stroke=\"none\"/><ellipse cx=\"90\" cy=\"36\" rx=\"46\" ry=\"14\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 234 132 A 46 14 0 0 0 326 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.1\" stroke-dasharray=\"7 5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"280\" y1=\"36\" x2=\"234\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><line x1=\"280\" y1=\"36\" x2=\"326\" y2=\"132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><path d=\"M 234 132 A 46 14 0 0 1 326 132\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/><text x=\"90\" y=\"168\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">圆柱</text><text x=\"90\" y=\"188\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"14\" text-anchor=\"middle\">体积 30 cm³</text><text x=\"280\" y=\"168\" fill=\"currentColor\" font-family=\"Noto Sans CJK SC, Noto Sans SC, sans-serif\" font-weight=\"650\" font-size=\"15\" text-anchor=\"middle\">圆锥</text></svg>",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p209_q4",
@@ -10958,30 +11179,33 @@
     "topicId": "cnm_p211",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "2：3＝8：x。x 是多少？计算：8×3÷2＝？",
+    "prompt": "2：3＝8：x。x 是多少？",
     "answer": "12",
     "explanation": "2x＝24，x＝12。",
-    "verify": "8*3/2"
+    "verify": "8*3/2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p211_q2",
     "topicId": "cnm_p211",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "4：5＝x：20。x 是多少？计算：4×20÷5＝？",
+    "prompt": "4：5＝x：20。x 是多少？",
     "answer": "16",
     "explanation": "5x＝80，x＝16。",
-    "verify": "4*20/5"
+    "verify": "4*20/5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p211_q3",
     "topicId": "cnm_p211",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "6：x＝2：5。先算 6×5÷2。计算：6×5÷2＝？",
+    "prompt": "6：x＝2：5。先算 6×5÷2。结果是几？",
     "answer": "15",
     "explanation": "2x＝30，x＝15。",
-    "verify": "6*5/2"
+    "verify": "6*5/2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p211_q4",
@@ -11040,20 +11264,22 @@
     "topicId": "cnm_p212",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "图上距离 4 厘米，比例尺是 1 厘米表示实际 100 厘米。实际多少厘米？计算：4×100＝？",
+    "prompt": "图上距离 4 厘米，比例尺是 1 厘米表示实际 100 厘米。实际多少厘米？",
     "answer": "400",
     "explanation": "4×100＝400。",
-    "verify": "4*100"
+    "verify": "4*100",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p212_q3",
     "topicId": "cnm_p212",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "实际距离 800 厘米，图上 4 厘米。图上 1 厘米表示实际多少厘米？计算：800÷4＝？",
+    "prompt": "实际距离 800 厘米，图上 4 厘米。图上 1 厘米表示实际多少厘米？",
     "answer": "200",
     "explanation": "800÷4＝200。",
-    "verify": "800/4"
+    "verify": "800/4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p213_q1",
@@ -11084,20 +11310,22 @@
     "topicId": "cnm_p213",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "速度一定，3 时行 180 千米。1 时行多少千米？计算：180÷3＝？",
+    "prompt": "速度一定，3 时行 180 千米。1 时行多少千米？",
     "answer": "60",
     "explanation": "180÷3＝60。",
-    "verify": "180/3"
+    "verify": "180/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p213_q3",
     "topicId": "cnm_p213",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每本 4 元，买 7 本。一共多少元？计算：4×7＝？",
+    "prompt": "每本 4 元，买 7 本。一共多少元？",
     "answer": "28",
     "explanation": "单价一定，总价和数量成正比例，4×7＝28。",
-    "verify": "4*7"
+    "verify": "4*7",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p213_q4",
@@ -11156,50 +11384,55 @@
     "topicId": "cnm_p214",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "总价一定，单价 4 元时能买 6 个。单价 3 元时能买几个？计算：4×6÷3＝？",
+    "prompt": "总价一定，单价 4 元时能买 6 个。单价 3 元时能买几个？",
     "answer": "8",
     "explanation": "4×6＝24，24÷3＝8。",
-    "verify": "4*6/3"
+    "verify": "4*6/3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p214_q3",
     "topicId": "cnm_p214",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "修路，每天修 8 米要 6 天。每天修 12 米，要几天？计算：8×6÷12＝？",
+    "prompt": "修路，每天修 8 米要 6 天。每天修 12 米，要几天？",
     "answer": "4",
     "explanation": "工作总量 48 米，48÷12＝4 天。",
-    "verify": "8*6/12"
+    "verify": "8*6/12",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p215_q1",
     "topicId": "cnm_p215",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "3 本笔记本 12 元，同样的笔记本 5 本多少元？计算：12÷3×5＝？",
+    "prompt": "3 本笔记本 12 元，同样的笔记本 5 本多少元？",
     "answer": "20",
     "explanation": "每本 4 元，5 本 20 元。",
-    "verify": "12/3*5"
+    "verify": "12/3*5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p215_q2",
     "topicId": "cnm_p215",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "2 小时行 90 千米，同样的速度 4 小时行多少千米？计算：90÷2×4＝？",
+    "prompt": "2 小时行 90 千米，同样的速度 4 小时行多少千米？",
     "answer": "180",
     "explanation": "每小时 45 千米，4 小时 180 千米。",
-    "verify": "90/2*4"
+    "verify": "90/2*4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p215_q3",
     "topicId": "cnm_p215",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "用 6 台机器 4 小时完成的工作，改用 8 台同样的机器要几小时？计算：6×4÷8＝？",
+    "prompt": "用 6 台机器 4 小时完成的工作，改用 8 台同样的机器要几小时？",
     "answer": "3",
     "explanation": "工作总量按台时算是 24，24÷8＝3。",
-    "verify": "6*4/8"
+    "verify": "6*4/8",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p216_q1",
@@ -11250,10 +11483,11 @@
     "topicId": "cnm_p217",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "计算：15－9＝？ 15 比 9 多几？",
+    "prompt": "15 比 9 多几？",
     "answer": "6",
     "explanation": "15－9＝6，所以 15 比 9 多 6。",
-    "verify": "15-9"
+    "verify": "15-9",
+    "fixed_from_source": "首题原来是一句和知识点无关的算式，改成贴着考点的问法（2026-10-27）"
   },
   {
     "id": "cnm_p217_q2",
@@ -11444,20 +11678,22 @@
     "topicId": "cnm_p221",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "搭一个两层的积木：下层 3 个小正方体，上层 1 个。一共用了几个小正方体？计算：3＋1＝？",
+    "prompt": "搭一个两层的积木：下层 3 个小正方体，上层 1 个。一共用了几个小正方体？",
     "answer": "4",
     "explanation": "上下两层合起来：3＋1＝4。",
-    "verify": "3+1"
+    "verify": "3+1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p221_q4",
     "topicId": "cnm_p221",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "从上面看是 2 行、每行 3 个正方形，并且每个位置只放 1 个小正方体。一共有几个小正方体？计算：2×3＝？",
+    "prompt": "从上面看是 2 行、每行 3 个正方形，并且每个位置只放 1 个小正方体。一共有几个小正方体？",
     "answer": "6",
     "explanation": "只有一层，2 行每行 3 个：2×3＝6。",
-    "verify": "2*3"
+    "verify": "2*3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p222_q1",
@@ -11498,20 +11734,22 @@
     "topicId": "cnm_p222",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "长方体纸盒相对的两个面完全一样。6 个面可以分成几对？计算：6÷2＝？",
+    "prompt": "长方体纸盒相对的两个面完全一样。6 个面可以分成几对？",
     "answer": "3",
     "explanation": "前后、上下、左右各一对：6÷2＝3。",
-    "verify": "6//2"
+    "verify": "6//2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p222_q4",
     "topicId": "cnm_p222",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个正方体纸盒展开后，已经给 2 个面涂了颜色。还有几个面没涂？计算：6－2＝？",
+    "prompt": "一个正方体纸盒展开后，已经给 2 个面涂了颜色。还有几个面没涂？",
     "answer": "4",
     "explanation": "一共 6 个面：6－2＝4。",
-    "verify": "6-2"
+    "verify": "6-2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p223_q1",
@@ -11582,30 +11820,33 @@
     "topicId": "cnm_p224",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "1 个苹果和 2 个梨一样重，1 个梨重 150 克。1 个苹果重多少克？计算：150×2＝？",
+    "prompt": "1 个苹果和 2 个梨一样重，1 个梨重 150 克。1 个苹果重多少克？",
     "answer": "300",
     "explanation": "1 个苹果等于 2 个梨：150×2＝300。",
-    "verify": "150*2"
+    "verify": "150*2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p224_q3",
     "topicId": "cnm_p224",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "1 只鸭和 3 只鸡一样重，1 只鹅和 2 只鸭一样重。1 只鹅和几只鸡一样重？计算：3×2＝？",
+    "prompt": "1 只鸭和 3 只鸡一样重，1 只鹅和 2 只鸭一样重。1 只鹅和几只鸡一样重？",
     "answer": "6",
     "explanation": "1 只鸭换成 3 只鸡，2 只鸭就是 3×2＝6 只鸡。",
-    "verify": "3*2"
+    "verify": "3*2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p224_q4",
     "topicId": "cnm_p224",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "天平左边放 1 个西瓜，右边放 4 个同样的哈密瓜，正好平衡。每个哈密瓜重 1 千克，西瓜重多少千克？计算：4×1＝？",
+    "prompt": "天平左边放 1 个西瓜，右边放 4 个同样的哈密瓜，正好平衡。每个哈密瓜重 1 千克，西瓜重多少千克？",
     "answer": "4",
     "explanation": "西瓜和 4 个哈密瓜一样重：4×1＝4。",
-    "verify": "4*1"
+    "verify": "4*1",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p225_q1",
@@ -11656,10 +11897,11 @@
     "topicId": "cnm_p225",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个角有 2 条边。3 个这样的角一共有几条边？计算：2×3＝？",
+    "prompt": "一个角有 2 条边。3 个这样的角一共有几条边？",
     "answer": "6",
     "explanation": "2×3＝6。",
-    "verify": "2*3"
+    "verify": "2*3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p226_q1",
@@ -11768,10 +12010,11 @@
     "topicId": "cnm_p227",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "把同样大的两张饼，一张平均分成 4 份、一张平均分成 8 份。各取 1 份，1/4 比 1/8 大多少？计算：1/4－1/8＝？",
+    "prompt": "把同样大的两张饼，一张平均分成 4 份、一张平均分成 8 份。各取 1 份，1/4 比 1/8 大多少？",
     "answer": "1/8",
     "explanation": "1/4＝2/8，2/8－1/8＝1/8。",
-    "verify": "Fraction(1,4)-Fraction(1,8)"
+    "verify": "Fraction(1,4)-Fraction(1,8)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p227_q4",
@@ -11874,10 +12117,11 @@
     "topicId": "cnm_p228",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个小方块先向右平移 4 格，再向右平移 3 格。一共向右平移了几格？计算：4＋3＝？",
+    "prompt": "一个小方块先向右平移 4 格，再向右平移 3 格。一共向右平移了几格？",
     "answer": "7",
     "explanation": "方向相同，格数相加：4＋3＝7。",
-    "verify": "4+3"
+    "verify": "4+3",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p229_q1",
@@ -11928,30 +12172,33 @@
     "topicId": "cnm_p229",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一个三角形和一个四边形，边数一共是多少？计算：3＋4＝？",
+    "prompt": "一个三角形和一个四边形，边数一共是多少？",
     "answer": "7",
     "explanation": "三角形 3 条边，四边形 4 条边：3＋4＝7。",
-    "verify": "3+4"
+    "verify": "3+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p230_q1",
     "topicId": "cnm_p230",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一班有男生 23 人、女生 21 人。一共有多少人？计算：23＋21＝？",
+    "prompt": "一班有男生 23 人、女生 21 人。一共有多少人？",
     "answer": "44",
     "explanation": "总量＝分量＋分量：23＋21＝44。",
-    "verify": "23+21"
+    "verify": "23+21",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p230_q2",
     "topicId": "cnm_p230",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "学校买来 120 本书，借出 75 本。还剩多少本？计算：120－75＝？",
+    "prompt": "学校买来 120 本书，借出 75 本。还剩多少本？",
     "answer": "45",
     "explanation": "一个分量＝总量－另一个分量：120－75＝45。",
-    "verify": "120-75"
+    "verify": "120-75",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p230_q3",
@@ -11978,20 +12225,22 @@
     "topicId": "cnm_p231",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "每支笔 6 元，买 12 支要多少元？计算：6×12＝？",
+    "prompt": "每支笔 6 元，买 12 支要多少元？",
     "answer": "72",
     "explanation": "总价＝单价×数量：6×12＝72。",
-    "verify": "6*12"
+    "verify": "6*12",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p231_q2",
     "topicId": "cnm_p231",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "汽车每小时行 60 千米，4 小时行多少千米？计算：60×4＝？",
+    "prompt": "汽车每小时行 60 千米，4 小时行多少千米？",
     "answer": "240",
     "explanation": "路程＝速度×时间：60×4＝240。",
-    "verify": "60*4"
+    "verify": "60*4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p231_q3",
@@ -12028,10 +12277,11 @@
     "topicId": "cnm_p232",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "1 周角等于几个平角？计算：360÷180＝？",
+    "prompt": "1 周角等于几个平角？",
     "answer": "2",
     "explanation": "1 周角 360°，1 平角 180°：360÷180＝2。",
-    "verify": "360//180"
+    "verify": "360//180",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p232_q3",
@@ -12062,30 +12312,33 @@
     "topicId": "cnm_p232",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "1 周角等于几个直角？计算：360÷90＝？",
+    "prompt": "1 周角等于几个直角？",
     "answer": "4",
     "explanation": "360÷90＝4。",
-    "verify": "360//90"
+    "verify": "360//90",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p233_q1",
     "topicId": "cnm_p233",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "估算 49×21：把两个数看作 50 和 20，积大约是多少？计算：50×20＝？",
+    "prompt": "估算 49×21：把两个数看作 50 和 20，积大约是多少？",
     "answer": "1000",
     "explanation": "49≈50，21≈20：50×20＝1000。",
-    "verify": "50*20"
+    "verify": "50*20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p233_q2",
     "topicId": "cnm_p233",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "估算 302×19：把两个数看作 300 和 20，积大约是多少？计算：300×20＝？",
+    "prompt": "估算 302×19：把两个数看作 300 和 20，积大约是多少？",
     "answer": "6000",
     "explanation": "300×20＝6000。",
-    "verify": "300*20"
+    "verify": "300*20",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p233_q3",
@@ -12116,10 +12369,11 @@
     "topicId": "cnm_p233",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "每张门票 18 元，31 人去参观。把 18 看作 20、31 看作 30，大约需要多少元？计算：20×30＝？",
+    "prompt": "每张门票 18 元，31 人去参观。把 18 看作 20、31 看作 30，大约需要多少元？",
     "answer": "600",
     "explanation": "20×30＝600。",
-    "verify": "20*30"
+    "verify": "20*30",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p234_q1",
@@ -12194,10 +12448,11 @@
     "topicId": "cnm_p235",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "从起点向东走 30 米，再继续向东走 45 米。这时离起点多少米？计算：30＋45＝？",
+    "prompt": "从起点向东走 30 米，再继续向东走 45 米。这时离起点多少米？",
     "answer": "75",
     "explanation": "方向相同，距离相加：30＋45＝75。",
-    "verify": "30+45"
+    "verify": "30+45",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p235_q2",
@@ -12228,40 +12483,44 @@
     "topicId": "cnm_p235",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "藏宝图上 1 格表示 10 米。宝藏在起点东边 6 格处，实际离起点多少米？计算：10×6＝？",
+    "prompt": "藏宝图上 1 格表示 10 米。宝藏在起点东边 6 格处，实际离起点多少米？",
     "answer": "60",
     "explanation": "10×6＝60。",
-    "verify": "10*6"
+    "verify": "10*6",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p235_q4",
     "topicId": "cnm_p235",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "从起点向北走 80 米，又向南走回 30 米。这时在起点北边多少米？计算：80－30＝？",
+    "prompt": "从起点向北走 80 米，又向南走回 30 米。这时在起点北边多少米？",
     "answer": "50",
     "explanation": "向南走回来要减：80－30＝50。",
-    "verify": "80-30"
+    "verify": "80-30",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p236_q1",
     "topicId": "cnm_p236",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "1 亿里面有几个一千万？计算：100000000÷10000000＝？",
+    "prompt": "1 亿里面有几个一千万？",
     "answer": "10",
     "explanation": "10 个一千万是一亿。",
-    "verify": "100000000//10000000"
+    "verify": "100000000//10000000",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p236_q2",
     "topicId": "cnm_p236",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "1 亿里面有几个一万？计算：100000000÷10000＝？",
+    "prompt": "1 亿里面有几个一万？",
     "answer": "10000",
     "explanation": "1 亿＝10000 个一万。",
-    "verify": "100000000//10000"
+    "verify": "100000000//10000",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p236_q3",
@@ -12292,20 +12551,22 @@
     "topicId": "cnm_p236",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "数 1 万粒米大约用 1 小时。照这样，数 1 亿粒米大约要多少小时？计算：100000000÷10000＝？",
+    "prompt": "数 1 万粒米大约用 1 小时。照这样，数 1 亿粒米大约要多少小时？",
     "answer": "10000",
     "explanation": "1 亿是 1 万的 10000 倍，时间也约是 10000 小时。",
-    "verify": "100000000//10000"
+    "verify": "100000000//10000",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p237_q1",
     "topicId": "cnm_p237",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一个组合体下层有 4 个小正方体，上层有 2 个。一共有几个小正方体？计算：4＋2＝？",
+    "prompt": "一个组合体下层有 4 个小正方体，上层有 2 个。一共有几个小正方体？",
     "answer": "6",
     "explanation": "两层相加：4＋2＝6。",
-    "verify": "4+2"
+    "verify": "4+2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p237_q2",
@@ -12346,10 +12607,11 @@
     "topicId": "cnm_p237",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "从上面看是 2 行、每行 2 个正方形，每个位置都叠了 2 层。一共有几个小正方体？计算：2×2×2＝？",
+    "prompt": "从上面看是 2 行、每行 2 个正方形，每个位置都叠了 2 层。一共有几个小正方体？",
     "answer": "8",
     "explanation": "每层 4 个，2 层：2×2×2＝8。",
-    "verify": "2*2*2"
+    "verify": "2*2*2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p238_q1",
@@ -12380,60 +12642,66 @@
     "topicId": "cnm_p238",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "钟面上的指针从 12 顺时针旋转到 3，旋转了多少度？计算：360÷4＝？",
+    "prompt": "钟面上的指针从 12 顺时针旋转到 3，旋转了多少度？",
     "answer": "90",
     "explanation": "从 12 到 3 是周角的四分之一：360÷4＝90。",
-    "verify": "360//4"
+    "verify": "360//4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p238_q3",
     "topicId": "cnm_p238",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "指针从 12 顺时针旋转到 6，旋转了多少度？计算：360÷2＝？",
+    "prompt": "指针从 12 顺时针旋转到 6，旋转了多少度？",
     "answer": "180",
     "explanation": "从 12 到 6 是半圈：360÷2＝180。",
-    "verify": "360//2"
+    "verify": "360//2",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p238_q4",
     "topicId": "cnm_p238",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "方格纸上一个点在第 3 列，向右平移 4 格后在第几列？计算：3＋4＝？",
+    "prompt": "方格纸上一个点在第 3 列，向右平移 4 格后在第几列？",
     "answer": "7",
     "explanation": "向右平移列数增加：3＋4＝7。",
-    "verify": "3+4"
+    "verify": "3+4",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p239_q1",
     "topicId": "cnm_p239",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "正三角形每个角是 60°。围绕一个点拼正三角形，几个正好拼满一周？计算：360÷60＝？",
+    "prompt": "正三角形每个角是 60°。围绕一个点拼正三角形，几个正好拼满一周？",
     "answer": "6",
     "explanation": "一周 360°：360÷60＝6。",
-    "verify": "360//60"
+    "verify": "360//60",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p239_q2",
     "topicId": "cnm_p239",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "正方形每个角是 90°。一个点周围要拼几个正方形？计算：360÷90＝？",
+    "prompt": "正方形每个角是 90°。一个点周围要拼几个正方形？",
     "answer": "4",
     "explanation": "360÷90＝4。",
-    "verify": "360//90"
+    "verify": "360//90",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p239_q3",
     "topicId": "cnm_p239",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "正六边形每个角是 120°。一个点周围要拼几个正六边形？计算：360÷120＝？",
+    "prompt": "正六边形每个角是 120°。一个点周围要拼几个正六边形？",
     "answer": "3",
     "explanation": "360÷120＝3。",
-    "verify": "360//120"
+    "verify": "360//120",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p239_q4",
@@ -12532,10 +12800,11 @@
     "topicId": "cnm_p241",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "跑道一圈 400 米，跑 5 圈一共多少米？计算：400×5＝？",
+    "prompt": "跑道一圈 400 米，跑 5 圈一共多少米？",
     "answer": "2000",
     "explanation": "400×5＝2000。",
-    "verify": "400*5"
+    "verify": "400*5",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p241_q2",
@@ -12566,10 +12835,11 @@
     "topicId": "cnm_p241",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "8 支队伍进行单循环赛，每两队之间赛一场。一共要赛多少场？计算：8×7÷2＝？",
+    "prompt": "8 支队伍进行单循环赛，每两队之间赛一场。一共要赛多少场？",
     "answer": "28",
     "explanation": "每队和另外 7 队各赛一场，每场算了两次：8×7÷2＝28。",
-    "verify": "comb(8,2)"
+    "verify": "comb(8,2)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p241_q4",
@@ -12586,40 +12856,44 @@
     "topicId": "cnm_p242",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一个水龙头每天漏水 2 升，30 天一共漏水多少升？计算：2×30＝？",
+    "prompt": "一个水龙头每天漏水 2 升，30 天一共漏水多少升？",
     "answer": "60",
     "explanation": "2×30＝60。",
-    "verify": "2*30"
+    "verify": "2*30",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p242_q2",
     "topicId": "cnm_p242",
     "difficulty": "basic",
     "type": "numeric",
-    "prompt": "一桶水 18 升，用去 1/3，用去了多少升？计算：18×1/3＝？",
+    "prompt": "一桶水 18 升，用去 1/3，用去了多少升？",
     "answer": "6",
     "explanation": "18×1/3＝6。",
-    "verify": "18*Fraction(1,3)"
+    "verify": "18*Fraction(1,3)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p242_q3",
     "topicId": "cnm_p242",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "一户人家每月用水 15 吨，节约 20% 后每月用水多少吨？计算：15×（1－20%）＝？",
+    "prompt": "一户人家每月用水 15 吨，节约 20% 后每月用水多少吨？",
     "answer": "12",
     "explanation": "15×0.8＝12。",
-    "verify": "15*(1-Fraction(20,100))"
+    "verify": "15*(1-Fraction(20,100))",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_p242_q4",
     "topicId": "cnm_p242",
     "difficulty": "standard",
     "type": "numeric",
-    "prompt": "学校一个月用水 400 吨，其中 25% 用于浇花。浇花用水多少吨？计算：400×25%＝？",
+    "prompt": "学校一个月用水 400 吨，其中 25% 用于浇花。浇花用水多少吨？",
     "answer": "100",
     "explanation": "400×0.25＝100。",
-    "verify": "400*Fraction(25,100)"
+    "verify": "400*Fraction(25,100)",
+    "fixed_from_source": "去掉题干末尾多余的算式提示（2026-10-27）"
   },
   {
     "id": "cnm_001_q1",
