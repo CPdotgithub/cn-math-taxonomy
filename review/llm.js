@@ -149,8 +149,27 @@
     return out;
   }
 
+  /* 中转地址：部署在云上时走「同站转发」（页面和转发在同一个服务里，没有跨域这回事，
+     手机、别人电脑都能用，也不用在自己电脑上开 8790）；本机调试才用 127.0.0.1。 */
+  function defaultRelay() {
+    var h = location.hostname;
+    if (location.protocol === 'file:' || h === '127.0.0.1' || h === 'localhost') {
+      return 'http://127.0.0.1:8790';
+    }
+    return location.origin + '/api/ds';
+  }
+
   function relayBase(cfg) {
-    return String((cfg || web()).relay || '').replace(/\/+$/, '');
+    var r = String((cfg || web()).relay || '').replace(/\/+$/, '');
+    if (!r) return defaultRelay();
+    /* 旧配置里存着 127.0.0.1：在云端页面上这个地址指向「看网页那台设备」，手机上必然打不通，
+       直接改用同站转发，不给用户留一个打了也白打的地址。 */
+    var local = /^https?:\/\/(127\.0\.0\.1|localhost)(:|\/|$)/.test(r);
+    var onLocalhost = /^(127\.0\.0\.1|localhost)$/.test(location.hostname);
+    if (local && !onLocalhost && /^https?:$/.test(location.protocol)) {
+      return location.origin + '/api/ds';
+    }
+    return r;
   }
 
   /* ---------------------------------------------------------------- 通道状态 */
@@ -158,7 +177,7 @@
   function available() {
     if (isWeb()) {
       var c = web();
-      return !!c.token && /^https?:\/\//.test(String(c.relay || ''));
+      return !!c.token && /^https?:\/\//.test(String(relayBase(c) || ''));
     }
     return !!getClient();
   }
@@ -497,12 +516,12 @@
     if (code === 'model_empty') return '模型这次什么都没返回，再点一次「重新生成」通常就好。';
     if (code === 'model_bad_json') return '模型返回的题目格式不对，点「重新生成」再试一次。';
     if (code === 'image_dropped') return '照片没被云端接收，这次只按文字批改。想拍照批改，把通道换成「网页版」。';
-    if (code === 'web_no_relay') return '还没填本机中转地址（形如 http://127.0.0.1:8790）。';
+    if (code === 'web_no_relay') return '还没填转发地址。';
     if (code === 'web_no_token') return '还没贴登录凭据。在 chat.deepseek.com 上复制一条 curl 贴进来。';
-    if (code === 'web_offline') return '连不上本机中转服务。先在电脑上双击 tools/start-dsweb.command，再点「测试连接」。';
+    if (code === 'web_offline') return '转发服务没响应。云端用的是本站转发，稍等几秒再试；本机调试要先开 tools/start-dsweb.command。';
     if (code === 'token_missing' || code === 'token_invalid') return 'DeepSeek 登录凭据过期了。重新在浏览器里复制一条 curl 贴上就好。';
-    if (code === 'node_missing') return '本机没找到 Node.js，网页版解锁挑战要靠它；装好 Node 后重启中转服务。';
-    if (code === 'solver_missing') return '中转服务缺少 tools/dsweb 里的求解文件，重新拉一次项目文件。';
+    if (code === 'node_missing') return '转发那边没找到 Node.js（网页版解开挑战要靠它），本机调试的话装好 Node 再重启。';
+    if (code === 'solver_missing') return '转发服务缺少 tools/dsweb 里的求解文件。';
     if (code === 'image_too_large') return '照片太大，压缩后重拍一张（8MB 以内）。';
     if (code === 'upload_failed') return '照片没传上去，重拍一张或先只交文字。';
     if (code === 'empty' || code === 'web_failed') return 'DeepSeek 这次没返回内容，隔十几秒再试；也可能是内容被风控拦了。';
@@ -534,6 +553,8 @@
     health: health,
     detectRelay: detectRelay,
     onAuthFail: onAuthFail,
+    relayBase: relayBase,
+    usingSiteRelay: function () { return /\/api\/ds$/.test(relayBase()); },
     WEB_MODELS: WEB_MODELS
   };
 })();
