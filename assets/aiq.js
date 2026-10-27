@@ -79,7 +79,8 @@
     '2. 不出需要画图、作图、查资料、听录音才能作答的题；不出需要多步长推理（超过 3 步）的题。',
     '3. 不使用 LaTeX、Markdown、表格；数学符号用 Unicode（× ÷ ± ≤ ≥ ≠ ≈ √ π ∠ △ ° ² ³ ½），分数写 3/4，带分数写 1又3/4。',
     '4. 出完自己重算一遍：位数、量级、单位、选项标号，任何一处不确认就换一道更稳的。',
-    '5. 只输出一个 JSON 对象，不要解释文字、不要代码块围栏。'
+    '5. 题目必须真的考到指定的知识点：抽掉这个知识点还能做对的题，一律不合格，重出。',
+    '6. 只输出一个 JSON 对象，不要解释文字、不要代码块围栏。'
   ].join('\n');
 
   function clip(s, n) {
@@ -109,6 +110,19 @@
     }
     L.push('');
 
+    /* 这一节是「题目别跑偏」的关键：光说「贴考点」不够，要把不合格的样子写在提示词里 */
+    L.push('【这道题必须做到】（任何一条做不到就换一道，别硬凑）');
+    L.push('1. 抽掉这个知识点，这道题就做不出来——否则不合格。反例：知识点是「可能性的大小」，却出「袋中红球 4 个、黄球 4 个，两种球一共几个？」——那是加法题，答对了也说明不了懂不懂可能性。');
+    L.push('2. 题干自带全部条件：只读题干就能作答，不依赖图片、课文或上一段材料。');
+    L.push('3. 一道题只验一件事：不要又考概念又考计算。');
+    L.push('4. 不要把答案要用的算式写进题干（「计算：…＝？」「先算…」这类一律不要）。');
+    L.push('5. 情境要真实、数字要合理（摸球、买东西、量长度、排队、分东西），别为了凑数硬编。');
+    L.push('6. 答对 = 学生真的会这一条；答错 = 能推出他卡在哪一步。');
+    if (/可能性|概率|统计|图形|位置|方向|单位|分类|观察|认识|意义|性质/.test(t.name || '')) {
+      L.push('（这个知识点偏「判断 / 描述」，题目要让学生判断或说明，别退化成加减乘除。）');
+    }
+    L.push('');
+
     /* 图谱上下文：这道题不是孤立的，答错要能顺着先修往下追 */
     var opts = (ctx.probeOptions || []);
     var pre = opts.filter(function (p) { return p.id !== t.id; });
@@ -125,9 +139,11 @@
 
     L.push('【难度】' + (ctx.difficulty === 'basic'
       ? '基础：直接考这个点本身，单步或两步，答对说明会了'
-      : '标准：这个点的常规应用，两步左右'));
+      : '标准：这个点的常规应用，允许一步推理或一个判断，不要靠多算几步凑难度'));
     L.push('');
-    if (ctx.bankPrompt) L.push('题库里已经有这道题了：「' + clip(ctx.bankPrompt, 90) + '」，请换一个情境和数字，不要雷同。');
+    var bank = String(ctx.bankPrompt || '').trim();
+    var bankOk = bank.length >= 12 && /[？?]/.test(bank) && !/^计算[:：]/.test(bank);
+    if (bankOk) L.push('题库里已经有这道题了：「' + clip(bank, 90) + '」，请换一个情境和数字，不要雷同。');
     if (ctx.avoid && ctx.avoid.length) {
       L.push('这一轮已经出过：');
       ctx.avoid.slice(-4).forEach(function (s) { L.push('- ' + clip(s, 70)); });
@@ -152,8 +168,9 @@
     L.push('step 写这一步在做什么（不超过 14 字，例如「两位数乘法的进位」）；reason 写答错为什么能推出这一步没掌握（不超过 30 字）。');
     L.push('');
     L.push('【输出】只给 JSON，二选一：');
-    L.push('{"type":"numeric","prompt":"题干","answer":"7","accept":["7 个","7个"],"probe":{"id":"' + (pre[0] ? pre[0].id : t.id) + '","step":"…","reason":"…"},"explanation":"30–80 字讲评：思路 + 常见错因"}');
-    L.push('{"type":"choice","prompt":"题干","choices":[{"key":"A","text":"…"},{"key":"B","text":"…"}],"answer":"A","probe":{"id":"' + (pre[0] ? pre[0].id : t.id) + '","step":"…","reason":"…"},"explanation":"30–80 字讲评"}');
+    L.push('{"type":"numeric","prompt":"题干","answer":"7","accept":["7 个","7个"],"check":{"tests":"这道题验的是哪一句掌握标准","wrong":"答错说明什么"},"probe":{"id":"' + (pre[0] ? pre[0].id : t.id) + '","step":"…","reason":"…"},"explanation":"30–80 字讲评：思路 + 常见错因"}');
+    L.push('{"type":"choice","prompt":"题干","choices":[{"key":"A","text":"…"},{"key":"B","text":"…"}],"answer":"A","check":{"tests":"…","wrong":"…"},"probe":{"id":"' + (pre[0] ? pre[0].id : t.id) + '","step":"…","reason":"…"},"explanation":"30–80 字讲评"}');
+    L.push('check.tests 用一句话说清：学生答对这道题，能证明他掌握了你给的那条掌握标准；check.wrong 说清答错能推出什么。写不出来就说明这道题不合格，换一道。');
     L.push('accept 只放同一答案的常见写法（可省略）；题干里不要写「本题」「以下选项」，不要自带「答案：」。');
     return L.join('\n');
   }
@@ -190,9 +207,8 @@
       }
       q.choices = cs;
       q.answer = ans;
-      return q;
-    }
-    if (type === 'numeric' || type === 'short' || type === 'answer') {
+      /* 不要在这里 return：选择题同样要带探针和自检，否则答错就追不下去 */
+    } else if (type === 'numeric' || type === 'short' || type === 'answer') {
       q.type = type === 'numeric' ? 'numeric' : 'short';
       var a = String(obj.answer == null ? '' : obj.answer).trim();
       if (!a || a.length > 40) return null;
@@ -230,6 +246,11 @@
         self: hit.id === t.id
       };
     }
+
+    /* 自检说明：模型认为这道题验的是哪条掌握标准。留着给家长判断「这题到底有没有考到点上」 */
+    var chk = obj.check || {};
+    var tests = clip(chk.tests || '', 60);
+    if (tests) q.check = { tests: tests, wrong: clip(chk.wrong || '', 60) };
     return q;
   }
 

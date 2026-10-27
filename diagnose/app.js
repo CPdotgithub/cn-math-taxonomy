@@ -1339,15 +1339,18 @@
   }
 
   /* 知识点自带的说明和掌握标准：题目看不懂时，比「再读一遍」有用 */
-  function topicWhy(t) {
+  function topicWhy(t, q) {
     if (!t) return null;
     const desc = String(t.description || '').trim();
     const crit = (t.mastery_criteria || []).filter(Boolean).slice(0, 3);
-    if (!desc && !crit.length) return null;
+    const chk = q && q.check && q.check.tests ? q.check : null;
+    if (!desc && !crit.length && !chk) return null;
     return h('details', { class: 'q-why' },
       h('summary', null, '这题在考什么？'),
       desc ? h('p', { class: 'q-why-desc' }, desc) : null,
-      crit.length ? h('ul', { class: 'q-why-list' }, crit.map(function (x) { return h('li', null, x); })) : null);
+      crit.length ? h('ul', { class: 'q-why-list' }, crit.map(function (x) { return h('li', null, x); })) : null,
+      chk ? h('p', { class: 'q-why-check' },
+        '出这道题时说的是：验「' + chk.tests + '」' + (chk.wrong ? '；答错说明：' + chk.wrong : '')) : null);
   }
 
   function renderQuestion(item) {
@@ -1387,7 +1390,7 @@
       if (qt) qt.insertAdjacentElement('afterend', stemFig);
     }
     /* 题干写得省略时，孩子可以自己展开看「这个点到底在学什么」——用的是图谱里的说明，不靠模型 */
-    const why = topicWhy(t);
+    const why = topicWhy(t, q);
     if (why) card.append(why);
 
     if (ui.phase === 'ask') {

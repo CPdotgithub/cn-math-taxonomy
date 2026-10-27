@@ -1364,3 +1364,9 @@ button.linkish {
   line-height: 1.6;
   color: var(--pt-ink-2);
 }
+.q-why-check {
+  margin: 8px 0 0;
+  font-size: .8rem;
+  line-height: 1.7;
+  color: var(--pt-ink-3);
+}
