@@ -24,6 +24,7 @@ import sys
 import json
 import time
 import threading
+import hashlib
 import importlib.util
 from http.server import ThreadingHTTPServer
 from urllib.parse import unquote, urlparse, parse_qs
@@ -62,6 +63,54 @@ STORE_PATH = os.path.join(ROOT, ".aiq-store.json")
 # 别把它当成公开接口——拿到 token 就等于拿到了账号。
 CRED_PATH = os.path.join(ROOT, ".ds-cred.json")
 CRED_LOCK = threading.Lock()
+
+# 接口鉴权：和前端密码门同一个口令（前端算好 sha256 再发过来，不传明文）。
+# 静态托管没有这一层；只有本服务在跑时才会要求。
+GATE_HASH = os.environ.get("GATE_HASH") or "00847220aa587c230746ac58189197151d6322a13518104a476bdd96ac4b7ae8"  # 123456
+SESS_PATH = os.path.join(ROOT, ".sessions.json")
+SESS_LOCK = threading.Lock()
+SESS_TTL = 30 * 24 * 3600
+
+
+def _sessions():
+    try:
+        with open(SESS_PATH, "r", encoding="utf-8") as f:
+            v = json.load(f)
+        if isinstance(v, dict):
+            now = time.time()
+            return {k: t for k, t in v.items() if isinstance(t, (int, float)) and t > now}
+    except Exception:
+        pass
+    return {}
+
+
+def _save_sessions(d):
+    tmp = SESS_PATH + ".tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(d, f)
+    os.replace(tmp, SESS_PATH)
+    try:
+        os.chmod(SESS_PATH, 0o600)
+    except OSError:
+        pass
+
+
+def session_new():
+    key = os.urandom(24).hex()
+    with SESS_LOCK:
+        d = _sessions()
+        d[key] = time.time() + SESS_TTL
+        _save_sessions(d)
+    return key
+
+
+def session_ok(key):
+    if not key:
+        return False
+    with SESS_LOCK:
+        d = _sessions()
+        exp = d.get(key)
+        return bool(exp and exp > time.time())
 STORE_LOCK = threading.Lock()
 STORE_PER_KEY = 5        # 同一个知识点最多留几个版本
 STORE_TOTAL = 2000       # 总量上限，超了按时间淘汰最旧的
@@ -232,11 +281,15 @@ def make_handler(relay):
             if path in ("/health",):
                 return self._health()
             if path == "/api/q":
+                if not self._authed():
+                    return self._json({"ok": False, "code": "locked", "error": "需要先输入访问密码"}, 403)
                 qs = parse_qs(urlparse(self.path).query)
                 key = (qs.get("key") or [""])[0]
                 return self._json({"ok": True, "items": store_get(key)})
             if path == "/api/cred":
                 return self._api_cred_get()
+            if path == "/api/session":
+                return self._json({"ok": True, "authed": self._authed()})
             return self._static(path, head_only)
 
         def do_HEAD(self):
@@ -249,9 +302,13 @@ def make_handler(relay):
                 self.path = api
                 return relay.Handler.do_POST(self)
             if path == "/api/q":
+                if not self._authed():
+                    return self._json({"ok": False, "code": "locked", "error": "需要先输入访问密码"}, 403)
                 return self._api_q_put()
             if path == "/api/cred":
                 return self._api_cred_put()
+            if path == "/api/unlock":
+                return self._api_unlock()
             return self._plain(404, "not found")
 
         def do_OPTIONS(self):
@@ -285,8 +342,47 @@ def make_handler(relay):
             total = store_put(key, q)
             return self._json({"ok": True, "count": total})
 
+        def _authed(self):
+            """本机直接放行；其他来源要带上密码门换来的会话。"""
+            if self._is_local():
+                return True
+            key = ""
+            cookie = self.headers.get("Cookie") or ""
+            for part in cookie.split(";"):
+                k, _, v = part.strip().partition("=")
+                if k == "cnmkey":
+                    key = v
+                    break
+            if not key:
+                key = (self.headers.get("X-Cnm-Key") or "").strip()
+            return session_ok(key)
+
+        def _api_unlock(self):
+            try:
+                n = int(self.headers.get("Content-Length") or 0)
+                raw = self.rfile.read(n) if n > 0 else b"{}"
+                payload = json.loads(raw.decode("utf-8"))
+            except Exception:
+                return self._json({"ok": False, "error": "bad json"}, 400)
+            h = str(payload.get("h") or "").strip().lower()
+            # 浏览器在非 https 的非 localhost 地址上拿不到 crypto.subtle，
+            # 算不了哈希，就把明文发过来，这里帮着算（这段本来就是明文 http，不算额外泄露）
+            if not h and payload.get("pass"):
+                h = hashlib.sha256(("cnm-gate-v1:" + str(payload.get("pass"))).encode("utf-8")).hexdigest()
+            if not h or h != GATE_HASH.lower():
+                return self._json({"ok": False, "code": "bad_pass"}, 403)
+            key = session_new()
+            body = json.dumps({"ok": True}, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.send_header("Set-Cookie", "cnmkey=%s; Path=/; Max-Age=%d; SameSite=Lax" % (key, SESS_TTL))
+            self.send_header("Cache-Control", "no-store")
+            self.end_headers()
+            self.wfile.write(body)
+
         def _is_local(self):
-            """只有本机来的请求能读写凭据。"""
+            """本机来的请求不用鉴权（本地调试方便）。"""
             try:
                 h = self.client_address[0]
             except Exception:
@@ -294,9 +390,9 @@ def make_handler(relay):
             return h in ("127.0.0.1", "::1", "::ffff:127.0.0.1")
 
         def _api_cred_get(self):
-            if not self._is_local():
-                return self._json({"ok": False, "code": "forbidden",
-                                   "error": "凭据只对本机开放"}, 403)
+            if not self._authed():
+                return self._json({"ok": False, "code": "locked",
+                                   "error": "需要先输入访问密码"}, 403)
             c = cred_read()
             if not c:
                 return self._json({"ok": True, "cred": None})
@@ -307,9 +403,9 @@ def make_handler(relay):
             }})
 
         def _api_cred_put(self):
-            if not self._is_local():
-                return self._json({"ok": False, "code": "forbidden",
-                                   "error": "凭据只对本机开放"}, 403)
+            if not self._authed():
+                return self._json({"ok": False, "code": "locked",
+                                   "error": "需要先输入访问密码"}, 403)
             try:
                 n = int(self.headers.get("Content-Length") or 0)
                 raw = self.rfile.read(n) if n > 0 else b"{}"

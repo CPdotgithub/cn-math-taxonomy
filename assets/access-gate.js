@@ -20,11 +20,34 @@
   function readPass() {
     try {
       var v = JSON.parse(localStorage.getItem(STORE_KEY));
-      return !!(v && v.ok && v.exp > Date.now());
-    } catch (e) { return false; }
+      if (!v || !v.ok || !(v.exp > Date.now())) return null;
+      return v;
+    } catch (e) { return null; }
   }
-  function savePass() {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify({ ok: true, exp: Date.now() + KEEP_MS })); } catch (e) {}
+  function savePass(h) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify({ ok: true, exp: Date.now() + KEEP_MS, k: h || '' })); } catch (e) {}
+  }
+
+  /* 把「已经通过密码门」这件事告诉服务端，换一个会话 Cookie。
+     接口（存 curl / 题库）要它才肯给数据；静态托管没有这个接口，404 就算了。 */
+  function apiUnlock(body) {
+    if (!body) return Promise.resolve(false);
+    /* 静态托管没有这个接口：第一次 404/501 就记住，别再每页都试一遍 */
+    try { if (sessionStorage.getItem('cnmGate.noApi') === '1') return Promise.resolve(false); } catch (e) {}
+    try {
+      return fetch('/api/unlock', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body), credentials: 'same-origin'
+      }).then(function (r) {
+        if (r.status === 404 || r.status === 501) {
+          try { sessionStorage.setItem('cnmGate.noApi', '1'); } catch (e) {}
+          return null;
+        }
+        return r.ok ? r.json() : null;
+      })
+        .then(function (j) { return !!(j && j.ok); })
+        .catch(function () { return false; });
+    } catch (e) { return Promise.resolve(false); }
   }
   function hex(buf) {
     var out = '';
@@ -39,7 +62,8 @@
       .then(function (buf) { return hex(new Uint8Array(buf)); });
   }
 
-  if (readPass()) return; // 已通过：什么都不做
+  var passed = readPass();
+  if (passed) { apiUnlock({ h: passed.k }); return; } // 已通过：补一次会话，然后什么都不做
 
   // 未通过：先隐藏正文，避免内容一闪而过
   document.documentElement.classList.add('cnm-gate-locked');
@@ -84,8 +108,9 @@
       btn.disabled = false;
     }
 
-    function ok() {
-      savePass();
+    function ok(h) {
+      savePass(h);
+      if (h) apiUnlock({ h: h });
       mask.classList.add('cnm-gate-out');
       setTimeout(function () {
         mask.remove();
@@ -103,8 +128,15 @@
       btn.disabled = true;
       err.textContent = '';
       digest(val).then(function (h) {
-        if (h === null) { fail('当前环境无法校验密码，请用 https 访问'); return; }
-        if (h === PASS_HASH) { ok(); return; }
+        if (h === null) {
+          /* 非 https 的非 localhost（比如用局域网 IP 在手机上打开）拿不到 crypto.subtle，
+             本地算不了哈希：交给服务端判定，服务端也没有就只能提示换 https。 */
+          return apiUnlock({ pass: val }).then(function (yes) {
+            if (yes) { ok(''); return; }
+            fail('当前环境无法校验密码，请用 https 或 127.0.0.1 访问');
+          });
+        }
+        if (h === PASS_HASH) { ok(h); return; }
         fail('密码不正确，请重试');
       }).catch(function () { fail('校验失败，请重试'); });
     });

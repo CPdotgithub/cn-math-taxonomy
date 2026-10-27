@@ -4,3 +4,4 @@ node_modules/
 .DS_Store
 .aiq-store.json
 .ds-cred.json
+.sessions.json
