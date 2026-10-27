@@ -645,6 +645,7 @@
           var c = j && j.cred;
           if (!c || !c.token) return false;
           setWeb({
+            kind: 'web',   /* 存了 curl 就是网页版通道，别停在「云端」上 */
             token: c.token, cookie: c.cookie || '', ua: c.ua || '', hdr: c.hdr || '',
             model: c.model || 'deepseek', savedAt: c.savedAt || ''
           });

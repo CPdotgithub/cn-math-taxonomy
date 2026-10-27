@@ -1143,3 +1143,7 @@ body.has-modal { overflow: hidden; }
 .rv-diag-row.is-ok { border-left-color: #2f9e44; }
 .rv-diag-row.is-bad { border-left-color: #e03131; }
 .rv-diag-row b { flex: none; color: var(--pt-ink); }
+
+/* 凭据粘贴框：够高、等宽，能看到整段 curl */
+.rv-curl { min-height: 132px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; line-height: 1.55; }
+.rv-curl-hint { margin: 6px 0 0; }

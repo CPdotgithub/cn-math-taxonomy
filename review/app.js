@@ -869,15 +869,66 @@
     }
 
     var ta = h('textarea', {
-      class: 'rv-input rv-textarea rv-curl', rows: '3',
+      class: 'rv-input rv-textarea rv-curl', rows: '8',
       placeholder: cfg.token
-        ? '已保存凭据。要换就粘贴新的 curl 覆盖'
-        : '在 chat.deepseek.com 的请求上右键 → 复制 → 以 cURL 格式复制，粘到这里',
+        ? '已保存凭据。要换就把新的整条 curl 粘进来覆盖'
+        : '在 chat.deepseek.com 的请求上右键 → 复制 → 以 cURL 格式复制，整段粘到这里',
       'aria-label': '登录凭据'
     });
+    /* 粘进来就先告诉你认出了什么：只粘一半是最常见的失败原因 */
+    var preview = h('p', { class: 'rv-hint rv-curl-hint' });
+    function refreshPreview() {
+      var raw = String(ta.value || '').trim();
+      if (!raw) {
+        preview.textContent = cfg.token ? '要换凭据就粘一条新的；不换可以直接用下面两个按钮。'
+          : '要粘完整的一段：从 curl --url 一直到 --data-raw 结尾。';
+        preview.className = 'rv-hint rv-curl-hint';
+        return;
+      }
+      var got = LLM.parseCurl(raw);
+      if (!got.token) {
+        preview.textContent = '这段里没认出登录 token——多半是只粘了一部分，重新「以 cURL 格式复制」整段。';
+        preview.className = 'rv-hint rv-curl-hint is-warn';
+        return;
+      }
+      var bits = ['token ' + got.token.length + ' 字符'];
+      if (got.cookie) bits.push('Cookie ' + got.cookie.length + ' 字符');
+      if (got.hdr) bits.push('带自定义头');
+      preview.textContent = '已识别：' + bits.join(' · ') + '。点「保存凭据」生效。';
+      preview.className = 'rv-hint rv-curl-hint';
+    }
+    ta.addEventListener('input', refreshPreview);
     box.appendChild(h('label', { class: 'rv-field rv-field-col rv-field-tight' }, [
       h('span', { class: 'rv-label', text: '登录凭据（整条 curl 贴进来）' }), ta
     ]));
+    box.appendChild(preview);
+    refreshPreview();
+
+    /* 两个按钮都先吃文本框里的内容：不然「测试连接」测的是旧凭据，看着就像粘贴没用 */
+    function saveFromBox() {
+      var raw = String(ta.value || '').trim();
+      if (!raw) return false;
+      var got = LLM.parseCurl(raw);
+      if (!got.token) return false;
+      LLM.setWeb({ kind: 'web', token: got.token, cookie: got.cookie, ua: got.ua, hdr: got.hdr });
+      ta.value = '';
+      refreshPreview();
+      LLM.credPush().then(function (ok) {
+        if (ok) { ST.chanNote = '已保存，并存到本机服务（换浏览器不用重贴）'; renderSide(); }
+      });
+      return true;
+    }
+    function testOrSave() {
+      var raw = String(ta.value || '').trim();
+      if (!raw) { testChannel(false); return; }
+      if (!saveFromBox()) {
+        ST.chanNote = '这段里没认出 token，先粘完整的一条 curl。';
+        ST.chanTone = 'is-warn';
+        renderSide();
+        return;
+      }
+      testChannel(false);
+    }
 
     var acts = h('div', { class: 'rv-webcfg-acts' });
     acts.appendChild(h('button', {
@@ -891,29 +942,21 @@
           renderSide();
           return;
         }
-        var got = LLM.parseCurl(raw);
-        if (!got.token) {
+        if (!saveFromBox()) {
           ST.chanNote = '没从这段里认出 userToken，重新复制一次完整的 curl。';
           ST.chanTone = 'is-warn';
           renderSide();
           return;
         }
-        LLM.setWeb({ token: got.token, cookie: got.cookie, ua: got.ua, hdr: got.hdr });
         ST.chanNote = '';
         ST.chanTone = '';
         renderSide();
-        /* 顺手托管一份到本机服务：换浏览器、清缓存都不用重贴 */
-        LLM.credPush().then(function (ok) {
-          if (!ok) return;
-          ST.chanNote = '已保存，并存到本机服务（换浏览器不用重贴）';
-          renderSide();
-        });
         testChannel(false);
       }
     }));
     acts.appendChild(h('button', {
       type: 'button', class: 'rv-btn rv-btn-sm', text: '测试连接',
-      onclick: function () { testChannel(false); }
+      onclick: function () { testOrSave(); }
     }));
     acts.appendChild(h('button', {
       type: 'button', class: 'rv-btn rv-btn-sm', text: '连接诊断',
