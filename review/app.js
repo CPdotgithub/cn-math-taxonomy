@@ -2535,6 +2535,13 @@
     LLM.ensureCred().then(function (got) {
       if (got) { ST.chanNote = '已从本机服务取回凭据，不用重贴'; renderSide(); }
     });
+    /* 刚过密码门：这时才有会话，重新问一次服务端 */
+    window.addEventListener('cnm-unlocked', function () {
+      LLM.ensureCred(true).then(function (got) {
+        if (got) { ST.chanNote = '已从服务端取回凭据，不用重贴'; renderSide(); }
+        else if (LLM.available() && !LLM.web().token) { ST.chanNote = '还没配凭据，把 chat.deepseek.com 的 curl 粘进来。'; renderSide(); }
+      });
+    });
     render();
 
     loadData().then(function () {

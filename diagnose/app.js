@@ -99,6 +99,12 @@
     return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'subject=' + subject;
   }
   function detectSubject() {
+    /* 刚过密码门：这时接口才有会话，重新问一次凭据再渲染 */
+    window.addEventListener('cnm-unlocked', function () {
+      if (!window.RvLLM || !window.RvLLM.ensureCred) return;
+      window.RvLLM.ensureCred(true).then(function (got) { if (got) render(); });
+    });
+
     const params = new URLSearchParams(location.search);
     const explicit = params.get('subject');
     if (explicit === 'english' || explicit === 'math' || explicit === 'physics' || explicit === 'chinese') return explicit;
@@ -2360,6 +2366,12 @@
         h('p', null, '请用「启动.command」打开的页面进入（或发布后的网址），不要直接双击 HTML 文件。')));
       return;
     }
+    /* 刚过密码门：这时接口才有会话，重新问一次凭据再渲染 */
+    window.addEventListener('cnm-unlocked', function () {
+      if (!window.RvLLM || !window.RvLLM.ensureCred) return;
+      window.RvLLM.ensureCred(true).then(function (got) { if (got) render(); });
+    });
+
     const params = new URLSearchParams(location.search);
     /* 凭据可能只存在于本机服务里（换过浏览器）：先取一次，再判断有没有通道 */
     if (window.RvLLM && window.RvLLM.ensureCred) {

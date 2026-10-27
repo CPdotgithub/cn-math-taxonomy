@@ -176,6 +176,11 @@
     if (location.protocol === 'file:') return 'http://127.0.0.1:8790';
     return location.origin + '/api/ds';
   }
+  /* 本机地址：只有在这里，浏览器里复制的 DeepSeek 凭据才稳 */
+  function onLocalHost() {
+    return /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
+  }
+
   function sameSiteRelay() {
     if (location.protocol === 'file:') return '';
     return String(location.origin || '') + '/api/ds';
@@ -600,7 +605,8 @@
             ok: okToken,
             detail: okToken ? ('DeepSeek 认这条凭据（' + (j.name || '正常') + '）')
               : (code === 'token_missing' ? '没带凭据'
-                : code === 'token_invalid' ? ('凭据无效或已过期' + (msg ? '：' + msg : ''))
+                : code === 'token_invalid' ? ('凭据无效或已过期' + (msg ? '：' + msg : '') +
+                    (onLocalHost() ? '' : '（线上常见的另一层原因：DeepSeek 按设备/网络校验，跨主机转发会被拒）'))
                   : code === 'network' ? ('转发在，但连不上 chat.deepseek.com' + (msg ? '：' + msg : ''))
                     : ('自检没通过：' + (msg || code || '未知')))
           });
@@ -634,7 +640,8 @@
   }
 
   /* 本地没有凭据时，问一次本机服务；拿回来了就写进 localStorage 并返回 true */
-  function ensureCred() {
+  function ensureCred(force) {
+    if (force) credPromise = null;
     if (credPromise) return credPromise;
     credPromise = (function () {
       if (!apiOrigin()) return Promise.resolve(false);

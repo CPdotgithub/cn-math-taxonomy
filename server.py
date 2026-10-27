@@ -67,6 +67,9 @@ CRED_LOCK = threading.Lock()
 # 接口鉴权：和前端密码门同一个口令（前端算好 sha256 再发过来，不传明文）。
 # 静态托管没有这一层；只有本服务在跑时才会要求。
 GATE_HASH = os.environ.get("GATE_HASH") or "00847220aa587c230746ac58189197151d6322a13518104a476bdd96ac4b7ae8"  # 123456
+# 本机放行默认关闭：线上有反代，所有请求的对端都是 127.0.0.1，靠 IP 判断等于不设防。
+# 本地想省掉登录，启动时加 LOCAL_BYPASS=1。
+LOCAL_BYPASS = os.environ.get("LOCAL_BYPASS") == "1"
 SESS_PATH = os.path.join(ROOT, ".sessions.json")
 SESS_LOCK = threading.Lock()
 SESS_TTL = 30 * 24 * 3600
@@ -211,6 +214,10 @@ def make_handler(relay):
         # ---------- 静态文件 ----------
         def _local(self, path):
             rel = unquote(path).lstrip("/")
+            # 点文件一律不对外：.ds-cred.json（登录凭据）、.sessions.json（会话）、
+            # .aiq-store.json（题库缓存）都在站点根目录，绝不能当静态资源发出去
+            if rel.startswith(".") or "/." in rel:
+                return None
             full = os.path.normpath(os.path.join(ROOT, rel))
             if not (full == ROOT or full.startswith(ROOT + os.sep)):
                 return None
@@ -260,6 +267,9 @@ def make_handler(relay):
             self.send_response(code)
             self.send_header("Content-Type", "text/plain; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))
+            if code >= 400:
+                self.send_header("Connection", "close")
+                self.close_connection = True
             self.end_headers()
             self.wfile.write(body)
 
@@ -309,6 +319,8 @@ def make_handler(relay):
                 return self._api_cred_put()
             if path == "/api/unlock":
                 return self._api_unlock()
+            if path == "/api/cred" and (self.headers.get("X-Cnm-Method") or "").lower() == "delete":
+                return self._api_cred_delete()
             return self._plain(404, "not found")
 
         def do_OPTIONS(self):
@@ -325,6 +337,11 @@ def make_handler(relay):
             self.send_header("Content-Length", str(len(body)))
             self.send_header("Access-Control-Allow-Origin", "*")
             self.send_header("Cache-Control", "no-store")
+            if code >= 400:
+                # 拒绝时没人读请求 body，留在 socket 里会把下一个请求读成
+                # 「Bad request syntax」——直接关连接，让客户端另开一条
+                self.send_header("Connection", "close")
+                self.close_connection = True
             self.end_headers()
             self.wfile.write(body)
 
@@ -382,12 +399,24 @@ def make_handler(relay):
             self.wfile.write(body)
 
         def _is_local(self):
-            """本机来的请求不用鉴权（本地调试方便）。"""
+            """只有显式开了 LOCAL_BYPASS 才认本机（反代后面所有请求都像本机，不能靠它）。"""
+            if not LOCAL_BYPASS:
+                return False
             try:
                 h = self.client_address[0]
             except Exception:
                 return False
             return h in ("127.0.0.1", "::1", "::ffff:127.0.0.1")
+
+        def _api_cred_delete(self):
+            if not self._authed():
+                return self._json({"ok": False, "code": "locked", "error": "需要先输入访问密码"}, 403)
+            try:
+                if os.path.exists(CRED_PATH):
+                    os.remove(CRED_PATH)
+            except OSError:
+                pass
+            return self._json({"ok": True})
 
         def _api_cred_get(self):
             if not self._authed():

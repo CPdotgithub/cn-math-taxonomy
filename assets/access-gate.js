@@ -63,7 +63,13 @@
   }
 
   var passed = readPass();
-  if (passed) { apiUnlock({ h: passed.k }); return; } // 已通过：补一次会话，然后什么都不做
+  if (passed) {
+    // 已通过：补一次会话；补上了通知页面重新取凭据
+    apiUnlock({ h: passed.k }).then(function (yes) {
+      if (yes) { try { window.dispatchEvent(new Event('cnm-unlocked')); } catch (e) {} }
+    });
+    return;
+  }
 
   // 未通过：先隐藏正文，避免内容一闪而过
   document.documentElement.classList.add('cnm-gate-locked');
@@ -110,7 +116,11 @@
 
     function ok(h) {
       savePass(h);
-      if (h) apiUnlock({ h: h });
+      if (h) {
+        apiUnlock({ h: h }).then(function (yes) {
+          if (yes) { try { window.dispatchEvent(new Event('cnm-unlocked')); } catch (e) {} }
+        });
+      }
       mask.classList.add('cnm-gate-out');
       setTimeout(function () {
         mask.remove();
