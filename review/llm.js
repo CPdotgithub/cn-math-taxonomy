@@ -42,6 +42,7 @@
     ua: '',
     hdr: '',            /* 从 curl 里带出来的整套请求头（base64 JSON），转发给中转 */
     model: 'deepseek',
+    auto: false,          /* true = 转发地址是自动探测到的（本机服务），换域名时不要改写它 */
     savedAt: ''
   };
 
@@ -428,7 +429,20 @@
       temperature: o.temperature, signal: o.signal, onProgress: o.onProgress
     };
 
-    if (isWeb()) return webComplete(base);
+    if (isWeb()) {
+      /* 静态托管的地址（预览面板 / 只跑了个文件服务器）会被 POST 501 或 404 掉。
+         这不是用户填错了什么——自动找一次能用的转发，找到就悄悄换过去重发一次。 */
+      return webComplete(base).catch(function (e) {
+        var code = (e && e.error && e.error.code) || '';
+        /* 静态服务器有的回 501/404，有的直接断连（web_offline）——都当成「这个地址不转发」 */
+        if (!/^web_http_(404|405|501)$/.test(code) && code !== 'web_offline') throw e;
+        return detectRelay().then(function (hit) {
+          if (!hit) throw makeErr('web_no_relay', '这个地址没有转发');
+          setWeb({ relay: hit.base === sameSiteRelay() ? '' : hit.base, auto: hit.base !== sameSiteRelay() });
+          return webComplete(base);
+        });
+      });
+    }
 
     /* 云端不保证支持图片。带了图但被拒时，退回纯文字再批一次，别让整张卷子卡住。 */
     return cloudComplete(base).catch(function (e) {
@@ -474,6 +488,8 @@
       if (!/^https?:$/.test(location.protocol)) return Promise.resolve(false);
       var cfg = web();
       var stored = String(cfg.relay || '');
+      /* 没配凭据的人用不到转发，别在控制台里刷一堆探测失败 */
+      if (!cfg.token) return Promise.resolve(false);
       /* 旧配置里存着 8790：如果这个页面本身带转发，就改回「本站」 */
       if (/^http:\/\/(127\.0\.0\.1|localhost):87\d\d$/.test(stored)) {
         var site0 = sameSiteRelay();
@@ -599,6 +615,7 @@
     if (code === 'web_no_relay') return '网页版的转发没准备好，重新用「启动.command」打开页面再试。';
     if (code === 'web_no_token') return '还没贴登录凭据。在 chat.deepseek.com 上复制一条 curl 贴进来。';
     if (code === 'web_offline') return '转发服务没响应，等几秒再试一次；一直不行就重新用「启动.command」打开页面。';
+    if (/^web_http_(404|405|501)$/.test(code)) return '这个地址没有转发能力（静态预览常见）。用「启动.command」打开的页面，或者发布后的网址。';
     if (code === 'token_missing' || code === 'token_invalid') return 'DeepSeek 登录凭据过期了。重新在浏览器里复制一条 curl 贴上就好。';
     if (code === 'node_missing') return '转发那边没找到 Node.js（网页版解开挑战要靠它），本机调试的话装好 Node 再重启。';
     if (code === 'solver_missing') return '转发服务缺少 tools/dsweb 里的求解文件。';
