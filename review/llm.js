@@ -181,8 +181,11 @@
   }
 
   function relayBase(cfg) {
-    var r = String((cfg || web()).relay || '').replace(/\/+$/, '');
+    var conf = cfg || web();
+    var r = String(conf.relay || '').replace(/\/+$/, '');
     if (!r) return defaultRelay();
+    /* auto = 自动探测到的（可能在本机 8981 上），别再按「云上」规则改写它 */
+    if (conf.auto) return r;
     /* 旧配置里存着 127.0.0.1：在云端页面上这个地址指向「看网页那台设备」，手机上必然打不通，
        直接改用同站转发，不给用户留一个打了也白打的地址。 */
     var local = /^https?:\/\/(127\.0\.0\.1|localhost)(:|\/|$)/.test(r);
@@ -470,17 +473,37 @@
     relayPromise = (function () {
       if (!/^https?:$/.test(location.protocol)) return Promise.resolve(false);
       var cfg = web();
-      if (!/^http:\/\/(127\.0\.0\.1|localhost):87\d\d$/.test(String(cfg.relay || ''))) return Promise.resolve(false);
-      var site = sameSiteRelay();
-      if (!site) return Promise.resolve(false);
-      return fetch(site + '/health', { method: 'GET' })
-        .then(function (r) { return r.json(); })
-        .then(function (j) {
-          if (!j || j.service !== 'dsweb-relay') return false;
-          setWeb({ relay: '' });
-          return true;
-        })
-        .catch(function () { return false; });
+      var stored = String(cfg.relay || '');
+      /* 旧配置里存着 8790：如果这个页面本身带转发，就改回「本站」 */
+      if (/^http:\/\/(127\.0\.0\.1|localhost):87\d\d$/.test(stored)) {
+        var site0 = sameSiteRelay();
+        if (site0) {
+          return fetch(site0 + '/health', { method: 'GET' })
+            .then(function (r) { return r.json(); })
+            .then(function (j) {
+              if (j && j.service === 'dsweb-relay') { setWeb({ relay: '', auto: false }); return true; }
+              return false;
+            })
+            .catch(function () { return false; });
+        }
+        return Promise.resolve(false);
+      }
+      if (stored) return Promise.resolve(false);   // 用户自己指定过，不猜
+      /* 没指定：先看本站有没有，没有再找本机跑着的那个（预览面板里页面不在这台服务上） */
+      var cands = relayCandidates();
+      /* 并行探，别一个个排队等超时（静态托管时整串都要失败一遍） */
+      return Promise.all(cands.map(function (base) {
+        return healthOf(base).then(function (hit) { return hit ? base : null; });
+      })).then(function (rs) {
+        var base = null;
+        for (var i = 0; i < rs.length; i++) if (rs[i]) { base = rs[i]; break; }
+        if (!base) return false;
+        var sameNow = base === sameSiteRelay();
+        /* 同站就留空（跟着地址走）；本机的打 auto，换地址后不会被改写 */
+        if (sameNow) { if (stored !== '') setWeb({ relay: '', auto: false }); }
+        else setWeb({ relay: base, auto: true });
+        return true;
+      });
     })();
     return relayPromise;
   }
@@ -507,18 +530,25 @@
       .catch(function () { clearTimeout(timer); return null; });
   }
 
+  function relayCandidates() {
+    var out = [];
+    var site = sameSiteRelay();
+    if (site) out.push(site);
+    /* 页面被别的地址托管时（预览面板之类），服务可能还在 8981 / 8790 上独立跑着 */
+    ['127.0.0.1', 'localhost'].forEach(function (h) {
+      out.push('http://' + h + ':8981/api/ds');
+      for (var p = 8790; p <= 8792; p++) out.push('http://' + h + ':' + p);
+    });
+    return out;
+  }
+
   function detectRelay() {
     var cur = relayBase(web());
     var cands = [];
     var site = sameSiteRelay();
     if (site && site !== cur) cands.push(site);
     if (cur) cands.push(cur);
-    ['127.0.0.1', 'localhost'].forEach(function (h) {
-      for (var p = 8790; p <= 8795; p++) {
-        var u = 'http://' + h + ':' + p;
-        if (u !== cur) cands.push(u);
-      }
-    });
+    relayCandidates().forEach(function (u) { if (u !== cur && cands.indexOf(u) < 0) cands.push(u); });
     return Promise.all(cands.map(healthOf)).then(function (rs) {
       var hit = null;
       rs.forEach(function (x) { if (!hit && x) hit = x; });
@@ -566,9 +596,9 @@
     if (code === 'model_empty') return '模型这次什么都没返回，再点一次「重新生成」通常就好。';
     if (code === 'model_bad_json') return '模型返回的题目格式不对，点「重新生成」再试一次。';
     if (code === 'image_dropped') return '照片没被云端接收，这次只按文字批改。想拍照批改，把通道换成「网页版」。';
-    if (code === 'web_no_relay') return '还没填转发地址。';
+    if (code === 'web_no_relay') return '网页版的转发没准备好，重新用「启动.command」打开页面再试。';
     if (code === 'web_no_token') return '还没贴登录凭据。在 chat.deepseek.com 上复制一条 curl 贴进来。';
-    if (code === 'web_offline') return '转发服务没响应。云端用的是本站转发，稍等几秒再试；本机调试要先开 tools/start-dsweb.command。';
+    if (code === 'web_offline') return '转发服务没响应，等几秒再试一次；一直不行就重新用「启动.command」打开页面。';
     if (code === 'token_missing' || code === 'token_invalid') return 'DeepSeek 登录凭据过期了。重新在浏览器里复制一条 curl 贴上就好。';
     if (code === 'node_missing') return '转发那边没找到 Node.js（网页版解开挑战要靠它），本机调试的话装好 Node 再重启。';
     if (code === 'solver_missing') return '转发服务缺少 tools/dsweb 里的求解文件。';

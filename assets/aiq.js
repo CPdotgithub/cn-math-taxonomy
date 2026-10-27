@@ -276,7 +276,9 @@
     if (!L) return Promise.reject(new Error('no-llm'));
     var system = SYSTEM;
     var user = buildPrompt(ctx);
-    return modelId().then(function (model) {
+    /* 先把转发地址定下来（同站 / 本机自动探测），再发请求，别拿一个连不上的地址去撞 */
+    var settle = (L.ensureRelay ? L.ensureRelay() : Promise.resolve());
+    return settle.then(function () { return modelId(); }).then(function (model) {
       if (!model) {
         var e = new Error('没有可用模型');
         e.error = { code: 'no_model', message: '没有可用模型' };

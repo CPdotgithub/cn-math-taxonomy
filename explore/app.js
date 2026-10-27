@@ -1182,6 +1182,6 @@
     renderList();
     bootSelection();
   }).catch(function (error) {
-    showLoadError('无法读取数据（' + (error && error.message ? error.message : error) + '）。请在项目根目录运行 python3 -m http.server 8000，不要直接用 file:// 打开。');
+    showLoadError('数据没读出来（' + (error && error.message ? error.message : error) + '）。请用「启动.command」打开的页面进入，不要直接双击 HTML 文件。');
   });
 })();

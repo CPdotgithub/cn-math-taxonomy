@@ -190,6 +190,6 @@
       addCard(14, '高中', '选必三', 'is-senior', '选择性必修第三册', 'explore/?grade=14');
     }
   }).catch(function (error) {
-    fail('数据没有加载成功（' + (error && error.message ? error.message : error) + '）。请在项目根目录运行 python3 -m http.server 8000，再用浏览器打开，不要直接双击 html 文件。');
+    fail('数据没有加载成功（' + (error && error.message ? error.message : error) + '）。请用「启动.command」打开的页面进入，不要直接双击 HTML 文件。');
   });
 })();

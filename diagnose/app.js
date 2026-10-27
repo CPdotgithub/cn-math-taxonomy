@@ -2259,7 +2259,7 @@
       clearRoot();
       root.append(h('div', { class: 'card' }, h('h2', { class: 'err', text: '数据加载失败' }),
         h('p', null, String(e.message || e)),
-        h('p', null, '请在项目根目录运行 ', h('code', { text: 'python3 -m http.server 8000' }), '，再访问 http://localhost:8000/diagnose/ （不能直接用 file:// 打开）。')));
+        h('p', null, '请用「启动.command」打开的页面进入（或发布后的网址），不要直接双击 HTML 文件。')));
       return;
     }
     const params = new URLSearchParams(location.search);

@@ -850,49 +850,22 @@
     return wrap;
   }
 
-  /* 网页版要连本机中转；凭据是家长自己复制的一条 curl，过期了重新贴 */
+  /* 网页版：家长只需要贴一条 curl。转发、端口这些都不露出来——普通用户看不懂，
+     看到了只会以为要自己配。地址由 relayBase() 在后台决定（默认本站 /api/ds）。 */
   function webCfgField() {
     var cfg = LLM.web();
     var same = LLM.usingSiteRelay();
     var box = h('div', { class: 'rv-webcfg' });
 
-    /* 网页版自带搜索和推理，模型只剩一个，说清楚就行，不需要选 */
     box.appendChild(h('p', {
       class: 'rv-hint',
-      text: same
-        ? '网页版走 chat.deepseek.com 那个对话框：联网搜索和深度思考它自己开着，不用另配。转发已经做在本站里，你只要贴一条凭据。'
-        : '网页版用的是 chat.deepseek.com 那个对话框：联网搜索和深度思考默认都开着，不用另配。'
+      text: '网页版用的是 chat.deepseek.com 那个对话框：联网搜索和深度思考它自己开着，不用另配；这里只要贴一条登录凭据。'
     }));
-
-    if (same) {
-      box.appendChild(h('p', { class: 'rv-hint rv-hint-ok', text: '转发：本站 /api/ds（内置，不用开任何服务、也不用装东西）' }));
-    }
-
-    var relay = h('input', {
-      type: 'text', class: 'rv-input rv-input-sm', value: cfg.relay || '',
-      placeholder: same ? LLM.relayBase() : 'http://127.0.0.1:8790',
-      'aria-label': '转发地址'
-    });
-    /* 边输入边存，但不重绘：否则点「测试连接」时输入框失焦重绘，按钮就点不到了 */
-    relay.addEventListener('input', function () {
-      LLM.setWeb({ relay: relay.value.trim() });
-    });
-    relay.addEventListener('change', function () {
-      ST.chanNote = '';
-      ST.chanTone = '';
-    });
-    var relayField = h('label', { class: 'rv-field rv-field-col rv-field-tight' }, [
-      h('span', { class: 'rv-label', text: same ? '换成自己的转发地址（留空就用本站）' : '本机中转地址' }), relay
-    ]);
-    if (same) {
-      /* 云端不需要看见它，但留着给想自己搭转发的人 */
-      var adv = h('details', { class: 'rv-howto' });
-      adv.appendChild(h('summary', null, [document.createTextNode('高级：换转发地址')]));
-      adv.appendChild(relayField);
-      adv.appendChild(h('p', { class: 'rv-hint', text: '留空 = 本站 /api/ds。自己在本机跑 tools/dsweb-relay.py 调试时填 http://127.0.0.1:8790。' }));
-      box.appendChild(adv);
-    } else {
-      box.appendChild(relayField);
+    if (!same) {
+      box.appendChild(h('p', {
+        class: 'rv-hint is-warn',
+        text: '网页版要走站点自带的转发，这个地址没有。用「启动.command」打开的页面来配，或者用发布后的网址。'
+      }));
     }
 
     var ta = h('textarea', {
@@ -944,27 +917,14 @@
       : '还没配凭据。');
     box.appendChild(note);
 
-    /* 第一次用的人卡在「中转是什么」上，直接给几句话说清 */
+    /* 第一次用的人卡在「curl 从哪来」，把这一步说清就够了，别再讲服务怎么起 */
     var how = h('details', { class: 'rv-howto' });
-    how.appendChild(h('summary', null, [document.createTextNode(same ? '网页版怎么开（两步）' : '网页版怎么开（三步）')]));
+    how.appendChild(h('summary', null, [document.createTextNode('这条 curl 怎么复制（两步）')]));
     var ol = h('ol', { class: 'rv-howto-list' });
-    var steps = same
-      ? [
-        ['浏览器打开 chat.deepseek.com 随便发一句话（登录状态要是好的）。'],
-        ['在开发者工具的网络面板里找到那条 completion 请求，右键「以 cURL 格式复制」，粘到上面保存。']
-      ]
-      : [
-        ['双击项目里的「启动.command」：它把页面和转发一起起在 http://127.0.0.1:8981，用这个地址打开本站。',
-          '没有图形界面就运行：PORT=8981 python3 server.py'],
-        ['地址留空即可（默认用本站 /api/ds）；只有自己单独跑了 tools/dsweb-relay.py 才填 http://127.0.0.1:8790。'],
-        ['浏览器打开 chat.deepseek.com 随便发一句话，在开发者工具的网络面板里找到那条 completion 请求，右键「以 cURL 格式复制」，粘到上面保存。']
-      ];
-    steps.forEach(function (x) {
-      ol.appendChild(h('li', null, [
-        h('span', { text: x[0] }),
-        x[1] ? h('code', { class: 'rv-code', text: x[1] }) : null
-      ]));
-    });
+    [
+      '浏览器打开 chat.deepseek.com，随便发一句话（登录状态要是好的）。',
+      '按 F12 打开开发者工具 → 网络（Network）→ 找到那条 completion 请求 → 右键「复制 → 以 cURL 格式复制」，粘到上面保存。'
+    ].forEach(function (x) { ol.appendChild(h('li', null, [h('span', { text: x })])); });
     how.appendChild(ol);
     how.appendChild(h('p', {
       class: 'rv-hint',
@@ -1002,21 +962,20 @@
     }).catch(function (e) {
       var code = (e && e.error && e.error.code) || '';
       if (code === 'web_offline' && !retried) {
-        ST.chanNote = LLM.usingSiteRelay() ? '本站转发没响应，正在重试…' : '这个地址没响应，正在找本机的中转服务…';
+        ST.chanNote = '正在重试…';
         ST.chanTone = 'is-warn';
         renderSide();
+        /* 地址不往界面上露：自动探一遍就行，探到了悄悄用，探不到就说人话 */
         LLM.detectRelay().then(function (hit) {
           if (hit) {
             LLM.setWeb({ relay: hit.base });
-            ST.chanNote = '找到了 ' + hit.base + '，再测一次。';
+            ST.chanNote = '';
             ST.chanTone = '';
             testChannel(true);
           } else {
             ST.chanNote = LLM.usingSiteRelay()
-              ? '本站转发暂时没响应，等几秒再点一次；一直不行就刷新页面。'
-              : (/^https?:$/.test(location.protocol)
-                ? '这个地址没有内置转发。双击项目里的「启动.command」，它会同时起页面和转发，用它打开的地址再试。'
-                : '没找到在跑的中转。先在电脑上双击项目里的「启动.command」（或 tools/start-dsweb.command），再把显示的地址填到这里。');
+              ? '转发暂时没响应，等几秒再点一次；一直不行就刷新页面。'
+              : '网页版要走站点自带的转发，这个页面没有。用「启动.command」打开页面，或者用发布后的网址。';
             ST.chanTone = 'is-warn';
             renderSide();
           }

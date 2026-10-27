@@ -110,7 +110,7 @@
     box.className = 'cnm-storage-warn';
     box.setAttribute('role', 'alert');
     box.innerHTML = '<b>这个地址存不住数据</b>：浏览器不允许写入本地存储，孩子档案、DeepSeek 凭据、诊断进度都保存不下来。' +
-      '换一个固定地址打开就行，比如在本机跑 <code>启动.command</code>（http://127.0.0.1:8981/diagnose/），或者用发布后的网址。';
+      '换成双击「启动.command」打开的那个页面，或者用发布后的网址，就正常了。';
     document.body.insertBefore(box, document.body.firstChild);
   }
 
