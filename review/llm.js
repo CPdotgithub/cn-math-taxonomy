@@ -524,6 +524,94 @@
     return relayPromise;
   }
 
+  /* 连接自检：把「页面在哪、转发指向哪、健康检查过不过、凭据认不认」逐条打出来。
+     出问题时不用猜，也不用开控制台。 */
+  function selfCheck() {
+    var cfg = web();
+    var steps = [];
+    var base = relayBase(cfg);
+    steps.push({
+      name: '当前页面',
+      ok: /^https?:$/.test(location.protocol),
+      detail: location.origin + location.pathname + (location.protocol === 'https:' ? '（https，可能挡住本机 http 转发）' : '')
+    });
+    steps.push({
+      name: '出题通道',
+      ok: true,
+      detail: (isWeb() ? '网页版（你自己的 DeepSeek 账号）' : '云端') + '，转发地址：' + (base || '（空）')
+    });
+    steps.push({
+      name: '登录凭据',
+      ok: !!cfg.token,
+      detail: cfg.token ? ('已保存（' + cfg.token.length + ' 字符' + (cfg.savedAt ? '，更新于 ' + cfg.savedAt.slice(0, 16).replace('T', ' ') : '') + '）') : '还没贴 curl'
+    });
+
+    function healthStep(url) {
+      return fetch(url + '/health', { method: 'GET', cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) {
+          return { ok: !!(j && j.service === 'dsweb-relay'), info: j, url: url };
+        })
+        .catch(function () { return { ok: false, info: null, url: url }; });
+    }
+
+    return healthStep(base || sameSiteRelay() || '')
+      .then(function (h) {
+        steps.push({
+          name: '转发服务',
+          ok: h.ok,
+          detail: h.ok
+            ? (h.url + ' 正常' + (h.info && h.info.env && h.info.env.node ? '，Node 就绪' : '，但缺 Node（解不了挑战）'))
+            : (h.url + ' 没响应')
+        });
+        if (h.ok) return { base: h.url };
+        /* 本地页面常出现「转发在 8981、页面在别的端口」：顺手探一遍本机 */
+        return detectRelay().then(function (hit) {
+          steps.push({
+            name: '本机备用转发',
+            ok: !!hit,
+            detail: hit ? ('可用：' + hit.base) : '没找到（8981 / 8790-8792 都没响应）'
+          });
+          return { base: hit ? hit.base : (h.url || '') };
+        });
+      })
+      .then(function (ctx) {
+        var b = ctx.base || base;
+        if (!b) {
+          steps.push({ name: '模型探针', ok: false, detail: '没有可用的转发地址' });
+          return steps;
+        }
+        return fetch(b + '/v1/probe', {
+          method: 'POST',
+          headers: (function () {
+            var h = { 'Content-Type': 'application/json' };
+            if (cfg.token) h.Authorization = 'Bearer ' + cfg.token;
+            if (cfg.cookie) h['X-DS-Cookie'] = cfg.cookie;
+            if (cfg.hdr) h['X-DS-Headers'] = cfg.hdr;
+            return h;
+          })(),
+          body: '{}'
+        }).then(function (r) { return r.json(); }).then(function (j) {
+          var okToken = !!(j && j.ok);
+          var code = (j && j.code) || '';
+          var msg = (j && j.message) || '';
+          steps.push({
+            name: '模型探针',
+            ok: okToken,
+            detail: okToken ? ('DeepSeek 认这条凭据（' + (j.name || '正常') + '）')
+              : (code === 'token_missing' ? '没带凭据'
+                : code === 'token_invalid' ? ('凭据无效或已过期' + (msg ? '：' + msg : ''))
+                  : code === 'network' ? ('转发在，但连不上 chat.deepseek.com' + (msg ? '：' + msg : ''))
+                    : ('自检没通过：' + (msg || code || '未知')))
+          });
+          return steps;
+        }).catch(function () {
+          steps.push({ name: '模型探针', ok: false, detail: '请求转发失败（' + b + '/v1/probe）' });
+          return steps;
+        });
+      });
+  }
+
   function health() {
     var base = relayBase(web());
     if (!base) return Promise.reject(makeErr('web_no_relay'));
@@ -654,6 +742,7 @@
     onAuthFail: onAuthFail,
     relayBase: relayBase,
     cloudOriginOk: cloudOriginOk,
+    selfCheck: selfCheck,
     usingSiteRelay: function () { return /\/api\/ds$/.test(relayBase()); },
     sameSiteRelay: sameSiteRelay,
     ensureRelay: ensureRelay,

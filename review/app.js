@@ -909,7 +909,12 @@
       type: 'button', class: 'rv-btn rv-btn-sm', text: '测试连接',
       onclick: function () { testChannel(false); }
     }));
+    acts.appendChild(h('button', {
+      type: 'button', class: 'rv-btn rv-btn-sm', text: '连接诊断',
+      onclick: function () { runSelfCheck(); }
+    }));
     box.appendChild(acts);
+    box.appendChild(h('div', { class: 'rv-diag' }));
 
     var note = h('p', { class: 'rv-hint' + (ST.chanTone ? ' ' + ST.chanTone : '') });
     note.textContent = ST.chanNote || (cfg.token
@@ -933,6 +938,26 @@
     box.appendChild(how);
 
     return box;
+  }
+
+  /* 一条条列出「页面在哪 / 转发指哪 / 健康检查 / 凭据认不认」，出问题不用猜 */
+  function runSelfCheck() {
+    var box = sideEl && sideEl.querySelector('.rv-diag');
+    if (!box) return;
+    box.textContent = '';
+    box.appendChild(h('p', { class: 'rv-hint', text: '正在诊断…' }));
+    LLM.selfCheck().then(function (steps) {
+      box.textContent = '';
+      (steps || []).forEach(function (s) {
+        box.appendChild(h('div', { class: 'rv-diag-row' + (s.ok ? ' is-ok' : ' is-bad') }, [
+          h('b', { text: (s.ok ? '✓ ' : '✗ ') + s.name }),
+          h('span', { text: '  ' + s.detail })
+        ]));
+      });
+    }).catch(function (e) {
+      box.textContent = '';
+      box.appendChild(h('p', { class: 'rv-hint is-warn', text: '诊断本身失败了：' + LLM.describeError(e) }));
+    });
   }
 
   function testChannel(retried) {

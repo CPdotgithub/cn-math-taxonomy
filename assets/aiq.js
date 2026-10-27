@@ -266,6 +266,7 @@
   var modelCache = '';
   var inflight = Object.create(null);
   var fails = 0;      /* 连续失败次数：页面据此决定「这一轮先用题库」 */
+  var lastErr = '';   /* 最近一次失败的错误码，页面拿它说清原因 */
 
   function keyOf(ctx) {
     var t = ctx.topic || {};
@@ -458,6 +459,7 @@
       }, function (err) {
         e.state = 'error';
         e.err = (err && err.error && err.error.code) || String((err && err.message) || err);
+        lastErr = e.err;
         fails++;
         return finish();
       });
@@ -526,7 +528,7 @@
     available: available, on: on, setOn: setOn, enabled: enabled,
     peek: peek, warm: warm, pick: pick, variants: variants,
     forget: forget, forgetFailed: forgetFailed, clear: clear, stats: stats,
-    fails: failsCount, resetFails: resetFails,
+    fails: failsCount, resetFails: resetFails, lastError: function () { return lastErr; },
     buildPrompt: buildPrompt, profileText: profileText, normQuestion: normQuestion,
     SYSTEM: SYSTEM
   };

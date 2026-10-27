@@ -1124,3 +1124,22 @@ body.has-modal { overflow: hidden; }
   border-top: 1px dashed var(--pt-line-soft);
 }
 .rv-whole .rv-btn { margin-top: 8px; }
+
+/* 连接诊断：一条条打勾/打叉 */
+.rv-diag { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.rv-diag:empty { display: none; }
+.rv-diag-row {
+  display: flex;
+  gap: 6px;
+  padding: 8px 10px;
+  font-size: .8rem;
+  line-height: 1.6;
+  color: var(--pt-ink-2);
+  background: var(--pt-surface-2);
+  border-left: 3px solid var(--pt-line);
+  border-radius: 7px;
+  word-break: break-all;
+}
+.rv-diag-row.is-ok { border-left-color: #2f9e44; }
+.rv-diag-row.is-bad { border-left-color: #e03131; }
+.rv-diag-row b { flex: none; color: var(--pt-ink); }

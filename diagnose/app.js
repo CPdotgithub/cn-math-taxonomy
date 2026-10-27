@@ -1249,6 +1249,18 @@
     } catch (e) { /* 预取失败不影响答题 */ }
   }
 
+  /* 把错误码翻成一句人话：不要所有失败都叫「连不上」 */
+  function aiFailureReason() {
+    const code = (AIQ && AIQ.lastError && AIQ.lastError()) || '';
+    if (code === 'token_invalid' || code === 'token_missing') return 'DeepSeek 的登录凭据过期了，去复习页重新贴一条 curl';
+    if (code === 'web_no_relay' || /^web_http_(404|405|501)$/.test(code)) return '这个地址没有转发能力（静态托管），用「启动.command」打开页面再试';
+    if (code === 'web_offline') return '转发服务没响应（本机服务没开，或页面和它不在同一个地址）';
+    if (code === 'timeout') return '模型太久没响应';
+    if (code === 'ai_bad_json') return '模型这次给的题格式不对';
+    if (code === 'no_model') return '没有可用的模型';
+    return '连不上模型' + (code ? '（' + code + '）' : '');
+  }
+
   function noteAiQuestion(q) {
     if (!q || !q.ai) return;
     const s = String(q.prompt || '');
@@ -1484,11 +1496,13 @@
       }
     } else if (AIQ && AIQ.enabled() && aiDead()) {
       card.append(h('p', { class: 'muted small ai-flag is-warn' },
-        '「AI 现出」连不上模型，这一轮先用题库的题。', ' ',
+        '「AI 现出」没成功：' + aiFailureReason() + '。这一轮先用题库的题。', ' ',
         h('button', {
           class: 'linkish', type: 'button',
           onclick: function () { AIQ.resetFails(); AIQ.forgetFailed(); render(); }
-        }, '再试一次')));
+        }, '再试一次'),
+        ' ',
+        h('a', { class: 'linkish', href: '../review/', target: '_blank', rel: 'noopener' }, '去诊断')));
     }
     card.append(h('div', { class: 'row no-print', style: 'margin-top:12px' },
       n > 0 ? h('button', { class: 'small', onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null,
