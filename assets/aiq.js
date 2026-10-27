@@ -233,9 +233,15 @@
     return q;
   }
 
-  /* ---------------------------------------------------------------- 调用 */
+  /* ---------------------------------------------------------------- 调用与缓存 */
 
-  var mem = Object.create(null);
+  /* 本地持久缓存：出的题存进 localStorage，下次进来（换页、刷新、第二天）直接用，
+     不再等模型。同一知识点留多个版本，「换一题」就是往前面插一个新的。 */
+  var LS = 'cnmAI.q.v2';
+  var PER_KEY = 5;      /* 同一个知识点最多留几个版本 */
+  var TOTAL = 240;      /* 总共最多留几道，别把 localStorage 撑爆 */
+
+  var mem = Object.create(null);   /* key -> { state, list, idx, err, at } */
   var modelCache = '';
   var inflight = Object.create(null);
   var fails = 0;      /* 连续失败次数：页面据此决定「这一轮先用题库」 */
@@ -243,6 +249,71 @@
   function keyOf(ctx) {
     var t = ctx.topic || {};
     return [t.id || '', ctx.attempt || 1, ctx.difficulty || ''].join('|');
+  }
+
+  var store = null;
+  function readStore() {
+    if (store) return store;
+    try {
+      var raw = JSON.parse(localStorage.getItem(LS));
+      store = (raw && raw.v === 2 && raw.items && typeof raw.items === 'object') ? raw : { v: 2, items: {} };
+    } catch (e) { store = { v: 2, items: {} }; }
+    return store;
+  }
+  function saveStore() {
+    if (!store) return;
+    try {
+      localStorage.setItem(LS, JSON.stringify(store));
+    } catch (e) {
+      /* 配额满了：砍掉一半再试一次，宁可少留几道也别让页面报错 */
+      trimStore(0.5);
+      try { localStorage.setItem(LS, JSON.stringify(store)); } catch (e2) { /* 放弃写入 */ }
+    }
+  }
+  function trimStore(keepRatio) {
+    var s = readStore();
+    var flat = [];
+    Object.keys(s.items).forEach(function (k) {
+      s.items[k] = (s.items[k] || []).filter(function (it) { return it && it.q; });
+      s.items[k].forEach(function (it) { flat.push({ k: k, it: it }); });
+    });
+    var want = Math.max(20, Math.floor(flat.length * keepRatio));
+    if (flat.length <= want) return;
+    flat.sort(function (a, b) { return (a.it.at || 0) - (b.it.at || 0); });
+    flat.slice(0, flat.length - want).forEach(function (x) {
+      var arr = s.items[x.k] || [];
+      var i = arr.indexOf(x.it);
+      if (i >= 0) arr.splice(i, 1);
+      if (!arr.length) delete s.items[x.k];
+    });
+  }
+  function storePut(k, q) {
+    var s = readStore();
+    var list = (s.items[k] || []).filter(function (it) { return it && it.q && it.q.prompt !== q.prompt; });
+    list.unshift({ q: q, at: Date.now() });
+    s.items[k] = list.slice(0, PER_KEY);
+    trimStore(1);   /* 只做总量控制：超过 TOTAL 时按时间淘汰最旧的 */
+    saveStore();
+  }
+
+  function view(e) {
+    var list = (e && e.list) || [];
+    var idx = Math.min(Math.max(0, (e && e.idx) || 0), Math.max(0, list.length - 1));
+    return { state: e ? e.state : 'idle', q: list[idx] || null, list: list, idx: idx, err: (e && e.err) || '' };
+  }
+
+  function entryFor(ctx) {
+    var k = keyOf(ctx);
+    if (mem[k]) return mem[k];
+    var saved = readStore().items[k];
+    if (Array.isArray(saved) && saved.length) {
+      mem[k] = {
+        state: 'ok', idx: 0, err: '', at: saved[0].at || 0,
+        list: saved.map(function (it) { return it.q; }).filter(Boolean)
+      };
+      return mem[k];
+    }
+    return null;
   }
 
   function modelId() {
@@ -297,43 +368,64 @@
     });
   }
 
-  /* 预取：第一次问这个点就开始出题；重复调用共用同一个请求。
-     已经失败的不会自动重试（force=true 才重来），否则每次渲染都会再打一次网络。 */
+  /* 预取 / 换一题：force=true 表示「再生成一题」，已有的版本会保留，新的插到最前。
+     失败的不会自动重试（再点一次才会），否则每次渲染都打一次网络。 */
   function warm(ctx, done, force) {
     if (!ctx || !ctx.topic || !enabled()) return null;
     var k = keyOf(ctx);
-    if (mem[k] && !force) {
-      /* 已经出好的直接返回（不要再回调一次，否则调用方一渲染就又回调，转圈）
-         正在出的把回调挂上，出好了叫一声 */
-      if (done && mem[k].state === 'loading' && inflight[k]) {
-        inflight[k].then(function (r) { done(r); }, function () {});
-      }
-      return mem[k];
+    var e = entryFor(ctx);
+    if (!e) e = mem[k] = { state: 'idle', list: [], idx: 0, err: '', at: 0 };
+
+    if (!force && e.state === 'ok' && e.list.length) return view(e);   /* 有缓存，直接用 */
+    if (!force && e.state === 'error') return view(e);                 /* 失败过，别自动重试 */
+
+    if (inflight[k]) {
+      if (done) inflight[k].then(function () { done(view(e)); }, function () { done(view(e)); });
+      return view(e);
     }
-    if (inflight[k] && !force) {
-      if (done) { inflight[k].then(function (r) { done(r); }, function () {}); }
-      return mem[k];
-    }
-    var entry = { state: 'loading', q: null, err: '', at: Date.now() };
-    mem[k] = entry;
-    /* 图谱节点上带着 nameOf 需要的能力，交给调用方塞进 ctx */
+
+    e.state = 'loading'; e.err = '';
     inflight[k] = one(ctx).then(function (q) {
-      entry.state = 'ok'; entry.q = q; entry.err = ''; fails = 0;
+      e.list = [q].concat((e.list || []).filter(function (x) { return x.prompt !== q.prompt; }));
+      e.idx = 0; e.state = 'ok'; e.err = ''; e.at = Date.now();
+      fails = 0;
+      storePut(k, q);
       delete inflight[k];
-      if (done) { try { done(entry); } catch (e) {} }
-      return entry;
+      if (done) { try { done(view(e)); } catch (err) {} }
+      return view(e);
     }, function (err) {
-      entry.state = 'error';
-      entry.err = (err && err.error && err.error.code) || String((err && err.message) || err);
+      e.state = 'error';
+      e.err = (err && err.error && err.error.code) || String((err && err.message) || err);
       fails++;
       delete inflight[k];
-      if (done) { try { done(entry); } catch (e) {} }
-      return entry;
+      if (done) { try { done(view(e)); } catch (e2) {} }
+      return view(e);
     });
-    return entry;
+    return view(e);
   }
 
-  function peek(ctx) { return ctx ? (mem[keyOf(ctx)] || null) : null; }
+  function peek(ctx) { return ctx ? view(entryFor(ctx)) : null; }
+  /* 切到第 i 个版本（0 = 最新出的）。选中的提到最前并落盘，刷新后还是这一道。 */
+  function pick(ctx, i) {
+    if (!ctx) return null;
+    var e = entryFor(ctx);
+    if (!e || !e.list.length) return null;
+    var idx = Math.min(Math.max(0, i | 0), e.list.length - 1);
+    var chosen = e.list[idx];
+    e.list = [chosen].concat(e.list.filter(function (x) { return x !== chosen; }));
+    e.idx = 0;
+    var k = keyOf(ctx);
+    var s = readStore();
+    var arr = (s.items[k] || []).filter(function (it) { return it && it.q && it.q.prompt !== chosen.prompt; });
+    arr.unshift({ q: chosen, at: Date.now() });
+    s.items[k] = arr;
+    saveStore();
+    return view(e);
+  }
+  function variants(ctx) {
+    var e = ctx ? entryFor(ctx) : null;
+    return e ? e.list.slice() : [];
+  }
   function forget(ctx) { if (ctx) delete mem[keyOf(ctx)]; }
   function forgetFailed() {
     Object.keys(mem).forEach(function (k) { if (mem[k].state === 'error') delete mem[k]; });
@@ -342,16 +434,23 @@
   function resetFails() { fails = 0; }
   function clear() { mem = Object.create(null); }
 
-  /* 已经为多少个点成功出过题（结果页/调试用） */
+  /* 缓存里现在有多少道题（设置页/调试用） */
   function stats() {
-    var ok = 0, bad = 0;
-    Object.keys(mem).forEach(function (k) { if (mem[k].state === 'ok') ok++; else if (mem[k].state === 'error') bad++; });
-    return { ok: ok, bad: bad };
+    var ok = 0, bad = 0, saved = 0;
+    Object.keys(mem).forEach(function (k) {
+      if (mem[k].state === 'ok') ok++; else if (mem[k].state === 'error') bad++;
+      saved += (mem[k].list || []).length;
+    });
+    var s = readStore();
+    var onDisk = 0;
+    Object.keys(s.items).forEach(function (k) { onDisk += (s.items[k] || []).length; });
+    return { ok: ok, bad: bad, saved: saved, onDisk: onDisk };
   }
 
   window.CnmAIQ = {
     available: available, on: on, setOn: setOn, enabled: enabled,
-    peek: peek, warm: warm, forget: forget, forgetFailed: forgetFailed, clear: clear, stats: stats,
+    peek: peek, warm: warm, pick: pick, variants: variants,
+    forget: forget, forgetFailed: forgetFailed, clear: clear, stats: stats,
     fails: failsCount, resetFails: resetFails,
     buildPrompt: buildPrompt, profileText: profileText, normQuestion: normQuestion,
     SYSTEM: SYSTEM

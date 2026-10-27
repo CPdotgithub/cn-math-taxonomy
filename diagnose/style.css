@@ -1330,3 +1330,37 @@ button.linkish {
   line-height: 1.75;
   color: var(--pt-ink-2);
 }
+
+/* AI 题的多个版本：上下排列，点哪道用哪道 */
+.ai-vers { margin: 6px 0 0; }
+.ai-vers summary {
+  width: fit-content;
+  font-size: .78rem;
+  font-weight: 650;
+  color: var(--pt-blue);
+  cursor: pointer;
+}
+.ai-vers-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.ai-vers-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 9px 11px;
+  background: var(--pt-surface-2);
+  border: 1px solid var(--pt-line);
+  border-radius: 8px;
+}
+.ai-vers-tag {
+  flex: none;
+  padding-top: 2px;
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--pt-ink-3);
+}
+.ai-vers-text {
+  flex: 1;
+  min-width: 0;
+  font-size: .84rem;
+  line-height: 1.6;
+  color: var(--pt-ink-2);
+}

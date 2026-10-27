@@ -335,6 +335,7 @@
     resetUi();
     save();
     render();
+    aiWarmUpcoming(2);   /* 先把后面两个考点热起来 */
   }
 
   function restoreSession(saved) {
@@ -404,6 +405,7 @@
     }
     /* 探针可能把队列换过头，按最终队列补一次预取（已备好的会复用） */
     aiPrefetchFor(session);
+    aiWarmUpcoming(2);
     markSeen(item.question.id);
     return true;
   }
@@ -1175,14 +1177,55 @@
     const ctx = aiCtxOf(item);
     if (!ctx) return null;
     const mine = aiKeyOf(item);
-    /* 一定要走 warm：它会把「出好了」的回调挂上，正在出的那道才有人通知刷新 */
+    /* 一定要走 warm：它会把「出好了」的回调挂上，正在出的那道才有人通知刷新。
+       已有缓存时它直接返回，不再打网络——这是「后续加载不慢」的关键。 */
     const st = AIQ.warm(ctx, function () {
       if (currentKey() === mine) render();
     });
     if (!st) return null;
-    if (st.state === 'ok' && st.q) return { q: st.q };
-    if (st.state === 'loading') return 'wait';
+    if (st.state === 'ok' && st.q) return { q: st.q, list: st.list || [], idx: st.idx || 0 };
+    if (st.state === 'loading') {
+      /* 换一题时手上还有旧版本：先把旧的留着，别让题目闪成占位卡 */
+      if (st.list && st.list.length) return { q: st.list[st.idx] || st.list[0], list: st.list, idx: st.idx || 0 };
+      return 'wait';
+    }
     return null;
+  }
+
+  /* 「换一题」：为当前知识点再生成一道，旧的留在版本列表里 */
+  const aiRegen = {};
+  function regenAi(item) {
+    if (!AIQ || !AIQ.enabled()) return;
+    const key = aiKeyOf(item);
+    const ctx = aiCtxOf(item);
+    if (!ctx || aiRegen[key]) return;
+    aiRegen[key] = true;
+    render();
+    AIQ.warm(ctx, function () {
+      delete aiRegen[key];
+      if (currentKey() === key) render();
+    }, true);
+  }
+
+  /* 空闲时把后面几个考点先出好：孩子答当前这题的几十秒里，模型把下一批做掉 */
+  let aiWarmTimer = null;
+  function aiWarmUpcoming(n) {
+    if (!AIQ || !AIQ.enabled() || aiDead() || !session) return;
+    if (aiWarmTimer) clearTimeout(aiWarmTimer);
+    aiWarmTimer = setTimeout(function () {
+      aiWarmTimer = null;
+      if (!AIQ.enabled() || aiDead() || !session) return;
+      const ids = (session.stack || []).filter(function (id) {
+        return !session.status[id] && E.isTestable(D.graph, id);
+      }).slice(0, n || 2);
+      ids.forEach(function (id, i) {
+        setTimeout(function () {
+          if (!AIQ.enabled() || aiDead()) return;
+          const ctx = aiCtxOf({ topicId: id, attempt: 1, question: null });
+          if (ctx) AIQ.warm(ctx);      /* 不带回调 = 纯预取，不触发重绘 */
+        }, i * 500);
+      });
+    }, 800);
   }
 
   /* 按「已经定下来的一轮状态」把下一道备好 */
@@ -1406,16 +1449,36 @@
     }
 
     card.append(h('div', { class: 'notice' }, '提示：自动判题只是近似的（数字、分数、多个答案会做规范化后比较），一切以参考答案为准；判错了可以手动更正。'));
-    card.append(h('div', { class: 'row no-print', style: 'margin-top:12px' },
-      n > 0 ? h('button', { class: 'small', onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null,
-      h('button', { class: 'small', onclick: function () { if (confirm('确定放弃当前诊断并回到开始页吗？')) restart(); } }, '重新开始')));
     if (q.ai) {
+      const list = (gen && gen.list) || [];
+      const busy = !!aiRegen[aiKeyOf(item)];
       card.append(h('p', { class: 'muted small ai-flag' },
-        'AI 现出：DeepSeek 按这个知识点和孩子的档案临时命的一道题，判分照旧按参考答案比对。', ' ',
+        'AI 现出：DeepSeek 按这个知识点和孩子的档案临时命的一道题，判分照旧按参考答案比对。',
+        list.length > 1 ? '（第 ' + ((gen.idx || 0) + 1) + ' / ' + list.length + ' 版）' : '',
+        ' ',
+        h('button', {
+          class: 'linkish', type: 'button', disabled: busy,
+          onclick: function () { regenAi(item); }
+        }, busy ? '正在出题…' : '换一题'),
+        ' ',
         h('button', {
           class: 'linkish', type: 'button',
           onclick: function () { aiSkip[aiKeyOf(item)] = true; render(); }
         }, '换成题库那道')));
+      if (list.length > 1) {
+        card.append(h('details', { class: 'ai-vers' },
+          h('summary', null, '这个知识点的其它版本（' + (list.length - 1) + '）'),
+          h('div', { class: 'ai-vers-list' }, list.map(function (v, i) {
+            if (i === (gen.idx || 0)) return null;
+            return h('div', { class: 'ai-vers-row' },
+              h('span', { class: 'ai-vers-tag' }, v.type === 'choice' ? '选择' : '数值'),
+              h('span', { class: 'ai-vers-text' }, v.prompt),
+              h('button', {
+                type: 'button', class: 'small',
+                onclick: function () { AIQ.pick(aiCtxOf(item), i); render(); }
+              }, '用这道'));
+          }))));
+      }
     } else if (AIQ && AIQ.enabled() && aiDead()) {
       card.append(h('p', { class: 'muted small ai-flag is-warn' },
         '「AI 现出」连不上模型，这一轮先用题库的题。', ' ',
@@ -1424,6 +1487,9 @@
           onclick: function () { AIQ.resetFails(); AIQ.forgetFailed(); render(); }
         }, '再试一次')));
     }
+    card.append(h('div', { class: 'row no-print', style: 'margin-top:12px' },
+      n > 0 ? h('button', { class: 'small', onclick: function () { rebuild(session.answers.slice(0, -1)); } }, '撤销上一题') : null,
+      h('button', { class: 'small', onclick: function () { if (confirm('确定放弃当前诊断并回到开始页吗？')) restart(); } }, '重新开始')));
     const page = h('div');
     if (demo) page.append(demoBanner());
     const qBar = childBar('question');
