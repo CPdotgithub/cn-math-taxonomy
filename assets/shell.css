@@ -490,3 +490,19 @@ body.has-rail.page-explore { padding-left: var(--rail-w); }
   body.has-rail main#root { padding-top: 58px; }
 }
 
+
+/* 存不住数据时的顶部提示（沙箱 iframe / 禁用 cookie 的浏览器） */
+.cnm-storage-warn {
+  padding: 10px 16px;
+  font-size: .84rem;
+  line-height: 1.65;
+  color: #7c2d12;
+  background: #fff3e6;
+  border-bottom: 1px solid #f3c99a;
+}
+.cnm-storage-warn code {
+  padding: 1px 5px;
+  font-size: .95em;
+  background: rgba(0, 0, 0, .06);
+  border-radius: 4px;
+}

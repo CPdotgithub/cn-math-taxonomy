@@ -310,6 +310,135 @@
   /* 云端合并更新了本地档案后重排（cloud-sync.js 派发） */
   window.addEventListener('cnm-sync-changed', function () { render(); });
 
+
+  /* ---------------------------------------------------------------- 本机数据备份 */
+  /* 档案、记录、范围、DeepSeek 凭据都躺在 localStorage 里，而 localStorage 跟着「网址」走。
+     预览面板每次换端口、或者从预览切到正式网址，数据就看不到了——导出一个文件带走。 */
+  var BACKUP_KEYS = [
+    ['cnmChildren.v1', '孩子档案'],
+    ['cnmChildren.records.v1', '诊断记录'],
+    ['cnmScope.v1', '考察范围'],
+    ['cnmReview.chan.v1', 'DeepSeek 网页版凭据'],
+    ['cnmDiagnose.ai.v1', '出题方式'],
+    ['cnmDiagnose.seen.v1', '出过的题']
+  ];
+
+  window.CnmBackup = {
+    export: exportBackup,
+    import: importBackupData,
+    keys: BACKUP_KEYS
+  };
+
+  function stamp() {
+    var d = new Date();
+    var p = function (n) { return ('0' + n).slice(-2); };
+    return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+
+  function exportBackup() {
+    var data = {};
+    var n = 0;
+    BACKUP_KEYS.forEach(function (k) {
+      var raw = null;
+      try { raw = localStorage.getItem(k[0]); } catch (e) { raw = null; }
+      if (raw != null) { data[k[0]] = raw; n++; }
+    });
+    if (!n) { alert('本机还没有可导出的数据。'); return; }
+    var payload = {
+      app: 'cnm-knowledge-graph', v: 1, at: new Date().toISOString(),
+      note: '含孩子档案、诊断记录、考察范围，以及 DeepSeek 网页版凭据（凭据只在这台设备上用，别外发）',
+      data: data
+    };
+    var blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '知识图谱-备份-' + stamp() + '.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+    note('已导出 ' + n + ' 项。换到别的网址后，用「导入备份」把这份文件读回来。');
+  }
+
+  /* data: { key: 原始字符串 }；只认白名单里的键，别的忽略 */
+  function importBackupData(payload) {
+    if (!payload || payload.app !== 'cnm-knowledge-graph' || !payload.data) {
+      return { ok: false, error: '这不是本工具导出的备份文件。' };
+    }
+    var done = 0, skipped = [];
+    BACKUP_KEYS.forEach(function (k) {
+      var raw = payload.data[k[0]];
+      if (raw == null) return;
+      try {
+        JSON.parse(raw);              // 先确认是合法 JSON，别把坏数据写进去
+        localStorage.setItem(k[0], raw);
+        done++;
+      } catch (e) { skipped.push(k[1]); }
+    });
+    if (!done) return { ok: false, error: '文件里没有能导入的数据。' };
+    return { ok: true, done: done, skipped: skipped };
+  }
+
+  function note(msg, isErr) {
+    var n = document.getElementById('bk-note');
+    if (!n) return;
+    n.textContent = msg;
+    n.className = 'muted small' + (isErr ? ' err' : '');
+  }
+
+  function mountBackup() {
+    var aside = document.querySelector('.pt-side');
+    if (!aside || document.getElementById('backup-card')) return;
+    var card = el('section', 'kid-form');
+    card.id = 'backup-card';
+    card.appendChild(el('h2', null, '本机数据备份'));
+    var p1 = el('p', 'muted small',
+      '档案、诊断记录、考察范围和 DeepSeek 凭据都存在浏览器里，而浏览器是按「网址」分开存的：' +
+      '换一个网址（预览面板每次端口都不一样）就看不到了。用这里的导出 / 导入把它们带走。');
+    card.appendChild(p1);
+
+    var row = el('div', 'form-actions');
+    var out = el('button', null, '导出备份');
+    out.type = 'button';
+    out.addEventListener('click', exportBackup);
+    row.appendChild(out);
+
+    var inp = document.createElement('input');
+    inp.type = 'file';
+    inp.accept = 'application/json,.json';
+    inp.hidden = true;
+    inp.id = 'bk-file';
+    var into = el('button', null, '导入备份');
+    into.type = 'button';
+    into.addEventListener('click', function () { inp.click(); });
+    inp.addEventListener('change', function () {
+      var f = inp.files && inp.files[0];
+      if (!f) return;
+      var fr = new FileReader();
+      fr.onload = function () {
+        var payload = null;
+        try { payload = JSON.parse(String(fr.result)); } catch (e) { payload = null; }
+        var r = importBackupData(payload);
+        if (!r.ok) { note(r.error, true); return; }
+        note('已导入 ' + r.done + ' 项，正在重新加载…');
+        setTimeout(function () { location.reload(); }, 400);
+      };
+      fr.onerror = function () { note('这段文件读不出来。', true); };
+      fr.readAsText(f);
+      inp.value = '';
+    });
+    row.appendChild(into);
+    row.appendChild(inp);
+    card.appendChild(row);
+
+    var hint = el('p', 'muted small',
+      '备份文件里有 DeepSeek 网页版凭据（相当于你的登录状态），只自己留着，别发给别人。');
+    hint.id = 'bk-note';
+    card.appendChild(hint);
+    aside.appendChild(card);
+  }
+
+  mountBackup();
   resetForm();
   render();
 })();

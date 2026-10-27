@@ -62,8 +62,22 @@
       typeof window.WorkBuddyCloud.createWorkBuddyCloud !== 'function';
   }
 
+  /* 云端通道只认发布后的正式域名：本机 / 预览地址上 SDK 会弹
+     「当前地址暂不支持此登录方式」，干脆不建客户端，让用户走网页版。 */
+  function cloudOriginOk() {
+    try {
+      if (location.protocol !== 'http:' && location.protocol !== 'https:') return false;
+      var h = location.hostname;
+      if (!h || h === 'localhost' || h === '127.0.0.1' || h === '0.0.0.0' || h === '::1' || h === '[::1]') return false;
+      if (/\.local$/i.test(h)) return false;
+      if (/^(10|127)\./.test(h) || /^192\.168\./.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h)) return false;
+      return true;
+    } catch (e) { return false; }
+  }
+
   function getClient() {
     if (client) return client;
+    if (!cloudOriginOk()) return null;
     if (sdkMissing()) return null;
     if (!CFG || !CFG.endpoint || !CFG.publishableKey) return null;
     try {
@@ -88,6 +102,9 @@
       out[k] = (v && v[k] !== undefined && v[k] !== null) ? v[k] : WEB_DEFAULT[k];
     });
     if (out.kind !== 'web') out.kind = 'cloud';
+    /* 本机 / 预览地址用不了云端（SDK 不给登录），没手动选过就默认走网页版，
+       否则一进来就是「通道不可用」，还得自己猜要切哪里。 */
+    if (out.kind === 'cloud' && !cloudOriginOk() && !(v && v.kind)) out.kind = 'web';
     return out;
   }
 
@@ -511,7 +528,10 @@
   function describeError(err) {
     var code = (err && err.error && err.error.code) || (err && err.code) || '';
     var msg = (err && err.error && err.error.message) || (err && err.message) || '';
-    if (code === 'sdk') return '云端模型通道没加载成功，检查网络后刷新页面再试。';
+    if (code === 'sdk') {
+      if (!cloudOriginOk()) return '云端通道只在发布后的网址上能用；这个地址请把出题通道切到「网页版」（用你自己的 DeepSeek 账号）。';
+      return '云端模型通道没加载成功，检查网络后刷新页面再试。';
+    }
     if (code === 'request_empty') return '还没准备好题目要求，请重新选择知识点。';
     if (code === 'model_empty') return '模型这次什么都没返回，再点一次「重新生成」通常就好。';
     if (code === 'model_bad_json') return '模型返回的题目格式不对，点「重新生成」再试一次。';
@@ -554,6 +574,7 @@
     detectRelay: detectRelay,
     onAuthFail: onAuthFail,
     relayBase: relayBase,
+    cloudOriginOk: cloudOriginOk,
     usingSiteRelay: function () { return /\/api\/ds$/.test(relayBase()); },
     WEB_MODELS: WEB_MODELS
   };

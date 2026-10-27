@@ -97,9 +97,27 @@
     document.body.insertBefore(scrim, document.body.firstChild);
   }
 
+  /* 存不住数据要先说清楚：这个地址的浏览器不给写 localStorage（预览面板的沙箱 iframe 常见），
+     档案、凭据、进度全都存不下来，等用户填完才发现就晚了。 */
+  function storageBanner() {
+    var bad = null;
+    try {
+      localStorage.setItem('__cnmProbe', '1');
+      localStorage.removeItem('__cnmProbe');
+    } catch (e) { bad = String(e && e.message || e); }
+    if (!bad) return;
+    var box = document.createElement('div');
+    box.className = 'cnm-storage-warn';
+    box.setAttribute('role', 'alert');
+    box.innerHTML = '<b>这个地址存不住数据</b>：浏览器不允许写入本地存储，孩子档案、DeepSeek 凭据、诊断进度都保存不下来。' +
+      '换一个固定地址打开就行，比如在本机跑 <code>启动.command</code>（http://127.0.0.1:8981/diagnose/），或者用发布后的网址。';
+    document.body.insertBefore(box, document.body.firstChild);
+  }
+
   function boot() {
     dressNav();
     if (document.body.classList.contains('has-rail')) mountDrawer();
+    storageBanner();
   }
 
   if (document.readyState === 'loading') {

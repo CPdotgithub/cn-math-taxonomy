@@ -92,10 +92,25 @@
 
   /* ---------------------------------------------------------------- SDK 初始化 */
 
+  /* 云端登录只认发布后的正式域名：本机地址（含预览面板里的临时端口）一律只走本机存档 */
+  function cloudOriginOk() {
+    try {
+      if (location.protocol !== 'http:' && location.protocol !== 'https:') return false;
+      var h = location.hostname;
+      if (!h || h === 'localhost' || h === '127.0.0.1' || h === '0.0.0.0' || h === '[::1]' || h === '::1') return false;
+      if (/\.local$/i.test(h)) return false;
+      if (/^(10|127)\./.test(h) || /^192\.168\./.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h)) return false;
+      return true;
+    } catch (e) { return false; }
+  }
+
   function initCloud() {
     if (window.__CNM_SDK_FAILED || !window.WorkBuddyCloud || typeof window.WorkBuddyCloud.createWorkBuddyCloud !== 'function') {
       return null;
     }
+    /* 本机 / 预览地址不碰云通道：SDK 在这种地址上会弹「当前地址暂不支持此登录方式」，
+       而存档本来就是本机的，没必要为它挡路。 */
+    if (!cloudOriginOk()) return null;
     try {
       return window.WorkBuddyCloud.createWorkBuddyCloud({
         endpoint: CFG.endpoint,
@@ -551,7 +566,7 @@
 
     var desc = h('p', 'sync-desc');
     if (s.mode === 'local') {
-      desc.textContent = '云同步组件加载失败（可能是网络受限），档案仍只保存在本机浏览器。刷新页面可重试。';
+      desc.textContent = '这个地址不支持云同步（本机预览地址常见）。档案和诊断记录照常保存在这台设备的浏览器里，不用登录也能用；换成发布后的网址就能登录同步。';
     } else if (!s.user) {
       desc.textContent = '登录后，孩子档案和诊断记录会保存到云端：换设备、清缓存都不丢，多台设备自动合并。未登录时数据不上传。';
     } else {
@@ -563,10 +578,13 @@
 
     var actions = h('div', 'sync-actions');
     if (s.mode === 'local') {
-      var reload = h('button', 'btn', '刷新页面');
-      reload.type = 'button';
-      reload.addEventListener('click', function () { location.reload(); });
-      actions.appendChild(reload);
+      var bk = h('button', 'btn', '导出本机数据');
+      bk.type = 'button';
+      bk.addEventListener('click', function () {
+        if (window.CnmBackup) window.CnmBackup.export();
+        else location.hash = '#backup';
+      });
+      actions.appendChild(bk);
     } else if (!s.user) {
       var wx = h('button', 'btn btn-primary', '微信登录');
       wx.type = 'button';
