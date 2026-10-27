@@ -809,7 +809,10 @@
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (j) {
           var c = j && j.cred;
-          if (!c || !c.token) return false;
+          if (!c) return false;
+          /* 网页版凭据在别的机器上用不了（DeepSeek 按设备校验），线上别拿它当默认 */
+          if (remotePage() && !c.apiKey && (c.kind === 'web' || c.token) && !c.apiKey) return false;
+          if (!c.token && !c.apiKey) return false;
           setWeb({
             kind: c.kind || (c.apiKey ? 'direct' : 'web'),
             token: c.token || '', cookie: c.cookie || '', ua: c.ua || '', hdr: c.hdr || '',
