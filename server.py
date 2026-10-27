@@ -324,18 +324,30 @@ def make_handler(relay):
             return self._plain(404, "not found")
 
         def do_OPTIONS(self):
-            if relay:
+            path = urlparse(self.path).path
+            if relay and (path.startswith("/api/ds/") or path == "/api/ds"):
                 return relay.Handler.do_OPTIONS(self)
             self.send_response(204)
+            self.send_header("Access-Control-Allow-Origin", self._cors_origin())
+            self.send_header("Vary", "Origin")
+            self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+            self.send_header("Access-Control-Allow-Headers", "content-type, x-cnm-key")
+            self.send_header("Access-Control-Allow-Private-Network", "true")
+            self.send_header("Access-Control-Max-Age", "86400")
             self.send_header("Content-Length", "0")
             self.end_headers()
+
+        def _cors_origin(self):
+            """PNA（公网页面访问本机）要求回显具体 Origin，通配 * 会被拒。"""
+            return self.headers.get("Origin") or "*"
 
         def _json(self, obj, code=200):
             body = json.dumps(obj, ensure_ascii=False).encode("utf-8")
             self.send_response(code)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))
-            self.send_header("Access-Control-Allow-Origin", "*")
+            self.send_header("Access-Control-Allow-Origin", self._cors_origin())
+            self.send_header("Vary", "Origin")
             self.send_header("Cache-Control", "no-store")
             if code >= 400:
                 # 拒绝时没人读请求 body，留在 socket 里会把下一个请求读成
@@ -389,7 +401,7 @@ def make_handler(relay):
             if not h or h != GATE_HASH.lower():
                 return self._json({"ok": False, "code": "bad_pass"}, 403)
             key = session_new()
-            body = json.dumps({"ok": True}, ensure_ascii=False).encode("utf-8")
+            body = json.dumps({"ok": True, "key": key}, ensure_ascii=False).encode("utf-8")
             self.send_response(200)
             self.send_header("Content-Type", "application/json; charset=utf-8")
             self.send_header("Content-Length", str(len(body)))

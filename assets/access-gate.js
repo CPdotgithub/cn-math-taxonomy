@@ -30,24 +30,38 @@
 
   /* 把「已经通过密码门」这件事告诉服务端，换一个会话 Cookie。
      接口（存 curl / 题库）要它才肯给数据；静态托管没有这个接口，404 就算了。 */
+  /* 后端可能在本机（页面在线上时）：逐个候选试，谁先答应就用谁，并把会话 key 存下来 */
+  var API_KEY_LS = 'cnmGate.apiKey.v1';
+  var LOCAL_API = 'http://127.0.0.1:8981';
+
+  function apiBases() {
+    var localHost = /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
+    var out = localHost ? [] : [LOCAL_API];
+    out.push(location.origin);
+    if (localHost) out.push(LOCAL_API);
+    return out;
+  }
+
   function apiUnlock(body) {
     if (!body) return Promise.resolve(false);
-    /* 静态托管没有这个接口：第一次 404/501 就记住，别再每页都试一遍 */
-    try { if (sessionStorage.getItem('cnmGate.noApi') === '1') return Promise.resolve(false); } catch (e) {}
-    try {
-      return fetch('/api/unlock', {
+    var bases = apiBases();
+    var i = 0;
+    function next() {
+      if (i >= bases.length) return Promise.resolve(false);
+      var base = bases[i++];
+      return fetch(base + '/api/unlock', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body), credentials: 'same-origin'
+        body: JSON.stringify(body)
       }).then(function (r) {
-        if (r.status === 404 || r.status === 501) {
-          try { sessionStorage.setItem('cnmGate.noApi', '1'); } catch (e) {}
-          return null;
-        }
+        if (r.status === 404 || r.status === 501) return next();
         return r.ok ? r.json() : null;
-      })
-        .then(function (j) { return !!(j && j.ok); })
-        .catch(function () { return false; });
-    } catch (e) { return Promise.resolve(false); }
+      }).then(function (j) {
+        if (!j || !j.ok) return next();
+        if (j.key) { try { localStorage.setItem(API_KEY_LS, j.key); } catch (e) {} }
+        return true;
+      }).catch(function () { return next(); });
+    }
+    return next();
   }
   function hex(buf) {
     var out = '';

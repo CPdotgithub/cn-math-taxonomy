@@ -171,6 +171,8 @@
   /* 中转地址：部署在云上时走「同站转发」（页面和转发在同一个服务里，没有跨域这回事，
      手机、别人电脑都能用，也不用在自己电脑上开 8790）；本机调试才用 127.0.0.1。 */
   function defaultRelay() {
+    /* 页面在线上、本机后端在跑：转发走本机，DeepSeek 凭据只在这台机器上有效 */
+    if (localOk === true) return LOCAL_API + '/api/ds';
     /* 双击「启动.command」起的服务本身就把 /api/ds 带上了，页面和转发同源——
        本机也不例外，不用再另开 8790 那个中转。只有直接 file:// 打开才退回落。 */
     if (location.protocol === 'file:') return 'http://127.0.0.1:8790';
@@ -545,6 +547,16 @@
       ok: true,
       detail: (isWeb() ? '网页版（你自己的 DeepSeek 账号）' : '云端') + '，转发地址：' + (base || '（空）')
     });
+    if (remotePage()) {
+      steps.push({
+        name: '本机后端',
+        ok: localOk === true,
+        detail: localOk === true
+          ? ('已连上 ' + LOCAL_API + '，出题和凭据都走这台机器')
+          : ('没连上 ' + LOCAL_API + '：要么本机没开「启动.command」，要么浏览器拦了「访问本地网络设备」——' +
+            'Chrome 第一次会弹窗，点允许；没弹就是被策略拦了，那就只能在本机地址上用')
+      });
+    }
     steps.push({
       name: '登录凭据',
       ok: !!cfg.token,
@@ -624,19 +636,53 @@
 
   function credPush() {
     var cfg = web();
-    if (!cfg.token || !apiOrigin()) return Promise.resolve(false);
-    return fetch(apiOrigin() + '/api/cred', {
+    if (!cfg.token) return Promise.resolve(false);
+    return probeLocal().then(function () {
+      if (!apiOrigin()) return false;
+      return fetch(apiOrigin() + '/api/cred', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ token: cfg.token, cookie: cfg.cookie, ua: cfg.ua, hdr: cfg.hdr, model: cfg.model })
     }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { return !!(j && j.ok); })
       .catch(function () { return false; });
+    });
   }
 
+  /* 页面在线上、后端跑在本机时，所有 /api 都打到 http://127.0.0.1:8981。
+     浏览器允许 https 页面访问 http://127.0.0.1（它算「可信来源」），但跨站带不了 cookie，
+     所以会话改成 X-Cnm-Key 头。 */
+  var LOCAL_API = 'http://127.0.0.1:8981';
+  var localOk = null;
+  var KEY_LS = 'cnmGate.apiKey.v1';
+
+  function remotePage() {
+    if (!/^https?:$/.test(location.protocol)) return false;
+    return !/^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname);
+  }
+  function probeLocal() {
+    if (localOk !== null) return Promise.resolve(localOk);
+    if (!remotePage()) { localOk = false; return Promise.resolve(false); }
+    var ctl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timer = setTimeout(function () { try { if (ctl) ctl.abort(); } catch (e) {} }, 1500);
+    return fetch(LOCAL_API + '/health', { cache: 'no-store', signal: ctl ? ctl.signal : undefined })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { clearTimeout(timer); localOk = !!(j && j.service === 'cnm-site'); return localOk; })
+      .catch(function () { clearTimeout(timer); localOk = false; return false; });
+  }
   function apiOrigin() {
+    if (localOk === true) return LOCAL_API;
     if (location.protocol !== 'http:' && location.protocol !== 'https:') return '';
     return location.origin;
+  }
+  function apiKey() {
+    try { return localStorage.getItem(KEY_LS) || ''; } catch (e) { return ''; }
+  }
+  function authHeaders(extra) {
+    var h = extra || {};
+    var k = apiKey();
+    if (k) h['X-Cnm-Key'] = k;
+    return h;
   }
 
   /* 本地没有凭据时，问一次本机服务；拿回来了就写进 localStorage 并返回 true */
@@ -644,9 +690,10 @@
     if (force) credPromise = null;
     if (credPromise) return credPromise;
     credPromise = (function () {
-      if (!apiOrigin()) return Promise.resolve(false);
       if (web().token) return Promise.resolve(false);   /* 本地已有，不动 */
-      return fetch(apiOrigin() + '/api/cred', { cache: 'no-store' })
+      return probeLocal().then(function () {
+      if (!apiOrigin()) return false;
+      return fetch(apiOrigin() + '/api/cred', { cache: 'no-store', headers: authHeaders() })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (j) {
           var c = j && j.cred;
@@ -659,6 +706,7 @@
           return true;
         })
         .catch(function () { return false; });
+      });
     })();
     return credPromise;
   }
@@ -687,6 +735,7 @@
 
   function relayCandidates() {
     var out = [];
+    if (localOk === true && remotePage()) out.push(LOCAL_API + '/api/ds');
     var site = sameSiteRelay();
     if (site) out.push(site);
     /* 页面被别的地址托管时（预览面板之类），服务可能还在 8981 / 8790 上独立跑着 */
@@ -773,8 +822,7 @@
     return msg || '出错了，请稍后重试。';
   }
 
-  ensureRelay();
-  ensureCred();
+  probeLocal().then(function () { ensureRelay(); ensureCred(); });
 
   window.RvLLM = {
     available: available,
